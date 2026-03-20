@@ -1,0 +1,200 @@
+package com.hms.prescription.mapper;
+
+import com.hms.appointment.entity.Appointment;
+import com.hms.doctor.entity.Doctor;
+import com.hms.patient.entity.Patient;
+import com.hms.prescription.dto.request.PrescriptionRequestDTO;
+import com.hms.prescription.dto.response.PrescriptionResponseDTO;
+import com.hms.prescription.entity.Prescription;
+import com.hms.prescription.entity.PrescriptionMedicine;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.UUID;
+import javax.annotation.processing.Generated;
+import org.springframework.stereotype.Component;
+
+@Generated(
+    value = "org.mapstruct.ap.MappingProcessor",
+    date = "2026-03-20T16:41:08+0530",
+    comments = "version: 1.5.5.Final, compiler: javac, environment: Java 21.0.10 (Eclipse Adoptium)"
+)
+@Component
+public class PrescriptionMapperImpl implements PrescriptionMapper {
+
+    @Override
+    public Prescription toEntity(PrescriptionRequestDTO dto) {
+        if ( dto == null ) {
+            return null;
+        }
+
+        Prescription prescription = new Prescription();
+
+        prescription.setSymptoms( dto.getSymptoms() );
+        prescription.setDiagnosis( dto.getDiagnosis() );
+        prescription.setMedicines( prescriptionMedicineRequestDTOListToPrescriptionMedicineList( dto.getMedicines() ) );
+        prescription.setAdvice( dto.getAdvice() );
+        prescription.setNotes( dto.getNotes() );
+
+        return prescription;
+    }
+
+    @Override
+    public PrescriptionResponseDTO toDto(Prescription entity) {
+        if ( entity == null ) {
+            return null;
+        }
+
+        PrescriptionResponseDTO prescriptionResponseDTO = new PrescriptionResponseDTO();
+
+        prescriptionResponseDTO.setPatientId( entityPatientId( entity ) );
+        prescriptionResponseDTO.setPatientName( entityPatientName( entity ) );
+        prescriptionResponseDTO.setDoctorId( entityDoctorId( entity ) );
+        prescriptionResponseDTO.setAppointmentId( entityAppointmentId( entity ) );
+        prescriptionResponseDTO.setId( entity.getId() );
+        prescriptionResponseDTO.setSymptoms( entity.getSymptoms() );
+        prescriptionResponseDTO.setDiagnosis( entity.getDiagnosis() );
+        prescriptionResponseDTO.setMedicines( prescriptionMedicineListToPrescriptionMedicineResponseDTOList( entity.getMedicines() ) );
+        prescriptionResponseDTO.setAdvice( entity.getAdvice() );
+        prescriptionResponseDTO.setNotes( entity.getNotes() );
+        prescriptionResponseDTO.setCreatedAt( entity.getCreatedAt() );
+
+        prescriptionResponseDTO.setDoctorName( entity.getDoctor() != null ? entity.getDoctor().getFirstName() + " " + entity.getDoctor().getLastName() : null );
+
+        return prescriptionResponseDTO;
+    }
+
+    @Override
+    public List<PrescriptionResponseDTO> toDtoList(List<Prescription> entities) {
+        if ( entities == null ) {
+            return null;
+        }
+
+        List<PrescriptionResponseDTO> list = new ArrayList<PrescriptionResponseDTO>( entities.size() );
+        for ( Prescription prescription : entities ) {
+            list.add( toDto( prescription ) );
+        }
+
+        return list;
+    }
+
+    @Override
+    public PrescriptionResponseDTO.PrescriptionMedicineResponseDTO toMedicineDto(PrescriptionMedicine entity) {
+        if ( entity == null ) {
+            return null;
+        }
+
+        PrescriptionResponseDTO.PrescriptionMedicineResponseDTO prescriptionMedicineResponseDTO = new PrescriptionResponseDTO.PrescriptionMedicineResponseDTO();
+
+        prescriptionMedicineResponseDTO.setId( entity.getId() );
+        prescriptionMedicineResponseDTO.setMedicineName( entity.getMedicineName() );
+        prescriptionMedicineResponseDTO.setDosage( entity.getDosage() );
+        prescriptionMedicineResponseDTO.setDuration( entity.getDuration() );
+        prescriptionMedicineResponseDTO.setQuantity( entity.getQuantity() );
+        prescriptionMedicineResponseDTO.setInstructions( entity.getInstructions() );
+
+        return prescriptionMedicineResponseDTO;
+    }
+
+    @Override
+    public PrescriptionMedicine toMedicineEntity(PrescriptionRequestDTO.PrescriptionMedicineRequestDTO dto) {
+        if ( dto == null ) {
+            return null;
+        }
+
+        PrescriptionMedicine prescriptionMedicine = new PrescriptionMedicine();
+
+        prescriptionMedicine.setMedicineName( dto.getMedicineName() );
+        prescriptionMedicine.setDosage( dto.getDosage() );
+        prescriptionMedicine.setDuration( dto.getDuration() );
+        prescriptionMedicine.setQuantity( dto.getQuantity() );
+        prescriptionMedicine.setInstructions( dto.getInstructions() );
+
+        return prescriptionMedicine;
+    }
+
+    protected List<PrescriptionMedicine> prescriptionMedicineRequestDTOListToPrescriptionMedicineList(List<PrescriptionRequestDTO.PrescriptionMedicineRequestDTO> list) {
+        if ( list == null ) {
+            return null;
+        }
+
+        List<PrescriptionMedicine> list1 = new ArrayList<PrescriptionMedicine>( list.size() );
+        for ( PrescriptionRequestDTO.PrescriptionMedicineRequestDTO prescriptionMedicineRequestDTO : list ) {
+            list1.add( toMedicineEntity( prescriptionMedicineRequestDTO ) );
+        }
+
+        return list1;
+    }
+
+    private UUID entityPatientId(Prescription prescription) {
+        if ( prescription == null ) {
+            return null;
+        }
+        Patient patient = prescription.getPatient();
+        if ( patient == null ) {
+            return null;
+        }
+        UUID id = patient.getId();
+        if ( id == null ) {
+            return null;
+        }
+        return id;
+    }
+
+    private String entityPatientName(Prescription prescription) {
+        if ( prescription == null ) {
+            return null;
+        }
+        Patient patient = prescription.getPatient();
+        if ( patient == null ) {
+            return null;
+        }
+        String name = patient.getName();
+        if ( name == null ) {
+            return null;
+        }
+        return name;
+    }
+
+    private UUID entityDoctorId(Prescription prescription) {
+        if ( prescription == null ) {
+            return null;
+        }
+        Doctor doctor = prescription.getDoctor();
+        if ( doctor == null ) {
+            return null;
+        }
+        UUID id = doctor.getId();
+        if ( id == null ) {
+            return null;
+        }
+        return id;
+    }
+
+    private UUID entityAppointmentId(Prescription prescription) {
+        if ( prescription == null ) {
+            return null;
+        }
+        Appointment appointment = prescription.getAppointment();
+        if ( appointment == null ) {
+            return null;
+        }
+        UUID id = appointment.getId();
+        if ( id == null ) {
+            return null;
+        }
+        return id;
+    }
+
+    protected List<PrescriptionResponseDTO.PrescriptionMedicineResponseDTO> prescriptionMedicineListToPrescriptionMedicineResponseDTOList(List<PrescriptionMedicine> list) {
+        if ( list == null ) {
+            return null;
+        }
+
+        List<PrescriptionResponseDTO.PrescriptionMedicineResponseDTO> list1 = new ArrayList<PrescriptionResponseDTO.PrescriptionMedicineResponseDTO>( list.size() );
+        for ( PrescriptionMedicine prescriptionMedicine : list ) {
+            list1.add( toMedicineDto( prescriptionMedicine ) );
+        }
+
+        return list1;
+    }
+}

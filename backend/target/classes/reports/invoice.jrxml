@@ -1,0 +1,274 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports"
+              xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd"
+              name="invoice" pageWidth="595" pageHeight="842" columnWidth="555"
+              leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20"
+              uuid="4eedbb89-b4f6-4469-97ad-ca227b63a64d">
+
+    <!-- Parameters -->
+    <parameter name="invoiceNumber"   class="java.lang.String"/>
+    <parameter name="patientName"     class="java.lang.String"/>
+    <parameter name="billingDate"     class="java.lang.String"/>
+    <parameter name="paymentStatus"   class="java.lang.String"/>
+    <parameter name="paymentMethod"   class="java.lang.String"/>
+    <parameter name="totalAmount"     class="java.math.BigDecimal"/>
+    <parameter name="taxAmount"       class="java.math.BigDecimal"/>
+    <parameter name="discountAmount"  class="java.math.BigDecimal"/>
+    <parameter name="netAmount"       class="java.math.BigDecimal"/>
+    <parameter name="notes"           class="java.lang.String"/>
+
+    <queryString><![CDATA[]]></queryString>
+
+    <!-- Fields from data source -->
+    <field name="itemName"   class="java.lang.String"/>
+    <field name="quantity"   class="java.lang.Integer"/>
+    <field name="unitPrice"  class="java.math.BigDecimal"/>
+    <field name="totalPrice" class="java.math.BigDecimal"/>
+
+    <background><band splitType="Stretch"/></background>
+
+    <!-- ======= TITLE / HEADER BANNER ======= -->
+    <title>
+        <band height="80">
+            <rectangle>
+                <reportElement mode="Opaque" x="-20" y="-20" width="595" height="100" backcolor="#1A3C5E" uuid="hdr-bg"/>
+            </rectangle>
+            <staticText>
+                <reportElement x="10" y="10" width="280" height="40" forecolor="#FFFFFF" uuid="hdr-title"/>
+                <textElement><font size="28" isBold="true"/></textElement>
+                <text><![CDATA[HOSPITAL INVOICE]]></text>
+            </staticText>
+            <staticText>
+                <reportElement x="350" y="10" width="200" height="20" forecolor="#A8D4F0" uuid="hdr-hospital"/>
+                <textElement textAlignment="Right"><font size="12" isBold="true"/></textElement>
+                <text><![CDATA[Midnight Emerald HMS]]></text>
+            </staticText>
+            <staticText>
+                <reportElement x="350" y="30" width="200" height="15" forecolor="#A8D4F0" uuid="hdr-addr"/>
+                <textElement textAlignment="Right"><font size="9"/></textElement>
+                <text><![CDATA[123 Health Avenue, Medical City]]></text>
+            </staticText>
+        </band>
+    </title>
+
+    <!-- ======= PAGE HEADER: Invoice Meta ======= -->
+    <pageHeader>
+        <band height="110">
+            <!-- Invoice Info Box -->
+            <rectangle>
+                <reportElement mode="Opaque" x="0" y="5" width="265" height="90" backcolor="#F0F4F8" uuid="meta-box-l"/>
+                <graphicElement>
+                    <pen lineWidth="0.5" lineColor="#CCCCCC"/>
+                </graphicElement>
+            </rectangle>
+            <staticText>
+                <reportElement x="10" y="12" width="120" height="16" uuid="lbl-inv"/>
+                <textElement><font size="9" isBold="true"/></textElement>
+                <text><![CDATA[Invoice Number:]]></text>
+            </staticText>
+            <textField>
+                <reportElement x="135" y="12" width="120" height="16" uuid="val-inv"/>
+                <textElement><font size="9"/></textElement>
+                <textFieldExpression><![CDATA[$P{invoiceNumber}]]></textFieldExpression>
+            </textField>
+
+            <staticText>
+                <reportElement x="10" y="32" width="120" height="16" uuid="lbl-date"/>
+                <textElement><font size="9" isBold="true"/></textElement>
+                <text><![CDATA[Billing Date:]]></text>
+            </staticText>
+            <textField>
+                <reportElement x="135" y="32" width="120" height="16" uuid="val-date"/>
+                <textElement><font size="9"/></textElement>
+                <textFieldExpression><![CDATA[$P{billingDate}]]></textFieldExpression>
+            </textField>
+
+            <staticText>
+                <reportElement x="10" y="52" width="120" height="16" uuid="lbl-status"/>
+                <textElement><font size="9" isBold="true"/></textElement>
+                <text><![CDATA[Payment Status:]]></text>
+            </staticText>
+            <textField>
+                <reportElement x="135" y="52" width="120" height="16" uuid="val-status"/>
+                <textElement><font size="9"/></textElement>
+                <textFieldExpression><![CDATA[$P{paymentStatus}]]></textFieldExpression>
+            </textField>
+
+            <staticText>
+                <reportElement x="10" y="72" width="120" height="16" uuid="lbl-method"/>
+                <textElement><font size="9" isBold="true"/></textElement>
+                <text><![CDATA[Payment Method:]]></text>
+            </staticText>
+            <textField isBlankWhenNull="true">
+                <reportElement x="135" y="72" width="120" height="16" uuid="val-method"/>
+                <textElement><font size="9"/></textElement>
+                <textFieldExpression><![CDATA[$P{paymentMethod} != null ? $P{paymentMethod} : "N/A"]]></textFieldExpression>
+            </textField>
+
+            <!-- Patient Info Box -->
+            <rectangle>
+                <reportElement mode="Opaque" x="285" y="5" width="270" height="90" backcolor="#F0F4F8" uuid="meta-box-r"/>
+                <graphicElement>
+                    <pen lineWidth="0.5" lineColor="#CCCCCC"/>
+                </graphicElement>
+            </rectangle>
+            <staticText>
+                <reportElement x="295" y="12" width="100" height="16" uuid="lbl-pat"/>
+                <textElement><font size="9" isBold="true"/></textElement>
+                <text><![CDATA[Billed To:]]></text>
+            </staticText>
+            <textField>
+                <reportElement x="295" y="28" width="255" height="20" uuid="val-pat"/>
+                <textElement><font size="12" isBold="true"/></textElement>
+                <textFieldExpression><![CDATA[$P{patientName}]]></textFieldExpression>
+            </textField>
+        </band>
+    </pageHeader>
+
+    <!-- ======= COLUMN HEADER (Table Header) ======= -->
+    <columnHeader>
+        <band height="24">
+            <rectangle>
+                <reportElement mode="Opaque" x="0" y="0" width="555" height="24" backcolor="#1A3C5E" uuid="col-hdr-bg"/>
+            </rectangle>
+            <staticText>
+                <reportElement x="5" y="4" width="240" height="16" forecolor="#FFFFFF" uuid="col-item"/>
+                <textElement><font size="10" isBold="true"/></textElement>
+                <text><![CDATA[Description / Item]]></text>
+            </staticText>
+            <staticText>
+                <reportElement x="250" y="4" width="60" height="16" forecolor="#FFFFFF" uuid="col-qty"/>
+                <textElement textAlignment="Center"><font size="10" isBold="true"/></textElement>
+                <text><![CDATA[Qty]]></text>
+            </staticText>
+            <staticText>
+                <reportElement x="315" y="4" width="110" height="16" forecolor="#FFFFFF" uuid="col-unit"/>
+                <textElement textAlignment="Right"><font size="10" isBold="true"/></textElement>
+                <text><![CDATA[Unit Price (₹)]]></text>
+            </staticText>
+            <staticText>
+                <reportElement x="430" y="4" width="120" height="16" forecolor="#FFFFFF" uuid="col-total"/>
+                <textElement textAlignment="Right"><font size="10" isBold="true"/></textElement>
+                <text><![CDATA[Total (₹)]]></text>
+            </staticText>
+        </band>
+    </columnHeader>
+
+    <!-- ======= DETAIL (Line Items) ======= -->
+    <detail>
+        <band height="22">
+            <line>
+                <reportElement positionType="FixRelativeToBottom" x="0" y="21" width="555" height="1" forecolor="#DDDDDD" uuid="row-sep"/>
+            </line>
+            <textField textAdjust="StretchHeight">
+                <reportElement x="5" y="3" width="240" height="16" uuid="det-item"/>
+                <textElement><font size="9"/></textElement>
+                <textFieldExpression><![CDATA[$F{itemName}]]></textFieldExpression>
+            </textField>
+            <textField textAdjust="StretchHeight">
+                <reportElement x="250" y="3" width="60" height="16" uuid="det-qty"/>
+                <textElement textAlignment="Center"><font size="9"/></textElement>
+                <textFieldExpression><![CDATA[$F{quantity}]]></textFieldExpression>
+            </textField>
+            <textField textAdjust="StretchHeight" pattern="###,##0.00">
+                <reportElement x="315" y="3" width="110" height="16" uuid="det-unit"/>
+                <textElement textAlignment="Right"><font size="9"/></textElement>
+                <textFieldExpression><![CDATA[$F{unitPrice}]]></textFieldExpression>
+            </textField>
+            <textField textAdjust="StretchHeight" pattern="###,##0.00">
+                <reportElement x="430" y="3" width="120" height="16" uuid="det-tot"/>
+                <textElement textAlignment="Right"><font size="9"/></textElement>
+                <textFieldExpression><![CDATA[$F{totalPrice}]]></textFieldExpression>
+            </textField>
+        </band>
+    </detail>
+
+    <columnFooter><band/></columnFooter>
+
+    <!-- ======= PAGE FOOTER: Totals Summary ======= -->
+    <pageFooter>
+        <band height="110">
+            <line>
+                <reportElement x="0" y="2" width="555" height="1" forecolor="#1A3C5E" uuid="foot-line"/>
+            </line>
+
+            <!-- Subtotal -->
+            <staticText>
+                <reportElement x="330" y="10" width="120" height="16" uuid="lbl-sub"/>
+                <textElement textAlignment="Right"><font size="10"/></textElement>
+                <text><![CDATA[Subtotal:]]></text>
+            </staticText>
+            <textField pattern="₹ ###,##0.00">
+                <reportElement x="455" y="10" width="100" height="16" uuid="val-sub"/>
+                <textElement textAlignment="Right"><font size="10"/></textElement>
+                <textFieldExpression><![CDATA[$P{totalAmount}]]></textFieldExpression>
+            </textField>
+
+            <!-- Tax -->
+            <staticText>
+                <reportElement x="330" y="30" width="120" height="16" uuid="lbl-tax"/>
+                <textElement textAlignment="Right"><font size="10"/></textElement>
+                <text><![CDATA[Tax (5%):]]></text>
+            </staticText>
+            <textField pattern="₹ ###,##0.00">
+                <reportElement x="455" y="30" width="100" height="16" uuid="val-tax"/>
+                <textElement textAlignment="Right"><font size="10"/></textElement>
+                <textFieldExpression><![CDATA[$P{taxAmount}]]></textFieldExpression>
+            </textField>
+
+            <!-- Discount -->
+            <staticText>
+                <reportElement x="330" y="50" width="120" height="16" uuid="lbl-disc"/>
+                <textElement textAlignment="Right"><font size="10"/></textElement>
+                <text><![CDATA[Discount:]]></text>
+            </staticText>
+            <textField pattern="₹ ###,##0.00">
+                <reportElement x="455" y="50" width="100" height="16" uuid="val-disc"/>
+                <textElement textAlignment="Right"><font size="10"/></textElement>
+                <textFieldExpression><![CDATA[$P{discountAmount}]]></textFieldExpression>
+            </textField>
+
+            <!-- Grand Total -->
+            <rectangle>
+                <reportElement mode="Opaque" x="325" y="70" width="230" height="26" backcolor="#1A3C5E" uuid="grand-bg"/>
+            </rectangle>
+            <staticText>
+                <reportElement x="330" y="75" width="120" height="16" forecolor="#FFFFFF" uuid="lbl-grand"/>
+                <textElement textAlignment="Right"><font size="11" isBold="true"/></textElement>
+                <text><![CDATA[NET PAYABLE:]]></text>
+            </staticText>
+            <textField pattern="₹ ###,##0.00">
+                <reportElement x="455" y="75" width="96" height="16" forecolor="#FFFFFF" uuid="val-grand"/>
+                <textElement textAlignment="Right"><font size="11" isBold="true"/></textElement>
+                <textFieldExpression><![CDATA[$P{netAmount}]]></textFieldExpression>
+            </textField>
+
+            <!-- Notes -->
+            <staticText>
+                <reportElement x="0" y="10" width="300" height="14" uuid="lbl-notes"/>
+                <textElement><font size="8" isBold="true"/></textElement>
+                <text><![CDATA[Notes:]]></text>
+            </staticText>
+            <textField isBlankWhenNull="true">
+                <reportElement x="0" y="24" width="300" height="30" uuid="val-notes"/>
+                <textElement><font size="8"/></textElement>
+                <textFieldExpression><![CDATA[$P{notes}]]></textFieldExpression>
+            </textField>
+
+            <!-- Page number -->
+            <textField>
+                <reportElement x="0" y="95" width="200" height="12" uuid="pg-num"/>
+                <textElement><font size="7"/></textElement>
+                <textFieldExpression><![CDATA["Page " + $V{PAGE_NUMBER} + " | Generated: " + new java.text.SimpleDateFormat("dd-MM-yyyy").format(new java.util.Date())]]></textFieldExpression>
+            </textField>
+            <staticText>
+                <reportElement x="200" y="95" width="355" height="12" uuid="footer-msg"/>
+                <textElement textAlignment="Right"><font size="7"/></textElement>
+                <text><![CDATA[Thank you for choosing Midnight Emerald HMS. This is a computer-generated invoice.]]></text>
+            </staticText>
+        </band>
+    </pageFooter>
+
+    <summary><band splitType="Stretch"/></summary>
+</jasperReport>

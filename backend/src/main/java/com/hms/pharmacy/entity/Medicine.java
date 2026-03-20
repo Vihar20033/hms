@@ -1,0 +1,70 @@
+package com.hms.pharmacy.entity;
+
+import com.hms.common.entity.Auditable;
+import com.hms.common.enums.MedicineCategory;
+import jakarta.persistence.*;
+import org.hibernate.annotations.SQLDelete;
+import org.hibernate.annotations.SQLRestriction;
+import lombok.*;
+import lombok.experimental.SuperBuilder;
+
+import java.math.BigDecimal;
+
+@Entity
+@Table(name = "medicines")
+@SQLDelete(sql = "UPDATE medicines SET deleted = true WHERE id=?")
+@SQLRestriction("deleted = false")
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
+@SuperBuilder
+public class Medicine extends Auditable {
+
+    @Column(nullable = false)
+    private String name;
+
+    @Column(nullable = false, unique = true)
+    private String medicineCode;
+
+    private String description;
+
+    @Enumerated(EnumType.STRING)
+    @Column(name = "category")
+    private MedicineCategory category;
+
+    @Column(name = "manufacturer")
+    private String manufacturer;
+
+    @Column(name = "batch_number")
+    private String batchNumber;
+
+    @Column(name = "expiry_date")
+    private String expiryDate;
+
+    @Column(name = "quantity_in_stock", nullable = false)
+    private Integer quantityInStock;
+
+    @Column(name = "unit_price", nullable = false, precision = 10, scale = 2)
+    private BigDecimal unitPrice;
+
+    @Column(name = "reorder_level")
+    private Integer reorderLevel;
+
+    @Column(name = "storage_location")
+    private String storageLocation;
+
+    @Column(name = "dosage")
+    private String dosage;
+
+    @Column(name = "side_effects")
+    private String sideEffects;
+
+    @Builder.Default
+    @Column(name = "is_active", nullable = false)
+    private Boolean isActive = true;
+
+    @Builder.Default
+    @Column(name = "requires_prescription")
+    private Boolean requiresPrescription = false;
+}

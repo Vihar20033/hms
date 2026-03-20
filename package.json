@@ -1,0 +1,13 @@
+{
+  "name": "hms-fullstack",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "lint": "npm run lint --prefix frontend",
+    "lint:fix": "npm run lint:fix --prefix frontend",
+    "format": "npm run format --prefix frontend",
+    "frontend:start": "npm start --prefix frontend",
+    "frontend:build": "npm run build --prefix frontend",
+    "backend:start": "cd backend && ./mvnw spring-boot:run"
+  }
+}

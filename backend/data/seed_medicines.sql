@@ -1,0 +1,18 @@
+-- Seed data for medicines table
+INSERT INTO medicines (id, name, medicine_code, description, category, manufacturer, batch_number, expiry_date, quantity_in_stock, unit_price, reorder_level, storage_location, dosage, side_effects, is_active, requires_prescription, created_at, created_by, deleted, version)
+VALUES 
+(UUID(), 'Paracetamol 500mg', 'MED-001', 'Pain reliever and fever reducer', 'ANALGESICS', 'GlaxoSmithKline', 'B123', '2026-12-31', 500, 5.50, 50, 'Shelf A1', '500mg every 6 hours', 'Nausea, allergic reactions', 1, 0, NOW(), 'system', 0, 0),
+(UUID(), 'Amoxicillin 250mg', 'MED-002', 'Broad-spectrum antibiotic', 'ANTIBIOTICS', 'Pfizer', 'B124', '2025-10-15', 200, 12.00, 30, 'Cold Storage', '250mg three times daily', 'Rash, diarrhea', 1, 1, NOW(), 'system', 0, 0),
+(UUID(), 'Vitamin C 1000mg', 'MED-003', 'Immune system support', 'VITAMINS', 'Nature-Made', 'B125', '2027-04-20', 1000, 3.25, 100, 'Shelf B2', 'One tablet daily', 'None common', 1, 0, NOW(), 'system', 0, 0),
+(UUID(), 'Metformin 500mg', 'MED-004', 'Anti-diabetic medication', 'DIABETIC', 'Merck', 'B126', '2026-06-11', 350, 8.50, 40, 'Shelf C1', '500mg twice daily with meals', 'Lactic acidosis (rare)', 1, 1, NOW(), 'system', 0, 0),
+(UUID(), 'Aspirin 75mg', 'MED-005', 'Blood thinner and anti-platelet', 'CARDIAC', 'Bayer', 'B127', '2026-01-30', 600, 4.00, 75, 'Shelf A2', '75mg once daily', 'Gastrointestinal bleeding', 1, 0, NOW(), 'system', 0, 0),
+(UUID(), 'Azithromycin 500mg', 'MED-006', 'Macrolide antibiotic', 'ANTIBIOTICS', 'Sandoz', 'B128', '2025-08-14', 150, 45.00, 20, 'Shelf B1', '500mg once daily for 3 days', 'Vomiting, stomach pain', 1, 1, NOW(), 'system', 0, 0),
+(UUID(), 'Ibuprofen 400mg', 'MED-007', 'Non-steroidal anti-inflammatory', 'ANALGESICS', 'Abbott', 'B129', '2027-11-01', 400, 7.50, 50, 'Shelf A1', '400mg three times daily', 'Heartburn, stomach upset', 1, 0, NOW(), 'system', 0, 0),
+(UUID(), 'Dettol Antiseptic', 'MED-008', 'General purpose antiseptic liquid', 'ANTISEPTICS', 'Reckitt', 'B130', '2028-12-01', 100, 120.00, 10, 'Cabinet D', 'Dilute with water', 'Skin irritation', 1, 0, NOW(), 'system', 0, 0),
+(UUID(), 'Vitamin D3 60K', 'MED-009', 'High-dose Vitamin D supplement', 'VITAMINS', 'Cipla', 'B131', '2026-09-18', 300, 25.00, 50, 'Shelf B2', 'Once weekly', 'None common', 1, 0, NOW(), 'system', 0, 0),
+(UUID(), 'Atorvastatin 10mg', 'MED-010', 'Statin for cholesterol management', 'CARDIAC', 'Sun Pharma', 'B132', '2026-02-22', 450, 15.00, 40, 'Shelf C2', '10mg at bedtime', 'Muscle pain', 1, 1, NOW(), 'system', 0, 0),
+(UUID(), 'Insulin Glargine', 'MED-011', 'Long-acting basal insulin', 'DIABETIC', 'Lilly', 'B133', '2025-05-10', 80, 450.00, 15, 'Refrigerator', 'Inject as per doctor advice', 'Hypoglycemia', 1, 1, NOW(), 'system', 0, 0),
+(UUID(), 'Ciprofloxacin 500mg', 'MED-012', 'Fluoroquinolone antibiotic', 'ANTIBIOTICS', 'Dr. Reddys', 'B134', '2026-07-07', 120, 18.00, 25, 'Shelf B1', '500mg twice daily', 'Tendonitis (rare)', 1, 1, NOW(), 'system', 0, 0),
+(UUID(), 'Multivitamin Syrup', 'MED-013', 'Liquid vitamin supplement', 'VITAMINS', 'Himalaya', 'B135', '2025-12-25', 200, 85.00, 30, 'Shelf B2', '5ml twice daily', 'None', 1, 0, NOW(), 'system', 0, 0),
+(UUID(), 'Betadine Ointment', 'MED-014', 'Povidone-iodine antiseptic', 'ANTISEPTICS', 'Win-Medicare', 'B136', '2027-03-30', 150, 95.00, 25, 'Cabinet D', 'Apply to wound area', 'Staining of skin', 1, 0, NOW(), 'system', 0, 0),
+(UUID(), 'Losartan 50mg', 'MED-015', 'Angiotensin II receptor blocker', 'CARDIAC', 'Zydus', 'B137', '2026-11-15', 500, 10.50, 60, 'Shelf C2', '50mg daily', 'Dizziness', 1, 1, NOW(), 'system', 0, 0);

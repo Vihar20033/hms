@@ -1,0 +1,16 @@
+# Artifacts/Build folders
+node_modules
+dist
+.angular
+package-lock.json
+
+# Assets
+src/assets/
+*.ico
+*.svg
+
+# Environment
+src/environments/
+
+# Markdown
+*.md

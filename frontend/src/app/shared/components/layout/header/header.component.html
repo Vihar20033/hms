@@ -1,0 +1,30 @@
+<header class="main-header">
+  <div class="header-intro">
+    <div class="search-bar">
+      <i class="ri-search-line"></i>
+      <input type="text" placeholder="Search patients, doctors, appointments..." />
+    </div>
+    <div class="header-date">
+      <i class="ri-calendar-2-line"></i>
+      <span>{{ today | date: 'EEEE, MMM d' }}</span>
+    </div>
+  </div>
+
+  <div class="header-actions">
+    <button class="action-btn logout-header-btn" title="Sign Out" (click)="$event.stopPropagation(); onLogout()">
+      <i class="ri-logout-box-r-line"></i>
+    </button>
+
+    <div class="user-profile" *ngIf="user">
+      <div class="user-info">
+        <span class="username">{{ user.username }}</span>
+        <span class="role">{{ roleLabel }}</span>
+      </div>
+      <div class="avatar">
+        <img [src]="'https://ui-avatars.com/api/?name=' + user.username + '&background=0f6cbd&color=fff'" alt="User" />
+      </div>
+    </div>
+  </div>
+
+
+</header>

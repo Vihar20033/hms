@@ -134,13 +134,19 @@ erDiagram
 *   PostgreSQL 14+
 
 ### Backend Setup
-1. Configure `src/main/resources/application.properties` with your DB credentials.
-2. Run `./mvnw spring-boot:run`
+1. `cd backend`
+2. Configure `src/main/resources/application.properties` with your DB credentials.
+3. Run `./mvnw spring-boot:run`
 
 ### Frontend Setup
-1. `cd hospital-frontend`
+1. `cd frontend`
 2. `npm install`
 3. `ng serve` (Available at http://localhost:4200)
+
+### 🧹 Linting & Formatting
+*   `npm run lint` - Run ESLint check
+*   `npm run lint:fix` - Auto-fix lint errors
+*   `npm run format` - Format code with Prettier
 
 ---
 
