@@ -6,18 +6,25 @@ import { UserService } from '../../../../core/services/user.service';
 import { ApiResponse } from '../../../../core/models/common.models';
 import { HeaderComponent } from '../../../../shared/components/layout/header/header.component';
 import { SidebarComponent } from '../../../../shared/components/layout/sidebar/sidebar.component';
+import { TableModule } from 'primeng/table';
+import { InputTextModule } from 'primeng/inputtext';
+import { FormsModule } from '@angular/forms';
+import { Subject, debounceTime, distinctUntilChanged } from 'rxjs';
 
 @Component({
   selector: 'app-user-list',
   standalone: true,
-  imports: [CommonModule, SidebarComponent, HeaderComponent, RouterLink],
+  imports: [CommonModule, SidebarComponent, HeaderComponent, RouterLink, TableModule, InputTextModule, FormsModule],
   templateUrl: './user-list.component.html',
   styleUrl: './user-list.component.scss'
 })
 export class UserListComponent implements OnInit {
   users: User[] = [];
+  filteredUsers: User[] = [];
   isLoading = true;
   Role = Role;
+  searchTerm = '';
+  private searchSubject = new Subject<string>();
 
   constructor(
     private userService: UserService,
@@ -26,6 +33,12 @@ export class UserListComponent implements OnInit {
 
   ngOnInit(): void {
     this.loadUsers();
+    this.searchSubject.pipe(
+      debounceTime(300),
+      distinctUntilChanged()
+    ).subscribe(term => {
+      this.filterUsers(term);
+    });
   }
 
   loadUsers(): void {
@@ -33,12 +46,30 @@ export class UserListComponent implements OnInit {
     this.userService.getAll().subscribe({
       next: (res: ApiResponse<User[]>) => {
         this.users = res.data;
+        this.filterUsers('');
         this.isLoading = false;
       },
       error: () => {
         this.isLoading = false;
       }
     });
+  }
+
+  onSearchChange(): void {
+    this.searchSubject.next(this.searchTerm);
+  }
+
+  filterUsers(term: string): void {
+    if (!term) {
+      this.filteredUsers = [...this.users];
+      return;
+    }
+    const lowerTerm = term.toLowerCase();
+    this.filteredUsers = this.users.filter(u => 
+      u.username.toLowerCase().includes(lowerTerm) || 
+      u.email.toLowerCase().includes(lowerTerm) ||
+      u.role.toLowerCase().includes(lowerTerm)
+    );
   }
 
   onDelete(user: User): void {

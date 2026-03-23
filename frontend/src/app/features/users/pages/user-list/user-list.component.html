@@ -18,6 +18,21 @@
         </div>
       </div>
 
+      <!-- Search Section -->
+      <div class="search-bar-row mb-4">
+        <div class="input-wrapper search-bar">
+          <i class="ri-search-line icon"></i>
+          <input 
+            type="text" 
+            pInputText 
+            [(ngModel)]="searchTerm" 
+            (ngModelChange)="onSearchChange()"
+            placeholder="Search by username, email or role..." 
+            class="form-control"
+          >
+        </div>
+      </div>
+
       <!-- Stats Section -->
       <div class="row mb-4">
         <div class="col-md-4">
@@ -33,68 +48,69 @@
         </div>
       </div>
 
-      <!-- User List Card -->
-      <div class="card shadow-sm border-0">
-        <div class="card-body p-0">
-          <div class="table-container p-3">
-            <table class="table custom-table mb-0">
-              <thead>
-                <tr>
-                  <th>Username</th>
-                  <th>Email</th>
-                  <th>Role</th>
-                  <th class="text-center">Status</th>
-                  <th class="text-end">Actions</th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr *ngFor="let user of users" class="user-row">
-                  <td class="fw-medium text-dark">
-                    <div class="d-flex align-items-center">
-                      <div class="avatar-sm bg-light text-primary me-2 rounded-circle d-flex align-items-center justify-content-center">
-                        {{ user.username.charAt(0).toUpperCase() }}
-                      </div>
-                      {{ user.username }}
-                    </div>
-                  </td>
-                  <td class="text-muted">{{ user.email }}</td>
-                  <td>
-                    <span class="badge" [ngClass]="getRoleBadgeClass(user.role)">
-                      {{ user.role.replace('_', ' ') }}
-                    </span>
-                  </td>
-                  <td class="text-center">
-                    <span class="status-indicator" [ngClass]="$any(user).enabled ? 'active' : 'inactive'"></span>
-                    <span class="ms-2 small">{{ $any(user).enabled ? 'Active' : 'Disabled' }}</span>
-                  </td>
-                  <td class="text-end">
-                    <div class="btn-group btn-group-sm">
-                      <button class="btn btn-link text-danger" (click)="onDelete(user)" title="Delete User">
-                        <i class="ri-delete-bin-line"></i>
-                      </button>
-                    </div>
-                  </td>
-                </tr>
+      <!-- PrimeNG Table -->
+      <div class="card shadow-sm border-0 overflow-hidden">
+        <p-table 
+          [value]="filteredUsers" 
+          [loading]="isLoading" 
+          [rows]="10" 
+          [paginator]="true" 
+          responsiveLayout="stack"
+          styleClass="p-datatable-sm"
+          class="custom-p-table"
+        >
+          <ng-template pTemplate="header">
+            <tr>
+              <th pSortableColumn="username">Username <p-sortIcon field="username"></p-sortIcon></th>
+              <th pSortableColumn="email">Email <p-sortIcon field="email"></p-sortIcon></th>
+              <th pSortableColumn="role">Role <p-sortIcon field="role"></p-sortIcon></th>
+              <th class="text-center">Status</th>
+              <th class="text-end">Actions</th>
+            </tr>
+          </ng-template>
+          
+          <ng-template pTemplate="body" let-user>
+            <tr class="user-row">
+              <td class="fw-medium text-dark">
+                <div class="d-flex align-items-center">
+                  <div class="avatar-sm bg-light text-primary me-2 rounded-circle d-flex align-items-center justify-content-center">
+                    {{ user.username.charAt(0).toUpperCase() }}
+                  </div>
+                  {{ user.username }}
+                </div>
+              </td>
+              <td class="text-muted">{{ user.email }}</td>
+              <td>
+                <span class="badge" [ngClass]="getRoleBadgeClass(user.role)">
+                  <i class="ri-user-settings-fill me-1 small"></i>
+                  {{ user.role.replace('_', ' ') }}
+                </span>
+              </td>
+              <td class="text-center">
+                <span class="status-indicator" [ngClass]="$any(user).enabled ? 'active' : 'inactive'"></span>
+                <span class="ms-2 small">{{ $any(user).enabled ? 'Active' : 'Disabled' }}</span>
+              </td>
+              <td class="text-end">
+                <div class="action-buttons justify-content-end">
+                  <button class="btn-icon btn-delete" (click)="onDelete(user)" title="Delete User">
+                    <i class="ri-delete-bin-line"></i>
+                  </button>
+                </div>
+              </td>
+            </tr>
+          </ng-template>
 
-                <tr *ngIf="users.length === 0 && !isLoading">
-                  <td colspan="5" class="text-center py-5">
-                    <div class="empty-state">
-                      <i class="ri-user-search-line h1 text-muted"></i>
-                      <p class="text-muted">No system users found.</p>
-                    </div>
-                  </td>
-                </tr>
-
-                <tr *ngIf="isLoading">
-                  <td colspan="5" class="text-center py-5">
-                    <div class="spinner-border text-primary spinner-border-sm" role="status"></div>
-                    <span class="ms-2 text-muted small">Loading system identities...</span>
-                  </td>
-                </tr>
-              </tbody>
-            </table>
-          </div>
-        </div>
+          <ng-template pTemplate="emptymessage">
+            <tr>
+              <td colspan="5" class="text-center py-5">
+                <div class="empty-state">
+                  <i class="ri-user-search-line h1 text-muted"></i>
+                  <p class="text-muted">No system users matching your search.</p>
+                </div>
+              </td>
+            </tr>
+          </ng-template>
+        </p-table>
       </div>
     </div>
   </div>

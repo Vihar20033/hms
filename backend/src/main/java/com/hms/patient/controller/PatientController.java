@@ -28,9 +28,6 @@ public class PatientController {
         return ApiResponse.success(service.create(dto));
     }
 
-    /**
-     * Search and list patients. Restricted to staff for hospital management.
-     */
     @PreAuthorize("hasAnyRole('ADMIN','DOCTOR','NURSE','RECEPTIONIST','PHARMACIST','LABORATORY_STAFF')")
     @GetMapping
     public ApiResponse<Slice<PatientResponseDTO>> search(

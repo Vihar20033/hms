@@ -30,56 +30,112 @@
   border-radius: 12px;
   overflow: hidden;
   box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+  background: white;
 }
 
-.table-container {
-  background: #ffffff;
-}
-
-.custom-table {
-  width: 100%;
-  border-spacing: 0 0.5rem;
-  border-collapse: separate;
-
-  thead th {
-    font-weight: 600;
-    color: #64748b;
-    text-transform: uppercase;
-    font-size: 0.75rem;
-    letter-spacing: 0.05em;
-    padding: 1rem;
-    border: none;
+/* Search Bar Wrapper */
+.search-bar-row {
+  max-width: 600px;
+  .input-wrapper {
+    position: relative;
+    .icon {
+      position: absolute;
+      left: 1rem;
+      top: 50%;
+      transform: translateY(-50%);
+      color: #94a3b8;
+      z-index: 10;
+    }
+    .form-control {
+      padding-left: 2.75rem;
+      border-radius: 10px;
+      border: 1px solid #e2e8f0;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+      &:focus {
+        border-color: #3b82f6;
+        box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.15);
+      }
+    }
   }
+}
 
-  tbody tr {
-    transition: all 0.2s ease;
-    border-radius: 8px;
-    
+/* Custom Table Styles override for PrimeNG */
+::ng-deep .custom-p-table {
+  .p-datatable-thead > tr > th {
+    background: #f8fafc;
+    color: #475569;
+    font-weight: 600;
+    font-size: 0.82rem;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    padding: 1.25rem 1rem;
+    border: none;
+    border-bottom: 2px solid #f1f5f9;
+
+    .p-sortable-column-icon {
+      font-size: 0.75rem;
+      width: 0.75rem;
+      height: 0.75rem;
+      margin-left: 0.35rem;
+      color: #94a3b8;
+    }
+
     &:hover {
-      background-color: #f1f5f9 !important;
-      transform: scale(1.002);
+      background: #f1f5f9;
+      color: #1e293b;
     }
   }
 
-  td {
-    padding: 1.25rem 1rem;
-    vertical-align: middle;
+  .p-datatable-tbody > tr {
+    transition: all 0.2s ease;
     border-bottom: 1px solid #f1f5f9;
+
+    &:hover {
+      background-color: #f8fafc !important;
+    }
+
+    td {
+      padding: 1.25rem 1rem;
+      vertical-align: middle;
+      border: none;
+    }
+  }
+
+  /* Paginator styling */
+  .p-paginator {
+    background: #f8fafc;
+    border: none;
+    border-top: 1px solid #f1f5f9;
+    padding: 0.75rem;
+
+    .p-paginator-pages .p-paginator-page {
+      min-width: 2.25rem;
+      height: 2.25rem;
+      border-radius: 8px;
+      font-weight: 600;
+      color: #64748b;
+
+      &.p-highlight {
+        background: #3b82f6;
+        color: white;
+      }
+    }
   }
 }
 
 .avatar-sm {
-  width: 32px;
-  height: 32px;
+  width: 34px;
+  height: 34px;
   font-weight: 600;
   font-size: 0.875rem;
+  border-radius: 50%;
 }
 
 .badge {
-  padding: 0.4rem 0.8rem;
-  border-radius: 6px;
-  font-weight: 600;
-  font-size: 0.75rem;
+  padding: 0.45rem 0.85rem;
+  border-radius: 8px;
+  font-weight: 700;
+  font-size: 0.72rem;
   letter-spacing: 0.01em;
   display: inline-flex;
   align-items: center;
@@ -109,20 +165,48 @@
   border-radius: 12px;
   display: flex;
   align-items: center;
-  gap: 1rem;
+  gap: 1.25rem;
   box-shadow: 0 2px 10px rgba(0,0,0,0.04);
   margin-bottom: 1rem;
 
   .icon-box {
-    width: 48px;
-    height: 48px;
-    border-radius: 10px;
+    width: 52px;
+    height: 52px;
+    border-radius: 12px;
     display: flex;
     align-items: center;
     justify-content: center;
   }
 
   .bg-primary-soft { background-color: #eff6ff; }
+}
+
+.action-buttons {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.btn-icon {
+  width: 2.25rem;
+  height: 2.25rem;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid transparent;
+  transition: all 0.2s ease;
+  cursor: pointer;
+
+  &.btn-delete {
+    background: #fef2f2;
+    color: #ef4444;
+    &:hover {
+      background: #ef4444;
+      color: white;
+      transform: translateY(-2px);
+      box-shadow: 0 4px 10px rgba(239, 68, 68, 0.2);
+    }
+  }
 }
 
 .empty-state {

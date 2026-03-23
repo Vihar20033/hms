@@ -11,15 +11,10 @@ import org.springframework.transaction.annotation.Transactional;
 @RequiredArgsConstructor
 public class AuditLogService {
 
-    /** Logger configured in logback to write to logs/audit.log */
     private static final Logger AUDIT_FILE = LoggerFactory.getLogger("AUDIT");
 
     private final AuditLogRepository repository;
 
-    /**
-     * Log an audit event (persisted to DB and appended to audit log file).
-     * Runs async so it does not block the main request.
-     */
     @Async
     @Transactional
     public void log(String username, String action, String entityType, String entityId, String details) {

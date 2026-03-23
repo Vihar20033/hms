@@ -3,6 +3,7 @@ import { CanActivateFn, Router } from '@angular/router';
 import { AuthService } from '../services/auth.service';
 
 export const authGuard: CanActivateFn = (route, state) => {
+
   const router = inject(Router);
   const authService = inject(AuthService);
 
@@ -10,10 +11,10 @@ export const authGuard: CanActivateFn = (route, state) => {
     return router.createUrlTree(['/login'], { queryParams: { returnUrl: state.url } });
   }
 
-  // Check role permissions if specified in route data
   const requiredRoles = route.data?.['roles'] as string[];
   if (requiredRoles && requiredRoles.length > 0) {
     const userRole = authService.getUserRole();
+    
     if (!userRole || !requiredRoles.includes(userRole)) {
       return router.createUrlTree(['/unauthorized']);
     }
