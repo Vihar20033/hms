@@ -25,4 +25,13 @@ public class UserServiceImpl implements UserService {
                 .orElseThrow(() -> new RuntimeException("Current user not found"));
         return userMapper.toResponseDTO(user);
     }
+
+    @Override
+    @Transactional(readOnly = true)
+    public java.util.List<UserResponseDTO> getAll() {
+        return userRepository.findAll().stream()
+                .filter(user -> !user.isDeleted())
+                .map(userMapper::toResponseDTO)
+                .collect(java.util.stream.Collectors.toList());
+    }
 }

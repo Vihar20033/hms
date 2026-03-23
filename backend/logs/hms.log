@@ -166,3 +166,4 @@ com.hms.user.exception.UserNotFoundException: User not found
 2026-03-23 11:35:53.807 [http-nio-8082-exec-4] DEBUG com.hms.security.jwt.JwtAuthenticationFilter - User token version in DB: 12, in token: 12
 2026-03-23 11:35:53.811 [http-nio-8082-exec-4] DEBUG com.hms.security.jwt.JwtAuthenticationFilter - User authorities: [ROLE_RECEPTIONIST]
 2026-03-23 11:35:53.811 [http-nio-8082-exec-4] INFO  com.hms.security.jwt.JwtAuthenticationFilter - User recep authenticated successfully via JWT with authorities: [ROLE_RECEPTIONIST]
+2026-03-23 14:47:11.213 [HikariPool-1 housekeeper] WARN  com.zaxxer.hikari.pool.HikariPool - HikariPool-1 - Thread starvation or clock leap detected (housekeeper delta=35m37s388ms28µs600ns).

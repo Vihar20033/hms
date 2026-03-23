@@ -4,9 +4,6 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-/**
- * Simplified user details for dropdowns and listings
- */
 @Data
 @NoArgsConstructor
 @AllArgsConstructor

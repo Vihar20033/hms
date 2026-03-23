@@ -7,6 +7,7 @@ import { LoginComponent } from './features/auth/pages/login/login.component';
 import { RegisterComponent } from './features/auth/pages/register/register.component';
 import { UnauthorizedComponent } from './features/auth/pages/unauthorized/unauthorized.component';
 import { DashboardComponent } from './features/dashboard/pages/dashboard.component';
+import { UserListComponent } from './features/users/pages/user-list/user-list.component';
 
 // Patient Components
 import { PatientListComponent } from './features/patients/pages/patient-list/patient-list.component';
@@ -61,6 +62,12 @@ export const routes: Routes = [
     data: {
       roles: ['ADMIN', 'DOCTOR', 'NURSE', 'RECEPTIONIST', 'PHARMACIST', 'LABORATORY_STAFF', 'PATIENT'],
     },
+  },
+  {
+    path: 'users',
+    component: UserListComponent,
+    canActivate: [authGuard, roleGuard],
+    data: { roles: ['ADMIN'] },
   },
 
   // Patient Routes

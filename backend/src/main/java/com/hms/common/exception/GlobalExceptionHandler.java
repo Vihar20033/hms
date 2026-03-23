@@ -3,7 +3,7 @@ package com.hms.common.exception;
 import com.hms.appointment.exception.AppointmentNotFoundException;
 import com.hms.appointment.exception.DoctorUnavailableException;
 import com.hms.appointment.exception.SlotAlreadyBookedException;
-import com.hms.auth.SelfRegistrationRoleNotAllowedException;
+import com.hms.auth.exception.SelfRegistrationRoleNotAllowedException;
 
 import com.hms.common.response.ApiError;
 import com.hms.common.response.ValidationError;

@@ -1,11 +1,9 @@
 package com.hms.common.entity;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 import lombok.experimental.SuperBuilder;
+import org.hibernate.annotations.ColumnDefault;
 
 import java.util.UUID;
 
@@ -22,12 +20,12 @@ public abstract class BaseEntity {
     private UUID id;
 
     @Column(nullable = false)
-    @org.hibernate.annotations.ColumnDefault("false")
-    @lombok.Builder.Default
+    @ColumnDefault("false")
+    @Builder.Default
     private boolean deleted = false;
 
     @Version
     @Column(nullable = false, columnDefinition = "BIGINT DEFAULT 0")
-    @lombok.Builder.Default
+    @Builder.Default
     private Long version = 0L;
 }

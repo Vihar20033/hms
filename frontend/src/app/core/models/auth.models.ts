@@ -9,10 +9,11 @@ export enum Role {
 }
 
 export interface User {
-  id?: number;
+  id?: string;
   username: string;
   email: string;
   role: Role;
+  enabled?: boolean;
   passwordChangeRequired?: boolean;
 }
 

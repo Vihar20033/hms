@@ -30,6 +30,13 @@ export class SidebarComponent {
       summary: 'Ops command center',
     },
     {
+      title: 'User Management',
+      icon: 'ri-user-settings-line',
+      link: '/users',
+      roles: ['ADMIN'],
+      summary: 'Staff identity control',
+    },
+    {
       title: 'Patients',
       icon: 'ri-user-heart-line',
       link: '/patients',

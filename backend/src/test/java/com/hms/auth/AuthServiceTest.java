@@ -1,5 +1,8 @@
 package com.hms.auth;
 
+import com.hms.auth.dto.request.RegisterRequest;
+import com.hms.auth.service.AuthService;
+import com.hms.auth.service.impl.AuthServiceImpl;
 import com.hms.common.audit.AuditLogService;
 import com.hms.common.enums.Role;
 import com.hms.security.jwt.JwtUtil;
@@ -40,7 +43,7 @@ class AuthServiceTest {
 
     @BeforeEach
     void setUp() {
-        authService = new AuthService(userRepository, passwordEncoder, authenticationManager, jwtUtil, auditLogService);
+        authService = new AuthServiceImpl(userRepository, passwordEncoder, authenticationManager, jwtUtil, auditLogService);
     }
 
     @Test

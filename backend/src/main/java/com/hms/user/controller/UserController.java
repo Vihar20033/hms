@@ -1,5 +1,6 @@
 package com.hms.user.controller;
 
+import com.hms.user.dto.UserResponseDTO;
 import com.hms.user.dto.UserSummary;
 import com.hms.common.response.ApiResponse;
 import com.hms.user.entity.User;
@@ -13,6 +14,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
 @RestController
@@ -24,9 +26,15 @@ public class UserController {
     private final DoctorRepository doctorRepository;
     private final UserService userService;
 
+    @GetMapping
+    @PreAuthorize("hasRole('ADMIN')")
+    public ResponseEntity<ApiResponse<List<UserResponseDTO>>> getAllUsers() {
+        return ResponseEntity.ok(ApiResponse.success(userService.getAll()));
+    }
+
     @GetMapping("/me")
     @PreAuthorize("isAuthenticated()")
-    public ResponseEntity<ApiResponse<com.hms.user.dto.UserResponseDTO>> getCurrentUser() {
+    public ResponseEntity<ApiResponse<UserResponseDTO>> getCurrentUser() {
         return ResponseEntity.ok(ApiResponse.success(userService.getCurrentUser()));
     }
 
@@ -47,7 +55,7 @@ public class UserController {
 
     @DeleteMapping("/{id}")
     @PreAuthorize("hasRole('ADMIN')")
-    public ResponseEntity<ApiResponse<Void>> deleteUser(@PathVariable java.util.UUID id) {
+    public ResponseEntity<ApiResponse<Void>> deleteUser(@PathVariable UUID id) {
         User user = userRepository.findById(id)
                 .filter(existingUser -> !existingUser.isDeleted())
                 .orElseThrow(() -> new RuntimeException("User not found"));
