@@ -132,17 +132,6 @@ public class PrescriptionServiceImpl implements PrescriptionService {
         return Collections.emptyList();
     }
 
-    @Override
-    @Transactional(readOnly = true)
-    public List<PrescriptionResponseDTO> getMyPrescriptions() {
-        User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        if (user.getRole() != com.hms.common.enums.Role.PATIENT) {
-            return Collections.emptyList();
-        }
-        
-        List<Prescription> prescriptions = prescriptionRepository.findByPatientEmail(user.getEmail());
-        return prescriptionMapper.toDtoList(prescriptions);
-    }
 
     @Override
     @Transactional(readOnly = true)
@@ -204,12 +193,6 @@ public class PrescriptionServiceImpl implements PrescriptionService {
             }
         }
 
-        // 3. Patient access
-        if (role == com.hms.common.enums.Role.PATIENT) {
-            if (prescription.getPatient() != null && user.getEmail().equals(prescription.getPatient().getEmail())) {
-                return;
-            }
-        }
 
         log.warn("Security Alert: User {} with role {} tried to access prescription {}.", 
                 user.getUsername(), role, prescription.getId());

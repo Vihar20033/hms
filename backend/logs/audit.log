@@ -13,3 +13,13 @@
 2026-03-23 13:19:07.835 | Rishi | USER_LOGOUT | User | d26a98f0-9f41-4851-8d41-8dfb5908db7a | 
 2026-03-23 13:19:11.946 | Pritam | USER_LOGIN | User | 1b64df6d-e132-4dcd-93ec-2a7c7333bd51 | role=DOCTOR
 2026-03-23 16:34:30.575 | admin | USER_LOGIN | User | 6562bc81-3d8e-47f0-bb77-3a136d528d87 | role=ADMIN
+2026-03-23 17:35:32.683 | admin | USER_LOGIN | User | 6562bc81-3d8e-47f0-bb77-3a136d528d87 | role=ADMIN
+2026-03-23 18:18:31.527 | admin | USER_LOGOUT | User | 6562bc81-3d8e-47f0-bb77-3a136d528d87 | 
+2026-03-23 18:19:20.336 | patient | USER_LOGIN | User | d6c63963-adfa-4468-923f-128e736c7703 | role=PATIENT
+2026-03-23 18:27:12.077 | patient | USER_LOGOUT | User | d6c63963-adfa-4468-923f-128e736c7703 | 
+2026-03-23 18:27:31.080 | admin | USER_LOGIN | User | 6562bc81-3d8e-47f0-bb77-3a136d528d87 | role=ADMIN
+2026-03-23 18:44:29.120 | admin | PATIENT_CREATE | Patient | 92d1352e-cd3c-43de-85e4-ab76e20dbb69 | name=Krishna
+2026-03-23 18:44:32.066 | admin | PATIENT_CREATE | Patient | e7758e9b-324c-4440-a824-f60541fc5098 | name=Krishna
+2026-03-23 18:44:37.034 | admin | PATIENT_CREATE | Patient | 123111d2-afdc-455b-996f-155de00437cf | name=Krishna
+2026-03-23 18:52:25.289 | admin | PATIENT_CREATE | Patient | 6774de5a-1ab9-4be5-8387-611c0185b7d0 | name=Krishna
+2026-03-23 18:52:55.127 | admin | PATIENT_UPDATE | Patient | 6774de5a-1ab9-4be5-8387-611c0185b7d0 | name=Krishna

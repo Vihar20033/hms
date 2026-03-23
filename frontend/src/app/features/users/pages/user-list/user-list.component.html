@@ -87,8 +87,8 @@
                 </span>
               </td>
               <td class="text-center">
-                <span class="status-indicator" [ngClass]="$any(user).enabled ? 'active' : 'inactive'"></span>
-                <span class="ms-2 small">{{ $any(user).enabled ? 'Active' : 'Disabled' }}</span>
+                <span class="status-indicator" [ngClass]="user.enabled ? 'active' : 'inactive'"></span>
+                <span class="ms-2 small">{{ user.enabled ? 'Active' : 'Disabled' }}</span>
               </td>
               <td class="text-end">
                 <div class="action-buttons justify-content-end">

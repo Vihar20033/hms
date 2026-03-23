@@ -65,7 +65,6 @@ C:\Users\Piyush\Desktop\Project\backend\src\main\java\com\hms\patient\exception\
 C:\Users\Piyush\Desktop\Project\backend\src\main\java\com\hms\pharmacy\exception\DuplicateMedicineException.java
 C:\Users\Piyush\Desktop\Project\backend\src\main\java\com\hms\patient\repository\PatientRepository.java
 C:\Users\Piyush\Desktop\Project\backend\src\main\java\com\hms\appointment\dto\request\AppointmentRequestDTO.java
-C:\Users\Piyush\Desktop\Project\backend\src\main\java\com\hms\patient\dto\response\PatientOnboardingResponseDTO.java
 C:\Users\Piyush\Desktop\Project\backend\src\main\java\com\hms\doctor\service\impl\DoctorServiceImpl.java
 C:\Users\Piyush\Desktop\Project\backend\src\main\java\com\hms\auth\dto\request\ChangePasswordRequest.java
 C:\Users\Piyush\Desktop\Project\backend\src\main\java\com\hms\billing\dto\request\BillingRequestDTO.java
@@ -86,6 +85,7 @@ C:\Users\Piyush\Desktop\Project\backend\src\main\java\com\hms\user\mapper\UserMa
 C:\Users\Piyush\Desktop\Project\backend\src\main\java\com\hms\common\audit\AuditLogRepository.java
 C:\Users\Piyush\Desktop\Project\backend\src\main\java\com\hms\laboratory\service\impl\LabServiceImpl.java
 C:\Users\Piyush\Desktop\Project\backend\src\main\java\com\hms\common\enums\AppointmentStatus.java
+C:\Users\Piyush\Desktop\Project\backend\src\main\java\com\hms\common\util\SecurityUtils.java
 C:\Users\Piyush\Desktop\Project\backend\src\main\java\com\hms\user\exception\InvalidCredentialsException.java
 C:\Users\Piyush\Desktop\Project\backend\src\main\java\com\hms\appointment\repository\AppointmentRepository.java
 C:\Users\Piyush\Desktop\Project\backend\src\main\java\com\hms\clinical\entity\Vitals.java

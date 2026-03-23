@@ -10,7 +10,7 @@ import { InputTextareaModule } from 'primeng/inputtextarea';
 import { KeyFilterModule } from 'primeng/keyfilter';
 import { Observable } from 'rxjs';
 import { ApiResponse } from '../../../../core/models/common.models';
-import { BloodGroup, Patient, PatientOnboardingResponse, UrgencyLevel } from '../../../../core/models/patient.models';
+import { BloodGroup, Patient, UrgencyLevel } from '../../../../core/models/patient.models';
 import { PatientService } from '../../../../core/services/patient.service';
 import { FULL_NAME_PATTERN, PHONE_PATTERN, trimRequired } from '../../../../core/validators/app-validators';
 import { HeaderComponent } from '../../../../shared/components/layout/header/header.component';
@@ -103,21 +103,22 @@ export class PatientRegistrationComponent implements OnInit {
       this.isLoading = true;
       this.errorMessage = '';
 
-      const request$: Observable<ApiResponse<Patient | PatientOnboardingResponse>> =
+      const request$: Observable<ApiResponse<Patient>> =
         this.isEditMode && this.patientId
           ? this.patientService.update(this.patientId, this.registrationForm.value)
           : this.patientService.create(this.registrationForm.value);
 
       request$.subscribe({
-        next: (res: ApiResponse<Patient | PatientOnboardingResponse>) => {
+        next: (res: ApiResponse<Patient>) => {
           this.isLoading = false;
           this.successMessage = this.isEditMode
             ? 'Patient record updated successfully.'
-            : this.buildCreateSuccessMessage(res.data as PatientOnboardingResponse);
+            : 'Patient registered successfully.';
+          
           setTimeout(() => {
-            if (!this.isEditMode && (res.data as PatientOnboardingResponse)?.patient?.id) {
+            if (!this.isEditMode && res.data.id) {
               this.router.navigate(['/appointments/book'], {
-                queryParams: { patientId: (res.data as PatientOnboardingResponse).patient.id },
+                queryParams: { patientId: res.data.id },
               });
             } else {
               this.router.navigate(['/patients'], { queryParams: { registered: 'true' } });
@@ -136,14 +137,6 @@ export class PatientRegistrationComponent implements OnInit {
         this.registrationForm.controls[key].markAsTouched();
       });
     }
-  }
-
-  private buildCreateSuccessMessage(data: PatientOnboardingResponse | null | undefined): string {
-    if (!data?.username || !data?.temporaryPassword) {
-      return 'Patient registered successfully.';
-    }
-
-    return `Patient registered successfully. Temporary login: ${data.username} / ${data.temporaryPassword}. Password change required on first login.`;
   }
 
   bloodGroupOptions(): Array<{ label: string; value: string }> {

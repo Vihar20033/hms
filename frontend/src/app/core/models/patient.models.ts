@@ -42,13 +42,6 @@ export interface PatientRequest {
   urgencyLevel: UrgencyLevel;
 }
 
-export interface PatientOnboardingResponse {
-  patient: Patient;
-  username?: string;
-  temporaryPassword?: string;
-  passwordChangeRequired?: boolean;
-}
-
 export interface PatientSlice {
   content: Patient[];
   numberOfElements: number;

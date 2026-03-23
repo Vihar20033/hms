@@ -32,7 +32,7 @@
               </div>
               <div class="form-grid two-column">
                 <!-- Patient Selection -->
-                <div class="form-group" *ngIf="!isPatient">
+                <div class="form-group">
                   <label class="form-label" for="patientId">Select Patient</label>
                   <p-dropdown
                     inputId="patientId"
@@ -50,20 +50,6 @@
                     *ngIf="bookingForm.get('patientId')?.touched && bookingForm.get('patientId')?.invalid"
                   >
                     <small>Patient is required</small>
-                  </div>
-                </div>
-
-                <div class="form-group" *ngIf="isPatient">
-                  <label class="form-label" for="patientNameDisplay">Patient Name</label>
-                  <div class="input-wrapper disabled">
-                    <i class="ri-user-heart-line icon"></i>
-                    <input
-                      id="patientNameDisplay"
-                      type="text"
-                      class="form-control"
-                      [value]="(currentUser$ | async)?.username"
-                      disabled
-                    />
                   </div>
                 </div>
 
@@ -179,8 +165,8 @@
                   </div>
                 </div>
 
-                <!-- Emergency Toggle (Only for staff) -->
-                <div class="form-group full-width" *ngIf="authService.getUserRole() !== 'PATIENT'">
+                <!-- Emergency Toggle -->
+                <div class="form-group full-width">
                   <div class="emergency-toggle-card" [class.active]="bookingForm.get('isEmergency')?.value">
                     <div class="toggle-content">
                       <div class="toggle-icon"><i class="ri-alarm-warning-line"></i></div>

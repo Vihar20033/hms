@@ -1,6 +1,7 @@
 import { CommonModule } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
-import { FormArray, FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
+import { HttpErrorResponse } from '@angular/common/http';
+import { FormArray, FormBuilder, FormGroup, ReactiveFormsModule, ValidationErrors, Validators } from '@angular/forms';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { AutoCompleteModule } from 'primeng/autocomplete';
 import { Appointment } from '../../../../core/models/appointment.models';
@@ -121,7 +122,7 @@ export class PrescriptionCreateComponent implements OnInit {
     return group;
   }
 
-  private stockValidator(group: FormGroup): any {
+  private stockValidator(group: FormGroup): ValidationErrors | null {
     const qty = group.get('quantity')?.value;
     const stock = group.get('availableStock')?.value;
     const medName = group.get('medicineName')?.value;
@@ -214,7 +215,7 @@ export class PrescriptionCreateComponent implements OnInit {
       next: () => {
         this.router.navigate(['/appointments']);
       },
-      error: (err: any) => {
+      error: (err: HttpErrorResponse) => {
         this.isSubmitting = false;
         this.errorMessage = err.error?.message || err.message || 'Failed to save prescription. Check inventory.';
       },

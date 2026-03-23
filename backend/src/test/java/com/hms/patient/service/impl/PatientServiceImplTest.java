@@ -2,7 +2,7 @@ package com.hms.patient.service.impl;
 
 import com.hms.common.audit.AuditLogService;
 import com.hms.patient.dto.request.PatientRequestDTO;
-import com.hms.patient.dto.response.PatientOnboardingResponseDTO;
+import com.hms.patient.dto.response.PatientResponseDTO;
 import com.hms.patient.entity.Patient;
 import com.hms.patient.mapper.PatientMapper;
 import com.hms.patient.repository.PatientRepository;
@@ -32,8 +32,6 @@ class PatientServiceImplTest {
     @Mock
     private UserRepository userRepository;
 
-    @Mock
-    private PasswordEncoder passwordEncoder;
 
     @Mock
     private PatientMapper mapper;
@@ -65,12 +63,10 @@ class PatientServiceImplTest {
     void createPatient_Success() {
         // Arrange
         when(repository.existsByContactNumber(anyString())).thenReturn(false);
-        when(userRepository.existsByEmail(anyString())).thenReturn(false);
-        when(mapper.toEntity(any())).thenReturn(mockPatient);
-        when(repository.save(any())).thenReturn(mockPatient);
+        when(mapper.toResponse(any())).thenReturn(new PatientResponseDTO());
         
         // Act
-        PatientOnboardingResponseDTO result = patientService.create(requestDTO);
+        PatientResponseDTO result = patientService.create(requestDTO);
 
         // Assert
         assertNotNull(result);

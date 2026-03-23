@@ -51,7 +51,7 @@ export class LabListComponent implements OnInit {
   showCreateForm = false;
   showEditForm = false;
   showRecordResults = false;
-  selectedTest: any = null;
+  selectedTest: LabTest | null = null;
   editingTest: LabTest | null = null;
   labForm!: FormGroup;
   isSubmitting = false;
@@ -73,7 +73,7 @@ export class LabListComponent implements OnInit {
     this.userRole = this.authService.getUserRole();
     this.initForm();
     this.loadTests();
-    if (this.userRole === 'ADMIN' || this.userRole === 'DOCTOR' || this.userRole === 'RECEPTIONIST') {
+    if (this.userRole === 'ADMIN' || this.userRole === 'DOCTOR' || this.userRole === 'RECEPTIONIST' || this.userRole === 'LABORATORY_STAFF') {
       this.patientService.getAll().subscribe((res: ApiResponse<Patient[]>) => (this.patients = res.data));
     }
   }
@@ -103,16 +103,13 @@ export class LabListComponent implements OnInit {
 
   loadTests(): void {
     this.isLoading = true;
-    const request = this.userRole === 'PATIENT' 
-      ? this.labService.getMyTests() 
-      : this.labService.getAll();
-
-    request.subscribe({
+    this.labService.getAll().subscribe({
       next: (res: ApiResponse<LabTest[]>) => {
         this.tests = res.data;
         this.isLoading = false;
       },
-      error: () => {
+      error: (error) => {
+        console.error('Error loading lab tests:', error);
         this.isLoading = false;
       },
     });
@@ -147,12 +144,6 @@ export class LabListComponent implements OnInit {
   onSubmit(): void {
     if (this.labForm.invalid) {
       this.labForm.markAllAsTouched();
-      Object.keys(this.labForm.controls).forEach((key) => {
-        const control = this.labForm.get(key);
-        if (control?.invalid) {
-          console.error(`Form control '${key}' is invalid:`, control.errors);
-        }
-      });
       return;
     }
     this.isSubmitting = true;
@@ -180,7 +171,6 @@ export class LabListComponent implements OnInit {
           this.loadTests();
         },
         error: (err: HttpErrorResponse) => {
-          console.error('Lab test creation error:', err);
           const errorMsg = err.error?.message || err.error?.error || 'Request failed.';
           this.statusModalService.showError('Lab Request Failed', errorMsg);
           this.isSubmitting = false;
@@ -207,8 +197,7 @@ export class LabListComponent implements OnInit {
         this.loadTests();
       },
       error: (err) => {
-        console.error('Delete error:', err);
-        const errorMsg = err.error?.message || err.error?.error || 'Lab test could not be deleted. Check permissions.';
+        const errorMsg = err.error?.message || err.error?.error || 'Lab test could not be deleted.';
         this.statusModalService.showError('Delete Failed', errorMsg);
       },
     });
@@ -243,8 +232,6 @@ export class LabListComponent implements OnInit {
     }));
   }
 
-  // ====== Test Results Recording and PDF Methods ======
-
   openRecordResults(test: LabTest): void {
     this.selectedTest = test;
     this.showRecordResults = true;
@@ -253,7 +240,7 @@ export class LabListComponent implements OnInit {
   closeRecordResults(): void {
     this.showRecordResults = false;
     this.selectedTest = null;
-    this.loadTests(); // Refresh list to show updated status
+    this.loadTests();
   }
 
   canRecordResults(): boolean {

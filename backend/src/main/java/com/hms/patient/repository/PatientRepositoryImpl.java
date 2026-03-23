@@ -14,9 +14,6 @@ import jakarta.persistence.criteria.*;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * Custom implementation returning Slice without COUNT query
- */
 @Repository
 @RequiredArgsConstructor
 public class PatientRepositoryImpl implements PatientRepositoryCustom {

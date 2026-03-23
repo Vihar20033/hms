@@ -25,7 +25,6 @@ export class DashboardComponent implements OnInit, AfterViewInit, OnDestroy {
   chart: any;
   currentUser$ = this.authService.currentUser$;
   isAdminOrStaff = false;
-  isPatient = false;
   role = '';
   quickActions: Array<{ label: string; link: string; icon: string }> = [];
   private chartPending = false;
@@ -39,7 +38,6 @@ export class DashboardComponent implements OnInit, AfterViewInit, OnDestroy {
     const role = this.authService.getUserRole();
     this.role = role || '';
     this.isAdminOrStaff = role === 'ADMIN' || role === 'RECEPTIONIST';
-    this.isPatient = role === 'PATIENT';
     this.quickActions = this.buildQuickActions();
 
     this.dashboardService.getSummary().subscribe({
@@ -82,21 +80,6 @@ export class DashboardComponent implements OnInit, AfterViewInit, OnDestroy {
           label: 'Prescriptions',
           link: '/prescriptions',
           icon: 'ri-file-list-3-line',
-        },
-      ];
-    }
-
-    if (this.role === 'PATIENT') {
-      return [
-        {
-          label: 'Book Visit',
-          link: '/appointments/book',
-          icon: 'ri-calendar-check-line',
-        },
-        {
-          label: 'My Appointments',
-          link: '/appointments',
-          icon: 'ri-time-line',
         },
       ];
     }

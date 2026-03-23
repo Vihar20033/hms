@@ -1,6 +1,7 @@
 package com.hms.doctor.service.impl;
 
 import com.hms.common.enums.Role;
+import com.hms.common.util.SecurityUtils;
 import com.hms.doctor.dto.request.CreateDoctorRequest;
 import com.hms.doctor.dto.request.UpdateDoctorRequest;
 import com.hms.doctor.dto.response.DoctorOnboardingResponse;
@@ -13,6 +14,7 @@ import com.hms.user.entity.User;
 import com.hms.user.exception.EmailAlreadyExistsException;
 import com.hms.user.exception.UsernameAlreadyExistsException;
 import com.hms.user.repository.UserRepository;
+import com.hms.user.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -27,6 +29,7 @@ public class DoctorServiceImpl implements DoctorService {
 
     private final DoctorRepository doctorRepository;
     private final UserRepository userRepository;
+    private final UserService userService;
     private final PasswordEncoder passwordEncoder;
     private final DoctorMapper doctorMapper;
     private final com.hms.common.audit.AuditLogService auditLogService;
@@ -41,7 +44,7 @@ public class DoctorServiceImpl implements DoctorService {
                 if (!existingUser.isDeleted()) {
                     throw new EmailAlreadyExistsException("Email already exists");
                 }
-                retireUserIdentity(existingUser);
+                userService.retireUserIdentity(existingUser);
                 userRepository.save(existingUser);
             });
 
@@ -49,7 +52,7 @@ public class DoctorServiceImpl implements DoctorService {
                 if (!existingUser.isDeleted()) {
                     throw new UsernameAlreadyExistsException("Username already exists");
                 }
-                retireUserIdentity(existingUser);
+                userService.retireUserIdentity(existingUser);
                 userRepository.save(existingUser);
             });
 
@@ -74,7 +77,7 @@ public class DoctorServiceImpl implements DoctorService {
         }
         
         Doctor savedDoctor = doctorRepository.save(doctor);
-        auditLogService.log(getCurrentUsername(), "DOCTOR_CREATE", "Doctor", savedDoctor.getId().toString(), "name=" + savedDoctor.getFirstName() + " " + savedDoctor.getLastName());
+        auditLogService.log(SecurityUtils.getCurrentUsername(), "DOCTOR_CREATE", "Doctor", savedDoctor.getId().toString(), "name=" + savedDoctor.getFirstName() + " " + savedDoctor.getLastName());
         DoctorResponseDTO doctorDto = doctorMapper.toDto(savedDoctor);
 
         return DoctorOnboardingResponse.builder()
@@ -91,7 +94,7 @@ public class DoctorServiceImpl implements DoctorService {
         Doctor doctor = getDoctorById(id);
         doctorMapper.updateEntity(request, doctor);
         Doctor saved = doctorRepository.save(doctor);
-        auditLogService.log(getCurrentUsername(), "DOCTOR_UPDATE", "Doctor", id.toString(), "name=" + saved.getFirstName() + " " + saved.getLastName());
+        auditLogService.log(SecurityUtils.getCurrentUsername(), "DOCTOR_UPDATE", "Doctor", id.toString(), "name=" + saved.getFirstName() + " " + saved.getLastName());
         return saved;
     }
 
@@ -127,38 +130,10 @@ public class DoctorServiceImpl implements DoctorService {
         Doctor doctor = getDoctorById(id);
         doctor.setDeleted(true);
         doctorRepository.save(doctor);
-        auditLogService.log(getCurrentUsername(), "DOCTOR_DELETE", "Doctor", id.toString(), "name=" + doctor.getFirstName() + " " + doctor.getLastName());
+        auditLogService.log(SecurityUtils.getCurrentUsername(), "DOCTOR_DELETE", "Doctor", id.toString(), "name=" + doctor.getFirstName() + " " + doctor.getLastName());
 
         userRepository.findById(doctor.getUserId()).ifPresent(user -> {
-            retireUserIdentity(user);
-            user.setDeleted(true);
-            user.setEnabled(false);
-            userRepository.save(user);
+            userService.deleteUser(user.getId());
         });
-    }
-
-    private String getCurrentUsername() {
-        org.springframework.security.core.Authentication auth = org.springframework.security.core.context.SecurityContextHolder.getContext().getAuthentication();
-        return (auth != null && auth.isAuthenticated()) ? auth.getName() : "system";
-    }
-
-    private void retireUserIdentity(User user) {
-        String uniqueSuffix = "__deleted__" + user.getId();
-
-        if (user.getUsername() != null && !user.getUsername().contains("__deleted__")) {
-            String retiredUsername = truncate(user.getUsername() + uniqueSuffix, 50);
-            user.setUsername(retiredUsername);
-        }
-
-        if (user.getEmail() != null && !user.getEmail().contains("__deleted__")) {
-            user.setEmail(user.getId() + "__deleted__" + user.getEmail());
-        }
-    }
-
-    private String truncate(String value, int maxLength) {
-        if (value == null || value.length() <= maxLength) {
-            return value;
-        }
-        return value.substring(0, maxLength);
     }
 }

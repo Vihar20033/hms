@@ -39,14 +39,6 @@ public class PrescriptionController {
         return ResponseEntity.ok(ApiResponse.success(prescriptionService.getAllPrescriptions()));
     }
 
-    /**
-     * Fetch the logged-in patient's own prescriptions securely.
-     */
-    @PreAuthorize("hasRole('PATIENT')")
-    @GetMapping("/my")
-    public ResponseEntity<ApiResponse<List<PrescriptionResponseDTO>>> getMyPrescriptions() {
-        return ResponseEntity.ok(ApiResponse.success(prescriptionService.getMyPrescriptions()));
-    }
 
     @PreAuthorize("hasAnyRole('ADMIN','DOCTOR','PHARMACIST')")
     @GetMapping("/patient/{patientId}")
@@ -58,7 +50,7 @@ public class PrescriptionController {
      * Fetch specific prescription by ID. Service layer enforces identity checks.
      * Note: placed after static lookups to avoid path collisions.
      */
-    @PreAuthorize("hasAnyRole('ADMIN','DOCTOR','PHARMACIST','PATIENT')")
+    @PreAuthorize("hasAnyRole('ADMIN','DOCTOR','PHARMACIST')")
     @GetMapping("/{id}")
     public ResponseEntity<ApiResponse<PrescriptionResponseDTO>> getPrescriptionById(@PathVariable UUID id) {
         return ResponseEntity.ok(ApiResponse.success(prescriptionService.getPrescriptionById(id)));

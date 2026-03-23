@@ -9,9 +9,10 @@ import { InputSwitchModule } from 'primeng/inputswitch';
 import { InputTextModule } from 'primeng/inputtext';
 import { InputTextareaModule } from 'primeng/inputtextarea';
 import { BOOKABLE_DEPARTMENTS, formatDepartmentLabel } from '../../../../core/constants/department.constants';
+import { Appointment } from '../../../../core/models/appointment.models';
 import { ApiResponse } from '../../../../core/models/common.models';
 import { Doctor } from '../../../../core/models/doctor.models';
-import { Patient, PatientSlice } from '../../../../core/models/patient.models';
+import { Patient } from '../../../../core/models/patient.models';
 import { AppointmentService } from '../../../../core/services/appointment.service';
 import { AuthService } from '../../../../core/services/auth.service';
 import { DoctorService } from '../../../../core/services/doctor.service';
@@ -50,7 +51,6 @@ export class AppointmentBookingComponent implements OnInit {
   errorMessage = '';
   isEditMode = false;
   appointmentId: string | null = null;
-  isPatient = false;
   currentUser$ = this.authService.currentUser$;
 
   departments = BOOKABLE_DEPARTMENTS;
@@ -92,7 +92,6 @@ export class AppointmentBookingComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.isPatient = this.authService.getUserRole() === 'PATIENT';
     this.loadData();
     this.route.queryParams.subscribe((params) => {
       if (params['patientId']) {
@@ -104,18 +103,6 @@ export class AppointmentBookingComponent implements OnInit {
         this.loadAppointmentForEdit(params['appointmentId']);
       }
     });
-
-    if (this.isPatient) {
-      const user = this.authService.currentUserValue;
-      if (user?.email) {
-        this.patientService.search(undefined, user.email).subscribe((res: ApiResponse<PatientSlice>) => {
-          if (res.data.content.length > 0) {
-            const patient = res.data.content[0];
-            this.bookingForm.patchValue({ patientId: patient.id });
-          }
-        });
-      }
-    }
   }
 
   loadData(): void {
@@ -129,7 +116,7 @@ export class AppointmentBookingComponent implements OnInit {
   loadAppointmentForEdit(id: string): void {
     this.isLoading = true;
     this.appointmentService.getById(id).subscribe({
-      next: (res: ApiResponse<any>) => {
+      next: (res: ApiResponse<Appointment>) => {
         const appointment = res.data;
         this.selectedDepartment = appointment.department;
         this.filterDoctors();

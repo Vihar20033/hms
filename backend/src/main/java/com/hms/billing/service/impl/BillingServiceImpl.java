@@ -138,19 +138,6 @@ public class BillingServiceImpl implements BillingService {
         return billingMapper.toDtoList(billingRepository.findAll());
     }
 
-    @Override
-    @Transactional(readOnly = true)
-    public List<BillingResponseDTO> getMyBillings() {
-        User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        if (user.getRole() != com.hms.common.enums.Role.PATIENT) {
-            log.warn("Non-patient user {} tried to access /my billings.", user.getUsername());
-            return Collections.emptyList();
-        }
-        
-        // Match patient by email as per our existing link logic
-        List<Billing> billings = billingRepository.findByPatientEmail(user.getEmail());
-        return billingMapper.toDtoList(billings);
-    }
 
     @Override
     @Transactional(readOnly = true)
@@ -295,12 +282,6 @@ public class BillingServiceImpl implements BillingService {
             return;
         }
 
-        // 2. Patient specific access
-        if (role == com.hms.common.enums.Role.PATIENT) {
-            if (billing.getPatient() != null && user.getEmail().equals(billing.getPatient().getEmail())) {
-                return;
-            }
-        }
 
         log.warn("Security Alert: User {} with role {} attempted unauthorized access to invoice {}.", 
                 user.getUsername(), role, billing.getInvoiceNumber());

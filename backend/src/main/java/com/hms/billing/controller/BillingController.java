@@ -39,14 +39,6 @@ public class BillingController {
         return ResponseEntity.ok(ApiResponse.success(billingService.getAllBillings()));
     }
 
-    /**
-     * Get the logged-in patient's personal billing records.
-     */
-    @PreAuthorize("hasRole('PATIENT')")
-    @GetMapping("/my")
-    public ResponseEntity<ApiResponse<List<BillingResponseDTO>>> getMyBillings() {
-        return ResponseEntity.ok(ApiResponse.success(billingService.getMyBillings()));
-    }
 
     @PreAuthorize("hasAnyRole('ADMIN','RECEPTIONIST')")
     @GetMapping("/patient/{patientId}")
@@ -64,7 +56,7 @@ public class BillingController {
      * Fetch a specific invoice. Enforces ownership check in the service layer.
      * Note: placed after static lookups to avoid path collisions.
      */
-    @PreAuthorize("hasAnyRole('ADMIN','RECEPTIONIST','PATIENT')")
+    @PreAuthorize("hasAnyRole('ADMIN','RECEPTIONIST')")
     @GetMapping("/{id}")
     public ResponseEntity<ApiResponse<BillingResponseDTO>> getBillingById(@PathVariable("id") UUID id) {
         return ResponseEntity.ok(ApiResponse.success(billingService.getBillingById(id)));

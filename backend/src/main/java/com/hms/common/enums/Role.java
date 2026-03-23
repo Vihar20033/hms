@@ -7,5 +7,5 @@ public enum Role {
     RECEPTIONIST,
     PHARMACIST,
     LABORATORY_STAFF,
-    PATIENT
+    
 }

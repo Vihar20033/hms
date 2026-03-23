@@ -32,7 +32,7 @@ export class RegisterComponent {
         [Validators.required, Validators.minLength(3), Validators.maxLength(50), Validators.pattern(USERNAME_PATTERN)],
       ],
       email: ['', [Validators.required, Validators.email, Validators.maxLength(100)]],
-      role: [Role.PATIENT, [Validators.required]],
+      role: [Role.RECEPTIONIST, [Validators.required]],
       password: ['', [Validators.required, Validators.minLength(6), Validators.maxLength(128)]],
     });
   }

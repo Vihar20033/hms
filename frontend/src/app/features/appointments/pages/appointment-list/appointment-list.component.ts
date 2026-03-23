@@ -55,7 +55,7 @@ export class AppointmentListComponent implements OnInit, OnDestroy {
   loadAppointments(): void {
     this.isLoading = true;
     
-    // Pattern: Use getMyAppointments() for Doctors/Patients, getAll() for Staff
+    // Pattern: Use getMyAppointments() for Doctors, getAll() for Staff
     const isClinicalStaff = ['ADMIN', 'RECEPTIONIST', 'NURSE'].includes(this.userRole || '');
     const request = isClinicalStaff 
       ? this.appointmentService.getAll() 
@@ -175,10 +175,6 @@ export class AppointmentListComponent implements OnInit, OnDestroy {
 
     if (this.userRole === 'RECEPTIONIST') {
       return 'Manage arrivals, move patients into the doctor queue, and keep the OPD flowing.';
-    }
-
-    if (this.userRole === 'PATIENT') {
-      return 'Track your upcoming visits and consultation history.';
     }
 
     return 'View and manage all medical consultations.';

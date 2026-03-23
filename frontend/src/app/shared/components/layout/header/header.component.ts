@@ -12,6 +12,7 @@ import { AuthService } from '../../../../core/services/auth.service';
   styleUrl: './header.component.scss',
 })
 export class HeaderComponent implements OnInit {
+  
   user: User | null = null;
   today = new Date();
 

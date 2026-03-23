@@ -1,0 +1,26 @@
+<p-dialog
+  [(visible)]="visible"
+  [modal]="true"
+  [closable]="true"
+  [dismissableMask]="true"
+  [showHeader]="false"
+  styleClass="status-dialog"
+  [style]="{ width: '400px' }"
+  (onHide)="onHide()"
+>
+  <div class="status-modal-content" [ngClass]="state.type">
+    <div class="icon-circle">
+      <i [class]="getIcon(state.type)"></i>
+    </div>
+
+    <h2>{{ state.title }}</h2>
+    <p>{{ state.message }}</p>
+
+    <button
+      pButton
+      [label]="state.type === 'error' ? 'Dismiss' : 'Got it'"
+      (click)="onHide()"
+      class="status-btn"
+    ></button>
+  </div>
+</p-dialog>

@@ -56,27 +56,7 @@ public class UserController {
     @DeleteMapping("/{id}")
     @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<ApiResponse<Void>> deleteUser(@PathVariable UUID id) {
-        User user = userRepository.findById(id)
-                .filter(existingUser -> !existingUser.isDeleted())
-                .orElseThrow(() -> new RuntimeException("User not found"));
-        retireUserIdentity(user);
-        user.setDeleted(true);
-        user.setEnabled(false);
-        userRepository.save(user);
+        userService.deleteUser(id);
         return ResponseEntity.ok(ApiResponse.success(null));
     }
-
-    private void retireUserIdentity(User user) {
-        String uniqueSuffix = "__deleted__" + user.getId();
-
-        if (user.getUsername() != null && !user.getUsername().contains("__deleted__")) {
-            String retiredUsername = user.getUsername() + uniqueSuffix;
-            user.setUsername(retiredUsername.substring(0, Math.min(retiredUsername.length(), 50)));
-        }
-
-        if (user.getEmail() != null && !user.getEmail().contains("__deleted__")) {
-            user.setEmail(user.getId() + "__deleted__" + user.getEmail());
-        }
-    }
 }
-

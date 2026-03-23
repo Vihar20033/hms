@@ -22,12 +22,6 @@ export class LabService {
     );
   }
 
-  getMyTests(): Observable<ApiResponse<LabTest[]>> {
-    return this.http.get<ApiResponse<LabTest[]>>(`${this.apiUrl}/my`).pipe(
-      retry({ count: 2, delay: 1000 }),
-      timeout(10000),
-    );
-  }
 
   getById(id: string): Observable<ApiResponse<LabTest>> {
     return this.http.get<ApiResponse<LabTest>>(`${this.apiUrl}/${id}`).pipe(

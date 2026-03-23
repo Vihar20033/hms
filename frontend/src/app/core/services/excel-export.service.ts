@@ -13,7 +13,7 @@ export class ExcelExportService {
    * @param filename The name of the file (without extension)
    * @param sheetName The name of the Excel sheet
    */
-  exportAsExcelFile(data: any[], filename: string, sheetName: string = 'Sheet1'): void {
+  exportAsExcelFile(data: Record<string, unknown>[], filename: string, sheetName: string = 'Sheet1'): void {
     const worksheet: XLSX.WorkSheet = XLSX.utils.json_to_sheet(data);
     const workbook: XLSX.WorkBook = {
       Sheets: { [sheetName]: worksheet },

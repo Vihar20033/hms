@@ -60,7 +60,7 @@ export const routes: Routes = [
     component: DashboardComponent,
     canActivate: [authGuard, roleGuard],
     data: {
-      roles: ['ADMIN', 'DOCTOR', 'NURSE', 'RECEPTIONIST', 'PHARMACIST', 'LABORATORY_STAFF', 'PATIENT'],
+      roles: ['ADMIN', 'DOCTOR', 'NURSE', 'RECEPTIONIST', 'PHARMACIST', 'LABORATORY_STAFF'],
     },
   },
   {
@@ -101,13 +101,13 @@ export const routes: Routes = [
         path: '',
         component: AppointmentListComponent,
         data: {
-          roles: ['ADMIN', 'DOCTOR', 'NURSE', 'RECEPTIONIST', 'PATIENT'],
+          roles: ['ADMIN', 'DOCTOR', 'NURSE', 'RECEPTIONIST'],
         },
       },
       {
         path: 'book',
         component: AppointmentBookingComponent,
-        data: { roles: ['ADMIN', 'RECEPTIONIST', 'PATIENT'] },
+        data: { roles: ['ADMIN', 'RECEPTIONIST'] },
       },
     ],
   },
@@ -164,7 +164,7 @@ export const routes: Routes = [
       {
         path: '',
         component: PrescriptionListComponent,
-        data: { roles: ['ADMIN', 'DOCTOR', 'PHARMACIST', 'PATIENT'] },
+        data: { roles: ['ADMIN', 'DOCTOR', 'PHARMACIST'] },
       },
       {
         path: 'create/:appointmentId',
@@ -174,7 +174,7 @@ export const routes: Routes = [
       {
         path: ':id',
         component: PrescriptionDetailComponent,
-        data: { roles: ['ADMIN', 'DOCTOR', 'PHARMACIST', 'PATIENT'] },
+        data: { roles: ['ADMIN', 'DOCTOR', 'PHARMACIST'] },
       },
     ],
   },
@@ -207,7 +207,7 @@ export const routes: Routes = [
       {
         path: '',
         component: BillingListComponent,
-        data: { roles: ['ADMIN', 'RECEPTIONIST', 'PATIENT'] },
+        data: { roles: ['ADMIN', 'RECEPTIONIST'] },
       },
     ],
   },
@@ -221,7 +221,7 @@ export const routes: Routes = [
       {
         path: '',
         component: LabListComponent,
-        data: { roles: ['ADMIN', 'DOCTOR', 'LABORATORY_STAFF', 'PATIENT'] },
+        data: { roles: ['ADMIN', 'DOCTOR', 'LABORATORY_STAFF'] },
       },
     ],
   },

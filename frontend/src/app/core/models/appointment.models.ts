@@ -34,6 +34,7 @@ export interface Appointment {
   appointmentTime: string;
   status: AppointmentStatus;
   reason: string;
+  notes?: string;
   tokenNumber?: string;
   isEmergency: boolean;
 }

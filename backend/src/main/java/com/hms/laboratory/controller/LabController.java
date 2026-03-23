@@ -43,19 +43,11 @@ public class LabController {
         return ResponseEntity.ok(ApiResponse.success(labService.getAllTests()));
     }
 
-    /**
-     * Fetch the logged-in patient's own lab requests.
-     */
-    @PreAuthorize("hasRole('PATIENT')")
-    @GetMapping("/my")
-    public ResponseEntity<ApiResponse<List<LabTestResponseDTO>>> getMyTests() {
-        return ResponseEntity.ok(ApiResponse.success(labService.getMyTests()));
-    }
 
     /**
      * Get details of a single report. Note: placed after static lookups to avoid path collisions.
      */
-    @PreAuthorize("hasAnyRole('ADMIN','DOCTOR','LABORATORY_STAFF','PATIENT')")
+    @PreAuthorize("hasAnyRole('ADMIN','DOCTOR','LABORATORY_STAFF')")
     @GetMapping("/{id}")
     public ResponseEntity<ApiResponse<LabTestResponseDTO>> getTestById(@PathVariable("id") UUID id) {
         return ResponseEntity.ok(ApiResponse.success(labService.getTestById(id)));
@@ -94,16 +86,8 @@ public class LabController {
                 .body(ApiResponse.success(labService.createReport(dto)));
     }
 
-    /**
-     * Securely fetch the logged-in patient's own diagnostic findings.
-     */
-    @PreAuthorize("hasRole('PATIENT')")
-    @GetMapping("/reports/my")
-    public ResponseEntity<ApiResponse<List<LabReportResponseDTO>>> getMyReports() {
-        return ResponseEntity.ok(ApiResponse.success(labService.getMyReports()));
-    }
 
-    @PreAuthorize("hasAnyRole('LABORATORY_STAFF','ADMIN','DOCTOR','PATIENT')")
+    @PreAuthorize("hasAnyRole('LABORATORY_STAFF','ADMIN','DOCTOR')")
     @GetMapping("/{testId}/report")
     public ResponseEntity<ApiResponse<LabReportResponseDTO>> getReportByTestId(@PathVariable("testId") UUID testId) {
         return ResponseEntity.ok(ApiResponse.success(labService.getReportByTestId(testId)));

@@ -10,6 +10,7 @@ import { AccessFeedbackService } from '../../../../core/services/access-feedback
   styleUrl: './access-feedback-modal.component.scss',
 })
 export class AccessFeedbackModalComponent {
+  
   readonly modal$ = this.accessFeedbackService.modal$;
 
   constructor(private accessFeedbackService: AccessFeedbackService) {}

@@ -25,7 +25,7 @@ public class AppointmentController {
     private final AppointmentService appointmentService;
     private final AppointmentMapper appointmentMapper;
 
-    @PreAuthorize("hasAnyRole('ADMIN','RECEPTIONIST','PATIENT','DOCTOR')")
+    @PreAuthorize("hasAnyRole('ADMIN','RECEPTIONIST','DOCTOR')")
     @PostMapping
     public ResponseEntity<ApiResponse<AppointmentResponseDTO>> create(@Valid @RequestBody AppointmentRequestDTO dto) {
         return ResponseEntity.status(201)
@@ -45,7 +45,7 @@ public class AppointmentController {
     /**
      * View the logged-in doctor's personal queue of appointments.
      */
-    @PreAuthorize("hasAnyRole('DOCTOR','PATIENT')")
+    @PreAuthorize("hasRole('DOCTOR')")
     @GetMapping("/my")
     public ResponseEntity<ApiResponse<List<AppointmentResponseDTO>>> getMyAppointments() {
         return ResponseEntity.ok(ApiResponse.success(appointmentMapper.toDtoList(appointmentService.getMyAppointments())));
@@ -57,7 +57,7 @@ public class AppointmentController {
         return ResponseEntity.ok(ApiResponse.success(appointmentMapper.toDtoList(appointmentService.getAppointmentsByDepartment(department))));
     }
 
-    @PreAuthorize("hasAnyRole('ADMIN','DOCTOR','NURSE','RECEPTIONIST','PATIENT')")
+    @PreAuthorize("hasAnyRole('ADMIN','DOCTOR','NURSE','RECEPTIONIST')")
     @GetMapping("/patient/{patientId}")
     public ResponseEntity<ApiResponse<List<AppointmentResponseDTO>>> getAppointmentsByPatient(@PathVariable("patientId") UUID patientId) {
         return ResponseEntity.ok(ApiResponse.success(appointmentMapper.toDtoList(appointmentService.getAppointmentsByPatient(patientId))));
@@ -67,7 +67,7 @@ public class AppointmentController {
      * Get details of a single appointment. Service layer enforces ownership check.
      * Note: This is placed after static sub-paths (/my, /department, /patient) to avoid path collisions.
      */
-    @PreAuthorize("hasAnyRole('ADMIN','DOCTOR','NURSE','RECEPTIONIST','PATIENT')")
+    @PreAuthorize("hasAnyRole('ADMIN','DOCTOR','NURSE','RECEPTIONIST')")
     @GetMapping("/{id}")
     public ResponseEntity<ApiResponse<AppointmentResponseDTO>> getAppointmentById(@PathVariable("id") UUID id) {
         return ResponseEntity.ok(ApiResponse.success(appointmentMapper.toDto(appointmentService.getAppointmentById(id))));

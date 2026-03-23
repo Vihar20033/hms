@@ -33,17 +33,13 @@ export class PrescriptionListComponent implements OnInit {
 
   loadPrescriptions(): void {
     this.isLoading = true;
-    const role = this.authService.getUserRole();
-    const request = role === 'PATIENT' 
-      ? this.prescriptionService.getMyPrescriptions() 
-      : this.prescriptionService.getAll();
-
-    request.subscribe({
+    this.prescriptionService.getAll().subscribe({
       next: (res: ApiResponse<Prescription[]>) => {
         this.prescriptions = res.data;
         this.isLoading = false;
       },
-      error: () => {
+      error: (error) => {
+        console.error('Error loading prescriptions:', error);
         this.isLoading = false;
       },
     });

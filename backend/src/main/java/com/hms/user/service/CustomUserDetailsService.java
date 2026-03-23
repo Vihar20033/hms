@@ -1,6 +1,5 @@
 package com.hms.user.service;
 
-import com.hms.user.entity.User;
 import com.hms.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.jspecify.annotations.NonNull;

@@ -30,7 +30,6 @@ com\hms\patient\repository\PatientRepositoryCustom.class
 com\hms\auth\service\AuthService.class
 com\hms\laboratory\mapper\LabMapperImpl.class
 com\hms\prescription\dto\request\PrescriptionRequestDTO$PrescriptionRequestDTOBuilder.class
-com\hms\patient\dto\response\PatientOnboardingResponseDTO$PatientOnboardingResponseDTOBuilder.class
 com\hms\laboratory\entity\LabTest$LabTestBuilderImpl.class
 com\hms\auth\controller\AuthController.class
 com\hms\pharmacy\dto\response\MedicineResponseDTO$MedicineResponseDTOBuilder.class
@@ -125,7 +124,6 @@ com\hms\common\exception\BadRequestException.class
 com\hms\patient\service\impl\PatientServiceImpl.class
 com\hms\doctor\dto\response\DoctorResponse.class
 com\hms\clinical\entity\Vitals$VitalsBuilder.class
-com\hms\laboratory\service\impl\LabServiceImpl.class
 com\hms\pharmacy\dto\request\DispenseMedicineRequestDTO.class
 com\hms\clinical\dto\response\VitalsResponseDTO.class
 com\hms\billing\dto\response\BillingResponseDTO$BillingResponseDTOBuilder.class
@@ -137,7 +135,6 @@ com\hms\laboratory\mapper\LabMapper.class
 com\hms\pharmacy\service\impl\MedicineServiceImpl.class
 com\hms\prescription\entity\Prescription$PrescriptionBuilder.class
 com\hms\clinical\entity\Vitals.class
-com\hms\billing\service\BillingService.class
 com\hms\laboratory\dto\response\LabTestResponseDTO$LabTestResponseDTOBuilder.class
 com\hms\doctor\entity\Doctor$DoctorBuilderImpl.class
 com\hms\pharmacy\dto\request\MedicineRequestDTO.class
@@ -161,14 +158,12 @@ com\hms\common\response\ApiError$ApiErrorBuilder.class
 com\hms\common\exception\HmsErrorCode.class
 com\hms\doctor\repository\DoctorRepository.class
 com\hms\pharmacy\entity\Medicine$MedicineBuilderImpl.class
-com\hms\billing\service\impl\BillingServiceImpl.class
 com\hms\doctor\service\DoctorService.class
 com\hms\prescription\entity\Prescription$PrescriptionBuilderImpl.class
 com\hms\appointment\exception\DoctorUnavailableException.class
 com\hms\doctor\dto\response\DoctorOnboardingResponse.class
 com\hms\doctor\dto\response\DoctorResponse$DoctorResponseBuilder.class
 com\hms\patient\dto\response\PatientResponseDTO.class
-com\hms\prescription\service\impl\PrescriptionServiceImpl.class
 com\hms\common\enums\PrescriptionType.class
 com\hms\user\dto\UserResponseDTO$UserResponseDTOBuilder.class
 com\hms\security\config\AuditorAwareImpl.class
@@ -187,12 +182,10 @@ com\hms\appointment\entity\Appointment$AppointmentBuilderImpl.class
 com\hms\laboratory\repository\LabReportRepository.class
 com\hms\common\enums\MedicineCategory$TokenType.class
 com\hms\doctor\controller\DoctorController.class
-com\hms\appointment\service\impl\AppointmentServiceImpl.class
 com\hms\prescription\mapper\PrescriptionMapperImpl.class
 com\hms\billing\dto\request\BillingRequestDTO$BillingRequestDTOBuilder.class
 com\hms\prescription\entity\Prescription.class
 com\hms\patient\controller\PatientController.class
-com\hms\billing\controller\BillingController.class
 com\hms\pharmacy\dto\request\DispenseMedicineRequestDTO$DispenseItemDTO.class
 com\hms\clinical\service\VitalsService.class
 com\hms\doctor\entity\DoctorSchedule.class
@@ -207,7 +200,6 @@ com\hms\billing\dto\request\BillingRequestDTO.class
 com\hms\billing\entity\Billing$BillingBuilder.class
 com\hms\appointment\mapper\AppointmentMapperImpl.class
 com\hms\doctor\service\impl\DoctorScheduleServiceImpl.class
-com\hms\patient\dto\response\PatientOnboardingResponseDTO.class
 com\hms\laboratory\entity\LabTest$LabTestBuilder.class
 com\hms\doctor\dto\response\DoctorResponseDTO.class
 com\hms\prescription\mapper\PrescriptionMapper.class

@@ -96,7 +96,6 @@ export class UserListComponent implements OnInit {
       case Role.PHARMACIST: return 'badge-pharmacy';
       case Role.LABORATORY_STAFF: return 'badge-lab';
       case Role.RECEPTIONIST: return 'badge-recep';
-      case Role.PATIENT: return 'badge-patient';
       default: return 'badge-default';
     }
   }

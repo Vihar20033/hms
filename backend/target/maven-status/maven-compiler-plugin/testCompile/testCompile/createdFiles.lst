@@ -4,4 +4,3 @@ com\hms\auth\AuthServiceTest.class
 com\hms\prescription\service\impl\PrescriptionServiceImplTest.class
 com\hms\billing\service\impl\BillingServiceImplTest.class
 com\hms\laboratory\service\impl\LabServiceImplTest.class
-com\hms\patient\service\impl\PatientServiceImplTest.class

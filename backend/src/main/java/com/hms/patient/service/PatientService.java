@@ -1,7 +1,6 @@
 package com.hms.patient.service;
 
 import com.hms.patient.dto.request.PatientRequestDTO;
-import com.hms.patient.dto.response.PatientOnboardingResponseDTO;
 import com.hms.patient.dto.response.PatientResponseDTO;
 import org.springframework.data.domain.Slice;
 
@@ -10,7 +9,7 @@ import java.util.UUID;
 
 public interface PatientService {
 
-    PatientOnboardingResponseDTO create(PatientRequestDTO dto);
+    PatientResponseDTO create(PatientRequestDTO dto);
 
     Slice<PatientResponseDTO> search(
             String name,
@@ -23,8 +22,6 @@ public interface PatientService {
     );
 
     PatientResponseDTO getById(UUID id);
-
-    PatientResponseDTO getMyProfile();
 
     PatientResponseDTO update(UUID id, PatientRequestDTO dto);
 

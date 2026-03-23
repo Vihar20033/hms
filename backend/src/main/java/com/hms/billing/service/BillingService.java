@@ -16,8 +16,6 @@ public interface BillingService {
 
     List<BillingResponseDTO> getAllBillings();
 
-    List<BillingResponseDTO> getMyBillings();
-
     List<BillingResponseDTO> getBillingsByPatientId(UUID patientId);
 
     BillingResponseDTO updatePaymentStatus(UUID id, PaymentStatus status);

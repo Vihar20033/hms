@@ -216,12 +216,6 @@ public class AppointmentServiceImpl implements AppointmentService {
             }
         }
 
-        // 3. Patient specific access (Linked via Email in this system)
-        if (role == com.hms.common.enums.Role.PATIENT) {
-            if (appointment.getPatient() != null && user.getEmail().equals(appointment.getPatient().getEmail())) {
-                return;
-            }
-        }
 
         log.warn("Security Alert: User {} with role {} attempted unauthorized access/update for appointment {}.", 
                 user.getUsername(), role, appointment.getId());

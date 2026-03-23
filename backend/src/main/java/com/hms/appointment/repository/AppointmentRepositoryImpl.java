@@ -17,6 +17,7 @@ import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Repository;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -62,131 +63,60 @@ public class AppointmentRepositoryImpl implements AppointmentRepositoryCustom {
 
     @Override
     public List<Appointment> findConflictingAppointment(
-            UUID doctorId,
-            LocalDate date,
-            LocalTime time,
-            List<AppointmentStatus> excludedStatuses) {
-        
-        CriteriaBuilder cb = entityManager.getCriteriaBuilder();
-        CriteriaQuery<Appointment> cq = cb.createQuery(Appointment.class);
-        Root<Appointment> root = cq.from(Appointment.class);
-
-        List<Predicate> predicates = new ArrayList<>();
-        
-        // Not deleted
-        predicates.add(cb.isFalse(root.get("deleted")));
-        
-        // Doctor matches
-        predicates.add(cb.equal(root.get("doctor").get("id"), doctorId));
-        
-        // Date matches
-        predicates.add(cb.equal(root.get("appointmentDate"), date));
-        
-        // Time matches
-        predicates.add(cb.equal(root.get("appointmentTime"), time));
-        
-        // Status not in excluded
-        predicates.add(root.get("status").in(excludedStatuses).not());
-
-        cq.where(predicates.toArray(new Predicate[0]));
-
-        return entityManager.createQuery(cq).getResultList();
+            UUID doctorId, LocalDate date, LocalTime time, List<AppointmentStatus> excludedStatuses) {
+        return findConflictByEntity("doctor", doctorId, date, time, excludedStatuses);
     }
 
     @Override
     public List<Appointment> findPatientConflictingAppointment(
-            UUID patientId,
-            LocalDate date,
-            LocalTime time,
-            List<AppointmentStatus> excludedStatuses) {
-        
-        CriteriaBuilder cb = entityManager.getCriteriaBuilder();
-        CriteriaQuery<Appointment> cq = cb.createQuery(Appointment.class);
-        Root<Appointment> root = cq.from(Appointment.class);
-
-        List<Predicate> predicates = new ArrayList<>();
-        
-        // Not deleted
-        predicates.add(cb.isFalse(root.get("deleted")));
-        
-        // Patient matches
-        predicates.add(cb.equal(root.get("patient").get("id"), patientId));
-        
-        // Date matches
-        predicates.add(cb.equal(root.get("appointmentDate"), date));
-        
-        // Time matches
-        predicates.add(cb.equal(root.get("appointmentTime"), time));
-        
-        // Status not in excluded
-        predicates.add(root.get("status").in(excludedStatuses).not());
-
-        cq.where(predicates.toArray(new Predicate[0]));
-
-        return entityManager.createQuery(cq).getResultList();
+            UUID patientId, LocalDate date, LocalTime time, List<AppointmentStatus> excludedStatuses) {
+        return findConflictByEntity("patient", patientId, date, time, excludedStatuses);
     }
 
     @Override
     public List<Appointment> findAndLockConflictingAppointments(
-            UUID doctorId,
-            java.time.LocalDateTime dateTime,
-            List<AppointmentStatus> statuses) {
-        
-        CriteriaBuilder cb = entityManager.getCriteriaBuilder();
-        CriteriaQuery<Appointment> cq = cb.createQuery(Appointment.class);
-        Root<Appointment> root = cq.from(Appointment.class);
-
-        List<Predicate> predicates = new ArrayList<>();
-        
-        // Not deleted
-        predicates.add(cb.isFalse(root.get("deleted")));
-        
-        // Doctor matches
-        predicates.add(cb.equal(root.get("doctor").get("id"), doctorId));
-        
-        // Date-Time matches
-        predicates.add(cb.equal(root.get("appointmentTime"), dateTime));
-        
-        // Status in active statuses
-        predicates.add(root.get("status").in(statuses));
-
-        cq.where(predicates.toArray(new Predicate[0]));
-
-        TypedQuery<Appointment> query = entityManager.createQuery(cq);
-        // The @Lock annotation in the interface handles pessimistic locking
-        return query.getResultList();
+            UUID doctorId, LocalDateTime dateTime, List<AppointmentStatus> statuses) {
+        return findAndLockConflictByEntity("doctor", doctorId, dateTime, statuses);
     }
 
     @Override
     public List<Appointment> findAndLockPatientConflictingAppointments(
-            UUID patientId,
-            java.time.LocalDateTime dateTime,
-            List<AppointmentStatus> statuses) {
+            UUID patientId, LocalDateTime dateTime, List<AppointmentStatus> statuses) {
+        return findAndLockConflictByEntity("patient", patientId, dateTime, statuses);
+    }
+
+    private List<Appointment> findConflictByEntity(
+            String relationName, UUID entityId, LocalDate date, LocalTime time, List<AppointmentStatus> excludedStatuses) {
         
         CriteriaBuilder cb = entityManager.getCriteriaBuilder();
         CriteriaQuery<Appointment> cq = cb.createQuery(Appointment.class);
         Root<Appointment> root = cq.from(Appointment.class);
 
         List<Predicate> predicates = new ArrayList<>();
-        
-        // Not deleted
         predicates.add(cb.isFalse(root.get("deleted")));
+        predicates.add(cb.equal(root.get(relationName).get("id"), entityId));
+        predicates.add(cb.equal(root.get("appointmentDate"), date));
+        predicates.add(cb.equal(root.get("appointmentTime"), time));
+        predicates.add(root.get("status").in(excludedStatuses).not());
+
+        cq.where(predicates.toArray(new Predicate[0]));
+        return entityManager.createQuery(cq).getResultList();
+    }
+
+    private List<Appointment> findAndLockConflictByEntity(
+            String relationName, UUID entityId, LocalDateTime dateTime, List<AppointmentStatus> statuses) {
         
-        // Patient matches
-        predicates.add(cb.equal(root.get("patient").get("id"), patientId));
-        
-        // Date-Time matches
+        CriteriaBuilder cb = entityManager.getCriteriaBuilder();
+        CriteriaQuery<Appointment> cq = cb.createQuery(Appointment.class);
+        Root<Appointment> root = cq.from(Appointment.class);
+
+        List<Predicate> predicates = new ArrayList<>();
+        predicates.add(cb.isFalse(root.get("deleted")));
+        predicates.add(cb.equal(root.get(relationName).get("id"), entityId));
         predicates.add(cb.equal(root.get("appointmentTime"), dateTime));
-        
-        
-        // Status in active statuses
         predicates.add(root.get("status").in(statuses));
 
         cq.where(predicates.toArray(new Predicate[0]));
-
-        TypedQuery<Appointment> query = entityManager.createQuery(cq);
-        // The @Lock annotation in the interface handles pessimistic locking
-        return query.getResultList();
+        return entityManager.createQuery(cq).getResultList();
     }
 }
-

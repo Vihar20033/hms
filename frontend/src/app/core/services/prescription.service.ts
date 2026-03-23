@@ -17,9 +17,6 @@ export class PrescriptionService {
     return this.http.get<ApiResponse<Prescription[]>>(this.apiUrl);
   }
 
-  getMyPrescriptions(): Observable<ApiResponse<Prescription[]>> {
-    return this.http.get<ApiResponse<Prescription[]>>(`${this.apiUrl}/my`);
-  }
 
   create(prescription: PrescriptionRequest): Observable<ApiResponse<Prescription>> {
     return this.http.post<ApiResponse<Prescription>>(this.apiUrl, prescription);

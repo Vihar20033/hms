@@ -172,14 +172,6 @@ public class LabServiceImpl implements LabService {
         return Collections.emptyList();
     }
 
-    @Override
-    @Transactional(readOnly = true)
-    public List<LabTestResponseDTO> getMyTests() {
-        User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        if (user.getRole() != Role.PATIENT) return Collections.emptyList();
-        
-        return labMapper.toDtoList(labTestRepository.findByPatientEmail(user.getEmail()));
-    }
 
     @Override
     @Transactional(readOnly = true)
@@ -247,14 +239,6 @@ public class LabServiceImpl implements LabService {
         return labMapper.toReportDto(labReportRepository.save(report));
     }
 
-    @Override
-    @Transactional(readOnly = true)
-    public List<LabReportResponseDTO> getMyReports() {
-        User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        if (user.getRole() != Role.PATIENT) return Collections.emptyList();
-        
-        return labMapper.toReportDtoList(labReportRepository.findByLabTestPatientEmail(user.getEmail()));
-    }
 
     @Override
     @Transactional(readOnly = true)
@@ -303,10 +287,6 @@ public class LabServiceImpl implements LabService {
             if (test.getRequestedBy() != null && test.getRequestedBy().getUserId().equals(user.getId())) return;
         }
 
-        // 3. Patient
-        if (role == Role.PATIENT) {
-            if (test.getPatient() != null && user.getEmail().equalsIgnoreCase(test.getPatient().getEmail())) return;
-        }
 
         log.warn("Security Alert: User {} with role {} tried to access lab result {}.", user.getUsername(), role, test.getId());
         throw new AccessDeniedException("You do not have permission to view these laboratory results.");

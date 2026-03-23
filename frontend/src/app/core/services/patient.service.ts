@@ -5,7 +5,7 @@ import { Observable, timer } from 'rxjs';
 import { retry, timeout } from 'rxjs/operators';
 import { environment } from '../../../environments/environment';
 import { ApiResponse } from '../models/common.models';
-import { Patient, PatientOnboardingResponse, PatientRequest, PatientSlice } from '../models/patient.models';
+import { Patient, PatientRequest, PatientSlice } from '../models/patient.models';
 
 @Injectable({
   providedIn: 'root',
@@ -21,11 +21,6 @@ export class PatientService {
       .pipe(retry({ count: 3, delay: (error, retryCount) => timer(Math.pow(2, retryCount) * 1000) }), timeout(10000));
   }
 
-  getMyProfile(): Observable<ApiResponse<Patient>> {
-    return this.http
-      .get<ApiResponse<Patient>>(`${this.apiUrl}/my`)
-      .pipe(retry({ count: 2, delay: 1000 }), timeout(10000));
-  }
 
   search(
     name?: string,
@@ -53,9 +48,9 @@ export class PatientService {
       .pipe(retry({ count: 3, delay: (error, retryCount) => timer(Math.pow(2, retryCount) * 1000) }), timeout(10000));
   }
 
-  create(patient: PatientRequest): Observable<ApiResponse<PatientOnboardingResponse>> {
+  create(patient: PatientRequest): Observable<ApiResponse<Patient>> {
     return this.http
-      .post<ApiResponse<PatientOnboardingResponse>>(this.apiUrl, patient)
+      .post<ApiResponse<Patient>>(this.apiUrl, patient)
       .pipe(retry({ count: 3, delay: (error, retryCount) => timer(Math.pow(2, retryCount) * 1000) }), timeout(10000));
   }
 

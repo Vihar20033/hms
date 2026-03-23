@@ -47,7 +47,7 @@ export class SidebarComponent {
       title: 'Appointments',
       icon: 'ri-calendar-event-line',
       link: '/appointments',
-      roles: ['ADMIN', 'DOCTOR', 'NURSE', 'RECEPTIONIST', 'PATIENT'],
+      roles: ['ADMIN', 'DOCTOR', 'NURSE', 'RECEPTIONIST'],
       summary: 'Queue and consultations',
     },
     {
@@ -68,14 +68,14 @@ export class SidebarComponent {
       title: 'Lab Tests',
       icon: 'ri-test-tube-line',
       link: '/lab',
-      roles: ['ADMIN', 'DOCTOR', 'LABORATORY_STAFF', 'PATIENT'],
+      roles: ['ADMIN', 'DOCTOR', 'LABORATORY_STAFF'],
       summary: 'Orders and results',
     },
     {
       title: 'Prescriptions',
       icon: 'ri-file-text-line',
       link: '/prescriptions',
-      roles: ['ADMIN', 'DOCTOR', 'PHARMACIST', 'PATIENT'],
+      roles: ['ADMIN', 'DOCTOR', 'PHARMACIST'],
       summary: 'Clinical orders',
     },
     {
@@ -96,7 +96,7 @@ export class SidebarComponent {
       title: 'Billing',
       icon: 'ri-bill-line',
       link: '/billing',
-      roles: ['ADMIN', 'RECEPTIONIST', 'PATIENT'],
+      roles: ['ADMIN', 'RECEPTIONIST'],
       summary: 'Invoices and payments',
     },
   ];

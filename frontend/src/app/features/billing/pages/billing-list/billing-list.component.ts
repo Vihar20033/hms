@@ -60,7 +60,7 @@ export class BillingListComponent implements OnInit {
   PaymentStatus = PaymentStatus;
 
   showAutoGenerateModal = false;
-  selectedPatientIdForAuto: string = '';
+  selectedPatientIdForAuto = '';
   patientAppointments: Appointment[] = [];
   selectedAppointmentId: string = '';
 
@@ -147,16 +147,13 @@ export class BillingListComponent implements OnInit {
 
   loadBillings(): void {
     this.isLoading = true;
-    const request = this.userRole === 'PATIENT' 
-      ? this.billingService.getMyBillings() 
-      : this.billingService.getAll();
-
-    request.subscribe({
+    this.billingService.getAll().subscribe({
       next: (res: ApiResponse<Billing[]>) => {
         this.billings = res.data;
         this.isLoading = false;
       },
-      error: () => {
+      error: (error) => {
+        console.error('Error loading billings:', error);
         this.isLoading = false;
       },
     });

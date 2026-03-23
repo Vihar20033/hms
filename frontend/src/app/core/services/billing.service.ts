@@ -18,11 +18,6 @@ export class BillingService {
       .pipe(retry({ count: 3, delay: (error, retryCount) => timer(Math.pow(2, retryCount) * 1000) }), timeout(10000));
   }
 
-  getMyBillings(): Observable<ApiResponse<Billing[]>> {
-    return this.http
-      .get<ApiResponse<Billing[]>>(`${this.apiUrl}/my`)
-      .pipe(retry({ count: 2, delay: 1000 }), timeout(10000));
-  }
 
   getById(id: string): Observable<ApiResponse<Billing>> {
     return this.http

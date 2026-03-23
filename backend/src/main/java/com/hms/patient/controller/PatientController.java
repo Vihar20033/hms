@@ -2,7 +2,6 @@ package com.hms.patient.controller;
 
 import com.hms.common.response.ApiResponse;
 import com.hms.patient.dto.request.PatientRequestDTO;
-import com.hms.patient.dto.response.PatientOnboardingResponseDTO;
 import com.hms.patient.dto.response.PatientResponseDTO;
 import com.hms.patient.service.PatientService;
 import jakarta.validation.Valid;
@@ -24,7 +23,8 @@ public class PatientController {
 
     @PreAuthorize("hasAnyRole('ADMIN','RECEPTIONIST')")
     @PostMapping
-    public ApiResponse<PatientOnboardingResponseDTO> create(@Valid @RequestBody PatientRequestDTO dto) {
+    public ApiResponse<PatientResponseDTO> create(
+            @Valid @RequestBody PatientRequestDTO dto) {
         return ApiResponse.success(service.create(dto));
     }
 
@@ -42,43 +42,27 @@ public class PatientController {
         return ApiResponse.success(service.search(name, email, bloodGroup, urgencyLevel, page, size, sortBy));
     }
 
-    /**
-     * Listing all patients. Strictly restricted to clinical and administrative staff.
-     */
     @PreAuthorize("hasAnyRole('ADMIN','RECEPTIONIST','DOCTOR','NURSE')")
     @GetMapping("/all")
     public ApiResponse<List<PatientResponseDTO>> getAll() {
         return ApiResponse.success(service.getAll());
     }
 
-    /**
-     * Securely fetch the logged-in patient's own profile metadata.
-     */
-    @PreAuthorize("hasRole('PATIENT')")
-    @GetMapping("/my")
-    public ApiResponse<PatientResponseDTO> getMyProfile() {
-        return ApiResponse.success(service.getMyProfile());
-    }
-
-    /**
-     * Fetch a specific patient profile. Service layer enforces identity/role checks.
-     * Note: placed after static lookups to avoid path collisions.
-     */
-    @PreAuthorize("hasAnyRole('ADMIN','DOCTOR','NURSE','RECEPTIONIST','PHARMACIST','PATIENT')")
+    @PreAuthorize("hasAnyRole('ADMIN','DOCTOR','NURSE','RECEPTIONIST','PHARMACIST')")
     @GetMapping("/{id}")
-    public ApiResponse<PatientResponseDTO> getById(@PathVariable("id") UUID id) {
+    public ApiResponse<PatientResponseDTO> getById(@PathVariable UUID id) {
         return ApiResponse.success(service.getById(id));
     }
 
     @PreAuthorize("hasAnyRole('ADMIN','DOCTOR','RECEPTIONIST')")
     @PutMapping("/{id}")
-    public ApiResponse<PatientResponseDTO> update(@PathVariable("id") UUID id, @Valid @RequestBody PatientRequestDTO dto) {
+    public ApiResponse<PatientResponseDTO> update(@PathVariable UUID id, @Valid @RequestBody PatientRequestDTO dto) {
         return ApiResponse.success(service.update(id, dto));
     }
 
     @PreAuthorize("hasAnyRole('ADMIN','RECEPTIONIST','NURSE')")
     @DeleteMapping("/{id}")
-    public ApiResponse<Void> delete(@PathVariable("id") UUID id) {
+    public ApiResponse<Void> delete(@PathVariable UUID id) {
         service.delete(id);
         return ApiResponse.success(null);
     }
