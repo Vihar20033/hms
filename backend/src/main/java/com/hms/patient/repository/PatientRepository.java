@@ -11,5 +11,7 @@ public interface PatientRepository
 
     boolean existsByContactNumber(String contactNumber);
 
+    java.util.Optional<Patient> findByEmail(String email);
+
     long countByCreatedAtBetween(java.time.LocalDateTime start, java.time.LocalDateTime end);
 }

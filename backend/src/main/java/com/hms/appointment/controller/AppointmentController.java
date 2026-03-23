@@ -29,23 +29,29 @@ public class AppointmentController {
     @PostMapping
     public ResponseEntity<ApiResponse<AppointmentResponseDTO>> create(@Valid @RequestBody AppointmentRequestDTO dto) {
         return ResponseEntity.status(201)
-                .body(ApiResponse.success(appointmentMapper.toDto(appointmentService.createAppointment(dto)), "Request successful", org.springframework.http.HttpStatus.CREATED));
+                .body(ApiResponse.success(appointmentMapper.toDto(appointmentService.createAppointment(dto)), "Appointment scheduled successfully", org.springframework.http.HttpStatus.CREATED));
     }
 
-    @PreAuthorize("hasAnyRole('ADMIN','DOCTOR','NURSE','RECEPTIONIST','PATIENT')")
+    /**
+     * View all appointments in the system. Restricted to management staff.
+     */
+    @PreAuthorize("hasAnyRole('ADMIN','RECEPTIONIST')")
     @GetMapping
     public ResponseEntity<ApiResponse<List<AppointmentResponseDTO>>> getAllAppointments() {
         return ResponseEntity
                 .ok(ApiResponse.success(appointmentMapper.toDtoList(appointmentService.getAllAppointments())));
     }
 
-    @PreAuthorize("hasAnyRole('ADMIN','DOCTOR','NURSE','RECEPTIONIST','PATIENT')")
-    @GetMapping("/{id}")
-    public ResponseEntity<ApiResponse<AppointmentResponseDTO>> getAppointmentById(@PathVariable("id") UUID id) {
-        return ResponseEntity.ok(ApiResponse.success(appointmentMapper.toDto(appointmentService.getAppointmentById(id))));
+    /**
+     * View the logged-in doctor's personal queue of appointments.
+     */
+    @PreAuthorize("hasAnyRole('DOCTOR','PATIENT')")
+    @GetMapping("/my")
+    public ResponseEntity<ApiResponse<List<AppointmentResponseDTO>>> getMyAppointments() {
+        return ResponseEntity.ok(ApiResponse.success(appointmentMapper.toDtoList(appointmentService.getMyAppointments())));
     }
 
-    @PreAuthorize("hasAnyRole('ADMIN','DOCTOR','NURSE','RECEPTIONIST')")
+    @PreAuthorize("hasAnyRole('ADMIN','RECEPTIONIST')")
     @GetMapping("/department/{department}")
     public ResponseEntity<ApiResponse<List<AppointmentResponseDTO>>> getAppointmentsByDepartment(@PathVariable("department") Department department) {
         return ResponseEntity.ok(ApiResponse.success(appointmentMapper.toDtoList(appointmentService.getAppointmentsByDepartment(department))));
@@ -55,6 +61,16 @@ public class AppointmentController {
     @GetMapping("/patient/{patientId}")
     public ResponseEntity<ApiResponse<List<AppointmentResponseDTO>>> getAppointmentsByPatient(@PathVariable("patientId") UUID patientId) {
         return ResponseEntity.ok(ApiResponse.success(appointmentMapper.toDtoList(appointmentService.getAppointmentsByPatient(patientId))));
+    }
+
+    /**
+     * Get details of a single appointment. Service layer enforces ownership check.
+     * Note: This is placed after static sub-paths (/my, /department, /patient) to avoid path collisions.
+     */
+    @PreAuthorize("hasAnyRole('ADMIN','DOCTOR','NURSE','RECEPTIONIST','PATIENT')")
+    @GetMapping("/{id}")
+    public ResponseEntity<ApiResponse<AppointmentResponseDTO>> getAppointmentById(@PathVariable("id") UUID id) {
+        return ResponseEntity.ok(ApiResponse.success(appointmentMapper.toDto(appointmentService.getAppointmentById(id))));
     }
 
     @PreAuthorize("hasAnyRole('ADMIN','RECEPTIONIST')")
@@ -101,4 +117,3 @@ public class AppointmentController {
                 .ok(ApiResponse.success(appointmentMapper.toDto(appointmentService.updateStatus(id, AppointmentStatus.COMPLETED))));
     }
 }
-

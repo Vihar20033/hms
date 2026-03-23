@@ -33,7 +33,12 @@ export class PrescriptionListComponent implements OnInit {
 
   loadPrescriptions(): void {
     this.isLoading = true;
-    this.prescriptionService.getAll().subscribe({
+    const role = this.authService.getUserRole();
+    const request = role === 'PATIENT' 
+      ? this.prescriptionService.getMyPrescriptions() 
+      : this.prescriptionService.getAll();
+
+    request.subscribe({
       next: (res: ApiResponse<Prescription[]>) => {
         this.prescriptions = res.data;
         this.isLoading = false;

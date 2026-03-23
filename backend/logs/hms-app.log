@@ -1,0 +1,1404 @@
+2026-03-23 12:40:21.267 [main] INFO  com.hms.HospitalManagementSystemApplication - Starting HospitalManagementSystemApplication using Java 21.0.10 with PID 20580 (C:\Users\Piyush\Desktop\Project\backend\target\classes started by Piyush in C:\Users\Piyush\Desktop\Project\backend)
+2026-03-23 12:40:21.270 [main] DEBUG com.hms.HospitalManagementSystemApplication - Running with Spring Boot v3.3.4, Spring v6.1.13
+2026-03-23 12:40:21.271 [main] INFO  com.hms.HospitalManagementSystemApplication - No active profile set, falling back to 1 default profile: "mysql"
+2026-03-23 12:40:22.228 [main] INFO  o.s.d.r.config.RepositoryConfigurationDelegate - Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2026-03-23 12:40:22.422 [main] INFO  o.s.d.r.config.RepositoryConfigurationDelegate - Finished Spring Data repository scanning in 187 ms. Found 13 JPA repository interfaces.
+2026-03-23 12:40:23.538 [main] INFO  o.s.boot.web.embedded.tomcat.TomcatWebServer - Tomcat initialized with port 8082 (http)
+2026-03-23 12:40:23.561 [main] INFO  org.apache.catalina.core.StandardService - Starting service [Tomcat]
+2026-03-23 12:40:23.562 [main] INFO  org.apache.catalina.core.StandardEngine - Starting Servlet engine: [Apache Tomcat/10.1.30]
+2026-03-23 12:40:23.669 [main] INFO  o.a.c.core.ContainerBase.[Tomcat].[localhost].[/] - Initializing Spring embedded WebApplicationContext
+2026-03-23 12:40:23.671 [main] INFO  o.s.b.w.s.c.ServletWebServerApplicationContext - Root WebApplicationContext: initialization completed in 2287 ms
+2026-03-23 12:40:23.893 [main] INFO  org.hibernate.jpa.internal.util.LogHelper - HHH000204: Processing PersistenceUnitInfo [name: default]
+2026-03-23 12:40:24.015 [main] INFO  org.hibernate.Version - HHH000412: Hibernate ORM core version 6.5.3.Final
+2026-03-23 12:40:24.068 [main] INFO  o.hibernate.cache.internal.RegionFactoryInitiator - HHH000026: Second-level cache disabled
+2026-03-23 12:40:24.527 [main] INFO  o.s.o.j.persistenceunit.SpringPersistenceUnitInfo - No LoadTimeWeaver setup: ignoring JPA class transformer
+2026-03-23 12:40:24.575 [main] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Starting...
+2026-03-23 12:40:24.768 [main] INFO  com.zaxxer.hikari.pool.HikariPool - HikariPool-1 - Added connection com.mysql.cj.jdbc.ConnectionImpl@335b3d6
+2026-03-23 12:40:24.770 [main] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Start completed.
+2026-03-23 12:40:26.695 [main] INFO  o.h.e.t.jta.platform.internal.JtaPlatformInitiator - HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
+2026-03-23 12:40:27.270 [main] INFO  o.s.orm.jpa.LocalContainerEntityManagerFactoryBean - Initialized JPA EntityManagerFactory for persistence unit 'default'
+2026-03-23 12:40:27.585 [main] INFO  o.s.data.jpa.repository.query.QueryEnhancerFactory - Hibernate is in classpath; If applicable, HQL parser will be used.
+2026-03-23 12:40:28.231 [main] DEBUG com.hms.security.jwt.JwtAuthenticationFilter - Filter 'jwtAuthenticationFilter' configured for use
+2026-03-23 12:40:28.547 [main] INFO  o.s.s.c.a.a.c.InitializeUserDetailsBeanManagerConfigurer$InitializeUserDetailsManagerConfigurer - Global AuthenticationManager configured with UserDetailsService bean with name customUserDetailsService
+2026-03-23 12:40:29.241 [main] INFO  com.hms.security.config.SecurityConfig - Production Security configuration successfully initialized.
+2026-03-23 12:40:29.570 [main] WARN  o.s.b.w.s.c.AnnotationConfigServletWebServerApplicationContext - Exception encountered during context initialization - cancelling refresh attempt: org.springframework.context.ApplicationContextException: Failed to start bean 'webServerStartStop'
+2026-03-23 12:40:29.573 [main] INFO  o.s.orm.jpa.LocalContainerEntityManagerFactoryBean - Closing JPA EntityManagerFactory for persistence unit 'default'
+2026-03-23 12:40:29.575 [main] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Shutdown initiated...
+2026-03-23 12:40:29.583 [main] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Shutdown completed.
+2026-03-23 12:40:29.599 [main] INFO  o.s.b.a.logging.ConditionEvaluationReportLogger - 
+
+Error starting ApplicationContext. To display the condition evaluation report re-run your application with 'debug' enabled.
+2026-03-23 12:40:29.632 [main] ERROR o.s.b.diagnostics.LoggingFailureAnalysisReporter - 
+
+***************************
+APPLICATION FAILED TO START
+***************************
+
+Description:
+
+Web server failed to start. Port 8082 was already in use.
+
+Action:
+
+Identify and stop the process that's listening on port 8082 or configure this application to listen on another port.
+
+2026-03-23 12:41:17.037 [main] INFO  com.hms.HospitalManagementSystemApplication - Starting HospitalManagementSystemApplication using Java 21.0.10 with PID 8412 (C:\Users\Piyush\Desktop\Project\backend\target\classes started by Piyush in C:\Users\Piyush\Desktop\Project\backend)
+2026-03-23 12:41:17.038 [main] DEBUG com.hms.HospitalManagementSystemApplication - Running with Spring Boot v3.3.4, Spring v6.1.13
+2026-03-23 12:41:17.040 [main] INFO  com.hms.HospitalManagementSystemApplication - No active profile set, falling back to 1 default profile: "mysql"
+2026-03-23 12:41:17.878 [main] INFO  o.s.d.r.config.RepositoryConfigurationDelegate - Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2026-03-23 12:41:18.066 [main] INFO  o.s.d.r.config.RepositoryConfigurationDelegate - Finished Spring Data repository scanning in 181 ms. Found 13 JPA repository interfaces.
+2026-03-23 12:41:19.065 [main] INFO  o.s.boot.web.embedded.tomcat.TomcatWebServer - Tomcat initialized with port 8082 (http)
+2026-03-23 12:41:19.079 [main] INFO  org.apache.catalina.core.StandardService - Starting service [Tomcat]
+2026-03-23 12:41:19.080 [main] INFO  org.apache.catalina.core.StandardEngine - Starting Servlet engine: [Apache Tomcat/10.1.30]
+2026-03-23 12:41:19.146 [main] INFO  o.a.c.core.ContainerBase.[Tomcat].[localhost].[/] - Initializing Spring embedded WebApplicationContext
+2026-03-23 12:41:19.147 [main] INFO  o.s.b.w.s.c.ServletWebServerApplicationContext - Root WebApplicationContext: initialization completed in 2016 ms
+2026-03-23 12:41:19.357 [main] INFO  org.hibernate.jpa.internal.util.LogHelper - HHH000204: Processing PersistenceUnitInfo [name: default]
+2026-03-23 12:41:19.427 [main] INFO  org.hibernate.Version - HHH000412: Hibernate ORM core version 6.5.3.Final
+2026-03-23 12:41:19.465 [main] INFO  o.hibernate.cache.internal.RegionFactoryInitiator - HHH000026: Second-level cache disabled
+2026-03-23 12:41:19.811 [main] INFO  o.s.o.j.persistenceunit.SpringPersistenceUnitInfo - No LoadTimeWeaver setup: ignoring JPA class transformer
+2026-03-23 12:41:19.846 [main] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Starting...
+2026-03-23 12:41:20.007 [main] INFO  com.zaxxer.hikari.pool.HikariPool - HikariPool-1 - Added connection com.mysql.cj.jdbc.ConnectionImpl@1e95f584
+2026-03-23 12:41:20.009 [main] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Start completed.
+2026-03-23 12:41:21.763 [main] INFO  o.h.e.t.jta.platform.internal.JtaPlatformInitiator - HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
+2026-03-23 12:41:22.306 [main] INFO  o.s.orm.jpa.LocalContainerEntityManagerFactoryBean - Initialized JPA EntityManagerFactory for persistence unit 'default'
+2026-03-23 12:41:22.573 [main] INFO  o.s.data.jpa.repository.query.QueryEnhancerFactory - Hibernate is in classpath; If applicable, HQL parser will be used.
+2026-03-23 12:41:23.359 [main] DEBUG com.hms.security.jwt.JwtAuthenticationFilter - Filter 'jwtAuthenticationFilter' configured for use
+2026-03-23 12:41:23.702 [main] INFO  o.s.s.c.a.a.c.InitializeUserDetailsBeanManagerConfigurer$InitializeUserDetailsManagerConfigurer - Global AuthenticationManager configured with UserDetailsService bean with name customUserDetailsService
+2026-03-23 12:41:24.375 [main] INFO  com.hms.security.config.SecurityConfig - Production Security configuration successfully initialized.
+2026-03-23 12:41:24.698 [main] WARN  o.s.b.w.s.c.AnnotationConfigServletWebServerApplicationContext - Exception encountered during context initialization - cancelling refresh attempt: org.springframework.context.ApplicationContextException: Failed to start bean 'webServerStartStop'
+2026-03-23 12:41:24.702 [main] INFO  o.s.orm.jpa.LocalContainerEntityManagerFactoryBean - Closing JPA EntityManagerFactory for persistence unit 'default'
+2026-03-23 12:41:24.704 [main] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Shutdown initiated...
+2026-03-23 12:41:24.710 [main] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Shutdown completed.
+2026-03-23 12:41:24.723 [main] INFO  o.s.b.a.logging.ConditionEvaluationReportLogger - 
+
+Error starting ApplicationContext. To display the condition evaluation report re-run your application with 'debug' enabled.
+2026-03-23 12:41:24.742 [main] ERROR o.s.b.diagnostics.LoggingFailureAnalysisReporter - 
+
+***************************
+APPLICATION FAILED TO START
+***************************
+
+Description:
+
+Web server failed to start. Port 8082 was already in use.
+
+Action:
+
+Identify and stop the process that's listening on port 8082 or configure this application to listen on another port.
+
+2026-03-23 12:42:05.003 [main] INFO  com.hms.HospitalManagementSystemApplication - Starting HospitalManagementSystemApplication using Java 21.0.10 with PID 19752 (C:\Users\Piyush\Desktop\Project\backend\target\classes started by Piyush in C:\Users\Piyush\Desktop\Project\backend)
+2026-03-23 12:42:05.003 [main] DEBUG com.hms.HospitalManagementSystemApplication - Running with Spring Boot v3.3.4, Spring v6.1.13
+2026-03-23 12:42:05.003 [main] INFO  com.hms.HospitalManagementSystemApplication - No active profile set, falling back to 1 default profile: "mysql"
+2026-03-23 12:42:05.907 [main] INFO  o.s.d.r.config.RepositoryConfigurationDelegate - Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2026-03-23 12:42:06.121 [main] INFO  o.s.d.r.config.RepositoryConfigurationDelegate - Finished Spring Data repository scanning in 206 ms. Found 13 JPA repository interfaces.
+2026-03-23 12:42:07.377 [main] INFO  o.s.boot.web.embedded.tomcat.TomcatWebServer - Tomcat initialized with port 8080 (http)
+2026-03-23 12:42:07.395 [main] INFO  org.apache.catalina.core.StandardService - Starting service [Tomcat]
+2026-03-23 12:42:07.395 [main] INFO  org.apache.catalina.core.StandardEngine - Starting Servlet engine: [Apache Tomcat/10.1.30]
+2026-03-23 12:42:07.464 [main] INFO  o.a.c.core.ContainerBase.[Tomcat].[localhost].[/] - Initializing Spring embedded WebApplicationContext
+2026-03-23 12:42:07.464 [main] INFO  o.s.b.w.s.c.ServletWebServerApplicationContext - Root WebApplicationContext: initialization completed in 2361 ms
+2026-03-23 12:42:07.657 [main] INFO  org.hibernate.jpa.internal.util.LogHelper - HHH000204: Processing PersistenceUnitInfo [name: default]
+2026-03-23 12:42:07.731 [main] INFO  org.hibernate.Version - HHH000412: Hibernate ORM core version 6.5.3.Final
+2026-03-23 12:42:07.770 [main] INFO  o.hibernate.cache.internal.RegionFactoryInitiator - HHH000026: Second-level cache disabled
+2026-03-23 12:42:08.182 [main] INFO  o.s.o.j.persistenceunit.SpringPersistenceUnitInfo - No LoadTimeWeaver setup: ignoring JPA class transformer
+2026-03-23 12:42:08.212 [main] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Starting...
+2026-03-23 12:42:08.382 [main] INFO  com.zaxxer.hikari.pool.HikariPool - HikariPool-1 - Added connection com.mysql.cj.jdbc.ConnectionImpl@1b4ba615
+2026-03-23 12:42:08.383 [main] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Start completed.
+2026-03-23 12:42:10.212 [main] INFO  o.h.e.t.jta.platform.internal.JtaPlatformInitiator - HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
+2026-03-23 12:42:10.746 [main] INFO  o.s.orm.jpa.LocalContainerEntityManagerFactoryBean - Initialized JPA EntityManagerFactory for persistence unit 'default'
+2026-03-23 12:42:11.017 [main] INFO  o.s.data.jpa.repository.query.QueryEnhancerFactory - Hibernate is in classpath; If applicable, HQL parser will be used.
+2026-03-23 12:42:11.833 [main] DEBUG com.hms.security.jwt.JwtAuthenticationFilter - Filter 'jwtAuthenticationFilter' configured for use
+2026-03-23 12:42:12.159 [main] INFO  o.s.s.c.a.a.c.InitializeUserDetailsBeanManagerConfigurer$InitializeUserDetailsManagerConfigurer - Global AuthenticationManager configured with UserDetailsService bean with name customUserDetailsService
+2026-03-23 12:42:12.791 [main] INFO  com.hms.security.config.SecurityConfig - Production Security configuration successfully initialized.
+2026-03-23 12:42:13.118 [main] INFO  o.s.boot.web.embedded.tomcat.TomcatWebServer - Tomcat started on port 8080 (http) with context path '/'
+2026-03-23 12:42:13.126 [main] INFO  com.hms.HospitalManagementSystemApplication - Started HospitalManagementSystemApplication in 8.825 seconds (process running for 9.472)
+2026-03-23 12:42:13.135 [main] INFO  com.hms.common.config.DataInitializer - Starting database column initialization...
+2026-03-23 12:42:13.230 [main] INFO  com.hms.common.config.DataInitializer - Database column initialization completed.
+2026-03-23 12:43:05.470 [http-nio-8080-exec-1] INFO  o.a.c.core.ContainerBase.[Tomcat].[localhost].[/] - Initializing Spring DispatcherServlet 'dispatcherServlet'
+2026-03-23 12:43:05.470 [http-nio-8080-exec-1] INFO  org.springframework.web.servlet.DispatcherServlet - Initializing Servlet 'dispatcherServlet'
+2026-03-23 12:43:05.470 [http-nio-8080-exec-1] INFO  org.springframework.web.servlet.DispatcherServlet - Completed initialization in 0 ms
+2026-03-23 12:43:05.613 [http-nio-8080-exec-3] ERROR com.hms.security.jwt.JwtUtil - Invalid JWT signature: JWT signature does not match locally computed signature. JWT validity cannot be asserted and should not be trusted.
+2026-03-23 12:43:05.614 [http-nio-8080-exec-3] WARN  com.hms.security.jwt.JwtAuthenticationFilter - Invalid JWT provided from IP: 0:0:0:0:0:0:0:1, URL: /api/v1/patients
+2026-03-23 12:43:05.618 [http-nio-8080-exec-3] WARN  com.hms.security.config.SecurityConfig - Access unauthorized to /api/v1/patients - Full authentication is required to access this resource
+2026-03-23 12:43:05.625 [http-nio-8080-exec-3] WARN  com.hms.common.exception.GlobalExceptionHandler - Authentication failed: Full authentication is required to access this resource
+2026-03-23 12:43:05.690 [http-nio-8080-exec-4] ERROR com.hms.security.jwt.JwtUtil - Invalid JWT signature: JWT signature does not match locally computed signature. JWT validity cannot be asserted and should not be trusted.
+2026-03-23 12:43:05.690 [http-nio-8080-exec-4] WARN  com.hms.security.jwt.JwtAuthenticationFilter - Invalid JWT provided from IP: 0:0:0:0:0:0:0:1, URL: /api/v1/patients
+2026-03-23 12:43:05.690 [http-nio-8080-exec-4] WARN  com.hms.security.config.SecurityConfig - Access unauthorized to /api/v1/patients - Full authentication is required to access this resource
+2026-03-23 12:43:05.692 [http-nio-8080-exec-4] WARN  com.hms.common.exception.GlobalExceptionHandler - Authentication failed: Full authentication is required to access this resource
+2026-03-23 12:43:05.698 [http-nio-8080-exec-6] ERROR com.hms.security.jwt.JwtUtil - Invalid JWT signature: JWT signature does not match locally computed signature. JWT validity cannot be asserted and should not be trusted.
+2026-03-23 12:43:05.698 [http-nio-8080-exec-6] WARN  com.hms.security.jwt.JwtAuthenticationFilter - Invalid JWT provided from IP: 0:0:0:0:0:0:0:1, URL: /api/v1/auth/logout
+2026-03-23 12:43:05.813 [http-nio-8080-exec-6] ERROR com.hms.common.exception.GlobalExceptionHandler - Unexpected error occurred at /api/v1/auth/logout
+com.hms.user.exception.UserNotFoundException: User not found
+	at com.hms.auth.AuthService.lambda$logout$3(AuthService.java:99)
+	at java.base/java.util.Optional.orElseThrow(Optional.java:403)
+	at com.hms.auth.AuthService.logout(AuthService.java:99)
+	at java.base/jdk.internal.reflect.DirectMethodHandleAccessor.invoke(DirectMethodHandleAccessor.java:103)
+	at java.base/java.lang.reflect.Method.invoke(Method.java:580)
+	at org.springframework.aop.support.AopUtils.invokeJoinpointUsingReflection(AopUtils.java:355)
+	at org.springframework.aop.framework.ReflectiveMethodInvocation.invokeJoinpoint(ReflectiveMethodInvocation.java:196)
+	at org.springframework.aop.framework.ReflectiveMethodInvocation.proceed(ReflectiveMethodInvocation.java:163)
+	at org.springframework.aop.framework.CglibAopProxy$CglibMethodInvocation.proceed(CglibAopProxy.java:768)
+	at org.springframework.transaction.interceptor.TransactionAspectSupport.invokeWithinTransaction(TransactionAspectSupport.java:379)
+	at org.springframework.transaction.interceptor.TransactionInterceptor.invoke(TransactionInterceptor.java:119)
+	at org.springframework.aop.framework.ReflectiveMethodInvocation.proceed(ReflectiveMethodInvocation.java:184)
+	at org.springframework.aop.framework.CglibAopProxy$CglibMethodInvocation.proceed(CglibAopProxy.java:768)
+	at org.springframework.aop.framework.CglibAopProxy$DynamicAdvisedInterceptor.intercept(CglibAopProxy.java:720)
+	at com.hms.auth.AuthService$$SpringCGLIB$$0.logout(<generated>)
+	at com.hms.auth.AuthController.logout(AuthController.java:45)
+	at java.base/jdk.internal.reflect.DirectMethodHandleAccessor.invoke(DirectMethodHandleAccessor.java:103)
+	at java.base/java.lang.reflect.Method.invoke(Method.java:580)
+	at org.springframework.web.method.support.InvocableHandlerMethod.doInvoke(InvocableHandlerMethod.java:255)
+	at org.springframework.web.method.support.InvocableHandlerMethod.invokeForRequest(InvocableHandlerMethod.java:188)
+	at org.springframework.web.servlet.mvc.method.annotation.ServletInvocableHandlerMethod.invokeAndHandle(ServletInvocableHandlerMethod.java:118)
+	at org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerAdapter.invokeHandlerMethod(RequestMappingHandlerAdapter.java:926)
+	at org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerAdapter.handleInternal(RequestMappingHandlerAdapter.java:831)
+	at org.springframework.web.servlet.mvc.method.AbstractHandlerMethodAdapter.handle(AbstractHandlerMethodAdapter.java:87)
+	at org.springframework.web.servlet.DispatcherServlet.doDispatch(DispatcherServlet.java:1089)
+	at org.springframework.web.servlet.DispatcherServlet.doService(DispatcherServlet.java:979)
+	at org.springframework.web.servlet.FrameworkServlet.processRequest(FrameworkServlet.java:1014)
+	at org.springframework.web.servlet.FrameworkServlet.doPost(FrameworkServlet.java:914)
+	at jakarta.servlet.http.HttpServlet.service(HttpServlet.java:590)
+	at org.springframework.web.servlet.FrameworkServlet.service(FrameworkServlet.java:885)
+	at jakarta.servlet.http.HttpServlet.service(HttpServlet.java:658)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:195)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:140)
+	at org.apache.tomcat.websocket.server.WsFilter.doFilter(WsFilter.java:51)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:164)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:140)
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:110)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:164)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:140)
+	at org.springframework.web.filter.CompositeFilter$VirtualFilterChain.doFilter(CompositeFilter.java:108)
+	at org.springframework.security.web.FilterChainProxy.lambda$doFilterInternal$3(FilterChainProxy.java:231)
+	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:365)
+	at org.springframework.security.web.access.intercept.AuthorizationFilter.doFilter(AuthorizationFilter.java:100)
+	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:374)
+	at org.springframework.security.web.access.ExceptionTranslationFilter.doFilter(ExceptionTranslationFilter.java:126)
+	at org.springframework.security.web.access.ExceptionTranslationFilter.doFilter(ExceptionTranslationFilter.java:120)
+	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:374)
+	at org.springframework.security.web.session.SessionManagementFilter.doFilter(SessionManagementFilter.java:131)
+	at org.springframework.security.web.session.SessionManagementFilter.doFilter(SessionManagementFilter.java:85)
+	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:374)
+	at org.springframework.security.web.authentication.AnonymousAuthenticationFilter.doFilter(AnonymousAuthenticationFilter.java:100)
+	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:374)
+	at org.springframework.security.web.servletapi.SecurityContextHolderAwareRequestFilter.doFilter(SecurityContextHolderAwareRequestFilter.java:179)
+	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:374)
+	at org.springframework.security.web.savedrequest.RequestCacheAwareFilter.doFilter(RequestCacheAwareFilter.java:63)
+	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:374)
+	at com.hms.security.jwt.JwtAuthenticationFilter.doFilterInternal(JwtAuthenticationFilter.java:61)
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116)
+	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:374)
+	at org.springframework.security.web.authentication.logout.LogoutFilter.doFilter(LogoutFilter.java:107)
+	at org.springframework.security.web.authentication.logout.LogoutFilter.doFilter(LogoutFilter.java:93)
+	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:374)
+	at org.springframework.web.filter.CorsFilter.doFilterInternal(CorsFilter.java:91)
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116)
+	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:374)
+	at org.springframework.security.web.header.HeaderWriterFilter.doHeadersAfter(HeaderWriterFilter.java:90)
+	at org.springframework.security.web.header.HeaderWriterFilter.doFilterInternal(HeaderWriterFilter.java:75)
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116)
+	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:374)
+	at org.springframework.security.web.context.SecurityContextHolderFilter.doFilter(SecurityContextHolderFilter.java:82)
+	at org.springframework.security.web.context.SecurityContextHolderFilter.doFilter(SecurityContextHolderFilter.java:69)
+	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:374)
+	at org.springframework.security.web.context.request.async.WebAsyncManagerIntegrationFilter.doFilterInternal(WebAsyncManagerIntegrationFilter.java:62)
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116)
+	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:374)
+	at org.springframework.security.web.session.DisableEncodeUrlFilter.doFilterInternal(DisableEncodeUrlFilter.java:42)
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116)
+	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:374)
+	at org.springframework.security.web.FilterChainProxy.doFilterInternal(FilterChainProxy.java:233)
+	at org.springframework.security.web.FilterChainProxy.doFilter(FilterChainProxy.java:191)
+	at org.springframework.web.filter.CompositeFilter$VirtualFilterChain.doFilter(CompositeFilter.java:113)
+	at org.springframework.web.servlet.handler.HandlerMappingIntrospector.lambda$createCacheFilter$3(HandlerMappingIntrospector.java:195)
+	at org.springframework.web.filter.CompositeFilter$VirtualFilterChain.doFilter(CompositeFilter.java:113)
+	at org.springframework.web.filter.CompositeFilter.doFilter(CompositeFilter.java:74)
+	at org.springframework.security.config.annotation.web.configuration.WebMvcSecurityConfiguration$CompositeFilterChainProxy.doFilter(WebMvcSecurityConfiguration.java:230)
+	at org.springframework.web.filter.DelegatingFilterProxy.invokeDelegate(DelegatingFilterProxy.java:352)
+	at org.springframework.web.filter.DelegatingFilterProxy.doFilter(DelegatingFilterProxy.java:268)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:164)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:140)
+	at org.springframework.web.filter.RequestContextFilter.doFilterInternal(RequestContextFilter.java:100)
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:164)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:140)
+	at org.springframework.web.filter.FormContentFilter.doFilterInternal(FormContentFilter.java:93)
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:164)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:140)
+	at org.springframework.web.filter.CharacterEncodingFilter.doFilterInternal(CharacterEncodingFilter.java:201)
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:164)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:140)
+	at org.apache.catalina.core.StandardWrapperValve.invoke(StandardWrapperValve.java:167)
+	at org.apache.catalina.core.StandardContextValve.invoke(StandardContextValve.java:90)
+	at org.apache.catalina.authenticator.AuthenticatorBase.invoke(AuthenticatorBase.java:483)
+	at org.apache.catalina.core.StandardHostValve.invoke(StandardHostValve.java:115)
+	at org.apache.catalina.valves.ErrorReportValve.invoke(ErrorReportValve.java:93)
+	at org.apache.catalina.core.StandardEngineValve.invoke(StandardEngineValve.java:74)
+	at org.apache.catalina.connector.CoyoteAdapter.service(CoyoteAdapter.java:344)
+	at org.apache.coyote.http11.Http11Processor.service(Http11Processor.java:384)
+	at org.apache.coyote.AbstractProcessorLight.process(AbstractProcessorLight.java:63)
+	at org.apache.coyote.AbstractProtocol$ConnectionHandler.process(AbstractProtocol.java:905)
+	at org.apache.tomcat.util.net.NioEndpoint$SocketProcessor.doRun(NioEndpoint.java:1741)
+	at org.apache.tomcat.util.net.SocketProcessorBase.run(SocketProcessorBase.java:52)
+	at org.apache.tomcat.util.threads.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1190)
+	at org.apache.tomcat.util.threads.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:659)
+	at org.apache.tomcat.util.threads.TaskThread$WrappingRunnable.run(TaskThread.java:63)
+	at java.base/java.lang.Thread.run(Thread.java:1583)
+2026-03-23 12:43:07.698 [http-nio-8080-exec-9] WARN  com.hms.security.config.SecurityConfig - Access unauthorized to /api/v1/patients - Full authentication is required to access this resource
+2026-03-23 12:43:07.698 [http-nio-8080-exec-9] WARN  com.hms.common.exception.GlobalExceptionHandler - Authentication failed: Full authentication is required to access this resource
+2026-03-23 12:43:07.720 [http-nio-8080-exec-10] WARN  com.hms.security.config.SecurityConfig - Access unauthorized to /api/v1/patients - Full authentication is required to access this resource
+2026-03-23 12:43:07.723 [http-nio-8080-exec-10] WARN  com.hms.common.exception.GlobalExceptionHandler - Authentication failed: Full authentication is required to access this resource
+2026-03-23 12:43:08.183 [http-nio-8080-exec-2] INFO  com.hms.security.jwt.JwtAuthenticationFilter - Request authorized for user: recep with authorities: [ROLE_RECEPTIONIST]
+2026-03-23 12:43:09.226 [http-nio-8080-exec-3] INFO  com.hms.security.jwt.JwtAuthenticationFilter - Request authorized for user: recep with authorities: [ROLE_RECEPTIONIST]
+2026-03-23 12:43:09.301 [http-nio-8080-exec-5] INFO  com.hms.security.jwt.JwtAuthenticationFilter - Request authorized for user: recep with authorities: [ROLE_RECEPTIONIST]
+2026-03-23 12:43:10.185 [http-nio-8080-exec-4] INFO  com.hms.security.jwt.JwtAuthenticationFilter - Request authorized for user: recep with authorities: [ROLE_RECEPTIONIST]
+2026-03-23 12:43:10.949 [http-nio-8080-exec-6] INFO  com.hms.security.jwt.JwtAuthenticationFilter - Request authorized for user: recep with authorities: [ROLE_RECEPTIONIST]
+2026-03-23 12:43:10.974 [http-nio-8080-exec-7] INFO  com.hms.security.jwt.JwtAuthenticationFilter - Request authorized for user: recep with authorities: [ROLE_RECEPTIONIST]
+2026-03-23 12:43:11.724 [http-nio-8080-exec-9] INFO  com.hms.security.jwt.JwtAuthenticationFilter - Request authorized for user: recep with authorities: [ROLE_RECEPTIONIST]
+2026-03-23 12:43:11.754 [http-nio-8080-exec-10] INFO  com.hms.security.jwt.JwtAuthenticationFilter - Request authorized for user: recep with authorities: [ROLE_RECEPTIONIST]
+2026-03-23 12:43:11.768 [http-nio-8080-exec-1] INFO  com.hms.security.jwt.JwtAuthenticationFilter - Request authorized for user: recep with authorities: [ROLE_RECEPTIONIST]
+2026-03-23 12:43:12.535 [http-nio-8080-exec-5] INFO  com.hms.security.jwt.JwtAuthenticationFilter - Request authorized for user: recep with authorities: [ROLE_RECEPTIONIST]
+2026-03-23 12:43:12.535 [http-nio-8080-exec-4] INFO  com.hms.security.jwt.JwtAuthenticationFilter - Request authorized for user: recep with authorities: [ROLE_RECEPTIONIST]
+2026-03-23 12:43:13.393 [http-nio-8080-exec-6] INFO  com.hms.security.jwt.JwtAuthenticationFilter - Request authorized for user: recep with authorities: [ROLE_RECEPTIONIST]
+2026-03-23 12:43:14.236 [http-nio-8080-exec-7] INFO  com.hms.security.jwt.JwtAuthenticationFilter - Request authorized for user: recep with authorities: [ROLE_RECEPTIONIST]
+2026-03-23 12:43:14.236 [http-nio-8080-exec-9] INFO  com.hms.security.jwt.JwtAuthenticationFilter - Request authorized for user: recep with authorities: [ROLE_RECEPTIONIST]
+2026-03-23 12:43:14.970 [http-nio-8080-exec-8] INFO  com.hms.security.jwt.JwtAuthenticationFilter - Request authorized for user: recep with authorities: [ROLE_RECEPTIONIST]
+2026-03-23 12:43:15.481 [http-nio-8080-exec-10] INFO  com.hms.security.jwt.JwtAuthenticationFilter - Request authorized for user: recep with authorities: [ROLE_RECEPTIONIST]
+2026-03-23 12:43:15.834 [http-nio-8080-exec-1] INFO  com.hms.security.jwt.JwtAuthenticationFilter - Request authorized for user: recep with authorities: [ROLE_RECEPTIONIST]
+2026-03-23 12:43:15.869 [http-nio-8080-exec-2] INFO  com.hms.security.jwt.JwtAuthenticationFilter - Request authorized for user: recep with authorities: [ROLE_RECEPTIONIST]
+2026-03-23 12:43:16.195 [http-nio-8080-exec-3] INFO  com.hms.security.jwt.JwtAuthenticationFilter - Request authorized for user: recep with authorities: [ROLE_RECEPTIONIST]
+2026-03-23 12:43:16.568 [http-nio-8080-exec-5] INFO  com.hms.security.jwt.JwtAuthenticationFilter - Request authorized for user: recep with authorities: [ROLE_RECEPTIONIST]
+2026-03-23 12:43:16.966 [http-nio-8080-exec-4] INFO  com.hms.security.jwt.JwtAuthenticationFilter - Request authorized for user: recep with authorities: [ROLE_RECEPTIONIST]
+2026-03-23 12:43:16.968 [http-nio-8080-exec-7] INFO  com.hms.security.jwt.JwtAuthenticationFilter - Request authorized for user: recep with authorities: [ROLE_RECEPTIONIST]
+2026-03-23 12:43:16.973 [http-nio-8080-exec-8] INFO  com.hms.security.jwt.JwtAuthenticationFilter - Request authorized for user: recep with authorities: [ROLE_RECEPTIONIST]
+2026-03-23 12:43:18.378 [http-nio-8080-exec-10] INFO  com.hms.security.jwt.JwtAuthenticationFilter - Request authorized for user: recep with authorities: [ROLE_RECEPTIONIST]
+2026-03-23 12:43:19.077 [http-nio-8080-exec-1] INFO  com.hms.security.jwt.JwtAuthenticationFilter - Request authorized for user: recep with authorities: [ROLE_RECEPTIONIST]
+2026-03-23 12:43:19.548 [http-nio-8080-exec-2] INFO  com.hms.security.jwt.JwtAuthenticationFilter - Request authorized for user: recep with authorities: [ROLE_RECEPTIONIST]
+2026-03-23 12:43:19.873 [http-nio-8080-exec-3] INFO  com.hms.security.jwt.JwtAuthenticationFilter - Request authorized for user: recep with authorities: [ROLE_RECEPTIONIST]
+2026-03-23 12:43:20.197 [http-nio-8080-exec-9] INFO  com.hms.security.jwt.JwtAuthenticationFilter - Request authorized for user: recep with authorities: [ROLE_RECEPTIONIST]
+2026-03-23 12:43:20.197 [http-nio-8080-exec-5] INFO  com.hms.security.jwt.JwtAuthenticationFilter - Request authorized for user: recep with authorities: [ROLE_RECEPTIONIST]
+2026-03-23 12:43:20.198 [http-nio-8080-exec-6] INFO  com.hms.security.jwt.JwtAuthenticationFilter - Request authorized for user: recep with authorities: [ROLE_RECEPTIONIST]
+2026-03-23 12:43:20.825 [http-nio-8080-exec-4] INFO  com.hms.security.jwt.JwtAuthenticationFilter - Request authorized for user: recep with authorities: [ROLE_RECEPTIONIST]
+2026-03-23 12:43:22.415 [http-nio-8080-exec-8] INFO  com.hms.security.jwt.JwtAuthenticationFilter - Request authorized for user: recep with authorities: [ROLE_RECEPTIONIST]
+2026-03-23 12:43:22.415 [http-nio-8080-exec-7] INFO  com.hms.security.jwt.JwtAuthenticationFilter - Request authorized for user: recep with authorities: [ROLE_RECEPTIONIST]
+2026-03-23 12:43:22.415 [http-nio-8080-exec-10] INFO  com.hms.security.jwt.JwtAuthenticationFilter - Request authorized for user: recep with authorities: [ROLE_RECEPTIONIST]
+2026-03-23 12:43:23.158 [http-nio-8080-exec-1] INFO  com.hms.security.jwt.JwtAuthenticationFilter - Request authorized for user: recep with authorities: [ROLE_RECEPTIONIST]
+2026-03-23 12:43:23.870 [http-nio-8080-exec-2] INFO  com.hms.security.jwt.JwtAuthenticationFilter - Request authorized for user: recep with authorities: [ROLE_RECEPTIONIST]
+2026-03-23 12:43:23.870 [http-nio-8080-exec-3] INFO  com.hms.security.jwt.JwtAuthenticationFilter - Request authorized for user: recep with authorities: [ROLE_RECEPTIONIST]
+2026-03-23 12:43:23.870 [http-nio-8080-exec-6] INFO  com.hms.security.jwt.JwtAuthenticationFilter - Request authorized for user: recep with authorities: [ROLE_RECEPTIONIST]
+2026-03-23 12:43:31.193 [http-nio-8080-exec-9] INFO  com.hms.security.jwt.JwtAuthenticationFilter - Request authorized for user: recep with authorities: [ROLE_RECEPTIONIST]
+2026-03-23 12:43:32.051 [http-nio-8080-exec-5] INFO  com.hms.security.jwt.JwtAuthenticationFilter - Request authorized for user: recep with authorities: [ROLE_RECEPTIONIST]
+2026-03-23 12:43:32.070 [http-nio-8080-exec-4] INFO  com.hms.security.jwt.JwtAuthenticationFilter - Request authorized for user: recep with authorities: [ROLE_RECEPTIONIST]
+2026-03-23 12:43:32.987 [http-nio-8080-exec-8] INFO  com.hms.security.jwt.JwtAuthenticationFilter - Request authorized for user: recep with authorities: [ROLE_RECEPTIONIST]
+2026-03-23 12:43:35.604 [http-nio-8080-exec-10] INFO  com.hms.security.jwt.JwtAuthenticationFilter - Request authorized for user: recep with authorities: [ROLE_RECEPTIONIST]
+2026-03-23 12:43:35.604 [http-nio-8080-exec-7] INFO  com.hms.security.jwt.JwtAuthenticationFilter - Request authorized for user: recep with authorities: [ROLE_RECEPTIONIST]
+2026-03-23 12:49:17.454 [http-nio-8080-exec-6] INFO  com.hms.security.jwt.JwtAuthenticationFilter - Request authorized for user: recep with authorities: [ROLE_RECEPTIONIST]
+2026-03-23 12:49:18.210 [http-nio-8080-exec-9] INFO  com.hms.security.jwt.JwtAuthenticationFilter - Request authorized for user: recep with authorities: [ROLE_RECEPTIONIST]
+2026-03-23 12:49:18.229 [http-nio-8080-exec-5] INFO  com.hms.security.jwt.JwtAuthenticationFilter - Request authorized for user: recep with authorities: [ROLE_RECEPTIONIST]
+2026-03-23 12:49:19.452 [http-nio-8080-exec-4] INFO  com.hms.security.jwt.JwtAuthenticationFilter - Request authorized for user: recep with authorities: [ROLE_RECEPTIONIST]
+2026-03-23 12:49:20.996 [http-nio-8080-exec-8] INFO  com.hms.security.jwt.JwtAuthenticationFilter - Request authorized for user: recep with authorities: [ROLE_RECEPTIONIST]
+2026-03-23 12:49:22.888 [http-nio-8080-exec-10] INFO  com.hms.security.jwt.JwtAuthenticationFilter - Request authorized for user: recep with authorities: [ROLE_RECEPTIONIST]
+2026-03-23 12:49:26.499 [http-nio-8080-exec-1] INFO  com.hms.security.jwt.JwtAuthenticationFilter - Request authorized for user: admin with authorities: [ROLE_ADMIN]
+2026-03-23 12:49:28.236 [http-nio-8080-exec-3] INFO  com.hms.security.jwt.JwtAuthenticationFilter - Request authorized for user: admin with authorities: [ROLE_ADMIN]
+2026-03-23 12:49:32.709 [http-nio-8080-exec-6] INFO  com.hms.security.jwt.JwtAuthenticationFilter - Request authorized for user: admin with authorities: [ROLE_ADMIN]
+2026-03-23 12:49:38.191 [http-nio-8080-exec-9] INFO  com.hms.security.jwt.JwtAuthenticationFilter - Request authorized for user: admin with authorities: [ROLE_ADMIN]
+2026-03-23 12:49:46.267 [http-nio-8080-exec-4] INFO  com.hms.security.jwt.JwtAuthenticationFilter - Request authorized for user: admin with authorities: [ROLE_ADMIN]
+2026-03-23 12:49:49.896 [http-nio-8080-exec-8] INFO  com.hms.security.jwt.JwtAuthenticationFilter - Request authorized for user: admin with authorities: [ROLE_ADMIN]
+2026-03-23 12:49:52.895 [http-nio-8080-exec-10] INFO  com.hms.security.jwt.JwtAuthenticationFilter - Request authorized for user: admin with authorities: [ROLE_ADMIN]
+2026-03-23 12:49:53.626 [http-nio-8080-exec-7] INFO  com.hms.security.jwt.JwtAuthenticationFilter - Request authorized for user: admin with authorities: [ROLE_ADMIN]
+2026-03-23 12:49:54.926 [http-nio-8080-exec-1] INFO  com.hms.security.jwt.JwtAuthenticationFilter - Request authorized for user: admin with authorities: [ROLE_ADMIN]
+2026-03-23 12:50:01.255 [http-nio-8080-exec-3] INFO  com.hms.security.jwt.JwtAuthenticationFilter - Request authorized for user: admin with authorities: [ROLE_ADMIN]
+2026-03-23 12:50:04.206 [http-nio-8080-exec-2] INFO  com.hms.security.jwt.JwtAuthenticationFilter - Request authorized for user: admin with authorities: [ROLE_ADMIN]
+2026-03-23 12:50:04.858 [http-nio-8080-exec-6] INFO  com.hms.security.jwt.JwtAuthenticationFilter - Request authorized for user: admin with authorities: [ROLE_ADMIN]
+2026-03-23 12:50:07.595 [http-nio-8080-exec-9] INFO  com.hms.security.jwt.JwtAuthenticationFilter - Request authorized for user: admin with authorities: [ROLE_ADMIN]
+2026-03-23 12:51:04.778 [http-nio-8080-exec-10] INFO  com.hms.security.jwt.JwtAuthenticationFilter - Request authorized for user: Rishi with authorities: [ROLE_DOCTOR]
+2026-03-23 12:51:06.473 [http-nio-8080-exec-7] WARN  com.hms.security.jwt.JwtAuthenticationFilter - Stale token detected for Rishi. Token version: 0 | Expected: 1
+2026-03-23 12:51:06.476 [http-nio-8080-exec-7] WARN  com.hms.security.config.SecurityConfig - Access unauthorized to /api/v1/dashboard/summary - Full authentication is required to access this resource
+2026-03-23 12:51:06.478 [http-nio-8080-exec-7] WARN  com.hms.common.exception.GlobalExceptionHandler - Authentication failed: Full authentication is required to access this resource
+2026-03-23 12:51:06.495 [http-nio-8080-exec-1] WARN  com.hms.security.jwt.JwtAuthenticationFilter - Stale token detected for Rishi. Token version: 0 | Expected: 1
+2026-03-23 12:51:06.501 [http-nio-8080-exec-1] ERROR com.hms.common.exception.GlobalExceptionHandler - Unexpected error occurred at /api/v1/auth/logout
+com.hms.user.exception.UserNotFoundException: User not found
+	at com.hms.auth.AuthService.lambda$logout$3(AuthService.java:99)
+	at java.base/java.util.Optional.orElseThrow(Optional.java:403)
+	at com.hms.auth.AuthService.logout(AuthService.java:99)
+	at java.base/jdk.internal.reflect.DirectMethodHandleAccessor.invoke(DirectMethodHandleAccessor.java:103)
+	at java.base/java.lang.reflect.Method.invoke(Method.java:580)
+	at org.springframework.aop.support.AopUtils.invokeJoinpointUsingReflection(AopUtils.java:355)
+	at org.springframework.aop.framework.ReflectiveMethodInvocation.invokeJoinpoint(ReflectiveMethodInvocation.java:196)
+	at org.springframework.aop.framework.ReflectiveMethodInvocation.proceed(ReflectiveMethodInvocation.java:163)
+	at org.springframework.aop.framework.CglibAopProxy$CglibMethodInvocation.proceed(CglibAopProxy.java:768)
+	at org.springframework.transaction.interceptor.TransactionAspectSupport.invokeWithinTransaction(TransactionAspectSupport.java:379)
+	at org.springframework.transaction.interceptor.TransactionInterceptor.invoke(TransactionInterceptor.java:119)
+	at org.springframework.aop.framework.ReflectiveMethodInvocation.proceed(ReflectiveMethodInvocation.java:184)
+	at org.springframework.aop.framework.CglibAopProxy$CglibMethodInvocation.proceed(CglibAopProxy.java:768)
+	at org.springframework.aop.framework.CglibAopProxy$DynamicAdvisedInterceptor.intercept(CglibAopProxy.java:720)
+	at com.hms.auth.AuthService$$SpringCGLIB$$0.logout(<generated>)
+	at com.hms.auth.AuthController.logout(AuthController.java:45)
+	at java.base/jdk.internal.reflect.DirectMethodHandleAccessor.invoke(DirectMethodHandleAccessor.java:103)
+	at java.base/java.lang.reflect.Method.invoke(Method.java:580)
+	at org.springframework.web.method.support.InvocableHandlerMethod.doInvoke(InvocableHandlerMethod.java:255)
+	at org.springframework.web.method.support.InvocableHandlerMethod.invokeForRequest(InvocableHandlerMethod.java:188)
+	at org.springframework.web.servlet.mvc.method.annotation.ServletInvocableHandlerMethod.invokeAndHandle(ServletInvocableHandlerMethod.java:118)
+	at org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerAdapter.invokeHandlerMethod(RequestMappingHandlerAdapter.java:926)
+	at org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerAdapter.handleInternal(RequestMappingHandlerAdapter.java:831)
+	at org.springframework.web.servlet.mvc.method.AbstractHandlerMethodAdapter.handle(AbstractHandlerMethodAdapter.java:87)
+	at org.springframework.web.servlet.DispatcherServlet.doDispatch(DispatcherServlet.java:1089)
+	at org.springframework.web.servlet.DispatcherServlet.doService(DispatcherServlet.java:979)
+	at org.springframework.web.servlet.FrameworkServlet.processRequest(FrameworkServlet.java:1014)
+	at org.springframework.web.servlet.FrameworkServlet.doPost(FrameworkServlet.java:914)
+	at jakarta.servlet.http.HttpServlet.service(HttpServlet.java:590)
+	at org.springframework.web.servlet.FrameworkServlet.service(FrameworkServlet.java:885)
+	at jakarta.servlet.http.HttpServlet.service(HttpServlet.java:658)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:195)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:140)
+	at org.apache.tomcat.websocket.server.WsFilter.doFilter(WsFilter.java:51)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:164)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:140)
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:110)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:164)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:140)
+	at org.springframework.web.filter.CompositeFilter$VirtualFilterChain.doFilter(CompositeFilter.java:108)
+	at org.springframework.security.web.FilterChainProxy.lambda$doFilterInternal$3(FilterChainProxy.java:231)
+	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:365)
+	at org.springframework.security.web.access.intercept.AuthorizationFilter.doFilter(AuthorizationFilter.java:100)
+	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:374)
+	at org.springframework.security.web.access.ExceptionTranslationFilter.doFilter(ExceptionTranslationFilter.java:126)
+	at org.springframework.security.web.access.ExceptionTranslationFilter.doFilter(ExceptionTranslationFilter.java:120)
+	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:374)
+	at org.springframework.security.web.session.SessionManagementFilter.doFilter(SessionManagementFilter.java:131)
+	at org.springframework.security.web.session.SessionManagementFilter.doFilter(SessionManagementFilter.java:85)
+	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:374)
+	at org.springframework.security.web.authentication.AnonymousAuthenticationFilter.doFilter(AnonymousAuthenticationFilter.java:100)
+	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:374)
+	at org.springframework.security.web.servletapi.SecurityContextHolderAwareRequestFilter.doFilter(SecurityContextHolderAwareRequestFilter.java:179)
+	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:374)
+	at org.springframework.security.web.savedrequest.RequestCacheAwareFilter.doFilter(RequestCacheAwareFilter.java:63)
+	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:374)
+	at com.hms.security.jwt.JwtAuthenticationFilter.doFilterInternal(JwtAuthenticationFilter.java:83)
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116)
+	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:374)
+	at org.springframework.security.web.authentication.logout.LogoutFilter.doFilter(LogoutFilter.java:107)
+	at org.springframework.security.web.authentication.logout.LogoutFilter.doFilter(LogoutFilter.java:93)
+	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:374)
+	at org.springframework.web.filter.CorsFilter.doFilterInternal(CorsFilter.java:91)
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116)
+	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:374)
+	at org.springframework.security.web.header.HeaderWriterFilter.doHeadersAfter(HeaderWriterFilter.java:90)
+	at org.springframework.security.web.header.HeaderWriterFilter.doFilterInternal(HeaderWriterFilter.java:75)
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116)
+	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:374)
+	at org.springframework.security.web.context.SecurityContextHolderFilter.doFilter(SecurityContextHolderFilter.java:82)
+	at org.springframework.security.web.context.SecurityContextHolderFilter.doFilter(SecurityContextHolderFilter.java:69)
+	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:374)
+	at org.springframework.security.web.context.request.async.WebAsyncManagerIntegrationFilter.doFilterInternal(WebAsyncManagerIntegrationFilter.java:62)
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116)
+	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:374)
+	at org.springframework.security.web.session.DisableEncodeUrlFilter.doFilterInternal(DisableEncodeUrlFilter.java:42)
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116)
+	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:374)
+	at org.springframework.security.web.FilterChainProxy.doFilterInternal(FilterChainProxy.java:233)
+	at org.springframework.security.web.FilterChainProxy.doFilter(FilterChainProxy.java:191)
+	at org.springframework.web.filter.CompositeFilter$VirtualFilterChain.doFilter(CompositeFilter.java:113)
+	at org.springframework.web.servlet.handler.HandlerMappingIntrospector.lambda$createCacheFilter$3(HandlerMappingIntrospector.java:195)
+	at org.springframework.web.filter.CompositeFilter$VirtualFilterChain.doFilter(CompositeFilter.java:113)
+	at org.springframework.web.filter.CompositeFilter.doFilter(CompositeFilter.java:74)
+	at org.springframework.security.config.annotation.web.configuration.WebMvcSecurityConfiguration$CompositeFilterChainProxy.doFilter(WebMvcSecurityConfiguration.java:230)
+	at org.springframework.web.filter.DelegatingFilterProxy.invokeDelegate(DelegatingFilterProxy.java:352)
+	at org.springframework.web.filter.DelegatingFilterProxy.doFilter(DelegatingFilterProxy.java:268)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:164)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:140)
+	at org.springframework.web.filter.RequestContextFilter.doFilterInternal(RequestContextFilter.java:100)
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:164)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:140)
+	at org.springframework.web.filter.FormContentFilter.doFilterInternal(FormContentFilter.java:93)
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:164)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:140)
+	at org.springframework.web.filter.CharacterEncodingFilter.doFilterInternal(CharacterEncodingFilter.java:201)
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:164)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:140)
+	at org.apache.catalina.core.StandardWrapperValve.invoke(StandardWrapperValve.java:167)
+	at org.apache.catalina.core.StandardContextValve.invoke(StandardContextValve.java:90)
+	at org.apache.catalina.authenticator.AuthenticatorBase.invoke(AuthenticatorBase.java:483)
+	at org.apache.catalina.core.StandardHostValve.invoke(StandardHostValve.java:115)
+	at org.apache.catalina.valves.ErrorReportValve.invoke(ErrorReportValve.java:93)
+	at org.apache.catalina.core.StandardEngineValve.invoke(StandardEngineValve.java:74)
+	at org.apache.catalina.connector.CoyoteAdapter.service(CoyoteAdapter.java:344)
+	at org.apache.coyote.http11.Http11Processor.service(Http11Processor.java:384)
+	at org.apache.coyote.AbstractProcessorLight.process(AbstractProcessorLight.java:63)
+	at org.apache.coyote.AbstractProtocol$ConnectionHandler.process(AbstractProtocol.java:905)
+	at org.apache.tomcat.util.net.NioEndpoint$SocketProcessor.doRun(NioEndpoint.java:1741)
+	at org.apache.tomcat.util.net.SocketProcessorBase.run(SocketProcessorBase.java:52)
+	at org.apache.tomcat.util.threads.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1190)
+	at org.apache.tomcat.util.threads.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:659)
+	at org.apache.tomcat.util.threads.TaskThread$WrappingRunnable.run(TaskThread.java:63)
+	at java.base/java.lang.Thread.run(Thread.java:1583)
+2026-03-23 12:51:08.487 [http-nio-8080-exec-3] WARN  com.hms.security.config.SecurityConfig - Access unauthorized to /api/v1/dashboard/summary - Full authentication is required to access this resource
+2026-03-23 12:51:08.487 [http-nio-8080-exec-3] WARN  com.hms.common.exception.GlobalExceptionHandler - Authentication failed: Full authentication is required to access this resource
+2026-03-23 12:51:10.191 [http-nio-8080-exec-6] INFO  com.hms.security.jwt.JwtAuthenticationFilter - Request authorized for user: Rishi with authorities: [ROLE_DOCTOR]
+2026-03-23 12:51:11.946 [http-nio-8080-exec-9] INFO  com.hms.security.jwt.JwtAuthenticationFilter - Request authorized for user: Rishi with authorities: [ROLE_DOCTOR]
+2026-03-23 12:51:11.965 [http-nio-8080-exec-5] INFO  com.hms.security.jwt.JwtAuthenticationFilter - Request authorized for user: Rishi with authorities: [ROLE_DOCTOR]
+2026-03-23 12:51:12.500 [http-nio-8080-exec-4] INFO  com.hms.security.jwt.JwtAuthenticationFilter - Request authorized for user: Rishi with authorities: [ROLE_DOCTOR]
+2026-03-23 12:51:15.654 [http-nio-8080-exec-10] INFO  com.hms.security.jwt.JwtAuthenticationFilter - Request authorized for user: Rishi with authorities: [ROLE_DOCTOR]
+2026-03-23 12:51:15.656 [http-nio-8080-exec-7] INFO  com.hms.security.jwt.JwtAuthenticationFilter - Request authorized for user: Rishi with authorities: [ROLE_DOCTOR]
+2026-03-23 12:51:17.176 [http-nio-8080-exec-3] INFO  com.hms.security.jwt.JwtAuthenticationFilter - Request authorized for user: Rishi with authorities: [ROLE_DOCTOR]
+2026-03-23 12:51:17.994 [http-nio-8080-exec-6] INFO  com.hms.security.jwt.JwtAuthenticationFilter - Request authorized for user: Rishi with authorities: [ROLE_DOCTOR]
+2026-03-23 12:51:17.994 [http-nio-8080-exec-2] INFO  com.hms.security.jwt.JwtAuthenticationFilter - Request authorized for user: Rishi with authorities: [ROLE_DOCTOR]
+2026-03-23 12:51:18.904 [http-nio-8080-exec-9] INFO  com.hms.security.jwt.JwtAuthenticationFilter - Request authorized for user: Rishi with authorities: [ROLE_DOCTOR]
+2026-03-23 12:51:18.929 [http-nio-8080-exec-5] INFO  com.hms.security.jwt.JwtAuthenticationFilter - Request authorized for user: Rishi with authorities: [ROLE_DOCTOR]
+2026-03-23 12:51:19.923 [http-nio-8080-exec-4] INFO  com.hms.security.jwt.JwtAuthenticationFilter - Request authorized for user: Rishi with authorities: [ROLE_DOCTOR]
+2026-03-23 12:51:19.952 [http-nio-8080-exec-8] INFO  com.hms.security.jwt.JwtAuthenticationFilter - Request authorized for user: Rishi with authorities: [ROLE_DOCTOR]
+2026-03-23 12:51:20.740 [http-nio-8080-exec-10] INFO  com.hms.security.jwt.JwtAuthenticationFilter - Request authorized for user: Rishi with authorities: [ROLE_DOCTOR]
+2026-03-23 12:51:22.350 [http-nio-8080-exec-7] INFO  com.hms.security.jwt.JwtAuthenticationFilter - Request authorized for user: Rishi with authorities: [ROLE_DOCTOR]
+2026-03-23 12:51:22.378 [http-nio-8080-exec-1] INFO  com.hms.security.jwt.JwtAuthenticationFilter - Request authorized for user: Rishi with authorities: [ROLE_DOCTOR]
+2026-03-23 13:06:01.322 [http-nio-8080-exec-2] INFO  com.hms.security.jwt.JwtAuthenticationFilter - Request authorized for user: Rishi with authorities: [ROLE_DOCTOR]
+2026-03-23 13:06:01.338 [http-nio-8080-exec-9] INFO  com.hms.security.jwt.JwtAuthenticationFilter - Request authorized for user: Rishi with authorities: [ROLE_DOCTOR]
+2026-03-23 13:06:47.611 [http-nio-8080-exec-5] INFO  com.hms.security.jwt.JwtAuthenticationFilter - Request authorized for user: Rishi with authorities: [ROLE_DOCTOR]
+2026-03-23 13:06:47.625 [http-nio-8080-exec-4] INFO  com.hms.security.jwt.JwtAuthenticationFilter - Request authorized for user: Rishi with authorities: [ROLE_DOCTOR]
+2026-03-23 13:06:58.949 [http-nio-8080-exec-8] INFO  com.hms.security.jwt.JwtAuthenticationFilter - Request authorized for user: Rishi with authorities: [ROLE_DOCTOR]
+2026-03-23 13:06:58.973 [http-nio-8080-exec-10] INFO  com.hms.security.jwt.JwtAuthenticationFilter - Request authorized for user: Rishi with authorities: [ROLE_DOCTOR]
+2026-03-23 13:07:11.511 [http-nio-8080-exec-7] INFO  com.hms.security.jwt.JwtAuthenticationFilter - Request authorized for user: Rishi with authorities: [ROLE_DOCTOR]
+2026-03-23 13:07:11.523 [http-nio-8080-exec-1] INFO  com.hms.security.jwt.JwtAuthenticationFilter - Request authorized for user: Rishi with authorities: [ROLE_DOCTOR]
+2026-03-23 13:07:31.493 [http-nio-8080-exec-6] INFO  com.hms.security.jwt.JwtAuthenticationFilter - Request authorized for user: Rishi with authorities: [ROLE_DOCTOR]
+2026-03-23 13:07:31.508 [http-nio-8080-exec-3] INFO  com.hms.security.jwt.JwtAuthenticationFilter - Request authorized for user: Rishi with authorities: [ROLE_DOCTOR]
+2026-03-23 13:07:45.625 [http-nio-8080-exec-2] INFO  com.hms.security.jwt.JwtAuthenticationFilter - Request authorized for user: Rishi with authorities: [ROLE_DOCTOR]
+2026-03-23 13:07:45.644 [http-nio-8080-exec-9] INFO  com.hms.security.jwt.JwtAuthenticationFilter - Request authorized for user: Rishi with authorities: [ROLE_DOCTOR]
+2026-03-23 13:07:55.477 [http-nio-8080-exec-5] INFO  com.hms.security.jwt.JwtAuthenticationFilter - Request authorized for user: Rishi with authorities: [ROLE_DOCTOR]
+2026-03-23 13:07:55.490 [http-nio-8080-exec-4] INFO  com.hms.security.jwt.JwtAuthenticationFilter - Request authorized for user: Rishi with authorities: [ROLE_DOCTOR]
+2026-03-23 13:08:06.543 [http-nio-8080-exec-8] INFO  com.hms.security.jwt.JwtAuthenticationFilter - Request authorized for user: Rishi with authorities: [ROLE_DOCTOR]
+2026-03-23 13:08:06.561 [http-nio-8080-exec-10] INFO  com.hms.security.jwt.JwtAuthenticationFilter - Request authorized for user: Rishi with authorities: [ROLE_DOCTOR]
+2026-03-23 13:08:18.492 [http-nio-8080-exec-7] INFO  com.hms.security.jwt.JwtAuthenticationFilter - Request authorized for user: Rishi with authorities: [ROLE_DOCTOR]
+2026-03-23 13:08:18.507 [http-nio-8080-exec-1] INFO  com.hms.security.jwt.JwtAuthenticationFilter - Request authorized for user: Rishi with authorities: [ROLE_DOCTOR]
+2026-03-23 13:08:28.461 [http-nio-8080-exec-6] INFO  com.hms.security.jwt.JwtAuthenticationFilter - Request authorized for user: Rishi with authorities: [ROLE_DOCTOR]
+2026-03-23 13:08:28.472 [http-nio-8080-exec-3] INFO  com.hms.security.jwt.JwtAuthenticationFilter - Request authorized for user: Rishi with authorities: [ROLE_DOCTOR]
+2026-03-23 13:08:36.541 [http-nio-8080-exec-2] INFO  com.hms.security.jwt.JwtAuthenticationFilter - Request authorized for user: Rishi with authorities: [ROLE_DOCTOR]
+2026-03-23 13:08:36.562 [http-nio-8080-exec-9] INFO  com.hms.security.jwt.JwtAuthenticationFilter - Request authorized for user: Rishi with authorities: [ROLE_DOCTOR]
+2026-03-23 13:08:42.598 [http-nio-8080-exec-5] INFO  com.hms.security.jwt.JwtAuthenticationFilter - Request authorized for user: Rishi with authorities: [ROLE_DOCTOR]
+2026-03-23 13:08:42.619 [http-nio-8080-exec-4] INFO  com.hms.security.jwt.JwtAuthenticationFilter - Request authorized for user: Rishi with authorities: [ROLE_DOCTOR]
+2026-03-23 13:08:57.457 [http-nio-8080-exec-8] INFO  com.hms.security.jwt.JwtAuthenticationFilter - Request authorized for user: Rishi with authorities: [ROLE_DOCTOR]
+2026-03-23 13:08:57.481 [http-nio-8080-exec-10] INFO  com.hms.security.jwt.JwtAuthenticationFilter - Request authorized for user: Rishi with authorities: [ROLE_DOCTOR]
+2026-03-23 13:12:35.513 [http-nio-8080-exec-3] INFO  com.hms.security.jwt.JwtAuthenticationFilter - Request authorized for user: Rishi with authorities: [ROLE_DOCTOR]
+2026-03-23 13:12:35.516 [http-nio-8080-exec-3] ERROR com.hms.common.exception.GlobalExceptionHandler - Unexpected error occurred at /api/v1/appointments/my
+org.springframework.web.method.annotation.MethodArgumentTypeMismatchException: Failed to convert value of type 'java.lang.String' to required type 'java.util.UUID'; Invalid UUID string: my
+	at org.springframework.web.method.annotation.AbstractNamedValueMethodArgumentResolver.convertIfNecessary(AbstractNamedValueMethodArgumentResolver.java:302)
+	at org.springframework.web.method.annotation.AbstractNamedValueMethodArgumentResolver.resolveArgument(AbstractNamedValueMethodArgumentResolver.java:137)
+	at org.springframework.web.method.support.HandlerMethodArgumentResolverComposite.resolveArgument(HandlerMethodArgumentResolverComposite.java:122)
+	at org.springframework.web.method.support.InvocableHandlerMethod.getMethodArgumentValues(InvocableHandlerMethod.java:224)
+	at org.springframework.web.method.support.InvocableHandlerMethod.invokeForRequest(InvocableHandlerMethod.java:178)
+	at org.springframework.web.servlet.mvc.method.annotation.ServletInvocableHandlerMethod.invokeAndHandle(ServletInvocableHandlerMethod.java:118)
+	at org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerAdapter.invokeHandlerMethod(RequestMappingHandlerAdapter.java:926)
+	at org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerAdapter.handleInternal(RequestMappingHandlerAdapter.java:831)
+	at org.springframework.web.servlet.mvc.method.AbstractHandlerMethodAdapter.handle(AbstractHandlerMethodAdapter.java:87)
+	at org.springframework.web.servlet.DispatcherServlet.doDispatch(DispatcherServlet.java:1089)
+	at org.springframework.web.servlet.DispatcherServlet.doService(DispatcherServlet.java:979)
+	at org.springframework.web.servlet.FrameworkServlet.processRequest(FrameworkServlet.java:1014)
+	at org.springframework.web.servlet.FrameworkServlet.doGet(FrameworkServlet.java:903)
+	at jakarta.servlet.http.HttpServlet.service(HttpServlet.java:564)
+	at org.springframework.web.servlet.FrameworkServlet.service(FrameworkServlet.java:885)
+	at jakarta.servlet.http.HttpServlet.service(HttpServlet.java:658)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:195)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:140)
+	at org.apache.tomcat.websocket.server.WsFilter.doFilter(WsFilter.java:51)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:164)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:140)
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:110)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:164)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:140)
+	at org.springframework.web.filter.CompositeFilter$VirtualFilterChain.doFilter(CompositeFilter.java:108)
+	at org.springframework.security.web.FilterChainProxy.lambda$doFilterInternal$3(FilterChainProxy.java:231)
+	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:365)
+	at org.springframework.security.web.access.intercept.AuthorizationFilter.doFilter(AuthorizationFilter.java:100)
+	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:374)
+	at org.springframework.security.web.access.ExceptionTranslationFilter.doFilter(ExceptionTranslationFilter.java:126)
+	at org.springframework.security.web.access.ExceptionTranslationFilter.doFilter(ExceptionTranslationFilter.java:120)
+	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:374)
+	at org.springframework.security.web.session.SessionManagementFilter.doFilter(SessionManagementFilter.java:131)
+	at org.springframework.security.web.session.SessionManagementFilter.doFilter(SessionManagementFilter.java:85)
+	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:374)
+	at org.springframework.security.web.authentication.AnonymousAuthenticationFilter.doFilter(AnonymousAuthenticationFilter.java:100)
+	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:374)
+	at org.springframework.security.web.servletapi.SecurityContextHolderAwareRequestFilter.doFilter(SecurityContextHolderAwareRequestFilter.java:179)
+	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:374)
+	at org.springframework.security.web.savedrequest.RequestCacheAwareFilter.doFilter(RequestCacheAwareFilter.java:63)
+	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:374)
+	at com.hms.security.jwt.JwtAuthenticationFilter.doFilterInternal(JwtAuthenticationFilter.java:102)
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116)
+	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:374)
+	at org.springframework.security.web.authentication.logout.LogoutFilter.doFilter(LogoutFilter.java:107)
+	at org.springframework.security.web.authentication.logout.LogoutFilter.doFilter(LogoutFilter.java:93)
+	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:374)
+	at org.springframework.web.filter.CorsFilter.doFilterInternal(CorsFilter.java:91)
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116)
+	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:374)
+	at org.springframework.security.web.header.HeaderWriterFilter.doHeadersAfter(HeaderWriterFilter.java:90)
+	at org.springframework.security.web.header.HeaderWriterFilter.doFilterInternal(HeaderWriterFilter.java:75)
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116)
+	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:374)
+	at org.springframework.security.web.context.SecurityContextHolderFilter.doFilter(SecurityContextHolderFilter.java:82)
+	at org.springframework.security.web.context.SecurityContextHolderFilter.doFilter(SecurityContextHolderFilter.java:69)
+	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:374)
+	at org.springframework.security.web.context.request.async.WebAsyncManagerIntegrationFilter.doFilterInternal(WebAsyncManagerIntegrationFilter.java:62)
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116)
+	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:374)
+	at org.springframework.security.web.session.DisableEncodeUrlFilter.doFilterInternal(DisableEncodeUrlFilter.java:42)
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116)
+	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:374)
+	at org.springframework.security.web.FilterChainProxy.doFilterInternal(FilterChainProxy.java:233)
+	at org.springframework.security.web.FilterChainProxy.doFilter(FilterChainProxy.java:191)
+	at org.springframework.web.filter.CompositeFilter$VirtualFilterChain.doFilter(CompositeFilter.java:113)
+	at org.springframework.web.servlet.handler.HandlerMappingIntrospector.lambda$createCacheFilter$3(HandlerMappingIntrospector.java:195)
+	at org.springframework.web.filter.CompositeFilter$VirtualFilterChain.doFilter(CompositeFilter.java:113)
+	at org.springframework.web.filter.CompositeFilter.doFilter(CompositeFilter.java:74)
+	at org.springframework.security.config.annotation.web.configuration.WebMvcSecurityConfiguration$CompositeFilterChainProxy.doFilter(WebMvcSecurityConfiguration.java:230)
+	at org.springframework.web.filter.DelegatingFilterProxy.invokeDelegate(DelegatingFilterProxy.java:352)
+	at org.springframework.web.filter.DelegatingFilterProxy.doFilter(DelegatingFilterProxy.java:268)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:164)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:140)
+	at org.springframework.web.filter.RequestContextFilter.doFilterInternal(RequestContextFilter.java:100)
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:164)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:140)
+	at org.springframework.web.filter.FormContentFilter.doFilterInternal(FormContentFilter.java:93)
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:164)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:140)
+	at org.springframework.web.filter.CharacterEncodingFilter.doFilterInternal(CharacterEncodingFilter.java:201)
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:164)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:140)
+	at org.apache.catalina.core.StandardWrapperValve.invoke(StandardWrapperValve.java:167)
+	at org.apache.catalina.core.StandardContextValve.invoke(StandardContextValve.java:90)
+	at org.apache.catalina.authenticator.AuthenticatorBase.invoke(AuthenticatorBase.java:483)
+	at org.apache.catalina.core.StandardHostValve.invoke(StandardHostValve.java:115)
+	at org.apache.catalina.valves.ErrorReportValve.invoke(ErrorReportValve.java:93)
+	at org.apache.catalina.core.StandardEngineValve.invoke(StandardEngineValve.java:74)
+	at org.apache.catalina.connector.CoyoteAdapter.service(CoyoteAdapter.java:344)
+	at org.apache.coyote.http11.Http11Processor.service(Http11Processor.java:384)
+	at org.apache.coyote.AbstractProcessorLight.process(AbstractProcessorLight.java:63)
+	at org.apache.coyote.AbstractProtocol$ConnectionHandler.process(AbstractProtocol.java:905)
+	at org.apache.tomcat.util.net.NioEndpoint$SocketProcessor.doRun(NioEndpoint.java:1741)
+	at org.apache.tomcat.util.net.SocketProcessorBase.run(SocketProcessorBase.java:52)
+	at org.apache.tomcat.util.threads.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1190)
+	at org.apache.tomcat.util.threads.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:659)
+	at org.apache.tomcat.util.threads.TaskThread$WrappingRunnable.run(TaskThread.java:63)
+	at java.base/java.lang.Thread.run(Thread.java:1583)
+Caused by: java.lang.IllegalArgumentException: Invalid UUID string: my
+	at java.base/java.util.UUID.fromString1(UUID.java:282)
+	at java.base/java.util.UUID.fromString(UUID.java:260)
+	at org.springframework.beans.propertyeditors.UUIDEditor.setAsText(UUIDEditor.java:37)
+	at org.springframework.beans.TypeConverterDelegate.doConvertTextValue(TypeConverterDelegate.java:439)
+	at org.springframework.beans.TypeConverterDelegate.doConvertValue(TypeConverterDelegate.java:412)
+	at org.springframework.beans.TypeConverterDelegate.convertIfNecessary(TypeConverterDelegate.java:161)
+	at org.springframework.beans.TypeConverterSupport.convertIfNecessary(TypeConverterSupport.java:80)
+	at org.springframework.beans.TypeConverterSupport.convertIfNecessary(TypeConverterSupport.java:53)
+	at org.springframework.validation.DataBinder.convertIfNecessary(DataBinder.java:860)
+	at org.springframework.web.method.annotation.AbstractNamedValueMethodArgumentResolver.convertIfNecessary(AbstractNamedValueMethodArgumentResolver.java:294)
+	... 101 common frames omitted
+2026-03-23 13:12:36.589 [http-nio-8080-exec-2] INFO  com.hms.security.jwt.JwtAuthenticationFilter - Request authorized for user: Rishi with authorities: [ROLE_DOCTOR]
+2026-03-23 13:12:36.590 [http-nio-8080-exec-2] ERROR com.hms.common.exception.GlobalExceptionHandler - Unexpected error occurred at /api/v1/appointments/my
+org.springframework.web.method.annotation.MethodArgumentTypeMismatchException: Failed to convert value of type 'java.lang.String' to required type 'java.util.UUID'; Invalid UUID string: my
+	at org.springframework.web.method.annotation.AbstractNamedValueMethodArgumentResolver.convertIfNecessary(AbstractNamedValueMethodArgumentResolver.java:302)
+	at org.springframework.web.method.annotation.AbstractNamedValueMethodArgumentResolver.resolveArgument(AbstractNamedValueMethodArgumentResolver.java:137)
+	at org.springframework.web.method.support.HandlerMethodArgumentResolverComposite.resolveArgument(HandlerMethodArgumentResolverComposite.java:122)
+	at org.springframework.web.method.support.InvocableHandlerMethod.getMethodArgumentValues(InvocableHandlerMethod.java:224)
+	at org.springframework.web.method.support.InvocableHandlerMethod.invokeForRequest(InvocableHandlerMethod.java:178)
+	at org.springframework.web.servlet.mvc.method.annotation.ServletInvocableHandlerMethod.invokeAndHandle(ServletInvocableHandlerMethod.java:118)
+	at org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerAdapter.invokeHandlerMethod(RequestMappingHandlerAdapter.java:926)
+	at org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerAdapter.handleInternal(RequestMappingHandlerAdapter.java:831)
+	at org.springframework.web.servlet.mvc.method.AbstractHandlerMethodAdapter.handle(AbstractHandlerMethodAdapter.java:87)
+	at org.springframework.web.servlet.DispatcherServlet.doDispatch(DispatcherServlet.java:1089)
+	at org.springframework.web.servlet.DispatcherServlet.doService(DispatcherServlet.java:979)
+	at org.springframework.web.servlet.FrameworkServlet.processRequest(FrameworkServlet.java:1014)
+	at org.springframework.web.servlet.FrameworkServlet.doGet(FrameworkServlet.java:903)
+	at jakarta.servlet.http.HttpServlet.service(HttpServlet.java:564)
+	at org.springframework.web.servlet.FrameworkServlet.service(FrameworkServlet.java:885)
+	at jakarta.servlet.http.HttpServlet.service(HttpServlet.java:658)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:195)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:140)
+	at org.apache.tomcat.websocket.server.WsFilter.doFilter(WsFilter.java:51)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:164)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:140)
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:110)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:164)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:140)
+	at org.springframework.web.filter.CompositeFilter$VirtualFilterChain.doFilter(CompositeFilter.java:108)
+	at org.springframework.security.web.FilterChainProxy.lambda$doFilterInternal$3(FilterChainProxy.java:231)
+	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:365)
+	at org.springframework.security.web.access.intercept.AuthorizationFilter.doFilter(AuthorizationFilter.java:100)
+	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:374)
+	at org.springframework.security.web.access.ExceptionTranslationFilter.doFilter(ExceptionTranslationFilter.java:126)
+	at org.springframework.security.web.access.ExceptionTranslationFilter.doFilter(ExceptionTranslationFilter.java:120)
+	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:374)
+	at org.springframework.security.web.session.SessionManagementFilter.doFilter(SessionManagementFilter.java:131)
+	at org.springframework.security.web.session.SessionManagementFilter.doFilter(SessionManagementFilter.java:85)
+	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:374)
+	at org.springframework.security.web.authentication.AnonymousAuthenticationFilter.doFilter(AnonymousAuthenticationFilter.java:100)
+	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:374)
+	at org.springframework.security.web.servletapi.SecurityContextHolderAwareRequestFilter.doFilter(SecurityContextHolderAwareRequestFilter.java:179)
+	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:374)
+	at org.springframework.security.web.savedrequest.RequestCacheAwareFilter.doFilter(RequestCacheAwareFilter.java:63)
+	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:374)
+	at com.hms.security.jwt.JwtAuthenticationFilter.doFilterInternal(JwtAuthenticationFilter.java:102)
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116)
+	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:374)
+	at org.springframework.security.web.authentication.logout.LogoutFilter.doFilter(LogoutFilter.java:107)
+	at org.springframework.security.web.authentication.logout.LogoutFilter.doFilter(LogoutFilter.java:93)
+	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:374)
+	at org.springframework.web.filter.CorsFilter.doFilterInternal(CorsFilter.java:91)
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116)
+	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:374)
+	at org.springframework.security.web.header.HeaderWriterFilter.doHeadersAfter(HeaderWriterFilter.java:90)
+	at org.springframework.security.web.header.HeaderWriterFilter.doFilterInternal(HeaderWriterFilter.java:75)
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116)
+	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:374)
+	at org.springframework.security.web.context.SecurityContextHolderFilter.doFilter(SecurityContextHolderFilter.java:82)
+	at org.springframework.security.web.context.SecurityContextHolderFilter.doFilter(SecurityContextHolderFilter.java:69)
+	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:374)
+	at org.springframework.security.web.context.request.async.WebAsyncManagerIntegrationFilter.doFilterInternal(WebAsyncManagerIntegrationFilter.java:62)
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116)
+	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:374)
+	at org.springframework.security.web.session.DisableEncodeUrlFilter.doFilterInternal(DisableEncodeUrlFilter.java:42)
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116)
+	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:374)
+	at org.springframework.security.web.FilterChainProxy.doFilterInternal(FilterChainProxy.java:233)
+	at org.springframework.security.web.FilterChainProxy.doFilter(FilterChainProxy.java:191)
+	at org.springframework.web.filter.CompositeFilter$VirtualFilterChain.doFilter(CompositeFilter.java:113)
+	at org.springframework.web.servlet.handler.HandlerMappingIntrospector.lambda$createCacheFilter$3(HandlerMappingIntrospector.java:195)
+	at org.springframework.web.filter.CompositeFilter$VirtualFilterChain.doFilter(CompositeFilter.java:113)
+	at org.springframework.web.filter.CompositeFilter.doFilter(CompositeFilter.java:74)
+	at org.springframework.security.config.annotation.web.configuration.WebMvcSecurityConfiguration$CompositeFilterChainProxy.doFilter(WebMvcSecurityConfiguration.java:230)
+	at org.springframework.web.filter.DelegatingFilterProxy.invokeDelegate(DelegatingFilterProxy.java:352)
+	at org.springframework.web.filter.DelegatingFilterProxy.doFilter(DelegatingFilterProxy.java:268)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:164)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:140)
+	at org.springframework.web.filter.RequestContextFilter.doFilterInternal(RequestContextFilter.java:100)
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:164)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:140)
+	at org.springframework.web.filter.FormContentFilter.doFilterInternal(FormContentFilter.java:93)
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:164)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:140)
+	at org.springframework.web.filter.CharacterEncodingFilter.doFilterInternal(CharacterEncodingFilter.java:201)
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:164)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:140)
+	at org.apache.catalina.core.StandardWrapperValve.invoke(StandardWrapperValve.java:167)
+	at org.apache.catalina.core.StandardContextValve.invoke(StandardContextValve.java:90)
+	at org.apache.catalina.authenticator.AuthenticatorBase.invoke(AuthenticatorBase.java:483)
+	at org.apache.catalina.core.StandardHostValve.invoke(StandardHostValve.java:115)
+	at org.apache.catalina.valves.ErrorReportValve.invoke(ErrorReportValve.java:93)
+	at org.apache.catalina.core.StandardEngineValve.invoke(StandardEngineValve.java:74)
+	at org.apache.catalina.connector.CoyoteAdapter.service(CoyoteAdapter.java:344)
+	at org.apache.coyote.http11.Http11Processor.service(Http11Processor.java:384)
+	at org.apache.coyote.AbstractProcessorLight.process(AbstractProcessorLight.java:63)
+	at org.apache.coyote.AbstractProtocol$ConnectionHandler.process(AbstractProtocol.java:905)
+	at org.apache.tomcat.util.net.NioEndpoint$SocketProcessor.doRun(NioEndpoint.java:1741)
+	at org.apache.tomcat.util.net.SocketProcessorBase.run(SocketProcessorBase.java:52)
+	at org.apache.tomcat.util.threads.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1190)
+	at org.apache.tomcat.util.threads.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:659)
+	at org.apache.tomcat.util.threads.TaskThread$WrappingRunnable.run(TaskThread.java:63)
+	at java.base/java.lang.Thread.run(Thread.java:1583)
+Caused by: java.lang.IllegalArgumentException: Invalid UUID string: my
+	at java.base/java.util.UUID.fromString1(UUID.java:282)
+	at java.base/java.util.UUID.fromString(UUID.java:260)
+	at org.springframework.beans.propertyeditors.UUIDEditor.setAsText(UUIDEditor.java:37)
+	at org.springframework.beans.TypeConverterDelegate.doConvertTextValue(TypeConverterDelegate.java:439)
+	at org.springframework.beans.TypeConverterDelegate.doConvertValue(TypeConverterDelegate.java:412)
+	at org.springframework.beans.TypeConverterDelegate.convertIfNecessary(TypeConverterDelegate.java:161)
+	at org.springframework.beans.TypeConverterSupport.convertIfNecessary(TypeConverterSupport.java:80)
+	at org.springframework.beans.TypeConverterSupport.convertIfNecessary(TypeConverterSupport.java:53)
+	at org.springframework.validation.DataBinder.convertIfNecessary(DataBinder.java:860)
+	at org.springframework.web.method.annotation.AbstractNamedValueMethodArgumentResolver.convertIfNecessary(AbstractNamedValueMethodArgumentResolver.java:294)
+	... 101 common frames omitted
+2026-03-23 13:12:37.622 [http-nio-8080-exec-9] INFO  com.hms.security.jwt.JwtAuthenticationFilter - Request authorized for user: Rishi with authorities: [ROLE_DOCTOR]
+2026-03-23 13:12:37.625 [http-nio-8080-exec-9] ERROR com.hms.common.exception.GlobalExceptionHandler - Unexpected error occurred at /api/v1/appointments/my
+org.springframework.web.method.annotation.MethodArgumentTypeMismatchException: Failed to convert value of type 'java.lang.String' to required type 'java.util.UUID'; Invalid UUID string: my
+	at org.springframework.web.method.annotation.AbstractNamedValueMethodArgumentResolver.convertIfNecessary(AbstractNamedValueMethodArgumentResolver.java:302)
+	at org.springframework.web.method.annotation.AbstractNamedValueMethodArgumentResolver.resolveArgument(AbstractNamedValueMethodArgumentResolver.java:137)
+	at org.springframework.web.method.support.HandlerMethodArgumentResolverComposite.resolveArgument(HandlerMethodArgumentResolverComposite.java:122)
+	at org.springframework.web.method.support.InvocableHandlerMethod.getMethodArgumentValues(InvocableHandlerMethod.java:224)
+	at org.springframework.web.method.support.InvocableHandlerMethod.invokeForRequest(InvocableHandlerMethod.java:178)
+	at org.springframework.web.servlet.mvc.method.annotation.ServletInvocableHandlerMethod.invokeAndHandle(ServletInvocableHandlerMethod.java:118)
+	at org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerAdapter.invokeHandlerMethod(RequestMappingHandlerAdapter.java:926)
+	at org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerAdapter.handleInternal(RequestMappingHandlerAdapter.java:831)
+	at org.springframework.web.servlet.mvc.method.AbstractHandlerMethodAdapter.handle(AbstractHandlerMethodAdapter.java:87)
+	at org.springframework.web.servlet.DispatcherServlet.doDispatch(DispatcherServlet.java:1089)
+	at org.springframework.web.servlet.DispatcherServlet.doService(DispatcherServlet.java:979)
+	at org.springframework.web.servlet.FrameworkServlet.processRequest(FrameworkServlet.java:1014)
+	at org.springframework.web.servlet.FrameworkServlet.doGet(FrameworkServlet.java:903)
+	at jakarta.servlet.http.HttpServlet.service(HttpServlet.java:564)
+	at org.springframework.web.servlet.FrameworkServlet.service(FrameworkServlet.java:885)
+	at jakarta.servlet.http.HttpServlet.service(HttpServlet.java:658)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:195)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:140)
+	at org.apache.tomcat.websocket.server.WsFilter.doFilter(WsFilter.java:51)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:164)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:140)
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:110)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:164)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:140)
+	at org.springframework.web.filter.CompositeFilter$VirtualFilterChain.doFilter(CompositeFilter.java:108)
+	at org.springframework.security.web.FilterChainProxy.lambda$doFilterInternal$3(FilterChainProxy.java:231)
+	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:365)
+	at org.springframework.security.web.access.intercept.AuthorizationFilter.doFilter(AuthorizationFilter.java:100)
+	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:374)
+	at org.springframework.security.web.access.ExceptionTranslationFilter.doFilter(ExceptionTranslationFilter.java:126)
+	at org.springframework.security.web.access.ExceptionTranslationFilter.doFilter(ExceptionTranslationFilter.java:120)
+	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:374)
+	at org.springframework.security.web.session.SessionManagementFilter.doFilter(SessionManagementFilter.java:131)
+	at org.springframework.security.web.session.SessionManagementFilter.doFilter(SessionManagementFilter.java:85)
+	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:374)
+	at org.springframework.security.web.authentication.AnonymousAuthenticationFilter.doFilter(AnonymousAuthenticationFilter.java:100)
+	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:374)
+	at org.springframework.security.web.servletapi.SecurityContextHolderAwareRequestFilter.doFilter(SecurityContextHolderAwareRequestFilter.java:179)
+	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:374)
+	at org.springframework.security.web.savedrequest.RequestCacheAwareFilter.doFilter(RequestCacheAwareFilter.java:63)
+	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:374)
+	at com.hms.security.jwt.JwtAuthenticationFilter.doFilterInternal(JwtAuthenticationFilter.java:102)
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116)
+	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:374)
+	at org.springframework.security.web.authentication.logout.LogoutFilter.doFilter(LogoutFilter.java:107)
+	at org.springframework.security.web.authentication.logout.LogoutFilter.doFilter(LogoutFilter.java:93)
+	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:374)
+	at org.springframework.web.filter.CorsFilter.doFilterInternal(CorsFilter.java:91)
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116)
+	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:374)
+	at org.springframework.security.web.header.HeaderWriterFilter.doHeadersAfter(HeaderWriterFilter.java:90)
+	at org.springframework.security.web.header.HeaderWriterFilter.doFilterInternal(HeaderWriterFilter.java:75)
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116)
+	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:374)
+	at org.springframework.security.web.context.SecurityContextHolderFilter.doFilter(SecurityContextHolderFilter.java:82)
+	at org.springframework.security.web.context.SecurityContextHolderFilter.doFilter(SecurityContextHolderFilter.java:69)
+	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:374)
+	at org.springframework.security.web.context.request.async.WebAsyncManagerIntegrationFilter.doFilterInternal(WebAsyncManagerIntegrationFilter.java:62)
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116)
+	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:374)
+	at org.springframework.security.web.session.DisableEncodeUrlFilter.doFilterInternal(DisableEncodeUrlFilter.java:42)
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116)
+	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:374)
+	at org.springframework.security.web.FilterChainProxy.doFilterInternal(FilterChainProxy.java:233)
+	at org.springframework.security.web.FilterChainProxy.doFilter(FilterChainProxy.java:191)
+	at org.springframework.web.filter.CompositeFilter$VirtualFilterChain.doFilter(CompositeFilter.java:113)
+	at org.springframework.web.servlet.handler.HandlerMappingIntrospector.lambda$createCacheFilter$3(HandlerMappingIntrospector.java:195)
+	at org.springframework.web.filter.CompositeFilter$VirtualFilterChain.doFilter(CompositeFilter.java:113)
+	at org.springframework.web.filter.CompositeFilter.doFilter(CompositeFilter.java:74)
+	at org.springframework.security.config.annotation.web.configuration.WebMvcSecurityConfiguration$CompositeFilterChainProxy.doFilter(WebMvcSecurityConfiguration.java:230)
+	at org.springframework.web.filter.DelegatingFilterProxy.invokeDelegate(DelegatingFilterProxy.java:352)
+	at org.springframework.web.filter.DelegatingFilterProxy.doFilter(DelegatingFilterProxy.java:268)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:164)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:140)
+	at org.springframework.web.filter.RequestContextFilter.doFilterInternal(RequestContextFilter.java:100)
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:164)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:140)
+	at org.springframework.web.filter.FormContentFilter.doFilterInternal(FormContentFilter.java:93)
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:164)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:140)
+	at org.springframework.web.filter.CharacterEncodingFilter.doFilterInternal(CharacterEncodingFilter.java:201)
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:164)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:140)
+	at org.apache.catalina.core.StandardWrapperValve.invoke(StandardWrapperValve.java:167)
+	at org.apache.catalina.core.StandardContextValve.invoke(StandardContextValve.java:90)
+	at org.apache.catalina.authenticator.AuthenticatorBase.invoke(AuthenticatorBase.java:483)
+	at org.apache.catalina.core.StandardHostValve.invoke(StandardHostValve.java:115)
+	at org.apache.catalina.valves.ErrorReportValve.invoke(ErrorReportValve.java:93)
+	at org.apache.catalina.core.StandardEngineValve.invoke(StandardEngineValve.java:74)
+	at org.apache.catalina.connector.CoyoteAdapter.service(CoyoteAdapter.java:344)
+	at org.apache.coyote.http11.Http11Processor.service(Http11Processor.java:384)
+	at org.apache.coyote.AbstractProcessorLight.process(AbstractProcessorLight.java:63)
+	at org.apache.coyote.AbstractProtocol$ConnectionHandler.process(AbstractProtocol.java:905)
+	at org.apache.tomcat.util.net.NioEndpoint$SocketProcessor.doRun(NioEndpoint.java:1741)
+	at org.apache.tomcat.util.net.SocketProcessorBase.run(SocketProcessorBase.java:52)
+	at org.apache.tomcat.util.threads.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1190)
+	at org.apache.tomcat.util.threads.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:659)
+	at org.apache.tomcat.util.threads.TaskThread$WrappingRunnable.run(TaskThread.java:63)
+	at java.base/java.lang.Thread.run(Thread.java:1583)
+Caused by: java.lang.IllegalArgumentException: Invalid UUID string: my
+	at java.base/java.util.UUID.fromString1(UUID.java:282)
+	at java.base/java.util.UUID.fromString(UUID.java:260)
+	at org.springframework.beans.propertyeditors.UUIDEditor.setAsText(UUIDEditor.java:37)
+	at org.springframework.beans.TypeConverterDelegate.doConvertTextValue(TypeConverterDelegate.java:439)
+	at org.springframework.beans.TypeConverterDelegate.doConvertValue(TypeConverterDelegate.java:412)
+	at org.springframework.beans.TypeConverterDelegate.convertIfNecessary(TypeConverterDelegate.java:161)
+	at org.springframework.beans.TypeConverterSupport.convertIfNecessary(TypeConverterSupport.java:80)
+	at org.springframework.beans.TypeConverterSupport.convertIfNecessary(TypeConverterSupport.java:53)
+	at org.springframework.validation.DataBinder.convertIfNecessary(DataBinder.java:860)
+	at org.springframework.web.method.annotation.AbstractNamedValueMethodArgumentResolver.convertIfNecessary(AbstractNamedValueMethodArgumentResolver.java:294)
+	... 101 common frames omitted
+2026-03-23 13:14:57.027 [http-nio-8080-exec-5] INFO  com.hms.security.jwt.JwtAuthenticationFilter - Request authorized for user: Rishi with authorities: [ROLE_DOCTOR]
+2026-03-23 13:14:57.029 [http-nio-8080-exec-5] ERROR com.hms.common.exception.GlobalExceptionHandler - Unexpected error occurred at /api/v1/appointments/my
+org.springframework.web.method.annotation.MethodArgumentTypeMismatchException: Failed to convert value of type 'java.lang.String' to required type 'java.util.UUID'; Invalid UUID string: my
+	at org.springframework.web.method.annotation.AbstractNamedValueMethodArgumentResolver.convertIfNecessary(AbstractNamedValueMethodArgumentResolver.java:302)
+	at org.springframework.web.method.annotation.AbstractNamedValueMethodArgumentResolver.resolveArgument(AbstractNamedValueMethodArgumentResolver.java:137)
+	at org.springframework.web.method.support.HandlerMethodArgumentResolverComposite.resolveArgument(HandlerMethodArgumentResolverComposite.java:122)
+	at org.springframework.web.method.support.InvocableHandlerMethod.getMethodArgumentValues(InvocableHandlerMethod.java:224)
+	at org.springframework.web.method.support.InvocableHandlerMethod.invokeForRequest(InvocableHandlerMethod.java:178)
+	at org.springframework.web.servlet.mvc.method.annotation.ServletInvocableHandlerMethod.invokeAndHandle(ServletInvocableHandlerMethod.java:118)
+	at org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerAdapter.invokeHandlerMethod(RequestMappingHandlerAdapter.java:926)
+	at org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerAdapter.handleInternal(RequestMappingHandlerAdapter.java:831)
+	at org.springframework.web.servlet.mvc.method.AbstractHandlerMethodAdapter.handle(AbstractHandlerMethodAdapter.java:87)
+	at org.springframework.web.servlet.DispatcherServlet.doDispatch(DispatcherServlet.java:1089)
+	at org.springframework.web.servlet.DispatcherServlet.doService(DispatcherServlet.java:979)
+	at org.springframework.web.servlet.FrameworkServlet.processRequest(FrameworkServlet.java:1014)
+	at org.springframework.web.servlet.FrameworkServlet.doGet(FrameworkServlet.java:903)
+	at jakarta.servlet.http.HttpServlet.service(HttpServlet.java:564)
+	at org.springframework.web.servlet.FrameworkServlet.service(FrameworkServlet.java:885)
+	at jakarta.servlet.http.HttpServlet.service(HttpServlet.java:658)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:195)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:140)
+	at org.apache.tomcat.websocket.server.WsFilter.doFilter(WsFilter.java:51)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:164)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:140)
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:110)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:164)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:140)
+	at org.springframework.web.filter.CompositeFilter$VirtualFilterChain.doFilter(CompositeFilter.java:108)
+	at org.springframework.security.web.FilterChainProxy.lambda$doFilterInternal$3(FilterChainProxy.java:231)
+	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:365)
+	at org.springframework.security.web.access.intercept.AuthorizationFilter.doFilter(AuthorizationFilter.java:100)
+	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:374)
+	at org.springframework.security.web.access.ExceptionTranslationFilter.doFilter(ExceptionTranslationFilter.java:126)
+	at org.springframework.security.web.access.ExceptionTranslationFilter.doFilter(ExceptionTranslationFilter.java:120)
+	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:374)
+	at org.springframework.security.web.session.SessionManagementFilter.doFilter(SessionManagementFilter.java:131)
+	at org.springframework.security.web.session.SessionManagementFilter.doFilter(SessionManagementFilter.java:85)
+	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:374)
+	at org.springframework.security.web.authentication.AnonymousAuthenticationFilter.doFilter(AnonymousAuthenticationFilter.java:100)
+	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:374)
+	at org.springframework.security.web.servletapi.SecurityContextHolderAwareRequestFilter.doFilter(SecurityContextHolderAwareRequestFilter.java:179)
+	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:374)
+	at org.springframework.security.web.savedrequest.RequestCacheAwareFilter.doFilter(RequestCacheAwareFilter.java:63)
+	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:374)
+	at com.hms.security.jwt.JwtAuthenticationFilter.doFilterInternal(JwtAuthenticationFilter.java:102)
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116)
+	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:374)
+	at org.springframework.security.web.authentication.logout.LogoutFilter.doFilter(LogoutFilter.java:107)
+	at org.springframework.security.web.authentication.logout.LogoutFilter.doFilter(LogoutFilter.java:93)
+	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:374)
+	at org.springframework.web.filter.CorsFilter.doFilterInternal(CorsFilter.java:91)
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116)
+	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:374)
+	at org.springframework.security.web.header.HeaderWriterFilter.doHeadersAfter(HeaderWriterFilter.java:90)
+	at org.springframework.security.web.header.HeaderWriterFilter.doFilterInternal(HeaderWriterFilter.java:75)
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116)
+	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:374)
+	at org.springframework.security.web.context.SecurityContextHolderFilter.doFilter(SecurityContextHolderFilter.java:82)
+	at org.springframework.security.web.context.SecurityContextHolderFilter.doFilter(SecurityContextHolderFilter.java:69)
+	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:374)
+	at org.springframework.security.web.context.request.async.WebAsyncManagerIntegrationFilter.doFilterInternal(WebAsyncManagerIntegrationFilter.java:62)
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116)
+	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:374)
+	at org.springframework.security.web.session.DisableEncodeUrlFilter.doFilterInternal(DisableEncodeUrlFilter.java:42)
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116)
+	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:374)
+	at org.springframework.security.web.FilterChainProxy.doFilterInternal(FilterChainProxy.java:233)
+	at org.springframework.security.web.FilterChainProxy.doFilter(FilterChainProxy.java:191)
+	at org.springframework.web.filter.CompositeFilter$VirtualFilterChain.doFilter(CompositeFilter.java:113)
+	at org.springframework.web.servlet.handler.HandlerMappingIntrospector.lambda$createCacheFilter$3(HandlerMappingIntrospector.java:195)
+	at org.springframework.web.filter.CompositeFilter$VirtualFilterChain.doFilter(CompositeFilter.java:113)
+	at org.springframework.web.filter.CompositeFilter.doFilter(CompositeFilter.java:74)
+	at org.springframework.security.config.annotation.web.configuration.WebMvcSecurityConfiguration$CompositeFilterChainProxy.doFilter(WebMvcSecurityConfiguration.java:230)
+	at org.springframework.web.filter.DelegatingFilterProxy.invokeDelegate(DelegatingFilterProxy.java:352)
+	at org.springframework.web.filter.DelegatingFilterProxy.doFilter(DelegatingFilterProxy.java:268)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:164)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:140)
+	at org.springframework.web.filter.RequestContextFilter.doFilterInternal(RequestContextFilter.java:100)
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:164)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:140)
+	at org.springframework.web.filter.FormContentFilter.doFilterInternal(FormContentFilter.java:93)
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:164)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:140)
+	at org.springframework.web.filter.CharacterEncodingFilter.doFilterInternal(CharacterEncodingFilter.java:201)
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:164)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:140)
+	at org.apache.catalina.core.StandardWrapperValve.invoke(StandardWrapperValve.java:167)
+	at org.apache.catalina.core.StandardContextValve.invoke(StandardContextValve.java:90)
+	at org.apache.catalina.authenticator.AuthenticatorBase.invoke(AuthenticatorBase.java:483)
+	at org.apache.catalina.core.StandardHostValve.invoke(StandardHostValve.java:115)
+	at org.apache.catalina.valves.ErrorReportValve.invoke(ErrorReportValve.java:93)
+	at org.apache.catalina.core.StandardEngineValve.invoke(StandardEngineValve.java:74)
+	at org.apache.catalina.connector.CoyoteAdapter.service(CoyoteAdapter.java:344)
+	at org.apache.coyote.http11.Http11Processor.service(Http11Processor.java:384)
+	at org.apache.coyote.AbstractProcessorLight.process(AbstractProcessorLight.java:63)
+	at org.apache.coyote.AbstractProtocol$ConnectionHandler.process(AbstractProtocol.java:905)
+	at org.apache.tomcat.util.net.NioEndpoint$SocketProcessor.doRun(NioEndpoint.java:1741)
+	at org.apache.tomcat.util.net.SocketProcessorBase.run(SocketProcessorBase.java:52)
+	at org.apache.tomcat.util.threads.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1190)
+	at org.apache.tomcat.util.threads.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:659)
+	at org.apache.tomcat.util.threads.TaskThread$WrappingRunnable.run(TaskThread.java:63)
+	at java.base/java.lang.Thread.run(Thread.java:1583)
+Caused by: java.lang.IllegalArgumentException: Invalid UUID string: my
+	at java.base/java.util.UUID.fromString1(UUID.java:282)
+	at java.base/java.util.UUID.fromString(UUID.java:260)
+	at org.springframework.beans.propertyeditors.UUIDEditor.setAsText(UUIDEditor.java:37)
+	at org.springframework.beans.TypeConverterDelegate.doConvertTextValue(TypeConverterDelegate.java:439)
+	at org.springframework.beans.TypeConverterDelegate.doConvertValue(TypeConverterDelegate.java:412)
+	at org.springframework.beans.TypeConverterDelegate.convertIfNecessary(TypeConverterDelegate.java:161)
+	at org.springframework.beans.TypeConverterSupport.convertIfNecessary(TypeConverterSupport.java:80)
+	at org.springframework.beans.TypeConverterSupport.convertIfNecessary(TypeConverterSupport.java:53)
+	at org.springframework.validation.DataBinder.convertIfNecessary(DataBinder.java:860)
+	at org.springframework.web.method.annotation.AbstractNamedValueMethodArgumentResolver.convertIfNecessary(AbstractNamedValueMethodArgumentResolver.java:294)
+	... 101 common frames omitted
+2026-03-23 13:14:58.088 [http-nio-8080-exec-4] INFO  com.hms.security.jwt.JwtAuthenticationFilter - Request authorized for user: Rishi with authorities: [ROLE_DOCTOR]
+2026-03-23 13:14:58.090 [http-nio-8080-exec-4] ERROR com.hms.common.exception.GlobalExceptionHandler - Unexpected error occurred at /api/v1/appointments/my
+org.springframework.web.method.annotation.MethodArgumentTypeMismatchException: Failed to convert value of type 'java.lang.String' to required type 'java.util.UUID'; Invalid UUID string: my
+	at org.springframework.web.method.annotation.AbstractNamedValueMethodArgumentResolver.convertIfNecessary(AbstractNamedValueMethodArgumentResolver.java:302)
+	at org.springframework.web.method.annotation.AbstractNamedValueMethodArgumentResolver.resolveArgument(AbstractNamedValueMethodArgumentResolver.java:137)
+	at org.springframework.web.method.support.HandlerMethodArgumentResolverComposite.resolveArgument(HandlerMethodArgumentResolverComposite.java:122)
+	at org.springframework.web.method.support.InvocableHandlerMethod.getMethodArgumentValues(InvocableHandlerMethod.java:224)
+	at org.springframework.web.method.support.InvocableHandlerMethod.invokeForRequest(InvocableHandlerMethod.java:178)
+	at org.springframework.web.servlet.mvc.method.annotation.ServletInvocableHandlerMethod.invokeAndHandle(ServletInvocableHandlerMethod.java:118)
+	at org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerAdapter.invokeHandlerMethod(RequestMappingHandlerAdapter.java:926)
+	at org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerAdapter.handleInternal(RequestMappingHandlerAdapter.java:831)
+	at org.springframework.web.servlet.mvc.method.AbstractHandlerMethodAdapter.handle(AbstractHandlerMethodAdapter.java:87)
+	at org.springframework.web.servlet.DispatcherServlet.doDispatch(DispatcherServlet.java:1089)
+	at org.springframework.web.servlet.DispatcherServlet.doService(DispatcherServlet.java:979)
+	at org.springframework.web.servlet.FrameworkServlet.processRequest(FrameworkServlet.java:1014)
+	at org.springframework.web.servlet.FrameworkServlet.doGet(FrameworkServlet.java:903)
+	at jakarta.servlet.http.HttpServlet.service(HttpServlet.java:564)
+	at org.springframework.web.servlet.FrameworkServlet.service(FrameworkServlet.java:885)
+	at jakarta.servlet.http.HttpServlet.service(HttpServlet.java:658)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:195)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:140)
+	at org.apache.tomcat.websocket.server.WsFilter.doFilter(WsFilter.java:51)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:164)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:140)
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:110)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:164)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:140)
+	at org.springframework.web.filter.CompositeFilter$VirtualFilterChain.doFilter(CompositeFilter.java:108)
+	at org.springframework.security.web.FilterChainProxy.lambda$doFilterInternal$3(FilterChainProxy.java:231)
+	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:365)
+	at org.springframework.security.web.access.intercept.AuthorizationFilter.doFilter(AuthorizationFilter.java:100)
+	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:374)
+	at org.springframework.security.web.access.ExceptionTranslationFilter.doFilter(ExceptionTranslationFilter.java:126)
+	at org.springframework.security.web.access.ExceptionTranslationFilter.doFilter(ExceptionTranslationFilter.java:120)
+	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:374)
+	at org.springframework.security.web.session.SessionManagementFilter.doFilter(SessionManagementFilter.java:131)
+	at org.springframework.security.web.session.SessionManagementFilter.doFilter(SessionManagementFilter.java:85)
+	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:374)
+	at org.springframework.security.web.authentication.AnonymousAuthenticationFilter.doFilter(AnonymousAuthenticationFilter.java:100)
+	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:374)
+	at org.springframework.security.web.servletapi.SecurityContextHolderAwareRequestFilter.doFilter(SecurityContextHolderAwareRequestFilter.java:179)
+	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:374)
+	at org.springframework.security.web.savedrequest.RequestCacheAwareFilter.doFilter(RequestCacheAwareFilter.java:63)
+	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:374)
+	at com.hms.security.jwt.JwtAuthenticationFilter.doFilterInternal(JwtAuthenticationFilter.java:102)
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116)
+	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:374)
+	at org.springframework.security.web.authentication.logout.LogoutFilter.doFilter(LogoutFilter.java:107)
+	at org.springframework.security.web.authentication.logout.LogoutFilter.doFilter(LogoutFilter.java:93)
+	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:374)
+	at org.springframework.web.filter.CorsFilter.doFilterInternal(CorsFilter.java:91)
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116)
+	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:374)
+	at org.springframework.security.web.header.HeaderWriterFilter.doHeadersAfter(HeaderWriterFilter.java:90)
+	at org.springframework.security.web.header.HeaderWriterFilter.doFilterInternal(HeaderWriterFilter.java:75)
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116)
+	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:374)
+	at org.springframework.security.web.context.SecurityContextHolderFilter.doFilter(SecurityContextHolderFilter.java:82)
+	at org.springframework.security.web.context.SecurityContextHolderFilter.doFilter(SecurityContextHolderFilter.java:69)
+	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:374)
+	at org.springframework.security.web.context.request.async.WebAsyncManagerIntegrationFilter.doFilterInternal(WebAsyncManagerIntegrationFilter.java:62)
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116)
+	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:374)
+	at org.springframework.security.web.session.DisableEncodeUrlFilter.doFilterInternal(DisableEncodeUrlFilter.java:42)
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116)
+	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:374)
+	at org.springframework.security.web.FilterChainProxy.doFilterInternal(FilterChainProxy.java:233)
+	at org.springframework.security.web.FilterChainProxy.doFilter(FilterChainProxy.java:191)
+	at org.springframework.web.filter.CompositeFilter$VirtualFilterChain.doFilter(CompositeFilter.java:113)
+	at org.springframework.web.servlet.handler.HandlerMappingIntrospector.lambda$createCacheFilter$3(HandlerMappingIntrospector.java:195)
+	at org.springframework.web.filter.CompositeFilter$VirtualFilterChain.doFilter(CompositeFilter.java:113)
+	at org.springframework.web.filter.CompositeFilter.doFilter(CompositeFilter.java:74)
+	at org.springframework.security.config.annotation.web.configuration.WebMvcSecurityConfiguration$CompositeFilterChainProxy.doFilter(WebMvcSecurityConfiguration.java:230)
+	at org.springframework.web.filter.DelegatingFilterProxy.invokeDelegate(DelegatingFilterProxy.java:352)
+	at org.springframework.web.filter.DelegatingFilterProxy.doFilter(DelegatingFilterProxy.java:268)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:164)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:140)
+	at org.springframework.web.filter.RequestContextFilter.doFilterInternal(RequestContextFilter.java:100)
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:164)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:140)
+	at org.springframework.web.filter.FormContentFilter.doFilterInternal(FormContentFilter.java:93)
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:164)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:140)
+	at org.springframework.web.filter.CharacterEncodingFilter.doFilterInternal(CharacterEncodingFilter.java:201)
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:164)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:140)
+	at org.apache.catalina.core.StandardWrapperValve.invoke(StandardWrapperValve.java:167)
+	at org.apache.catalina.core.StandardContextValve.invoke(StandardContextValve.java:90)
+	at org.apache.catalina.authenticator.AuthenticatorBase.invoke(AuthenticatorBase.java:483)
+	at org.apache.catalina.core.StandardHostValve.invoke(StandardHostValve.java:115)
+	at org.apache.catalina.valves.ErrorReportValve.invoke(ErrorReportValve.java:93)
+	at org.apache.catalina.core.StandardEngineValve.invoke(StandardEngineValve.java:74)
+	at org.apache.catalina.connector.CoyoteAdapter.service(CoyoteAdapter.java:344)
+	at org.apache.coyote.http11.Http11Processor.service(Http11Processor.java:384)
+	at org.apache.coyote.AbstractProcessorLight.process(AbstractProcessorLight.java:63)
+	at org.apache.coyote.AbstractProtocol$ConnectionHandler.process(AbstractProtocol.java:905)
+	at org.apache.tomcat.util.net.NioEndpoint$SocketProcessor.doRun(NioEndpoint.java:1741)
+	at org.apache.tomcat.util.net.SocketProcessorBase.run(SocketProcessorBase.java:52)
+	at org.apache.tomcat.util.threads.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1190)
+	at org.apache.tomcat.util.threads.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:659)
+	at org.apache.tomcat.util.threads.TaskThread$WrappingRunnable.run(TaskThread.java:63)
+	at java.base/java.lang.Thread.run(Thread.java:1583)
+Caused by: java.lang.IllegalArgumentException: Invalid UUID string: my
+	at java.base/java.util.UUID.fromString1(UUID.java:282)
+	at java.base/java.util.UUID.fromString(UUID.java:260)
+	at org.springframework.beans.propertyeditors.UUIDEditor.setAsText(UUIDEditor.java:37)
+	at org.springframework.beans.TypeConverterDelegate.doConvertTextValue(TypeConverterDelegate.java:439)
+	at org.springframework.beans.TypeConverterDelegate.doConvertValue(TypeConverterDelegate.java:412)
+	at org.springframework.beans.TypeConverterDelegate.convertIfNecessary(TypeConverterDelegate.java:161)
+	at org.springframework.beans.TypeConverterSupport.convertIfNecessary(TypeConverterSupport.java:80)
+	at org.springframework.beans.TypeConverterSupport.convertIfNecessary(TypeConverterSupport.java:53)
+	at org.springframework.validation.DataBinder.convertIfNecessary(DataBinder.java:860)
+	at org.springframework.web.method.annotation.AbstractNamedValueMethodArgumentResolver.convertIfNecessary(AbstractNamedValueMethodArgumentResolver.java:294)
+	... 101 common frames omitted
+2026-03-23 13:14:59.107 [http-nio-8080-exec-8] INFO  com.hms.security.jwt.JwtAuthenticationFilter - Request authorized for user: Rishi with authorities: [ROLE_DOCTOR]
+2026-03-23 13:14:59.108 [http-nio-8080-exec-8] ERROR com.hms.common.exception.GlobalExceptionHandler - Unexpected error occurred at /api/v1/appointments/my
+org.springframework.web.method.annotation.MethodArgumentTypeMismatchException: Failed to convert value of type 'java.lang.String' to required type 'java.util.UUID'; Invalid UUID string: my
+	at org.springframework.web.method.annotation.AbstractNamedValueMethodArgumentResolver.convertIfNecessary(AbstractNamedValueMethodArgumentResolver.java:302)
+	at org.springframework.web.method.annotation.AbstractNamedValueMethodArgumentResolver.resolveArgument(AbstractNamedValueMethodArgumentResolver.java:137)
+	at org.springframework.web.method.support.HandlerMethodArgumentResolverComposite.resolveArgument(HandlerMethodArgumentResolverComposite.java:122)
+	at org.springframework.web.method.support.InvocableHandlerMethod.getMethodArgumentValues(InvocableHandlerMethod.java:224)
+	at org.springframework.web.method.support.InvocableHandlerMethod.invokeForRequest(InvocableHandlerMethod.java:178)
+	at org.springframework.web.servlet.mvc.method.annotation.ServletInvocableHandlerMethod.invokeAndHandle(ServletInvocableHandlerMethod.java:118)
+	at org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerAdapter.invokeHandlerMethod(RequestMappingHandlerAdapter.java:926)
+	at org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerAdapter.handleInternal(RequestMappingHandlerAdapter.java:831)
+	at org.springframework.web.servlet.mvc.method.AbstractHandlerMethodAdapter.handle(AbstractHandlerMethodAdapter.java:87)
+	at org.springframework.web.servlet.DispatcherServlet.doDispatch(DispatcherServlet.java:1089)
+	at org.springframework.web.servlet.DispatcherServlet.doService(DispatcherServlet.java:979)
+	at org.springframework.web.servlet.FrameworkServlet.processRequest(FrameworkServlet.java:1014)
+	at org.springframework.web.servlet.FrameworkServlet.doGet(FrameworkServlet.java:903)
+	at jakarta.servlet.http.HttpServlet.service(HttpServlet.java:564)
+	at org.springframework.web.servlet.FrameworkServlet.service(FrameworkServlet.java:885)
+	at jakarta.servlet.http.HttpServlet.service(HttpServlet.java:658)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:195)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:140)
+	at org.apache.tomcat.websocket.server.WsFilter.doFilter(WsFilter.java:51)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:164)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:140)
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:110)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:164)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:140)
+	at org.springframework.web.filter.CompositeFilter$VirtualFilterChain.doFilter(CompositeFilter.java:108)
+	at org.springframework.security.web.FilterChainProxy.lambda$doFilterInternal$3(FilterChainProxy.java:231)
+	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:365)
+	at org.springframework.security.web.access.intercept.AuthorizationFilter.doFilter(AuthorizationFilter.java:100)
+	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:374)
+	at org.springframework.security.web.access.ExceptionTranslationFilter.doFilter(ExceptionTranslationFilter.java:126)
+	at org.springframework.security.web.access.ExceptionTranslationFilter.doFilter(ExceptionTranslationFilter.java:120)
+	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:374)
+	at org.springframework.security.web.session.SessionManagementFilter.doFilter(SessionManagementFilter.java:131)
+	at org.springframework.security.web.session.SessionManagementFilter.doFilter(SessionManagementFilter.java:85)
+	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:374)
+	at org.springframework.security.web.authentication.AnonymousAuthenticationFilter.doFilter(AnonymousAuthenticationFilter.java:100)
+	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:374)
+	at org.springframework.security.web.servletapi.SecurityContextHolderAwareRequestFilter.doFilter(SecurityContextHolderAwareRequestFilter.java:179)
+	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:374)
+	at org.springframework.security.web.savedrequest.RequestCacheAwareFilter.doFilter(RequestCacheAwareFilter.java:63)
+	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:374)
+	at com.hms.security.jwt.JwtAuthenticationFilter.doFilterInternal(JwtAuthenticationFilter.java:102)
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116)
+	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:374)
+	at org.springframework.security.web.authentication.logout.LogoutFilter.doFilter(LogoutFilter.java:107)
+	at org.springframework.security.web.authentication.logout.LogoutFilter.doFilter(LogoutFilter.java:93)
+	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:374)
+	at org.springframework.web.filter.CorsFilter.doFilterInternal(CorsFilter.java:91)
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116)
+	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:374)
+	at org.springframework.security.web.header.HeaderWriterFilter.doHeadersAfter(HeaderWriterFilter.java:90)
+	at org.springframework.security.web.header.HeaderWriterFilter.doFilterInternal(HeaderWriterFilter.java:75)
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116)
+	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:374)
+	at org.springframework.security.web.context.SecurityContextHolderFilter.doFilter(SecurityContextHolderFilter.java:82)
+	at org.springframework.security.web.context.SecurityContextHolderFilter.doFilter(SecurityContextHolderFilter.java:69)
+	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:374)
+	at org.springframework.security.web.context.request.async.WebAsyncManagerIntegrationFilter.doFilterInternal(WebAsyncManagerIntegrationFilter.java:62)
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116)
+	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:374)
+	at org.springframework.security.web.session.DisableEncodeUrlFilter.doFilterInternal(DisableEncodeUrlFilter.java:42)
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116)
+	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:374)
+	at org.springframework.security.web.FilterChainProxy.doFilterInternal(FilterChainProxy.java:233)
+	at org.springframework.security.web.FilterChainProxy.doFilter(FilterChainProxy.java:191)
+	at org.springframework.web.filter.CompositeFilter$VirtualFilterChain.doFilter(CompositeFilter.java:113)
+	at org.springframework.web.servlet.handler.HandlerMappingIntrospector.lambda$createCacheFilter$3(HandlerMappingIntrospector.java:195)
+	at org.springframework.web.filter.CompositeFilter$VirtualFilterChain.doFilter(CompositeFilter.java:113)
+	at org.springframework.web.filter.CompositeFilter.doFilter(CompositeFilter.java:74)
+	at org.springframework.security.config.annotation.web.configuration.WebMvcSecurityConfiguration$CompositeFilterChainProxy.doFilter(WebMvcSecurityConfiguration.java:230)
+	at org.springframework.web.filter.DelegatingFilterProxy.invokeDelegate(DelegatingFilterProxy.java:352)
+	at org.springframework.web.filter.DelegatingFilterProxy.doFilter(DelegatingFilterProxy.java:268)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:164)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:140)
+	at org.springframework.web.filter.RequestContextFilter.doFilterInternal(RequestContextFilter.java:100)
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:164)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:140)
+	at org.springframework.web.filter.FormContentFilter.doFilterInternal(FormContentFilter.java:93)
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:164)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:140)
+	at org.springframework.web.filter.CharacterEncodingFilter.doFilterInternal(CharacterEncodingFilter.java:201)
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:164)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:140)
+	at org.apache.catalina.core.StandardWrapperValve.invoke(StandardWrapperValve.java:167)
+	at org.apache.catalina.core.StandardContextValve.invoke(StandardContextValve.java:90)
+	at org.apache.catalina.authenticator.AuthenticatorBase.invoke(AuthenticatorBase.java:483)
+	at org.apache.catalina.core.StandardHostValve.invoke(StandardHostValve.java:115)
+	at org.apache.catalina.valves.ErrorReportValve.invoke(ErrorReportValve.java:93)
+	at org.apache.catalina.core.StandardEngineValve.invoke(StandardEngineValve.java:74)
+	at org.apache.catalina.connector.CoyoteAdapter.service(CoyoteAdapter.java:344)
+	at org.apache.coyote.http11.Http11Processor.service(Http11Processor.java:384)
+	at org.apache.coyote.AbstractProcessorLight.process(AbstractProcessorLight.java:63)
+	at org.apache.coyote.AbstractProtocol$ConnectionHandler.process(AbstractProtocol.java:905)
+	at org.apache.tomcat.util.net.NioEndpoint$SocketProcessor.doRun(NioEndpoint.java:1741)
+	at org.apache.tomcat.util.net.SocketProcessorBase.run(SocketProcessorBase.java:52)
+	at org.apache.tomcat.util.threads.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1190)
+	at org.apache.tomcat.util.threads.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:659)
+	at org.apache.tomcat.util.threads.TaskThread$WrappingRunnable.run(TaskThread.java:63)
+	at java.base/java.lang.Thread.run(Thread.java:1583)
+Caused by: java.lang.IllegalArgumentException: Invalid UUID string: my
+	at java.base/java.util.UUID.fromString1(UUID.java:282)
+	at java.base/java.util.UUID.fromString(UUID.java:260)
+	at org.springframework.beans.propertyeditors.UUIDEditor.setAsText(UUIDEditor.java:37)
+	at org.springframework.beans.TypeConverterDelegate.doConvertTextValue(TypeConverterDelegate.java:439)
+	at org.springframework.beans.TypeConverterDelegate.doConvertValue(TypeConverterDelegate.java:412)
+	at org.springframework.beans.TypeConverterDelegate.convertIfNecessary(TypeConverterDelegate.java:161)
+	at org.springframework.beans.TypeConverterSupport.convertIfNecessary(TypeConverterSupport.java:80)
+	at org.springframework.beans.TypeConverterSupport.convertIfNecessary(TypeConverterSupport.java:53)
+	at org.springframework.validation.DataBinder.convertIfNecessary(DataBinder.java:860)
+	at org.springframework.web.method.annotation.AbstractNamedValueMethodArgumentResolver.convertIfNecessary(AbstractNamedValueMethodArgumentResolver.java:294)
+	... 101 common frames omitted
+2026-03-23 13:15:03.088 [SpringApplicationShutdownHook] INFO  o.s.orm.jpa.LocalContainerEntityManagerFactoryBean - Closing JPA EntityManagerFactory for persistence unit 'default'
+2026-03-23 13:15:03.090 [SpringApplicationShutdownHook] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Shutdown initiated...
+2026-03-23 13:15:03.092 [SpringApplicationShutdownHook] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Shutdown completed.
+2026-03-23 13:15:31.394 [main] INFO  com.hms.HospitalManagementSystemApplication - Starting HospitalManagementSystemApplication using Java 21.0.10 with PID 17852 (C:\Users\Piyush\Desktop\Project\backend\target\classes started by Piyush in C:\Users\Piyush\Desktop\Project\backend)
+2026-03-23 13:15:31.395 [main] DEBUG com.hms.HospitalManagementSystemApplication - Running with Spring Boot v3.3.4, Spring v6.1.13
+2026-03-23 13:15:31.396 [main] INFO  com.hms.HospitalManagementSystemApplication - No active profile set, falling back to 1 default profile: "mysql"
+2026-03-23 13:15:32.272 [main] INFO  o.s.d.r.config.RepositoryConfigurationDelegate - Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2026-03-23 13:15:32.477 [main] INFO  o.s.d.r.config.RepositoryConfigurationDelegate - Finished Spring Data repository scanning in 197 ms. Found 13 JPA repository interfaces.
+2026-03-23 13:15:33.568 [main] INFO  o.s.boot.web.embedded.tomcat.TomcatWebServer - Tomcat initialized with port 8080 (http)
+2026-03-23 13:15:33.588 [main] INFO  org.apache.catalina.core.StandardService - Starting service [Tomcat]
+2026-03-23 13:15:33.588 [main] INFO  org.apache.catalina.core.StandardEngine - Starting Servlet engine: [Apache Tomcat/10.1.30]
+2026-03-23 13:15:33.675 [main] INFO  o.a.c.core.ContainerBase.[Tomcat].[localhost].[/] - Initializing Spring embedded WebApplicationContext
+2026-03-23 13:15:33.678 [main] INFO  o.s.b.w.s.c.ServletWebServerApplicationContext - Root WebApplicationContext: initialization completed in 2176 ms
+2026-03-23 13:15:33.883 [main] INFO  org.hibernate.jpa.internal.util.LogHelper - HHH000204: Processing PersistenceUnitInfo [name: default]
+2026-03-23 13:15:33.987 [main] INFO  org.hibernate.Version - HHH000412: Hibernate ORM core version 6.5.3.Final
+2026-03-23 13:15:34.039 [main] INFO  o.hibernate.cache.internal.RegionFactoryInitiator - HHH000026: Second-level cache disabled
+2026-03-23 13:15:34.533 [main] INFO  o.s.o.j.persistenceunit.SpringPersistenceUnitInfo - No LoadTimeWeaver setup: ignoring JPA class transformer
+2026-03-23 13:15:34.575 [main] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Starting...
+2026-03-23 13:15:34.787 [main] INFO  com.zaxxer.hikari.pool.HikariPool - HikariPool-1 - Added connection com.mysql.cj.jdbc.ConnectionImpl@5aac6f9f
+2026-03-23 13:15:34.791 [main] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Start completed.
+2026-03-23 13:15:36.675 [main] INFO  o.h.e.t.jta.platform.internal.JtaPlatformInitiator - HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
+2026-03-23 13:15:37.192 [main] INFO  o.s.orm.jpa.LocalContainerEntityManagerFactoryBean - Initialized JPA EntityManagerFactory for persistence unit 'default'
+2026-03-23 13:15:37.443 [main] INFO  o.s.data.jpa.repository.query.QueryEnhancerFactory - Hibernate is in classpath; If applicable, HQL parser will be used.
+2026-03-23 13:15:38.205 [main] DEBUG com.hms.security.jwt.JwtAuthenticationFilter - Filter 'jwtAuthenticationFilter' configured for use
+2026-03-23 13:15:38.516 [main] INFO  o.s.s.c.a.a.c.InitializeUserDetailsBeanManagerConfigurer$InitializeUserDetailsManagerConfigurer - Global AuthenticationManager configured with UserDetailsService bean with name customUserDetailsService
+2026-03-23 13:15:39.175 [main] INFO  com.hms.security.config.SecurityConfig - Production Security configuration successfully initialized.
+2026-03-23 13:15:39.538 [main] INFO  o.s.boot.web.embedded.tomcat.TomcatWebServer - Tomcat started on port 8080 (http) with context path '/'
+2026-03-23 13:15:39.547 [main] INFO  com.hms.HospitalManagementSystemApplication - Started HospitalManagementSystemApplication in 8.849 seconds (process running for 9.421)
+2026-03-23 13:15:39.560 [main] INFO  com.hms.common.config.DataInitializer - Starting database column initialization...
+2026-03-23 13:15:39.629 [main] INFO  com.hms.common.config.DataInitializer - Database column initialization completed.
+2026-03-23 13:15:59.509 [http-nio-8080-exec-1] INFO  o.a.c.core.ContainerBase.[Tomcat].[localhost].[/] - Initializing Spring DispatcherServlet 'dispatcherServlet'
+2026-03-23 13:15:59.509 [http-nio-8080-exec-1] INFO  org.springframework.web.servlet.DispatcherServlet - Initializing Servlet 'dispatcherServlet'
+2026-03-23 13:15:59.512 [http-nio-8080-exec-1] INFO  org.springframework.web.servlet.DispatcherServlet - Completed initialization in 2 ms
+2026-03-23 13:15:59.834 [http-nio-8080-exec-1] INFO  com.hms.security.jwt.JwtAuthenticationFilter - Request authorized for user: Rishi with authorities: [ROLE_DOCTOR]
+2026-03-23 13:16:00.075 [http-nio-8080-exec-2] INFO  com.hms.security.jwt.JwtAuthenticationFilter - Request authorized for user: Rishi with authorities: [ROLE_DOCTOR]
+2026-03-23 13:16:00.243 [http-nio-8080-exec-3] INFO  com.hms.security.jwt.JwtAuthenticationFilter - Request authorized for user: Rishi with authorities: [ROLE_DOCTOR]
+2026-03-23 13:16:01.647 [http-nio-8080-exec-4] INFO  com.hms.security.jwt.JwtAuthenticationFilter - Request authorized for user: Rishi with authorities: [ROLE_DOCTOR]
+2026-03-23 13:16:07.696 [http-nio-8080-exec-6] INFO  com.hms.security.jwt.JwtAuthenticationFilter - Request authorized for user: Rishi with authorities: [ROLE_DOCTOR]
+2026-03-23 13:16:10.005 [http-nio-8080-exec-7] INFO  com.hms.security.jwt.JwtAuthenticationFilter - Request authorized for user: Rishi with authorities: [ROLE_DOCTOR]
+2026-03-23 13:16:10.041 [http-nio-8080-exec-8] INFO  com.hms.security.jwt.JwtAuthenticationFilter - Request authorized for user: Rishi with authorities: [ROLE_DOCTOR]
+2026-03-23 13:16:11.366 [http-nio-8080-exec-9] INFO  com.hms.security.jwt.JwtAuthenticationFilter - Request authorized for user: Rishi with authorities: [ROLE_DOCTOR]
+2026-03-23 13:16:12.662 [http-nio-8080-exec-10] INFO  com.hms.security.jwt.JwtAuthenticationFilter - Request authorized for user: Rishi with authorities: [ROLE_DOCTOR]
+2026-03-23 13:16:12.668 [http-nio-8080-exec-1] INFO  com.hms.security.jwt.JwtAuthenticationFilter - Request authorized for user: Rishi with authorities: [ROLE_DOCTOR]
+2026-03-23 13:16:12.678 [http-nio-8080-exec-1] WARN  com.hms.common.exception.GlobalExceptionHandler - Access denied: Access Denied
+2026-03-23 13:16:12.678 [http-nio-8080-exec-10] WARN  com.hms.common.exception.GlobalExceptionHandler - Access denied: Access Denied
+2026-03-23 13:16:14.769 [http-nio-8080-exec-2] INFO  com.hms.security.jwt.JwtAuthenticationFilter - Request authorized for user: Rishi with authorities: [ROLE_DOCTOR]
+2026-03-23 13:16:14.770 [http-nio-8080-exec-2] WARN  com.hms.common.exception.GlobalExceptionHandler - Access denied: Access Denied
+2026-03-23 13:16:14.783 [http-nio-8080-exec-3] INFO  com.hms.security.jwt.JwtAuthenticationFilter - Request authorized for user: Rishi with authorities: [ROLE_DOCTOR]
+2026-03-23 13:16:14.785 [http-nio-8080-exec-3] WARN  com.hms.common.exception.GlobalExceptionHandler - Access denied: Access Denied
+2026-03-23 13:16:16.018 [http-nio-8080-exec-4] INFO  com.hms.security.jwt.JwtAuthenticationFilter - Request authorized for user: Rishi with authorities: [ROLE_DOCTOR]
+2026-03-23 13:16:18.343 [http-nio-8080-exec-5] INFO  com.hms.security.jwt.JwtAuthenticationFilter - Request authorized for user: Rishi with authorities: [ROLE_DOCTOR]
+2026-03-23 13:16:18.347 [http-nio-8080-exec-5] WARN  com.hms.common.exception.GlobalExceptionHandler - Access denied: Access Denied
+2026-03-23 13:16:18.811 [http-nio-8080-exec-6] INFO  com.hms.security.jwt.JwtAuthenticationFilter - Request authorized for user: Rishi with authorities: [ROLE_DOCTOR]
+2026-03-23 13:16:18.812 [http-nio-8080-exec-6] WARN  com.hms.common.exception.GlobalExceptionHandler - Access denied: Access Denied
+2026-03-23 13:16:18.827 [http-nio-8080-exec-7] INFO  com.hms.security.jwt.JwtAuthenticationFilter - Request authorized for user: Rishi with authorities: [ROLE_DOCTOR]
+2026-03-23 13:16:18.829 [http-nio-8080-exec-7] WARN  com.hms.common.exception.GlobalExceptionHandler - Access denied: Access Denied
+2026-03-23 13:16:19.639 [http-nio-8080-exec-8] INFO  com.hms.security.jwt.JwtAuthenticationFilter - Request authorized for user: Rishi with authorities: [ROLE_DOCTOR]
+2026-03-23 13:16:25.601 [http-nio-8080-exec-9] INFO  com.hms.security.jwt.JwtAuthenticationFilter - Request authorized for user: Rishi with authorities: [ROLE_DOCTOR]
+2026-03-23 13:16:26.700 [http-nio-8080-exec-10] INFO  com.hms.security.jwt.JwtAuthenticationFilter - Request authorized for user: Rishi with authorities: [ROLE_DOCTOR]
+2026-03-23 13:16:26.702 [http-nio-8080-exec-10] WARN  com.hms.common.exception.GlobalExceptionHandler - Access denied: Access Denied
+2026-03-23 13:16:26.705 [http-nio-8080-exec-1] INFO  com.hms.security.jwt.JwtAuthenticationFilter - Request authorized for user: Rishi with authorities: [ROLE_DOCTOR]
+2026-03-23 13:16:26.707 [http-nio-8080-exec-1] WARN  com.hms.common.exception.GlobalExceptionHandler - Access denied: Access Denied
+2026-03-23 13:16:28.745 [http-nio-8080-exec-2] INFO  com.hms.security.jwt.JwtAuthenticationFilter - Request authorized for user: Rishi with authorities: [ROLE_DOCTOR]
+2026-03-23 13:16:28.745 [http-nio-8080-exec-2] WARN  com.hms.common.exception.GlobalExceptionHandler - Access denied: Access Denied
+2026-03-23 13:16:28.745 [http-nio-8080-exec-3] INFO  com.hms.security.jwt.JwtAuthenticationFilter - Request authorized for user: Rishi with authorities: [ROLE_DOCTOR]
+2026-03-23 13:16:28.749 [http-nio-8080-exec-3] WARN  com.hms.common.exception.GlobalExceptionHandler - Access denied: Access Denied
+2026-03-23 13:16:30.266 [http-nio-8080-exec-4] INFO  com.hms.security.jwt.JwtAuthenticationFilter - Request authorized for user: Rishi with authorities: [ROLE_DOCTOR]
+2026-03-23 13:16:32.547 [http-nio-8080-exec-5] INFO  com.hms.security.jwt.JwtAuthenticationFilter - Request authorized for user: Rishi with authorities: [ROLE_DOCTOR]
+2026-03-23 13:16:32.566 [http-nio-8080-exec-6] INFO  com.hms.security.jwt.JwtAuthenticationFilter - Request authorized for user: Rishi with authorities: [ROLE_DOCTOR]
+2026-03-23 13:16:32.776 [http-nio-8080-exec-7] INFO  com.hms.security.jwt.JwtAuthenticationFilter - Request authorized for user: Rishi with authorities: [ROLE_DOCTOR]
+2026-03-23 13:16:32.776 [http-nio-8080-exec-7] WARN  com.hms.common.exception.GlobalExceptionHandler - Access denied: Access Denied
+2026-03-23 13:16:32.783 [http-nio-8080-exec-8] INFO  com.hms.security.jwt.JwtAuthenticationFilter - Request authorized for user: Rishi with authorities: [ROLE_DOCTOR]
+2026-03-23 13:16:32.784 [http-nio-8080-exec-8] WARN  com.hms.common.exception.GlobalExceptionHandler - Access denied: Access Denied
+2026-03-23 13:16:34.365 [http-nio-8080-exec-9] INFO  com.hms.security.jwt.JwtAuthenticationFilter - Request authorized for user: Rishi with authorities: [ROLE_DOCTOR]
+2026-03-23 13:16:36.338 [http-nio-8080-exec-10] INFO  com.hms.security.jwt.JwtAuthenticationFilter - Request authorized for user: Rishi with authorities: [ROLE_DOCTOR]
+2026-03-23 13:16:36.340 [http-nio-8080-exec-10] WARN  com.hms.common.exception.GlobalExceptionHandler - Access denied: Access Denied
+2026-03-23 13:16:36.341 [http-nio-8080-exec-1] INFO  com.hms.security.jwt.JwtAuthenticationFilter - Request authorized for user: Rishi with authorities: [ROLE_DOCTOR]
+2026-03-23 13:16:36.343 [http-nio-8080-exec-1] WARN  com.hms.common.exception.GlobalExceptionHandler - Access denied: Access Denied
+2026-03-23 13:16:37.741 [http-nio-8080-exec-2] INFO  com.hms.security.jwt.JwtAuthenticationFilter - Request authorized for user: Rishi with authorities: [ROLE_DOCTOR]
+2026-03-23 13:16:38.361 [http-nio-8080-exec-3] INFO  com.hms.security.jwt.JwtAuthenticationFilter - Request authorized for user: Rishi with authorities: [ROLE_DOCTOR]
+2026-03-23 13:16:38.363 [http-nio-8080-exec-3] WARN  com.hms.common.exception.GlobalExceptionHandler - Access denied: Access Denied
+2026-03-23 13:16:38.376 [http-nio-8080-exec-4] INFO  com.hms.security.jwt.JwtAuthenticationFilter - Request authorized for user: Rishi with authorities: [ROLE_DOCTOR]
+2026-03-23 13:16:38.377 [http-nio-8080-exec-4] WARN  com.hms.common.exception.GlobalExceptionHandler - Access denied: Access Denied
+2026-03-23 13:16:39.763 [http-nio-8080-exec-5] INFO  com.hms.security.jwt.JwtAuthenticationFilter - Request authorized for user: Rishi with authorities: [ROLE_DOCTOR]
+2026-03-23 13:16:42.254 [http-nio-8080-exec-6] INFO  com.hms.security.jwt.JwtAuthenticationFilter - Request authorized for user: Rishi with authorities: [ROLE_DOCTOR]
+2026-03-23 13:16:42.284 [http-nio-8080-exec-7] INFO  com.hms.security.jwt.JwtAuthenticationFilter - Request authorized for user: Rishi with authorities: [ROLE_DOCTOR]
+2026-03-23 13:16:42.385 [http-nio-8080-exec-8] INFO  com.hms.security.jwt.JwtAuthenticationFilter - Request authorized for user: Rishi with authorities: [ROLE_DOCTOR]
+2026-03-23 13:16:42.386 [http-nio-8080-exec-8] WARN  com.hms.common.exception.GlobalExceptionHandler - Access denied: Access Denied
+2026-03-23 13:16:42.425 [http-nio-8080-exec-9] INFO  com.hms.security.jwt.JwtAuthenticationFilter - Request authorized for user: Rishi with authorities: [ROLE_DOCTOR]
+2026-03-23 13:16:42.427 [http-nio-8080-exec-9] WARN  com.hms.common.exception.GlobalExceptionHandler - Access denied: Access Denied
+2026-03-23 13:16:44.033 [http-nio-8080-exec-10] INFO  com.hms.security.jwt.JwtAuthenticationFilter - Request authorized for user: Rishi with authorities: [ROLE_DOCTOR]
+2026-03-23 13:17:11.299 [http-nio-8080-exec-1] INFO  com.hms.security.jwt.JwtAuthenticationFilter - Request authorized for user: Rishi with authorities: [ROLE_DOCTOR]
+2026-03-23 13:17:11.325 [http-nio-8080-exec-2] INFO  com.hms.security.jwt.JwtAuthenticationFilter - Request authorized for user: Rishi with authorities: [ROLE_DOCTOR]
+2026-03-23 13:17:13.170 [http-nio-8080-exec-3] INFO  com.hms.security.jwt.JwtAuthenticationFilter - Request authorized for user: Rishi with authorities: [ROLE_DOCTOR]
+2026-03-23 13:17:14.432 [http-nio-8080-exec-4] INFO  com.hms.security.jwt.JwtAuthenticationFilter - Request authorized for user: Rishi with authorities: [ROLE_DOCTOR]
+2026-03-23 13:17:14.433 [http-nio-8080-exec-4] WARN  com.hms.common.exception.GlobalExceptionHandler - Access denied: Access Denied
+2026-03-23 13:17:14.434 [http-nio-8080-exec-5] INFO  com.hms.security.jwt.JwtAuthenticationFilter - Request authorized for user: Rishi with authorities: [ROLE_DOCTOR]
+2026-03-23 13:17:14.435 [http-nio-8080-exec-5] WARN  com.hms.common.exception.GlobalExceptionHandler - Access denied: Access Denied
+2026-03-23 13:17:16.473 [http-nio-8080-exec-6] INFO  com.hms.security.jwt.JwtAuthenticationFilter - Request authorized for user: Rishi with authorities: [ROLE_DOCTOR]
+2026-03-23 13:17:16.476 [http-nio-8080-exec-6] WARN  com.hms.common.exception.GlobalExceptionHandler - Access denied: Access Denied
+2026-03-23 13:17:16.486 [http-nio-8080-exec-7] INFO  com.hms.security.jwt.JwtAuthenticationFilter - Request authorized for user: Rishi with authorities: [ROLE_DOCTOR]
+2026-03-23 13:17:16.512 [http-nio-8080-exec-8] INFO  com.hms.security.jwt.JwtAuthenticationFilter - Request authorized for user: Rishi with authorities: [ROLE_DOCTOR]
+2026-03-23 13:17:16.514 [http-nio-8080-exec-8] WARN  com.hms.common.exception.GlobalExceptionHandler - Access denied: Access Denied
+2026-03-23 13:17:17.918 [http-nio-8080-exec-9] INFO  com.hms.security.jwt.JwtAuthenticationFilter - Request authorized for user: Rishi with authorities: [ROLE_DOCTOR]
+2026-03-23 13:17:19.384 [http-nio-8080-exec-10] INFO  com.hms.security.jwt.JwtAuthenticationFilter - Request authorized for user: Rishi with authorities: [ROLE_DOCTOR]
+2026-03-23 13:17:20.332 [http-nio-8080-exec-1] INFO  com.hms.security.jwt.JwtAuthenticationFilter - Request authorized for user: Rishi with authorities: [ROLE_DOCTOR]
+2026-03-23 13:17:20.334 [http-nio-8080-exec-1] WARN  com.hms.common.exception.GlobalExceptionHandler - Access denied: Access Denied
+2026-03-23 13:17:20.335 [http-nio-8080-exec-2] INFO  com.hms.security.jwt.JwtAuthenticationFilter - Request authorized for user: Rishi with authorities: [ROLE_DOCTOR]
+2026-03-23 13:17:20.336 [http-nio-8080-exec-2] WARN  com.hms.common.exception.GlobalExceptionHandler - Access denied: Access Denied
+2026-03-23 13:17:20.512 [http-nio-8080-exec-3] INFO  com.hms.security.jwt.JwtAuthenticationFilter - Request authorized for user: Rishi with authorities: [ROLE_DOCTOR]
+2026-03-23 13:17:20.512 [http-nio-8080-exec-3] WARN  com.hms.common.exception.GlobalExceptionHandler - Access denied: Access Denied
+2026-03-23 13:17:20.536 [http-nio-8080-exec-4] INFO  com.hms.security.jwt.JwtAuthenticationFilter - Request authorized for user: Rishi with authorities: [ROLE_DOCTOR]
+2026-03-23 13:17:20.537 [http-nio-8080-exec-4] WARN  com.hms.common.exception.GlobalExceptionHandler - Access denied: Access Denied
+2026-03-23 13:17:21.758 [http-nio-8080-exec-5] INFO  com.hms.security.jwt.JwtAuthenticationFilter - Request authorized for user: Rishi with authorities: [ROLE_DOCTOR]
+2026-03-23 13:17:23.258 [http-nio-8080-exec-6] INFO  com.hms.security.jwt.JwtAuthenticationFilter - Request authorized for user: Rishi with authorities: [ROLE_DOCTOR]
+2026-03-23 13:17:23.261 [http-nio-8080-exec-6] WARN  com.hms.common.exception.GlobalExceptionHandler - Access denied: Access Denied
+2026-03-23 13:17:23.262 [http-nio-8080-exec-8] INFO  com.hms.security.jwt.JwtAuthenticationFilter - Request authorized for user: Rishi with authorities: [ROLE_DOCTOR]
+2026-03-23 13:17:23.263 [http-nio-8080-exec-8] WARN  com.hms.common.exception.GlobalExceptionHandler - Access denied: Access Denied
+2026-03-23 13:17:28.278 [http-nio-8080-exec-7] INFO  com.hms.security.jwt.JwtAuthenticationFilter - Request authorized for user: Rishi with authorities: [ROLE_DOCTOR]
+2026-03-23 13:17:28.278 [http-nio-8080-exec-7] WARN  com.hms.common.exception.GlobalExceptionHandler - Access denied: Access Denied
+2026-03-23 13:17:28.278 [http-nio-8080-exec-9] INFO  com.hms.security.jwt.JwtAuthenticationFilter - Request authorized for user: Rishi with authorities: [ROLE_DOCTOR]
+2026-03-23 13:17:28.278 [http-nio-8080-exec-9] WARN  com.hms.common.exception.GlobalExceptionHandler - Access denied: Access Denied
+2026-03-23 13:18:38.272 [http-nio-8080-exec-2] INFO  com.hms.security.jwt.JwtAuthenticationFilter - Request authorized for user: Rishi with authorities: [ROLE_DOCTOR]
+2026-03-23 13:19:01.925 [http-nio-8080-exec-4] INFO  com.hms.security.jwt.JwtAuthenticationFilter - Request authorized for user: Rishi with authorities: [ROLE_DOCTOR]
+2026-03-23 13:19:01.925 [http-nio-8080-exec-3] INFO  com.hms.security.jwt.JwtAuthenticationFilter - Request authorized for user: Rishi with authorities: [ROLE_DOCTOR]
+2026-03-23 13:19:01.925 [http-nio-8080-exec-4] WARN  com.hms.common.exception.GlobalExceptionHandler - Access denied: Access Denied
+2026-03-23 13:19:01.925 [http-nio-8080-exec-3] WARN  com.hms.common.exception.GlobalExceptionHandler - Access denied: Access Denied
+2026-03-23 13:19:03.260 [http-nio-8080-exec-5] INFO  com.hms.security.jwt.JwtAuthenticationFilter - Request authorized for user: Rishi with authorities: [ROLE_DOCTOR]
+2026-03-23 13:19:03.955 [http-nio-8080-exec-6] INFO  com.hms.security.jwt.JwtAuthenticationFilter - Request authorized for user: Rishi with authorities: [ROLE_DOCTOR]
+2026-03-23 13:19:03.955 [http-nio-8080-exec-8] INFO  com.hms.security.jwt.JwtAuthenticationFilter - Request authorized for user: Rishi with authorities: [ROLE_DOCTOR]
+2026-03-23 13:19:03.956 [http-nio-8080-exec-6] WARN  com.hms.common.exception.GlobalExceptionHandler - Access denied: Access Denied
+2026-03-23 13:19:03.956 [http-nio-8080-exec-8] WARN  com.hms.common.exception.GlobalExceptionHandler - Access denied: Access Denied
+2026-03-23 13:19:05.623 [http-nio-8080-exec-7] INFO  com.hms.security.jwt.JwtAuthenticationFilter - Request authorized for user: Rishi with authorities: [ROLE_DOCTOR]
+2026-03-23 13:19:07.805 [http-nio-8080-exec-9] INFO  com.hms.security.jwt.JwtAuthenticationFilter - Request authorized for user: Rishi with authorities: [ROLE_DOCTOR]
+2026-03-23 13:19:07.970 [http-nio-8080-exec-10] WARN  com.hms.security.config.SecurityConfig - Access unauthorized to /api/v1/patients/all - Full authentication is required to access this resource
+2026-03-23 13:19:07.970 [http-nio-8080-exec-10] WARN  com.hms.common.exception.GlobalExceptionHandler - Authentication failed: Full authentication is required to access this resource
+2026-03-23 13:19:07.982 [http-nio-8080-exec-1] WARN  com.hms.security.config.SecurityConfig - Access unauthorized to /api/v1/lab-tests - Full authentication is required to access this resource
+2026-03-23 13:19:07.983 [http-nio-8080-exec-1] WARN  com.hms.common.exception.GlobalExceptionHandler - Authentication failed: Full authentication is required to access this resource
+2026-03-23 13:19:11.964 [http-nio-8080-exec-3] INFO  com.hms.security.jwt.JwtAuthenticationFilter - Request authorized for user: Pritam with authorities: [ROLE_DOCTOR]
+2026-03-23 13:19:13.012 [http-nio-8080-exec-4] INFO  com.hms.security.jwt.JwtAuthenticationFilter - Request authorized for user: Pritam with authorities: [ROLE_DOCTOR]
+2026-03-23 13:19:13.013 [http-nio-8080-exec-4] WARN  com.hms.common.exception.GlobalExceptionHandler - Access denied: Access Denied
+2026-03-23 13:19:15.566 [http-nio-8080-exec-5] INFO  com.hms.security.jwt.JwtAuthenticationFilter - Request authorized for user: Pritam with authorities: [ROLE_DOCTOR]
+2026-03-23 13:19:17.128 [http-nio-8080-exec-6] INFO  com.hms.security.jwt.JwtAuthenticationFilter - Request authorized for user: Pritam with authorities: [ROLE_DOCTOR]
+2026-03-23 13:19:17.128 [http-nio-8080-exec-8] INFO  com.hms.security.jwt.JwtAuthenticationFilter - Request authorized for user: Pritam with authorities: [ROLE_DOCTOR]
+2026-03-23 13:19:17.129 [http-nio-8080-exec-8] WARN  com.hms.common.exception.GlobalExceptionHandler - Access denied: Access Denied
+2026-03-23 13:19:17.129 [http-nio-8080-exec-6] WARN  com.hms.common.exception.GlobalExceptionHandler - Access denied: Access Denied
+2026-03-23 13:19:18.383 [http-nio-8080-exec-7] INFO  com.hms.security.jwt.JwtAuthenticationFilter - Request authorized for user: Pritam with authorities: [ROLE_DOCTOR]
+2026-03-23 13:19:19.252 [http-nio-8080-exec-10] INFO  com.hms.security.jwt.JwtAuthenticationFilter - Request authorized for user: Pritam with authorities: [ROLE_DOCTOR]
+2026-03-23 13:19:19.252 [http-nio-8080-exec-9] INFO  com.hms.security.jwt.JwtAuthenticationFilter - Request authorized for user: Pritam with authorities: [ROLE_DOCTOR]
+2026-03-23 13:19:19.253 [http-nio-8080-exec-9] WARN  com.hms.common.exception.GlobalExceptionHandler - Access denied: Access Denied
+2026-03-23 13:19:19.253 [http-nio-8080-exec-10] WARN  com.hms.common.exception.GlobalExceptionHandler - Access denied: Access Denied
+2026-03-23 13:19:24.264 [http-nio-8080-exec-1] INFO  com.hms.security.jwt.JwtAuthenticationFilter - Request authorized for user: Pritam with authorities: [ROLE_DOCTOR]
+2026-03-23 13:19:24.264 [http-nio-8080-exec-2] INFO  com.hms.security.jwt.JwtAuthenticationFilter - Request authorized for user: Pritam with authorities: [ROLE_DOCTOR]
+2026-03-23 13:19:24.265 [http-nio-8080-exec-1] WARN  com.hms.common.exception.GlobalExceptionHandler - Access denied: Access Denied
+2026-03-23 13:19:24.265 [http-nio-8080-exec-2] WARN  com.hms.common.exception.GlobalExceptionHandler - Access denied: Access Denied
+2026-03-23 13:19:54.343 [http-nio-8080-exec-3] INFO  com.hms.security.jwt.JwtAuthenticationFilter - Request authorized for user: Pritam with authorities: [ROLE_DOCTOR]
+2026-03-23 13:19:56.493 [http-nio-8080-exec-4] INFO  com.hms.security.jwt.JwtAuthenticationFilter - Request authorized for user: Pritam with authorities: [ROLE_DOCTOR]
+2026-03-23 13:19:59.187 [SpringApplicationShutdownHook] INFO  o.s.orm.jpa.LocalContainerEntityManagerFactoryBean - Closing JPA EntityManagerFactory for persistence unit 'default'
+2026-03-23 13:19:59.189 [SpringApplicationShutdownHook] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Shutdown initiated...
+2026-03-23 13:19:59.194 [SpringApplicationShutdownHook] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Shutdown completed.
+2026-03-23 13:20:22.423 [main] INFO  com.hms.HospitalManagementSystemApplication - Starting HospitalManagementSystemApplication using Java 21.0.10 with PID 13868 (C:\Users\Piyush\Desktop\Project\backend\target\classes started by Piyush in C:\Users\Piyush\Desktop\Project\backend)
+2026-03-23 13:20:22.424 [main] DEBUG com.hms.HospitalManagementSystemApplication - Running with Spring Boot v3.3.4, Spring v6.1.13
+2026-03-23 13:20:22.426 [main] INFO  com.hms.HospitalManagementSystemApplication - No active profile set, falling back to 1 default profile: "mysql"
+2026-03-23 13:20:23.260 [main] INFO  o.s.d.r.config.RepositoryConfigurationDelegate - Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2026-03-23 13:20:23.467 [main] INFO  o.s.d.r.config.RepositoryConfigurationDelegate - Finished Spring Data repository scanning in 200 ms. Found 13 JPA repository interfaces.
+2026-03-23 13:20:24.493 [main] INFO  o.s.boot.web.embedded.tomcat.TomcatWebServer - Tomcat initialized with port 8080 (http)
+2026-03-23 13:20:24.508 [main] INFO  org.apache.catalina.core.StandardService - Starting service [Tomcat]
+2026-03-23 13:20:24.508 [main] INFO  org.apache.catalina.core.StandardEngine - Starting Servlet engine: [Apache Tomcat/10.1.30]
+2026-03-23 13:20:24.574 [main] INFO  o.a.c.core.ContainerBase.[Tomcat].[localhost].[/] - Initializing Spring embedded WebApplicationContext
+2026-03-23 13:20:24.575 [main] INFO  o.s.b.w.s.c.ServletWebServerApplicationContext - Root WebApplicationContext: initialization completed in 2053 ms
+2026-03-23 13:20:24.768 [main] INFO  org.hibernate.jpa.internal.util.LogHelper - HHH000204: Processing PersistenceUnitInfo [name: default]
+2026-03-23 13:20:24.841 [main] INFO  org.hibernate.Version - HHH000412: Hibernate ORM core version 6.5.3.Final
+2026-03-23 13:20:24.880 [main] INFO  o.hibernate.cache.internal.RegionFactoryInitiator - HHH000026: Second-level cache disabled
+2026-03-23 13:20:25.184 [main] INFO  o.s.o.j.persistenceunit.SpringPersistenceUnitInfo - No LoadTimeWeaver setup: ignoring JPA class transformer
+2026-03-23 13:20:25.223 [main] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Starting...
+2026-03-23 13:20:25.448 [main] INFO  com.zaxxer.hikari.pool.HikariPool - HikariPool-1 - Added connection com.mysql.cj.jdbc.ConnectionImpl@4d664323
+2026-03-23 13:20:25.451 [main] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Start completed.
+2026-03-23 13:20:27.168 [main] INFO  o.h.e.t.jta.platform.internal.JtaPlatformInitiator - HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
+2026-03-23 13:20:27.667 [main] INFO  o.s.orm.jpa.LocalContainerEntityManagerFactoryBean - Initialized JPA EntityManagerFactory for persistence unit 'default'
+2026-03-23 13:20:27.965 [main] INFO  o.s.data.jpa.repository.query.QueryEnhancerFactory - Hibernate is in classpath; If applicable, HQL parser will be used.
+2026-03-23 13:20:28.599 [main] DEBUG com.hms.security.jwt.JwtAuthenticationFilter - Filter 'jwtAuthenticationFilter' configured for use
+2026-03-23 13:20:28.917 [main] INFO  o.s.s.c.a.a.c.InitializeUserDetailsBeanManagerConfigurer$InitializeUserDetailsManagerConfigurer - Global AuthenticationManager configured with UserDetailsService bean with name customUserDetailsService
+2026-03-23 13:20:29.579 [main] INFO  com.hms.security.config.SecurityConfig - Production Security configuration successfully initialized.
+2026-03-23 13:20:29.906 [main] INFO  o.s.boot.web.embedded.tomcat.TomcatWebServer - Tomcat started on port 8080 (http) with context path '/'
+2026-03-23 13:20:29.918 [main] INFO  com.hms.HospitalManagementSystemApplication - Started HospitalManagementSystemApplication in 8.221 seconds (process running for 8.734)
+2026-03-23 13:20:29.944 [main] INFO  com.hms.common.config.DataInitializer - Starting database column initialization...
+2026-03-23 13:20:30.018 [main] INFO  com.hms.common.config.DataInitializer - Database column initialization completed.
+2026-03-23 13:20:36.895 [http-nio-8080-exec-1] INFO  o.a.c.core.ContainerBase.[Tomcat].[localhost].[/] - Initializing Spring DispatcherServlet 'dispatcherServlet'
+2026-03-23 13:20:36.897 [http-nio-8080-exec-1] INFO  org.springframework.web.servlet.DispatcherServlet - Initializing Servlet 'dispatcherServlet'
+2026-03-23 13:20:36.900 [http-nio-8080-exec-1] INFO  org.springframework.web.servlet.DispatcherServlet - Completed initialization in 3 ms
+2026-03-23 13:20:37.154 [http-nio-8080-exec-1] INFO  com.hms.security.jwt.JwtAuthenticationFilter - Request authorized for user: Pritam with authorities: [ROLE_DOCTOR]
+2026-03-23 13:20:40.310 [http-nio-8080-exec-4] INFO  com.hms.security.jwt.JwtAuthenticationFilter - Request authorized for user: Pritam with authorities: [ROLE_DOCTOR]
+2026-03-23 13:20:40.390 [http-nio-8080-exec-3] INFO  com.hms.security.jwt.JwtAuthenticationFilter - Request authorized for user: Pritam with authorities: [ROLE_DOCTOR]
+2026-03-23 13:20:41.415 [http-nio-8080-exec-2] INFO  com.hms.security.jwt.JwtAuthenticationFilter - Request authorized for user: Pritam with authorities: [ROLE_DOCTOR]
+2026-03-23 13:20:42.295 [http-nio-8080-exec-9] INFO  com.hms.security.jwt.JwtAuthenticationFilter - Request authorized for user: Pritam with authorities: [ROLE_DOCTOR]
+2026-03-23 13:20:42.300 [http-nio-8080-exec-6] INFO  com.hms.security.jwt.JwtAuthenticationFilter - Request authorized for user: Pritam with authorities: [ROLE_DOCTOR]
+2026-03-23 13:20:42.307 [http-nio-8080-exec-6] WARN  com.hms.common.exception.GlobalExceptionHandler - Access denied: Access Denied
+2026-03-23 13:20:44.348 [http-nio-8080-exec-7] INFO  com.hms.security.jwt.JwtAuthenticationFilter - Request authorized for user: Pritam with authorities: [ROLE_DOCTOR]
+2026-03-23 13:20:44.349 [http-nio-8080-exec-7] WARN  com.hms.common.exception.GlobalExceptionHandler - Access denied: Access Denied
+2026-03-23 13:20:45.986 [http-nio-8080-exec-10] INFO  com.hms.security.jwt.JwtAuthenticationFilter - Request authorized for user: Pritam with authorities: [ROLE_DOCTOR]
+2026-03-23 13:20:48.378 [http-nio-8080-exec-5] INFO  com.hms.security.jwt.JwtAuthenticationFilter - Request authorized for user: Pritam with authorities: [ROLE_DOCTOR]
+2026-03-23 13:20:48.379 [http-nio-8080-exec-5] WARN  com.hms.common.exception.GlobalExceptionHandler - Access denied: Access Denied
+2026-03-23 13:20:49.813 [http-nio-8080-exec-8] INFO  com.hms.security.jwt.JwtAuthenticationFilter - Request authorized for user: Pritam with authorities: [ROLE_DOCTOR]
+2026-03-23 13:20:59.361 [http-nio-8080-exec-4] INFO  com.hms.security.jwt.JwtAuthenticationFilter - Request authorized for user: Pritam with authorities: [ROLE_DOCTOR]
+2026-03-23 13:20:59.361 [http-nio-8080-exec-1] INFO  com.hms.security.jwt.JwtAuthenticationFilter - Request authorized for user: Pritam with authorities: [ROLE_DOCTOR]
+2026-03-23 13:20:59.362 [http-nio-8080-exec-4] WARN  com.hms.common.exception.GlobalExceptionHandler - Access denied: Access Denied
+2026-03-23 13:21:00.963 [http-nio-8080-exec-3] INFO  com.hms.security.jwt.JwtAuthenticationFilter - Request authorized for user: Pritam with authorities: [ROLE_DOCTOR]
+2026-03-23 13:21:01.388 [http-nio-8080-exec-2] INFO  com.hms.security.jwt.JwtAuthenticationFilter - Request authorized for user: Pritam with authorities: [ROLE_DOCTOR]
+2026-03-23 13:21:01.388 [http-nio-8080-exec-2] WARN  com.hms.common.exception.GlobalExceptionHandler - Access denied: Access Denied
+2026-03-23 13:21:06.258 [http-nio-8080-exec-6] INFO  com.hms.security.jwt.JwtAuthenticationFilter - Request authorized for user: Pritam with authorities: [ROLE_DOCTOR]
+2026-03-23 13:21:06.259 [http-nio-8080-exec-6] WARN  com.hms.common.exception.GlobalExceptionHandler - Access denied: Access Denied
+2026-03-23 13:21:19.285 [http-nio-8080-exec-9] INFO  com.hms.security.jwt.JwtAuthenticationFilter - Request authorized for user: Pritam with authorities: [ROLE_DOCTOR]
+2026-03-23 13:23:13.249 [SpringApplicationShutdownHook] INFO  o.s.orm.jpa.LocalContainerEntityManagerFactoryBean - Closing JPA EntityManagerFactory for persistence unit 'default'
+2026-03-23 13:23:13.251 [SpringApplicationShutdownHook] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Shutdown initiated...
+2026-03-23 13:23:13.257 [SpringApplicationShutdownHook] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Shutdown completed.
+2026-03-23 13:23:44.606 [main] INFO  com.hms.HospitalManagementSystemApplication - Starting HospitalManagementSystemApplication using Java 21.0.10 with PID 19300 (C:\Users\Piyush\Desktop\Project\backend\target\classes started by Piyush in C:\Users\Piyush\Desktop\Project\backend)
+2026-03-23 13:23:44.608 [main] DEBUG com.hms.HospitalManagementSystemApplication - Running with Spring Boot v3.3.4, Spring v6.1.13
+2026-03-23 13:23:44.609 [main] INFO  com.hms.HospitalManagementSystemApplication - No active profile set, falling back to 1 default profile: "mysql"
+2026-03-23 13:23:45.685 [main] INFO  o.s.d.r.config.RepositoryConfigurationDelegate - Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2026-03-23 13:23:46.616 [main] INFO  o.s.d.r.config.RepositoryConfigurationDelegate - Finished Spring Data repository scanning in 916 ms. Found 13 JPA repository interfaces.

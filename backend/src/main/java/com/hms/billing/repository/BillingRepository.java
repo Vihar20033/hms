@@ -15,5 +15,7 @@ public interface BillingRepository extends JpaRepository<Billing, UUID>, JpaSpec
 
     List<Billing> findByPatientId(UUID patientId);
 
+    List<Billing> findByPatientEmail(String email);
+
     boolean existsByInvoiceNumber(String invoiceNumber);
 }

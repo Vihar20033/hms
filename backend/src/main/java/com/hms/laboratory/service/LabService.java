@@ -20,12 +20,16 @@ public interface LabService {
 
     List<LabTestResponseDTO> getAllTests();
 
+    List<LabTestResponseDTO> getMyTests();
+
     List<LabTestResponseDTO> getTestsByPatientId(UUID patientId);
 
     void deleteTest(UUID id);
 
     // LabReport Service Methods
     LabReportResponseDTO createReport(LabReportRequestDTO dto);
+
+    List<LabReportResponseDTO> getMyReports();
 
     LabReportResponseDTO updateReport(UUID reportId, LabReportRequestDTO dto);
 

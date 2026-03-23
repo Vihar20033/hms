@@ -103,9 +103,12 @@ export class LabListComponent implements OnInit {
 
   loadTests(): void {
     this.isLoading = true;
-    this.labService.getAll().subscribe({
+    const request = this.userRole === 'PATIENT' 
+      ? this.labService.getMyTests() 
+      : this.labService.getAll();
+
+    request.subscribe({
       next: (res: ApiResponse<LabTest[]>) => {
-        console.log('Fetched Lab Tests:', res.data);
         this.tests = res.data;
         this.isLoading = false;
       },

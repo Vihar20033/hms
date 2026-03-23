@@ -1,34 +1,46 @@
 package com.hms.security.jwt;
 
+import com.hms.common.enums.MedicineCategory;
 import com.hms.user.entity.User;
-import com.hms.user.repository.UserRepository;
 import com.hms.user.service.CustomUserDetailsService;
-import jakarta.servlet.*;
+import jakarta.servlet.FilterChain;
+import jakarta.servlet.ServletException;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import lombok.extern.slf4j.Slf4j;
-import jakarta.servlet.http.*;
-import lombok.RequiredArgsConstructor;
 import org.jspecify.annotations.NonNull;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
+import org.springframework.web.servlet.HandlerExceptionResolver;
 
 import java.io.IOException;
+import java.util.Objects;
 
 @Component
-@RequiredArgsConstructor
 @Slf4j
 public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
     private final JwtUtil jwtUtil;
     private final CustomUserDetailsService userDetailsService;
-    private final UserRepository userRepository;
+    private final HandlerExceptionResolver resolver;
+
+    public JwtAuthenticationFilter(
+            JwtUtil jwtUtil,
+            CustomUserDetailsService userDetailsService,
+            @Qualifier("handlerExceptionResolver") HandlerExceptionResolver resolver) {
+        this.jwtUtil = jwtUtil;
+        this.userDetailsService = userDetailsService;
+        this.resolver = resolver;
+    }
 
     @Override
     protected void doFilterInternal(
-            HttpServletRequest request,
+            @NonNull HttpServletRequest request,
             @NonNull HttpServletResponse response,
             @NonNull FilterChain filterChain
     ) throws ServletException, IOException {
@@ -40,58 +52,50 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
             return;
         }
 
-        String jwt = authHeader.substring(7);
+        final String jwt = authHeader.substring(7);
 
-        if (!jwtUtil.isTokenValid(jwt)) {
-            filterChain.doFilter(request, response);
-            return;
-        }
+        try {
+            if (!jwtUtil.validateToken(jwt)) {
+                log.warn("Invalid JWT provided from IP: {}, URL: {}", request.getRemoteAddr(), request.getRequestURI());
+                filterChain.doFilter(request, response); 
+                return;
+            }
 
-        String username = jwtUtil.extractUsername(jwt);
-
-        if (username != null &&
-                SecurityContextHolder.getContext().getAuthentication() == null) {
-
-            log.debug("Authenticating user: {}", username);
-            User user = userRepository.findByUsername(username)
-                    .orElse(null);
-
-            if (user == null) {
-                log.warn("User not found in database: {}", username);
+            // Ensure we only process ACCESS tokens in the filter chain
+            if (jwtUtil.extractTokenType(jwt) != MedicineCategory.TokenType.ACCESS) {
+                log.warn("Attempted to use REFRESH token as ACCESS token by: {}", request.getRemoteAddr());
                 filterChain.doFilter(request, response);
                 return;
             }
 
-            Integer tokenVersionFromToken =
-                    jwtUtil.extractTokenVersion(jwt);
+            final String username = jwtUtil.extractUsername(jwt);
 
-            log.debug("User token version in DB: {}, in token: {}", user.getTokenVersion(), tokenVersionFromToken);
-            if (!java.util.Objects.equals(user.getTokenVersion(), tokenVersionFromToken)) {
-                log.warn("Token version mismatch for user: {}. Token invalidated.", username);
-                filterChain.doFilter(request, response);
-                return; // 🔥 Token invalidated
+            if (username != null && SecurityContextHolder.getContext().getAuthentication() == null) {
+                // Fetch user exactly once (using UserDetails which is now our User entity)
+                UserDetails userDetails = userDetailsService.loadUserByUsername(username);
+                User user = (User) userDetails;     // Cast to user Entity
+
+                // Validate token version against DB version for instant revocation
+                Integer tokenVersion = jwtUtil.extractTokenVersion(jwt);
+                if (!Objects.equals(user.getTokenVersion(), tokenVersion)) {
+                    log.warn("Stale token detected for {}. Token version: {} | Expected: {}", username, tokenVersion, user.getTokenVersion());
+                    filterChain.doFilter(request, response);
+                    return;
+                }
+
+                UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(
+                        userDetails, null, userDetails.getAuthorities());
+
+                authToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
+                SecurityContextHolder.getContext().setAuthentication(authToken);
+
+                log.info("Request authorized for user: {} with authorities: {}", username, userDetails.getAuthorities());
             }
 
-            UserDetails userDetails =
-                    userDetailsService.loadUserByUsername(username);
-
-            log.debug("User authorities: {}", userDetails.getAuthorities());
-            UsernamePasswordAuthenticationToken authenticationToken =
-                    new UsernamePasswordAuthenticationToken(
-                            userDetails,
-                            null,
-                            userDetails.getAuthorities()
-                    );
-
-            authenticationToken.setDetails(
-                    new WebAuthenticationDetailsSource()
-                            .buildDetails(request)
-            );
-
-            SecurityContextHolder.getContext()
-                    .setAuthentication(authenticationToken);
-            log.info("User {} authenticated successfully via JWT with authorities: {}",
-                    username, userDetails.getAuthorities());
+        } catch (Exception e) {
+            log.error("Authentication filter exception: {}", e.getMessage());
+            resolver.resolveException(request, response, null, e);
+            return;
         }
 
         filterChain.doFilter(request, response);

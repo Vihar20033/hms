@@ -61,14 +61,14 @@ export class SidebarComponent {
       title: 'Lab Tests',
       icon: 'ri-test-tube-line',
       link: '/lab',
-      roles: ['ADMIN', 'DOCTOR', 'LABORATORY_STAFF'],
+      roles: ['ADMIN', 'DOCTOR', 'LABORATORY_STAFF', 'PATIENT'],
       summary: 'Orders and results',
     },
     {
       title: 'Prescriptions',
       icon: 'ri-file-text-line',
       link: '/prescriptions',
-      roles: ['ADMIN', 'DOCTOR', 'PHARMACIST'],
+      roles: ['ADMIN', 'DOCTOR', 'PHARMACIST', 'PATIENT'],
       summary: 'Clinical orders',
     },
     {

@@ -11,4 +11,8 @@ import java.util.UUID;
 public interface LabReportRepository extends JpaRepository<LabReport, UUID> {
     
     Optional<LabReport> findByLabTestId(UUID testId);
+
+    java.util.List<LabReport> findByLabTestPatientEmail(String email);
+
+    java.util.List<LabReport> findByLabTestPatientId(UUID patientId);
 }

@@ -5,14 +5,10 @@ import { TableModule } from 'primeng/table';
 import { Appointment, AppointmentStatus } from '../../../../core/models/appointment.models';
 import { Billing } from '../../../../core/models/billing.models';
 import { ApiResponse } from '../../../../core/models/common.models';
-import { Doctor } from '../../../../core/models/doctor.models';
-import { PatientSlice } from '../../../../core/models/patient.models';
 import { AppointmentService } from '../../../../core/services/appointment.service';
 import { AuthService } from '../../../../core/services/auth.service';
 import { BillingService } from '../../../../core/services/billing.service';
-import { DoctorService } from '../../../../core/services/doctor.service';
 import { ExcelExportService } from '../../../../core/services/excel-export.service';
-import { PatientService } from '../../../../core/services/patient.service';
 
 import { HeaderComponent } from '../../../../shared/components/layout/header/header.component';
 import { SidebarComponent } from '../../../../shared/components/layout/sidebar/sidebar.component';
@@ -30,8 +26,6 @@ export class AppointmentListComponent implements OnInit, OnDestroy {
   isLoading = true;
   statusEnum = AppointmentStatus;
   userRole: string | null = null;
-  patientId: string | null = null;
-  doctorProfile: Doctor | null = null;
   selectedStatusFilter: 'ALL' | AppointmentStatus = 'ALL';
   scheduledCount = 0;
   checkedInCount = 0;
@@ -42,8 +36,6 @@ export class AppointmentListComponent implements OnInit, OnDestroy {
   constructor(
     private appointmentService: AppointmentService,
     private authService: AuthService,
-    private patientService: PatientService,
-    private doctorService: DoctorService,
     private router: Router,
     private billingService: BillingService,
     private excelExportService: ExcelExportService,
@@ -55,50 +47,23 @@ export class AppointmentListComponent implements OnInit, OnDestroy {
       this.selectedStatusFilter = AppointmentStatus.SCHEDULED;
     }
     this.pageLead = this.getPageLead();
-
-    const user = this.authService.currentUserValue;
-
-    if (this.userRole === 'PATIENT' && user?.email) {
-      this.patientService.search(undefined, user.email).subscribe((res: ApiResponse<PatientSlice>) => {
-        if (res.data.content.length > 0) {
-          this.patientId = res.data.content[0].id;
-          this.loadAppointments();
-        } else {
-          this.appointments = [];
-          this.isLoading = false;
-        }
-      });
-    } else if (this.userRole === 'DOCTOR' && user?.username) {
-      this.doctorService.getAll().subscribe((res: ApiResponse<Doctor[]>) => {
-        const email = user.email;
-        const found = res.data.find((d) => d.email === email);
-        if (found) {
-          this.doctorProfile = found;
-          this.loadAppointments();
-        } else {
-          this.appointments = [];
-          this.filteredAppointments = [];
-          this.isLoading = false;
-        }
-      });
-    } else {
-      this.loadAppointments();
-    }
+    this.loadAppointments();
   }
 
   ngOnDestroy(): void {}
 
   loadAppointments(): void {
     this.isLoading = true;
-    this.appointmentService.getAll().subscribe({
+    
+    // Pattern: Use getMyAppointments() for Doctors/Patients, getAll() for Staff
+    const isClinicalStaff = ['ADMIN', 'RECEPTIONIST', 'NURSE'].includes(this.userRole || '');
+    const request = isClinicalStaff 
+      ? this.appointmentService.getAll() 
+      : this.appointmentService.getMyAppointments();
+
+    request.subscribe({
       next: (res: ApiResponse<Appointment[]>) => {
-        if (this.userRole === 'PATIENT' && this.patientId) {
-          this.appointments = res.data.filter((a) => a.patientId === this.patientId);
-        } else if (this.userRole === 'DOCTOR' && this.doctorProfile) {
-          this.appointments = res.data.filter((a) => a.doctorId === this.doctorProfile?.id);
-        } else {
-          this.appointments = res.data;
-        }
+        this.appointments = res.data || [];
         this.refreshQueueView();
         this.isLoading = false;
       },
@@ -210,6 +175,10 @@ export class AppointmentListComponent implements OnInit, OnDestroy {
 
     if (this.userRole === 'RECEPTIONIST') {
       return 'Manage arrivals, move patients into the doctor queue, and keep the OPD flowing.';
+    }
+
+    if (this.userRole === 'PATIENT') {
+      return 'Track your upcoming visits and consultation history.';
     }
 
     return 'View and manage all medical consultations.';

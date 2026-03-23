@@ -16,7 +16,11 @@ public interface LabTestRepository extends JpaRepository<LabTest, UUID>, JpaSpec
 
     List<LabTest> findByPatientId(UUID patientId);
 
+    List<LabTest> findByPatientEmail(String email);
+
     boolean existsByTestCode(String testCode);
 
     List<LabTest> findByAppointmentId(UUID appointmentId);
+
+    List<LabTest> findByRequestedByUserId(UUID userId);
 }

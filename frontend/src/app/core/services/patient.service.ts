@@ -21,6 +21,12 @@ export class PatientService {
       .pipe(retry({ count: 3, delay: (error, retryCount) => timer(Math.pow(2, retryCount) * 1000) }), timeout(10000));
   }
 
+  getMyProfile(): Observable<ApiResponse<Patient>> {
+    return this.http
+      .get<ApiResponse<Patient>>(`${this.apiUrl}/my`)
+      .pipe(retry({ count: 2, delay: 1000 }), timeout(10000));
+  }
+
   search(
     name?: string,
     email?: string,

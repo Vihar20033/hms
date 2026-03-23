@@ -1,38 +1,43 @@
 package com.hms.billing.service.impl;
 
 import com.hms.appointment.entity.Appointment;
-
 import com.hms.appointment.repository.AppointmentRepository;
 import com.hms.billing.dto.request.BillingRequestDTO;
 import com.hms.billing.dto.response.BillingResponseDTO;
 import com.hms.billing.entity.Billing;
-import com.hms.common.enums.PaymentStatus;
-import com.hms.common.enums.PaymentMethod;
+import com.hms.billing.entity.BillingItem;
 import com.hms.billing.mapper.BillingMapper;
 import com.hms.billing.repository.BillingRepository;
 import com.hms.billing.service.BillingService;
+import com.hms.common.enums.PaymentMethod;
+import com.hms.common.enums.PaymentStatus;
+import com.hms.doctor.entity.Doctor;
+import com.hms.laboratory.entity.LabTest;
+import com.hms.laboratory.repository.LabTestRepository;
 import com.hms.patient.entity.Patient;
 import com.hms.patient.repository.PatientRepository;
-import com.hms.prescription.repository.PrescriptionRepository;
-import com.hms.laboratory.repository.LabTestRepository;
-import com.hms.pharmacy.repository.MedicineRepository;
-import com.hms.billing.entity.BillingItem;
 import com.hms.pharmacy.entity.Medicine;
-import com.hms.laboratory.entity.LabTest;
-import com.hms.doctor.entity.Doctor;
+import com.hms.pharmacy.repository.MedicineRepository;
+import com.hms.prescription.repository.PrescriptionRepository;
+import com.hms.user.entity.User;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.security.access.AccessDeniedException;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.beans.factory.annotation.Value;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
+@Slf4j
 public class BillingServiceImpl implements BillingService {
 
     private final BillingRepository billingRepository;
@@ -66,7 +71,6 @@ public class BillingServiceImpl implements BillingService {
         billing.setPaymentMethod(dto.getPaymentMethod());
         billing.setNotes(dto.getNotes());
 
-        // Insurance Fields
         billing.setInsuranceProvider(dto.getInsuranceProvider());
         billing.setInsuranceClaimNumber(dto.getInsuranceClaimNumber());
         billing.setInsuranceAmount(dto.getInsuranceAmount() != null ? dto.getInsuranceAmount() : BigDecimal.ZERO);
@@ -78,7 +82,6 @@ public class BillingServiceImpl implements BillingService {
             billing.setAppointment(appointment);
         }
 
-        // Wire each item
         if (dto.getItems() != null) {
             for (BillingRequestDTO.BillingItemRequestDTO itemDto : dto.getItems()) {
                 BillingItem item = new BillingItem();
@@ -90,7 +93,6 @@ public class BillingServiceImpl implements BillingService {
             }
         }
 
-        // Calculation if totals are manually provided but tax is null
         if (billing.getTaxAmount().compareTo(BigDecimal.ZERO) == 0 && billing.getTotalAmount().compareTo(BigDecimal.ZERO) > 0) {
             billing.setTaxAmount(billing.getTotalAmount().multiply(taxRate != null ? taxRate : new BigDecimal("0.05")));
             billing.setNetAmount(billing.getTotalAmount().add(billing.getTaxAmount()).subtract(billing.getDiscountAmount()));
@@ -121,9 +123,13 @@ public class BillingServiceImpl implements BillingService {
     @Override
     @Transactional(readOnly = true)
     public BillingResponseDTO getBillingById(UUID id) {
-        return billingRepository.findById(id)
-                .map(billingMapper::toDto)
+        Billing billing = billingRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Billing not found"));
+        
+        // 🔒 Identity Check
+        checkOwnership(billing);
+
+        return billingMapper.toDto(billing);
     }
 
     @Override
@@ -134,8 +140,28 @@ public class BillingServiceImpl implements BillingService {
 
     @Override
     @Transactional(readOnly = true)
+    public List<BillingResponseDTO> getMyBillings() {
+        User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        if (user.getRole() != com.hms.common.enums.Role.PATIENT) {
+            log.warn("Non-patient user {} tried to access /my billings.", user.getUsername());
+            return Collections.emptyList();
+        }
+        
+        // Match patient by email as per our existing link logic
+        List<Billing> billings = billingRepository.findByPatientEmail(user.getEmail());
+        return billingMapper.toDtoList(billings);
+    }
+
+    @Override
+    @Transactional(readOnly = true)
     public List<BillingResponseDTO> getBillingsByPatientId(UUID patientId) {
-        return billingMapper.toDtoList(billingRepository.findByPatientId(patientId));
+        List<Billing> billings = billingRepository.findByPatientId(patientId);
+        
+        if (!billings.isEmpty()) {
+            checkOwnership(billings.get(0));
+        }
+        
+        return billingMapper.toDtoList(billings);
     }
 
     @Override
@@ -255,8 +281,34 @@ public class BillingServiceImpl implements BillingService {
         return billing;
     }
 
+    /**
+     * Verifies financial data access.
+     * Allowed: ADMIN, RECEPTIONIST.
+     * Specific access: Related PATIENT (via email link).
+     */
+    private void checkOwnership(Billing billing) {
+        User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        com.hms.common.enums.Role role = user.getRole();
+
+        // 1. Staff with Global Access
+        if (role == com.hms.common.enums.Role.ADMIN || role == com.hms.common.enums.Role.RECEPTIONIST) {
+            return;
+        }
+
+        // 2. Patient specific access
+        if (role == com.hms.common.enums.Role.PATIENT) {
+            if (billing.getPatient() != null && user.getEmail().equals(billing.getPatient().getEmail())) {
+                return;
+            }
+        }
+
+        log.warn("Security Alert: User {} with role {} attempted unauthorized access to invoice {}.", 
+                user.getUsername(), role, billing.getInvoiceNumber());
+        throw new AccessDeniedException("You do not have permission to access this billing record.");
+    }
+
     private String getCurrentUsername() {
-        org.springframework.security.core.Authentication auth = org.springframework.security.core.context.SecurityContextHolder.getContext().getAuthentication();
+        org.springframework.security.core.Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         return (auth != null && auth.isAuthenticated()) ? auth.getName() : "system";
     }
 }

@@ -8,10 +8,6 @@ import org.springframework.stereotype.Component;
 
 import java.util.Optional;
 
-/**
- * Provides the current username for @CreatedBy and @LastModifiedBy.
- * Uses "system" when not authenticated (e.g. startup, tests).
- */
 @Component
 public class AuditorAwareImpl implements AuditorAware<String> {
 

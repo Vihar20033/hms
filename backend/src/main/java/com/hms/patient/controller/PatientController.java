@@ -20,60 +20,69 @@ import java.util.UUID;
 @PreAuthorize("isAuthenticated()")
 public class PatientController {
 
-        private final PatientService service;
+    private final PatientService service;
 
-        @PreAuthorize("hasAnyRole('ADMIN','RECEPTIONIST')")
-        @PostMapping
-        public ApiResponse<PatientOnboardingResponseDTO> create(
-                @Valid @RequestBody PatientRequestDTO dto) {
+    @PreAuthorize("hasAnyRole('ADMIN','RECEPTIONIST')")
+    @PostMapping
+    public ApiResponse<PatientOnboardingResponseDTO> create(@Valid @RequestBody PatientRequestDTO dto) {
+        return ApiResponse.success(service.create(dto));
+    }
 
-                return ApiResponse.success(service.create(dto));
-        }
+    /**
+     * Search and list patients. Restricted to staff for hospital management.
+     */
+    @PreAuthorize("hasAnyRole('ADMIN','DOCTOR','NURSE','RECEPTIONIST','PHARMACIST','LABORATORY_STAFF')")
+    @GetMapping
+    public ApiResponse<Slice<PatientResponseDTO>> search(
+            @RequestParam(name = "name", required = false) String name,
+            @RequestParam(name = "email", required = false) String email,
+            @RequestParam(name = "bloodGroup", required = false) String bloodGroup,
+            @RequestParam(name = "urgencyLevel", required = false) String urgencyLevel,
+            @RequestParam(name = "page", defaultValue = "0") int page,
+            @RequestParam(name = "size", defaultValue = "10") int size,
+            @RequestParam(name = "sortBy", defaultValue = "createdAt") String sortBy) {
 
-        @PreAuthorize("hasAnyRole('ADMIN','DOCTOR','NURSE','RECEPTIONIST','PHARMACIST')")
-        @GetMapping("/{id}")
-        public ApiResponse<PatientResponseDTO> getById(@PathVariable("id") UUID id) {
+        return ApiResponse.success(service.search(name, email, bloodGroup, urgencyLevel, page, size, sortBy));
+    }
 
-                return ApiResponse.success(service.getById(id));
-        }
+    /**
+     * Listing all patients. Strictly restricted to clinical and administrative staff.
+     */
+    @PreAuthorize("hasAnyRole('ADMIN','RECEPTIONIST','DOCTOR','NURSE')")
+    @GetMapping("/all")
+    public ApiResponse<List<PatientResponseDTO>> getAll() {
+        return ApiResponse.success(service.getAll());
+    }
 
-        @PreAuthorize("hasAnyRole('ADMIN','DOCTOR','RECEPTIONIST')")
-        @PutMapping("/{id}")
-        public ApiResponse<PatientResponseDTO> update(
-                @PathVariable("id") UUID id,
-                @Valid @RequestBody PatientRequestDTO dto) {
+    /**
+     * Securely fetch the logged-in patient's own profile metadata.
+     */
+    @PreAuthorize("hasRole('PATIENT')")
+    @GetMapping("/my")
+    public ApiResponse<PatientResponseDTO> getMyProfile() {
+        return ApiResponse.success(service.getMyProfile());
+    }
 
-                return ApiResponse.success(service.update(id, dto));
-        }
+    /**
+     * Fetch a specific patient profile. Service layer enforces identity/role checks.
+     * Note: placed after static lookups to avoid path collisions.
+     */
+    @PreAuthorize("hasAnyRole('ADMIN','DOCTOR','NURSE','RECEPTIONIST','PHARMACIST','PATIENT')")
+    @GetMapping("/{id}")
+    public ApiResponse<PatientResponseDTO> getById(@PathVariable("id") UUID id) {
+        return ApiResponse.success(service.getById(id));
+    }
 
-        @PreAuthorize("hasAnyRole('ADMIN','RECEPTIONIST','NURSE')")
-        @DeleteMapping("/{id}")
-        public ApiResponse<Void> delete(@PathVariable("id") UUID id) {
+    @PreAuthorize("hasAnyRole('ADMIN','DOCTOR','RECEPTIONIST')")
+    @PutMapping("/{id}")
+    public ApiResponse<PatientResponseDTO> update(@PathVariable("id") UUID id, @Valid @RequestBody PatientRequestDTO dto) {
+        return ApiResponse.success(service.update(id, dto));
+    }
 
-                service.delete(id);
-                return ApiResponse.success(null);
-        }
-
-        // Slice-based list/search (efficient: no count query)
-        @PreAuthorize("hasAnyRole('ADMIN','DOCTOR','NURSE','RECEPTIONIST','PHARMACIST','LABORATORY_STAFF','PATIENT')")
-        @GetMapping
-        public ApiResponse<Slice<PatientResponseDTO>> search(
-                @RequestParam(name = "name", required = false) String name,
-                @RequestParam(name = "email", required = false) String email,
-                @RequestParam(name = "bloodGroup", required = false) String bloodGroup,
-                @RequestParam(name = "urgencyLevel", required = false) String urgencyLevel,
-                @RequestParam(name = "page", defaultValue = "0") int page,
-                @RequestParam(name = "size", defaultValue = "10") int size,
-                @RequestParam(name = "sortBy", defaultValue = "createdAt") String sortBy) {
-
-                return ApiResponse.success(
-                        service.search(name, email, bloodGroup, urgencyLevel, page, size, sortBy)
-                );
-        }
-
-        @PreAuthorize("hasAnyRole('ADMIN','DOCTOR','NURSE','RECEPTIONIST','PHARMACIST','LABORATORY_STAFF','PATIENT')")
-        @GetMapping("/all")
-        public ApiResponse<List<PatientResponseDTO>> getAll() {
-                return ApiResponse.success(service.getAll());
-        }
+    @PreAuthorize("hasAnyRole('ADMIN','RECEPTIONIST','NURSE')")
+    @DeleteMapping("/{id}")
+    public ApiResponse<Void> delete(@PathVariable("id") UUID id) {
+        service.delete(id);
+        return ApiResponse.success(null);
+    }
 }

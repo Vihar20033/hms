@@ -42,9 +42,7 @@ com\hms\laboratory\dto\request\LabReportRequestDTO.class
 com\hms\doctor\entity\Doctor$DoctorBuilder.class
 com\hms\doctor\service\impl\DoctorServiceImpl.class
 com\hms\common\audit\AuditLog$AuditLogBuilder.class
-com\hms\reporting\dto\response\HospitalPerformanceDTO$DailyRevenue$DailyRevenueBuilder.class
 com\hms\patient\service\PatientService.class
-com\hms\reporting\dto\response\HospitalPerformanceDTO$DailyRevenue.class
 com\hms\patient\exception\PatientNotFoundException.class
 com\hms\billing\dto\response\BillingResponseDTO$BillingItemResponseDTO.class
 com\hms\user\entity\User.class
@@ -93,14 +91,11 @@ com\hms\patient\entity\Patient$PatientBuilder.class
 com\hms\doctor\mapper\DoctorMapper.class
 com\hms\clinical\controller\VitalsController.class
 com\hms\prescription\repository\PrescriptionRepository.class
-com\hms\user\dto\ChangePasswordRequest.class
 com\hms\user\entity\User$UserBuilder.class
 com\hms\prescription\dto\request\PrescriptionRequestDTO$PrescriptionMedicineRequestDTO.class
 com\hms\pharmacy\entity\InventoryTransaction.class
-com\hms\reporting\dto\response\HospitalPerformanceDTO$HospitalPerformanceDTOBuilder.class
 com\hms\dashboard\service\impl\DashboardServiceImpl.class
 com\hms\patient\exception\DuplicatePatientException.class
-com\hms\reporting\dto\response\HospitalPerformanceDTO$DepartmentStat$DepartmentStatBuilder.class
 com\hms\dashboard\dto\DashboardSummaryDTO.class
 com\hms\patient\dto\response\PatientResponseDTO$PatientResponseDTOBuilder.class
 com\hms\common\enums\PaymentStatus.class
@@ -130,7 +125,6 @@ com\hms\doctor\dto\response\DoctorResponse.class
 com\hms\clinical\entity\Vitals$VitalsBuilder.class
 com\hms\laboratory\service\impl\LabServiceImpl.class
 com\hms\pharmacy\dto\request\DispenseMedicineRequestDTO.class
-com\hms\reporting\service\ReportService.class
 com\hms\clinical\dto\response\VitalsResponseDTO.class
 com\hms\billing\dto\response\BillingResponseDTO$BillingResponseDTOBuilder.class
 com\hms\dashboard\service\DashboardService.class
@@ -146,7 +140,6 @@ com\hms\laboratory\dto\response\LabTestResponseDTO$LabTestResponseDTOBuilder.cla
 com\hms\doctor\entity\Doctor$DoctorBuilderImpl.class
 com\hms\pharmacy\dto\request\MedicineRequestDTO.class
 com\hms\appointment\entity\Appointment$AppointmentBuilder.class
-com\hms\reporting\dto\response\HospitalPerformanceDTO.class
 com\hms\appointment\exception\SlotAlreadyBookedException.class
 com\hms\appointment\exception\AppointmentNotFoundException.class
 com\hms\prescription\dto\response\PrescriptionResponseDTO$PrescriptionMedicineResponseDTO.class
@@ -188,6 +181,7 @@ com\hms\clinical\repository\VitalsRepository.class
 com\hms\common\enums\PaymentMethod.class
 com\hms\appointment\entity\Appointment$AppointmentBuilderImpl.class
 com\hms\laboratory\repository\LabReportRepository.class
+com\hms\common\enums\MedicineCategory$TokenType.class
 com\hms\doctor\controller\DoctorController.class
 com\hms\appointment\service\impl\AppointmentServiceImpl.class
 com\hms\auth\LoginRequest.class
@@ -217,12 +211,10 @@ com\hms\laboratory\entity\LabTest$LabTestBuilder.class
 com\hms\doctor\dto\response\DoctorResponseDTO.class
 com\hms\prescription\mapper\PrescriptionMapper.class
 com\hms\pharmacy\exception\DuplicateMedicineException.class
-com\hms\reporting\controller\ReportController.class
 com\hms\doctor\dto\request\CreateDoctorRequest$CreateDoctorRequestBuilder.class
 com\hms\billing\mapper\BillingMapper.class
 com\hms\common\response\ApiError.class
 com\hms\prescription\dto\response\PrescriptionResponseDTO$PrescriptionResponseDTOBuilder.class
-com\hms\reporting\dto\response\HospitalPerformanceDTO$DepartmentStat.class
 com\hms\patient\entity\Patient$PatientBuilderImpl.class
 com\hms\user\exception\UserNotFoundException.class
 com\hms\laboratory\dto\response\LabReportResponseDTO$LabReportResponseDTOBuilder.class

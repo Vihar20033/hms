@@ -30,22 +30,38 @@ public class PrescriptionController {
                 .body(ApiResponse.success(prescriptionService.createPrescription(dto), "Request successful", HttpStatus.CREATED));
     }
 
+    /**
+     * Fetch all prescriptions. Management/Pharmacist role only.
+     */
     @PreAuthorize("hasAnyRole('ADMIN','PHARMACIST','DOCTOR')")
     @GetMapping
     public ResponseEntity<ApiResponse<List<PrescriptionResponseDTO>>> getAllPrescriptions() {
         return ResponseEntity.ok(ApiResponse.success(prescriptionService.getAllPrescriptions()));
     }
 
-    @PreAuthorize("hasAnyRole('ADMIN','DOCTOR','PHARMACIST')")
-    @GetMapping("/{id}")
-    public ResponseEntity<ApiResponse<PrescriptionResponseDTO>> getPrescriptionById(@PathVariable UUID id) {
-        return ResponseEntity.ok(ApiResponse.success(prescriptionService.getPrescriptionById(id)));
+    /**
+     * Fetch the logged-in patient's own prescriptions securely.
+     */
+    @PreAuthorize("hasRole('PATIENT')")
+    @GetMapping("/my")
+    public ResponseEntity<ApiResponse<List<PrescriptionResponseDTO>>> getMyPrescriptions() {
+        return ResponseEntity.ok(ApiResponse.success(prescriptionService.getMyPrescriptions()));
     }
 
     @PreAuthorize("hasAnyRole('ADMIN','DOCTOR','PHARMACIST')")
     @GetMapping("/patient/{patientId}")
     public ResponseEntity<ApiResponse<List<PrescriptionResponseDTO>>> getByPatientId(@PathVariable UUID patientId) {
         return ResponseEntity.ok(ApiResponse.success(prescriptionService.getPrescriptionsByPatientId(patientId)));
+    }
+
+    /**
+     * Fetch specific prescription by ID. Service layer enforces identity checks.
+     * Note: placed after static lookups to avoid path collisions.
+     */
+    @PreAuthorize("hasAnyRole('ADMIN','DOCTOR','PHARMACIST','PATIENT')")
+    @GetMapping("/{id}")
+    public ResponseEntity<ApiResponse<PrescriptionResponseDTO>> getPrescriptionById(@PathVariable UUID id) {
+        return ResponseEntity.ok(ApiResponse.success(prescriptionService.getPrescriptionById(id)));
     }
 
     @PreAuthorize("hasAnyRole('ADMIN','DOCTOR')")

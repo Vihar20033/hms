@@ -25,6 +25,8 @@ public interface AppointmentService {
 
     List<Appointment> getAllAppointments();
 
+    List<Appointment> getMyAppointments();
+
     void deleteAppointment(UUID id);
 }
 

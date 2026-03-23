@@ -67,7 +67,8 @@ public class AuthService {
                 "role=" + user.getRole());
 
         return AuthResponse.builder()
-                .token(jwtUtil.generateToken(user.getUsername(), user.getRole().name(), user.getTokenVersion()))
+                .token(jwtUtil.generateAccessToken(user.getUsername(), user.getRole().name(), user.getTokenVersion()))
+                .refreshToken(jwtUtil.generateRefreshToken(user.getUsername(), user.getTokenVersion()))
                 .username(user.getUsername())
                 .email(user.getEmail())
                 .role(user.getRole().name())

@@ -13,6 +13,8 @@ public interface PrescriptionService {
 
     List<PrescriptionResponseDTO> getAllPrescriptions();
 
+    List<PrescriptionResponseDTO> getMyPrescriptions();
+
     List<PrescriptionResponseDTO> getPrescriptionsByPatientId(UUID patientId);
 
     List<PrescriptionResponseDTO> getPrescriptionsByDoctorId(UUID doctorId);

@@ -30,22 +30,44 @@ public class BillingController {
                 .body(ApiResponse.success(billingService.createBilling(dto)));
     }
 
-    @PreAuthorize("hasAnyRole('ADMIN','RECEPTIONIST','PATIENT')")
+    /**
+     * Get all bills in the system. Management role only.
+     */
+    @PreAuthorize("hasAnyRole('ADMIN','RECEPTIONIST')")
     @GetMapping
     public ResponseEntity<ApiResponse<List<BillingResponseDTO>>> getAllBillings() {
         return ResponseEntity.ok(ApiResponse.success(billingService.getAllBillings()));
     }
 
+    /**
+     * Get the logged-in patient's personal billing records.
+     */
+    @PreAuthorize("hasRole('PATIENT')")
+    @GetMapping("/my")
+    public ResponseEntity<ApiResponse<List<BillingResponseDTO>>> getMyBillings() {
+        return ResponseEntity.ok(ApiResponse.success(billingService.getMyBillings()));
+    }
+
+    @PreAuthorize("hasAnyRole('ADMIN','RECEPTIONIST')")
+    @GetMapping("/patient/{patientId}")
+    public ResponseEntity<ApiResponse<List<BillingResponseDTO>>> getBillingsByPatientId(@PathVariable("patientId") UUID patientId) {
+        return ResponseEntity.ok(ApiResponse.success(billingService.getBillingsByPatientId(patientId)));
+    }
+
+    @PreAuthorize("hasAnyRole('ADMIN','RECEPTIONIST')")
+    @GetMapping("/preview-appointment/{appointmentId}")
+    public ResponseEntity<ApiResponse<BillingResponseDTO>> previewBillingJson(@PathVariable("appointmentId") UUID appointmentId) {
+        return ResponseEntity.ok(ApiResponse.success(billingService.calculatePreviewBilling(appointmentId)));
+    }
+
+    /**
+     * Fetch a specific invoice. Enforces ownership check in the service layer.
+     * Note: placed after static lookups to avoid path collisions.
+     */
     @PreAuthorize("hasAnyRole('ADMIN','RECEPTIONIST','PATIENT')")
     @GetMapping("/{id}")
     public ResponseEntity<ApiResponse<BillingResponseDTO>> getBillingById(@PathVariable("id") UUID id) {
         return ResponseEntity.ok(ApiResponse.success(billingService.getBillingById(id)));
-    }
-
-    @PreAuthorize("hasAnyRole('ADMIN','RECEPTIONIST','PATIENT')")
-    @GetMapping("/patient/{patientId}")
-    public ResponseEntity<ApiResponse<List<BillingResponseDTO>>> getBillingsByPatientId(@PathVariable("patientId") UUID patientId) {
-        return ResponseEntity.ok(ApiResponse.success(billingService.getBillingsByPatientId(patientId)));
     }
 
     @PreAuthorize("hasAnyRole('ADMIN','RECEPTIONIST')")
@@ -62,20 +84,10 @@ public class BillingController {
                 .body(ApiResponse.success(billingService.generateBillingFromAppointment(appointmentId)));
     }
 
-    @PreAuthorize("hasAnyRole('ADMIN','RECEPTIONIST')")
-    @GetMapping("/preview-appointment/{appointmentId}")
-    public ResponseEntity<ApiResponse<BillingResponseDTO>> previewBillingJson(@PathVariable("appointmentId") UUID appointmentId) {
-        return ResponseEntity.ok(ApiResponse.success(billingService.calculatePreviewBilling(appointmentId)));
-    }
-
-
-
     @PreAuthorize("hasRole('ADMIN')")
     @DeleteMapping("/{id}")
     public ResponseEntity<ApiResponse<Void>> deleteBilling(@PathVariable("id") UUID id) {
         billingService.deleteBilling(id);
         return ResponseEntity.ok(ApiResponse.success(null));
     }
-
-
 }

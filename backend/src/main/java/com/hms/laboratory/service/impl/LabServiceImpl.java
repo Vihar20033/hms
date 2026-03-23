@@ -2,6 +2,9 @@ package com.hms.laboratory.service.impl;
 
 import com.hms.appointment.entity.Appointment;
 import com.hms.appointment.repository.AppointmentRepository;
+import com.hms.common.audit.AuditLogService;
+import com.hms.common.enums.Role;
+import com.hms.common.enums.TestStatus;
 import com.hms.common.exception.BadRequestException;
 import com.hms.doctor.entity.Doctor;
 import com.hms.doctor.repository.DoctorRepository;
@@ -11,27 +14,32 @@ import com.hms.laboratory.dto.response.LabReportResponseDTO;
 import com.hms.laboratory.dto.response.LabTestResponseDTO;
 import com.hms.laboratory.entity.LabReport;
 import com.hms.laboratory.entity.LabTest;
-import com.hms.common.enums.TestStatus;
 import com.hms.laboratory.mapper.LabMapper;
 import com.hms.laboratory.repository.LabReportRepository;
 import com.hms.laboratory.repository.LabTestRepository;
 import com.hms.laboratory.service.LabService;
 import com.hms.patient.entity.Patient;
 import com.hms.patient.repository.PatientRepository;
+import com.hms.user.entity.User;
+import com.hms.user.dto.UserResponseDTO;
+import com.hms.user.service.UserService;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.security.access.AccessDeniedException;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
-import com.hms.user.dto.UserResponseDTO;
-import com.hms.user.service.UserService;
-import com.hms.common.enums.Role;
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
+@Slf4j
 public class LabServiceImpl implements LabService {
 
     private final LabTestRepository labTestRepository;
@@ -41,7 +49,7 @@ public class LabServiceImpl implements LabService {
     private final AppointmentRepository appointmentRepository;
     private final UserService userService;
     private final LabMapper labMapper;
-    private final com.hms.common.audit.AuditLogService auditLogService;
+    private final AuditLogService auditLogService;
 
     @Override
     @Transactional
@@ -49,7 +57,7 @@ public class LabServiceImpl implements LabService {
         if (dto.getPrice() == null) {
             throw new BadRequestException("Lab test price is required");
         }
-        if (dto.getPrice().compareTo(java.math.BigDecimal.ZERO) <= 0) {
+        if (dto.getPrice().compareTo(BigDecimal.ZERO) <= 0) {
             throw new BadRequestException("Lab test price must be greater than zero");
         }
         if (dto.getPatientId() == null) {
@@ -60,11 +68,6 @@ public class LabServiceImpl implements LabService {
                 .orElseThrow(() -> new RuntimeException("Patient not found"));
 
         LabTest labTest = labMapper.toEntity(dto);
-        labTest.setTestName(dto.getTestName());
-        labTest.setTestCode(dto.getTestCode());
-        labTest.setPrice(dto.getPrice());
-        labTest.setDescription(dto.getDescription());
-        labTest.setCategory(dto.getCategory());
         labTest.setPatient(patient);
         labTest.setStatus(TestStatus.PENDING);
         labTest.setRequestedDate(LocalDateTime.now());
@@ -83,21 +86,15 @@ public class LabServiceImpl implements LabService {
             UserResponseDTO currentUser = userService.getCurrentUser();
             if (currentUser != null && currentUser.getRole() == Role.DOCTOR) {
                 Doctor doctor = doctorRepository.findByUserId(currentUser.getId())
-                        .orElse(null);
-                
-                if (doctor == null) {
-                    doctor = Doctor.builder()
+                        .orElseGet(() -> doctorRepository.save(Doctor.builder()
                             .userId(currentUser.getId())
                             .firstName(currentUser.getUsername())
                             .lastName("(Auto-Generated)")
                             .specialization("General")
-                            .registrationNumber("TEMP-" + currentUser.getId().toString().substring(0, 8))
+                            .registrationNumber("TEMP-" + UUID.randomUUID().toString().substring(0, 8))
                             .email(currentUser.getEmail())
                             .isAvailable(true)
-                            .build();
-                    doctor = doctorRepository.save(doctor);
-                }
-                
+                            .build()));
                 labTest.setRequestedBy(doctor);
             }
         }
@@ -106,7 +103,7 @@ public class LabServiceImpl implements LabService {
             throw new BadRequestException("A valid requesting doctor is required for all lab tests.");
         }
         
-        return labMapper.toDto(labTestRepository.saveAndFlush(labTest));
+        return labMapper.toDto(labTestRepository.save(labTest));
     }
 
     @Override
@@ -151,21 +148,47 @@ public class LabServiceImpl implements LabService {
     @Override
     @Transactional(readOnly = true)
     public LabTestResponseDTO getTestById(UUID id) {
-        return labTestRepository.findById(id)
-                .map(labMapper::toDto)
+        LabTest test = labTestRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Lab test not found"));
+        
+        checkOwnership(test);
+        return labMapper.toDto(test);
     }
 
     @Override
     @Transactional(readOnly = true)
     public List<LabTestResponseDTO> getAllTests() {
-        return labMapper.toDtoList(labTestRepository.findAll());
+        User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        Role role = user.getRole();
+
+        if (role == Role.ADMIN || role == Role.LABORATORY_STAFF) {
+            return labMapper.toDtoList(labTestRepository.findAll());
+        }
+
+        if (role == Role.DOCTOR) {
+            return labMapper.toDtoList(labTestRepository.findByRequestedByUserId(user.getId()));
+        }
+
+        return Collections.emptyList();
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public List<LabTestResponseDTO> getMyTests() {
+        User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        if (user.getRole() != Role.PATIENT) return Collections.emptyList();
+        
+        return labMapper.toDtoList(labTestRepository.findByPatientEmail(user.getEmail()));
     }
 
     @Override
     @Transactional(readOnly = true)
     public List<LabTestResponseDTO> getTestsByPatientId(UUID patientId) {
-        return labMapper.toDtoList(labTestRepository.findByPatientId(patientId));
+        List<LabTest> tests = labTestRepository.findByPatientId(patientId);
+        if (!tests.isEmpty()) {
+            checkOwnership(tests.get(0));
+        }
+        return labMapper.toDtoList(tests);
     }
 
     @Override
@@ -195,7 +218,6 @@ public class LabServiceImpl implements LabService {
             report.setReferenceRange(dto.getReferenceRange());
             report.setRemarks(dto.getRemarks());
             report.setPerformedBy(dto.getPerformedBy());
-            report.setDeleted(false);
         } else {
             report = labMapper.toReportEntity(dto);
             report.setLabTest(labTest);
@@ -206,7 +228,6 @@ public class LabServiceImpl implements LabService {
         labTest.setCompletedDate(LocalDateTime.now());
         
         LabTest savedTest = labTestRepository.save(labTest);
-        auditLogService.log(getCurrentUsername(), "LAB_REPORT_CREATE", "LabReport", savedTest.getReport().getId().toString(), "test=" + savedTest.getTestName());
         return labMapper.toReportDto(savedTest.getReport());
     }
 
@@ -223,25 +244,36 @@ public class LabServiceImpl implements LabService {
         report.setRemarks(dto.getRemarks());
         report.setPerformedBy(dto.getPerformedBy());
 
-        LabReport saved = labReportRepository.save(report);
-        auditLogService.log(getCurrentUsername(), "LAB_REPORT_UPDATE", "LabReport", reportId.toString(), "result=" + saved.getResult());
-        return labMapper.toReportDto(saved);
+        return labMapper.toReportDto(labReportRepository.save(report));
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public List<LabReportResponseDTO> getMyReports() {
+        User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        if (user.getRole() != Role.PATIENT) return Collections.emptyList();
+        
+        return labMapper.toReportDtoList(labReportRepository.findByLabTestPatientEmail(user.getEmail()));
     }
 
     @Override
     @Transactional(readOnly = true)
     public LabReportResponseDTO getReportByTestId(UUID testId) {
-        return labReportRepository.findByLabTestId(testId)
-                .map(labMapper::toReportDto)
-                .orElseThrow(() -> new RuntimeException("Lab report not found for test ID: " + testId));
+        LabReport report = labReportRepository.findByLabTestId(testId)
+                .orElseThrow(() -> new RuntimeException("Lab report not found"));
+        
+        checkOwnership(report.getLabTest());
+        return labMapper.toReportDto(report);
     }
 
     @Override
     @Transactional(readOnly = true)
     public LabReportResponseDTO getReportById(UUID reportId) {
-        return labReportRepository.findById(reportId)
-                .map(labMapper::toReportDto)
+        LabReport report = labReportRepository.findById(reportId)
                 .orElseThrow(() -> new RuntimeException("Lab report not found"));
+        
+        checkOwnership(report.getLabTest());
+        return labMapper.toReportDto(report);
     }
 
     @Override
@@ -257,12 +289,31 @@ public class LabServiceImpl implements LabService {
                 .orElseThrow(() -> new RuntimeException("Lab report not found"));
         report.setDeleted(true);
         labReportRepository.save(report);
-        auditLogService.log(getCurrentUsername(), "LAB_REPORT_DELETE", "LabReport", reportId.toString(), "deleted=true");
+    }
+
+    private void checkOwnership(LabTest test) {
+        User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        Role role = user.getRole();
+
+        // 1. Staff
+        if (role == Role.ADMIN || role == Role.LABORATORY_STAFF) return;
+
+        // 2. Doctor (If they requested it or are assigned)
+        if (role == Role.DOCTOR) {
+            if (test.getRequestedBy() != null && test.getRequestedBy().getUserId().equals(user.getId())) return;
+        }
+
+        // 3. Patient
+        if (role == Role.PATIENT) {
+            if (test.getPatient() != null && user.getEmail().equalsIgnoreCase(test.getPatient().getEmail())) return;
+        }
+
+        log.warn("Security Alert: User {} with role {} tried to access lab result {}.", user.getUsername(), role, test.getId());
+        throw new AccessDeniedException("You do not have permission to view these laboratory results.");
     }
 
     private String getCurrentUsername() {
-        org.springframework.security.core.Authentication auth = org.springframework.security.core.context.SecurityContextHolder.getContext().getAuthentication();
+        org.springframework.security.core.Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         return (auth != null && auth.isAuthenticated()) ? auth.getName() : "system";
     }
 }
-

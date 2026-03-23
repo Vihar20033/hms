@@ -1,4 +1,3 @@
-C:\Users\Piyush\Desktop\Project\backend\src\main\java\com\hms\reporting\service\ReportService.java
 C:\Users\Piyush\Desktop\Project\backend\src\main\java\com\hms\billing\dto\response\BillingResponseDTO.java
 C:\Users\Piyush\Desktop\Project\backend\src\main\java\com\hms\pharmacy\exception\InsufficientStockException.java
 C:\Users\Piyush\Desktop\Project\backend\src\main\java\com\hms\security\jwt\JwtAuthenticationFilter.java
@@ -13,7 +12,6 @@ C:\Users\Piyush\Desktop\Project\backend\src\main\java\com\hms\pharmacy\exception
 C:\Users\Piyush\Desktop\Project\backend\src\main\java\com\hms\common\config\JacksonConfig.java
 C:\Users\Piyush\Desktop\Project\backend\src\main\java\com\hms\prescription\service\impl\PrescriptionServiceImpl.java
 C:\Users\Piyush\Desktop\Project\backend\src\main\java\com\hms\patient\entity\Patient.java
-C:\Users\Piyush\Desktop\Project\backend\src\main\java\com\hms\user\dto\ChangePasswordRequest.java
 C:\Users\Piyush\Desktop\Project\backend\src\main\java\com\hms\patient\dto\response\PatientResponseDTO.java
 C:\Users\Piyush\Desktop\Project\backend\src\main\java\com\hms\appointment\repository\AppointmentRepositoryCustom.java
 C:\Users\Piyush\Desktop\Project\backend\src\main\java\com\hms\billing\repository\BillingRepository.java
@@ -89,7 +87,6 @@ C:\Users\Piyush\Desktop\Project\backend\src\main\java\com\hms\common\enums\Appoi
 C:\Users\Piyush\Desktop\Project\backend\src\main\java\com\hms\user\exception\InvalidCredentialsException.java
 C:\Users\Piyush\Desktop\Project\backend\src\main\java\com\hms\appointment\repository\AppointmentRepository.java
 C:\Users\Piyush\Desktop\Project\backend\src\main\java\com\hms\clinical\entity\Vitals.java
-C:\Users\Piyush\Desktop\Project\backend\src\main\java\com\hms\reporting\controller\ReportController.java
 C:\Users\Piyush\Desktop\Project\backend\src\main\java\com\hms\auth\AuthResponse.java
 C:\Users\Piyush\Desktop\Project\backend\src\main\java\com\hms\laboratory\dto\request\LabTestRequestDTO.java
 C:\Users\Piyush\Desktop\Project\backend\src\main\java\com\hms\doctor\entity\DoctorSchedule.java
@@ -106,7 +103,6 @@ C:\Users\Piyush\Desktop\Project\backend\src\main\java\com\hms\pharmacy\dto\respo
 C:\Users\Piyush\Desktop\Project\backend\src\main\java\com\hms\common\exception\BadRequestException.java
 C:\Users\Piyush\Desktop\Project\backend\src\main\java\com\hms\pharmacy\service\MedicineService.java
 C:\Users\Piyush\Desktop\Project\backend\src\main\java\com\hms\prescription\repository\PrescriptionRepository.java
-C:\Users\Piyush\Desktop\Project\backend\src\main\java\com\hms\reporting\dto\response\HospitalPerformanceDTO.java
 C:\Users\Piyush\Desktop\Project\backend\src\main\java\com\hms\security\config\SecurityConfig.java
 C:\Users\Piyush\Desktop\Project\backend\src\main\java\com\hms\billing\entity\Billing.java
 C:\Users\Piyush\Desktop\Project\backend\src\main\java\com\hms\laboratory\repository\LabTestRepository.java

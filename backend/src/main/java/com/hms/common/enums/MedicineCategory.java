@@ -7,5 +7,10 @@ public enum MedicineCategory {
     VITAMINS,
     CARDIAC,
     DIABETIC,
-    OTHER
+    OTHER;
+
+    public enum TokenType {
+        ACCESS,
+        REFRESH
+    }
 }

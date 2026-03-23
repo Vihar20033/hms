@@ -21,6 +21,12 @@ export class AppointmentService {
       .pipe(retry({ count: 3, delay: (error, retryCount) => timer(Math.pow(2, retryCount) * 1000) }), timeout(10000));
   }
 
+  getMyAppointments(): Observable<ApiResponse<Appointment[]>> {
+    return this.http
+      .get<ApiResponse<Appointment[]>>(`${this.apiUrl}/my`)
+      .pipe(retry({ count: 2, delay: 1000 }), timeout(10000));
+  }
+
   getByPatientId(patientId: string): Observable<ApiResponse<Appointment[]>> {
     return this.http
       .get<ApiResponse<Appointment[]>>(`${this.apiUrl}/patient/${patientId}`)

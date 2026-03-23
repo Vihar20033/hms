@@ -1,2 +1,7 @@
 C:\Users\Piyush\Desktop\Project\backend\src\test\java\com\hms\auth\AuthServiceTest.java
+C:\Users\Piyush\Desktop\Project\backend\src\test\java\com\hms\prescription\service\impl\PrescriptionServiceImplTest.java
+C:\Users\Piyush\Desktop\Project\backend\src\test\java\com\hms\pharmacy\service\impl\MedicineServiceImplTest.java
+C:\Users\Piyush\Desktop\Project\backend\src\test\java\com\hms\appointment\service\impl\AppointmentServiceImplTest.java
+C:\Users\Piyush\Desktop\Project\backend\src\test\java\com\hms\laboratory\service\impl\LabServiceImplTest.java
+C:\Users\Piyush\Desktop\Project\backend\src\test\java\com\hms\billing\service\impl\BillingServiceImplTest.java
 C:\Users\Piyush\Desktop\Project\backend\src\test\java\com\hms\patient\service\impl\PatientServiceImplTest.java

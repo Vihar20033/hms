@@ -12,7 +12,11 @@ import java.util.UUID;
 public interface PrescriptionRepository extends JpaRepository<Prescription, UUID> {
     List<Prescription> findByPatientId(UUID patientId);
 
+    List<Prescription> findByPatientEmail(String email);
+
     List<Prescription> findByDoctorId(UUID doctorId);
 
     Optional<Prescription> findByAppointmentId(UUID appointmentId);
+
+    List<Prescription> findByDoctorUserId(UUID userId);
 }

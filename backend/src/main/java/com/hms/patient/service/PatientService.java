@@ -24,6 +24,8 @@ public interface PatientService {
 
     PatientResponseDTO getById(UUID id);
 
+    PatientResponseDTO getMyProfile();
+
     PatientResponseDTO update(UUID id, PatientRequestDTO dto);
 
     void delete(UUID id);

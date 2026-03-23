@@ -157,7 +157,7 @@ export const routes: Routes = [
       {
         path: '',
         component: PrescriptionListComponent,
-        data: { roles: ['ADMIN', 'DOCTOR', 'PHARMACIST'] },
+        data: { roles: ['ADMIN', 'DOCTOR', 'PHARMACIST', 'PATIENT'] },
       },
       {
         path: 'create/:appointmentId',
@@ -214,7 +214,7 @@ export const routes: Routes = [
       {
         path: '',
         component: LabListComponent,
-        data: { roles: ['ADMIN', 'DOCTOR', 'LABORATORY_STAFF'] },
+        data: { roles: ['ADMIN', 'DOCTOR', 'LABORATORY_STAFF', 'PATIENT'] },
       },
     ],
   },

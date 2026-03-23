@@ -147,7 +147,11 @@ export class BillingListComponent implements OnInit {
 
   loadBillings(): void {
     this.isLoading = true;
-    this.billingService.getAll().subscribe({
+    const request = this.userRole === 'PATIENT' 
+      ? this.billingService.getMyBillings() 
+      : this.billingService.getAll();
+
+    request.subscribe({
       next: (res: ApiResponse<Billing[]>) => {
         this.billings = res.data;
         this.isLoading = false;

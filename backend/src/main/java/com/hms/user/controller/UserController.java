@@ -6,6 +6,7 @@ import com.hms.user.entity.User;
 import com.hms.common.enums.Role;
 import com.hms.user.repository.UserRepository;
 import com.hms.doctor.repository.DoctorRepository;
+import com.hms.user.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -21,19 +22,12 @@ public class UserController {
 
     private final UserRepository userRepository;
     private final DoctorRepository doctorRepository;
-    private final com.hms.user.service.UserService userService;
+    private final UserService userService;
 
     @GetMapping("/me")
     @PreAuthorize("isAuthenticated()")
     public ResponseEntity<ApiResponse<com.hms.user.dto.UserResponseDTO>> getCurrentUser() {
         return ResponseEntity.ok(ApiResponse.success(userService.getCurrentUser()));
-    }
-
-    @PatchMapping("/change-password")
-    @PreAuthorize("isAuthenticated()")
-    public ResponseEntity<ApiResponse<Void>> changePassword(@jakarta.validation.Valid @RequestBody com.hms.user.dto.ChangePasswordRequest request) {
-        userService.changePassword(request);
-        return ResponseEntity.ok(ApiResponse.success(null));
     }
 
     @GetMapping("/eligible-doctors")
@@ -42,7 +36,7 @@ public class UserController {
         List<User> doctorUsers = userRepository.findAll().stream()
                 .filter(u -> u.getRole() == Role.DOCTOR)
                 .filter(u -> !doctorRepository.existsByUserId(u.getId()))
-                .collect(Collectors.toList());
+                .toList();
 
         List<UserSummary> summaries = doctorUsers.stream()
                 .map(u -> new UserSummary(u.getId().toString(), u.getUsername()))
