@@ -27,39 +27,40 @@ public class PrescriptionController {
     public ResponseEntity<ApiResponse<PrescriptionResponseDTO>> createPrescription(
             @Valid @RequestBody PrescriptionRequestDTO dto) {
         return ResponseEntity.status(HttpStatus.CREATED)
-                .body(ApiResponse.success(prescriptionService.createPrescription(dto), "Request successful", HttpStatus.CREATED));
+                .body(ApiResponse.success(
+                        prescriptionService.createPrescription(dto), "Request successful", HttpStatus.CREATED));
     }
 
-    /**
-     * Fetch all prescriptions. Management/Pharmacist role only.
-     */
     @PreAuthorize("hasAnyRole('ADMIN','PHARMACIST','DOCTOR')")
     @GetMapping
     public ResponseEntity<ApiResponse<List<PrescriptionResponseDTO>>> getAllPrescriptions() {
-        return ResponseEntity.ok(ApiResponse.success(prescriptionService.getAllPrescriptions()));
+        return ResponseEntity.ok(
+                ApiResponse.success(prescriptionService.getAllPrescriptions()));
     }
 
 
     @PreAuthorize("hasAnyRole('ADMIN','DOCTOR','PHARMACIST')")
     @GetMapping("/patient/{patientId}")
-    public ResponseEntity<ApiResponse<List<PrescriptionResponseDTO>>> getByPatientId(@PathVariable UUID patientId) {
-        return ResponseEntity.ok(ApiResponse.success(prescriptionService.getPrescriptionsByPatientId(patientId)));
+    public ResponseEntity<ApiResponse<List<PrescriptionResponseDTO>>> getByPatientId(
+            @PathVariable UUID patientId) {
+        return ResponseEntity.ok(ApiResponse.success(
+                prescriptionService.getPrescriptionsByPatientId(patientId)));
     }
 
-    /**
-     * Fetch specific prescription by ID. Service layer enforces identity checks.
-     * Note: placed after static lookups to avoid path collisions.
-     */
     @PreAuthorize("hasAnyRole('ADMIN','DOCTOR','PHARMACIST')")
     @GetMapping("/{id}")
-    public ResponseEntity<ApiResponse<PrescriptionResponseDTO>> getPrescriptionById(@PathVariable UUID id) {
-        return ResponseEntity.ok(ApiResponse.success(prescriptionService.getPrescriptionById(id)));
+    public ResponseEntity<ApiResponse<PrescriptionResponseDTO>> getPrescriptionById(
+            @PathVariable UUID id) {
+        return ResponseEntity.ok(ApiResponse.success(
+                prescriptionService.getPrescriptionById(id)));
     }
 
     @PreAuthorize("hasAnyRole('ADMIN','DOCTOR')")
     @DeleteMapping("/{id}")
-    public ResponseEntity<ApiResponse<Void>> deletePrescription(@PathVariable UUID id) {
+    public ResponseEntity<ApiResponse<Void>> deletePrescription(
+            @PathVariable UUID id) {
         prescriptionService.deletePrescription(id);
-        return ResponseEntity.ok(ApiResponse.success(null));
+        return ResponseEntity.ok(ApiResponse.success(
+                null));
     }
 }

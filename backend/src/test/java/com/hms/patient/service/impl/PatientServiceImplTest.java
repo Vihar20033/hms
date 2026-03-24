@@ -7,6 +7,7 @@ import com.hms.patient.entity.Patient;
 import com.hms.patient.mapper.PatientMapper;
 import com.hms.patient.repository.PatientRepository;
 import com.hms.user.repository.UserRepository;
+import com.hms.user.service.UserService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -14,9 +15,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.springframework.security.crypto.password.PasswordEncoder;
 
-import java.util.Optional;
 import java.util.UUID;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -32,6 +31,8 @@ class PatientServiceImplTest {
     @Mock
     private UserRepository userRepository;
 
+    @Mock
+    private UserService userService;
 
     @Mock
     private PatientMapper mapper;
@@ -63,8 +64,10 @@ class PatientServiceImplTest {
     void createPatient_Success() {
         // Arrange
         when(repository.existsByContactNumber(anyString())).thenReturn(false);
+        when(mapper.toEntity(any(PatientRequestDTO.class))).thenReturn(mockPatient);
+        when(repository.save(any())).thenReturn(mockPatient);
         when(mapper.toResponse(any())).thenReturn(new PatientResponseDTO());
-        
+
         // Act
         PatientResponseDTO result = patientService.create(requestDTO);
 

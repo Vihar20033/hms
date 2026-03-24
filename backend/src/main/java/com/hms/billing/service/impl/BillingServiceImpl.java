@@ -11,6 +11,7 @@ import com.hms.billing.repository.BillingRepository;
 import com.hms.billing.service.BillingService;
 import com.hms.common.enums.PaymentMethod;
 import com.hms.common.enums.PaymentStatus;
+import com.hms.common.enums.Role;
 import com.hms.doctor.entity.Doctor;
 import com.hms.laboratory.entity.LabTest;
 import com.hms.laboratory.repository.LabTestRepository;
@@ -31,7 +32,6 @@ import org.springframework.transaction.annotation.Transactional;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 import java.util.UUID;
 
@@ -125,8 +125,7 @@ public class BillingServiceImpl implements BillingService {
     public BillingResponseDTO getBillingById(UUID id) {
         Billing billing = billingRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Billing not found"));
-        
-        // 🔒 Identity Check
+
         checkOwnership(billing);
 
         return billingMapper.toDto(billing);
@@ -275,10 +274,10 @@ public class BillingServiceImpl implements BillingService {
      */
     private void checkOwnership(Billing billing) {
         User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        com.hms.common.enums.Role role = user.getRole();
+        Role role = user.getRole();
 
         // 1. Staff with Global Access
-        if (role == com.hms.common.enums.Role.ADMIN || role == com.hms.common.enums.Role.RECEPTIONIST) {
+        if (role == Role.ADMIN || role == Role.RECEPTIONIST) {
             return;
         }
 

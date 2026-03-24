@@ -26,7 +26,7 @@ public class AuditLogService {
                 .details(details != null && details.length() > 1024 ? details.substring(0, 1024) : details)
                 .build();
         repository.save(entry);
-        // Also write to audit log file (single line for grep/parsing)
+
         AUDIT_FILE.info("{} | {} | {} | {} | {}", entry.getUsername(), action, entityType, entityId, details != null ? details : "");
     }
 }

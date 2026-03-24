@@ -5,6 +5,7 @@ import com.hms.auth.service.AuthService;
 import com.hms.auth.service.impl.AuthServiceImpl;
 import com.hms.common.audit.AuditLogService;
 import com.hms.common.enums.Role;
+import com.hms.doctor.repository.DoctorRepository;
 import com.hms.security.jwt.JwtUtil;
 import com.hms.user.entity.User;
 import com.hms.user.repository.UserRepository;
@@ -15,6 +16,8 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.crypto.password.PasswordEncoder;
+
+import java.util.UUID;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.ArgumentMatchers.any;
@@ -39,11 +42,14 @@ class AuthServiceTest {
     @Mock
     private AuditLogService auditLogService;
 
+    @Mock
+    private DoctorRepository doctorRepository;
+
     private AuthService authService;
 
     @BeforeEach
     void setUp() {
-        authService = new AuthServiceImpl(userRepository, passwordEncoder, authenticationManager, jwtUtil, auditLogService);
+        authService = new AuthServiceImpl(userRepository, passwordEncoder, authenticationManager, jwtUtil, auditLogService, doctorRepository);
     }
 
     @Test
@@ -57,7 +63,11 @@ class AuthServiceTest {
         when(userRepository.existsByUsername("doctor1")).thenReturn(false);
         when(userRepository.existsByEmail("doctor1@example.com")).thenReturn(false);
         when(passwordEncoder.encode("Secret@123")).thenReturn("encoded-password");
-        when(userRepository.save(any(User.class))).thenAnswer(invocation -> invocation.getArgument(0));
+        when(userRepository.save(any(User.class))).thenAnswer(invocation -> {
+            User u = invocation.getArgument(0);
+            u.setId(UUID.randomUUID());
+            return u;
+        });
 
         authService.register(request);
 

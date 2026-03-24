@@ -7,6 +7,7 @@ import com.hms.appointment.mapper.AppointmentMapper;
 import com.hms.appointment.repository.AppointmentRepository;
 import com.hms.appointment.service.AppointmentService;
 import com.hms.common.enums.AppointmentStatus;
+import com.hms.common.enums.Department;
 import com.hms.common.exception.BadRequestException;
 import com.hms.doctor.entity.Doctor;
 import com.hms.doctor.repository.DoctorRepository;
@@ -15,15 +16,23 @@ import com.hms.patient.repository.PatientRepository;
 import com.hms.user.entity.User;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Pageable;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import com.hms.appointment.dto.request.AppointmentRequestDTO;
+import com.hms.appointment.dto.response.AppointmentSummaryDTO;
+import com.hms.appointment.specification.AppointmentSpecification;
+import com.hms.common.audit.AuditLogService;
+import com.hms.common.enums.Role;
+import org.springframework.data.domain.Page;
+import org.springframework.data.jpa.domain.Specification;
+import org.springframework.security.core.Authentication;
 
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.List;
 import java.util.UUID;
 
@@ -42,16 +51,18 @@ public class AppointmentServiceImpl implements AppointmentService {
     private final PatientRepository patientRepository;
     private final DoctorRepository doctorRepository;
     private final AppointmentMapper appointmentMapper;
-    private final com.hms.common.audit.AuditLogService auditLogService;
+    private final AuditLogService auditLogService;
+
 
     @Override
     @Transactional(readOnly = true)
-    public com.hms.appointment.dto.response.AppointmentSummaryDTO getAppointmentSummary() {
-        User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        com.hms.appointment.dto.response.AppointmentSummaryDTO.AppointmentSummaryDTOBuilder builder = 
-                com.hms.appointment.dto.response.AppointmentSummaryDTO.builder();
+    public AppointmentSummaryDTO getAppointmentSummary() {
 
-        if (user.getRole() == com.hms.common.enums.Role.DOCTOR) {
+        // Get the user (logged-in)
+        User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        AppointmentSummaryDTO.AppointmentSummaryDTOBuilder builder = AppointmentSummaryDTO.builder();
+
+        if (user.getRole() == Role.DOCTOR) {
             Doctor doctor = doctorRepository.findByUserId(user.getId())
                     .orElseThrow(() -> new BadRequestException("Current user is not registered as a doctor."));
             UUID doctorId = doctor.getId();
@@ -76,9 +87,9 @@ public class AppointmentServiceImpl implements AppointmentService {
 
     @Override
     @Transactional
-    public Appointment createAppointment(com.hms.appointment.dto.request.AppointmentRequestDTO dto) {
+    public Appointment createAppointment(AppointmentRequestDTO dto) {
+
         Appointment appointment = appointmentMapper.toEntity(dto);
-        
         appointment.setPatient(patientRepository.findById(dto.getPatientId())
                 .orElseThrow(() -> new AppointmentNotFoundException("Patient not found with ID: " + dto.getPatientId())));
         
@@ -95,7 +106,7 @@ public class AppointmentServiceImpl implements AppointmentService {
             }
         }
         
-        // 🔒 Integrity Check: Ensure doctor belongs to the department
+        // Integrity Check: Ensure doctor belongs to the department
         if (doctor.getDepartment() != dto.getDepartment()) {
             throw new BadRequestException("Doctor " + doctor.getFirstName() + " does not belong to the " + dto.getDepartment() + " department.");
         }
@@ -121,8 +132,8 @@ public class AppointmentServiceImpl implements AppointmentService {
         return saved;
     }
 
-    @Override
     @Transactional
+    @Override
     public Appointment createAppointment(Appointment appointment) {
         if (appointment.getStatus() == null) {
             appointment.setStatus(AppointmentStatus.SCHEDULED);
@@ -152,16 +163,15 @@ public class AppointmentServiceImpl implements AppointmentService {
     public Appointment getAppointmentById(UUID id) {
         Appointment appointment = appointmentRepository.findById(id)
                 .orElseThrow(() -> new AppointmentNotFoundException("Appointment not found with ID: " + id));
-        
-        // 🔒 Security Check
+
         checkOwnership(appointment);
-        
         return appointment;
     }
 
     @Override
     @Transactional
-    public Appointment updateAppointment(UUID id, com.hms.appointment.dto.request.AppointmentRequestDTO dto) {
+    public Appointment updateAppointment(UUID id, AppointmentRequestDTO dto) {
+
         Appointment appointment = appointmentRepository.findById(id)
                 .orElseThrow(() -> new AppointmentNotFoundException("Appointment not found with ID: " + id));
 
@@ -171,7 +181,6 @@ public class AppointmentServiceImpl implements AppointmentService {
         Doctor doctor = doctorRepository.findById(dto.getDoctorId())
                 .orElseThrow(() -> new AppointmentNotFoundException("Doctor not found with ID: " + dto.getDoctorId()));
 
-        // 🔒 Integrity Check
         if (doctor.getDepartment() != dto.getDepartment()) {
             throw new BadRequestException("Doctor " + doctor.getFirstName() + " does not belong to the " + dto.getDepartment() + " department.");
         }
@@ -193,6 +202,7 @@ public class AppointmentServiceImpl implements AppointmentService {
     }
 
     private void lockAndCheckAvailability(UUID doctorId, UUID patientId, LocalDateTime time, UUID currentAppointmentId, boolean isEmergency) {
+
         if (isEmergency) return;
         
         List<Appointment> doctorConflicts = appointmentRepository.findAndLockConflictingAppointments(doctorId, time, ACTIVE_STATUSES);
@@ -209,10 +219,11 @@ public class AppointmentServiceImpl implements AppointmentService {
     @Override
     @Transactional
     public Appointment updateStatus(UUID id, AppointmentStatus status) {
+
         Appointment appointment = appointmentRepository.findById(id)
                 .orElseThrow(() -> new AppointmentNotFoundException("Appointment not found with ID: " + id));
         
-        // 🔒 Security Check: Only assigned doctor can update status to consultation/completed
+        //  Security Check: Only assigned doctor can update status to consultation/completed
         if (status == AppointmentStatus.IN_CONSULTATION || status == AppointmentStatus.COMPLETED) {
             checkOwnership(appointment);
         }
@@ -223,29 +234,23 @@ public class AppointmentServiceImpl implements AppointmentService {
         return saved;
     }
 
-    /**
-     * Verifies that the current user has authority to access or modify this specific appointment.
-     * Authorized roles: ADMIN, RECEPTIONIST, NURSE.
-     * Specific access: Assigned DOCTOR, related PATIENT.
-     */
     private void checkOwnership(Appointment appointment) {
         User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        com.hms.common.enums.Role role = user.getRole();
+        Role role = user.getRole();
 
         // 1. Staff with Global Access (Management & Triage)
-        if (role == com.hms.common.enums.Role.ADMIN || 
-            role == com.hms.common.enums.Role.RECEPTIONIST || 
-            role == com.hms.common.enums.Role.NURSE) {
+        if (role == Role.ADMIN || 
+            role == Role.RECEPTIONIST || 
+            role == Role.NURSE) {
             return;
         }
 
         // 2. Doctor specific access
-        if (role == com.hms.common.enums.Role.DOCTOR) {
+        if (role == Role.DOCTOR) {
             if (appointment.getDoctor() != null && appointment.getDoctor().getUserId().equals(user.getId())) {
                 return;
             }
         }
-
 
         log.warn("Security Alert: User {} with role {} attempted unauthorized access/update for appointment {}.", 
                 user.getUsername(), role, appointment.getId());
@@ -254,49 +259,47 @@ public class AppointmentServiceImpl implements AppointmentService {
 
     @Override
     @Transactional(readOnly = true)
-    public org.springframework.data.domain.Page<Appointment> findAppointments(
-            org.springframework.data.domain.Pageable pageable,
+    public Page<Appointment> findAppointments(
+            Pageable pageable,
             UUID doctorId,
             UUID patientId,
             AppointmentStatus status,
-            com.hms.common.enums.Department department,
+            Department department,
             LocalDateTime start,
             LocalDateTime end,
             Boolean isEmergency) {
         
-        org.springframework.data.jpa.domain.Specification<Appointment> spec = org.springframework.data.jpa.domain.Specification.where(null);
+        Specification<Appointment> spec = Specification.where(null);
         
         User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        if (user.getRole() == com.hms.common.enums.Role.DOCTOR) {
-            spec = spec.and(com.hms.appointment.specification.AppointmentSpecification.hasDoctorUserId(user.getId()));
-        } else if (user.getRole() == com.hms.common.enums.Role.PATIENT) {
-             // Future: filter for patient's own record
-        }
+        if (user.getRole() == Role.DOCTOR) {
+            spec = spec.and(AppointmentSpecification.hasDoctorUserId(user.getId()));
+        } 
 
-        if (doctorId != null) spec = spec.and(com.hms.appointment.specification.AppointmentSpecification.hasDoctorId(doctorId));
-        if (patientId != null) spec = spec.and(com.hms.appointment.specification.AppointmentSpecification.hasPatientId(patientId));
-        if (status != null) spec = spec.and(com.hms.appointment.specification.AppointmentSpecification.hasStatus(status));
-        if (department != null) spec = spec.and(com.hms.appointment.specification.AppointmentSpecification.hasDepartment(department));
-        if (start != null || end != null) spec = spec.and(com.hms.appointment.specification.AppointmentSpecification.hasTimeBetween(start, end));
-        if (isEmergency != null) spec = spec.and(com.hms.appointment.specification.AppointmentSpecification.isEmergency(isEmergency));
+        if (doctorId != null) spec = spec.and(AppointmentSpecification.hasDoctorId(doctorId));
+        if (patientId != null) spec = spec.and(AppointmentSpecification.hasPatientId(patientId));
+        if (status != null) spec = spec.and(AppointmentSpecification.hasStatus(status));
+        if (department != null) spec = spec.and(AppointmentSpecification.hasDepartment(department));
+        if (start != null || end != null) spec = spec.and(AppointmentSpecification.hasTimeBetween(start, end));
+        if (isEmergency != null) spec = spec.and(AppointmentSpecification.isEmergency(isEmergency));
 
         return appointmentRepository.findAll(spec, pageable);
     }
 
-    @Override
     @Transactional(readOnly = true)
+    @Override
     public List<Appointment> getAppointmentsByDoctor(UUID doctorId) {
         return appointmentRepository.findByDoctorId(doctorId);
     }
 
-    @Override
     @Transactional(readOnly = true)
-    public List<Appointment> getAppointmentsByDepartment(com.hms.common.enums.Department department) {
+    @Override
+    public List<Appointment> getAppointmentsByDepartment(Department department) {
         return appointmentRepository.findByDepartment(department);
     }
 
-    @Override
     @Transactional(readOnly = true)
+    @Override
     public List<Appointment> getAppointmentsByPatient(UUID patientId) {
         return appointmentRepository.findByPatientId(patientId);
     }
@@ -312,7 +315,7 @@ public class AppointmentServiceImpl implements AppointmentService {
     }
 
     private String getCurrentUsername() {
-        org.springframework.security.core.Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         return (auth != null && auth.isAuthenticated()) ? auth.getName() : "system";
     }
 }

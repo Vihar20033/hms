@@ -23,7 +23,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Locale;
-import java.util.UUID;
+
 
 @Service
 @RequiredArgsConstructor
@@ -54,9 +54,8 @@ public class DashboardServiceImpl implements DashboardService {
         if (totalRevenue == null) totalRevenue = BigDecimal.ZERO;
 
         long pendingLabs = labRepository.countByStatusIn(
-                Arrays.asList(com.hms.common.enums.TestStatus.PENDING, com.hms.common.enums.TestStatus.IN_PROGRESS));
+                Arrays.asList(TestStatus.PENDING, TestStatus.IN_PROGRESS));
 
-        // New Stats
         long inQueue = appointmentRepository.countByStatusInAndAppointmentTimeBetween(
                 Arrays.asList(AppointmentStatus.CHECKED_IN, AppointmentStatus.IN_CONSULTATION, AppointmentStatus.CONFIRMED),
                 startOfDay, endOfDay
@@ -69,7 +68,6 @@ public class DashboardServiceImpl implements DashboardService {
 
         long totalConsultations = appointmentRepository.countByStatus(AppointmentStatus.COMPLETED);
 
-        // Weekly Stats for Charts
         List<WeeklyStatisticsDTO> weeklyStats = new ArrayList<>();
         for (int i = 6; i >= 0; i--) {
             LocalDate date = LocalDate.now().minusDays(i);

@@ -5,7 +5,7 @@ import jakarta.validation.constraints.*;
 import lombok.*;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
-import jakarta.validation.constraints.AssertTrue;
+
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.UUID;
@@ -48,21 +48,4 @@ public class AppointmentRequestDTO {
 
     private boolean isEmergency;
 
-    /**
-     * Validates that the appointment time is within clinic hours.
-     * Clinic hours: 8:00 AM to 8:00 PM
-     * Emergency appointments override this restriction.
-     */
-    @AssertTrue(message = "Appointment time must be between 08:00 and 20:00")
-    public boolean isWithinClinicHours() {
-        if (isEmergency) {
-            return true;
-        }
-        if (appointmentTime == null) {
-            return true;
-        }
-        LocalTime clinicOpen = LocalTime.of(8, 0);
-        LocalTime clinicClose = LocalTime.of(20, 0);
-        return !appointmentTime.isBefore(clinicOpen) && !appointmentTime.isAfter(clinicClose);
-    }
 }

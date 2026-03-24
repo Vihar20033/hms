@@ -3,7 +3,10 @@ package com.hms.appointment.repository;
 import com.hms.appointment.entity.Appointment;
 import com.hms.common.enums.AppointmentStatus;
 import com.hms.common.enums.Department;
-import org.jspecify.annotations.NonNull;
+import io.micrometer.common.lang.NonNull;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.data.jpa.repository.EntityGraph;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
@@ -18,8 +21,14 @@ import java.time.LocalDateTime;
 
 @Repository
 public interface AppointmentRepository extends JpaRepository
-        // JPA = Simple CRUD , Custom = Custom Slice logic , JpaSpecificationExecutor = Dynamic filtering
+        // JPA = Simple CRUD, Custom = Custom Slice logic, JpaSpecificationExecutor = Dynamic filtering
         <Appointment, UUID>, AppointmentRepositoryCustom, JpaSpecificationExecutor<Appointment> {
+
+        // Eagerly fetch patient & doctor for Specification-based queries (search/filter endpoint)
+        @Override
+        @EntityGraph(attributePaths = {"patient", "doctor"})
+        @NonNull
+        Page<Appointment> findAll(Specification<Appointment> spec, @NonNull Pageable pageable);
 
         /*
                 SELECT a.*, p.*, d.*

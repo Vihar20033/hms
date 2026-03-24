@@ -50,8 +50,7 @@ public class VitalsServiceImpl implements VitalsService {
     public VitalsResponseDTO updateVitals(UUID id, VitalsRequestDTO dto) {
         Vitals vitals = vitalsRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Vitals record not found"));
-        
-        // Manual mapping from DTO to avoid destroying relations
+
         vitals.setTemperature(dto.getTemperature());
         vitals.setSystolicBP(dto.getSystolicBP());
         vitals.setDiastolicBP(dto.getDiastolicBP());
@@ -86,7 +85,7 @@ public class VitalsServiceImpl implements VitalsService {
 
     @Override
     @Transactional(readOnly = true)
-    public java.util.List<VitalsResponseDTO> getAllVitals() {
+    public List<VitalsResponseDTO> getAllVitals() {
         return vitalsRepository.findAll()
                 .stream()
                 .map(vitalsMapper::toDto)

@@ -54,6 +54,7 @@ public class LabServiceImpl implements LabService {
     @Override
     @Transactional
     public LabTestResponseDTO requestTest(LabTestRequestDTO dto) {
+
         if (dto.getPrice() == null) {
             throw new BadRequestException("Lab test price is required");
         }

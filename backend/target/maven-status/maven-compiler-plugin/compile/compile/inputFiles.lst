@@ -26,7 +26,6 @@ C:\Users\Piyush\Desktop\Project\backend\src\main\java\com\hms\clinical\service\i
 C:\Users\Piyush\Desktop\Project\backend\src\main\java\com\hms\doctor\dto\request\CreateDoctorRequest.java
 C:\Users\Piyush\Desktop\Project\backend\src\main\java\com\hms\patient\repository\PatientRepositoryCustom.java
 C:\Users\Piyush\Desktop\Project\backend\src\main\java\com\hms\common\response\ApiError.java
-C:\Users\Piyush\Desktop\Project\backend\src\main\java\com\hms\appointment\exception\DuplicateAppointmentException.java
 C:\Users\Piyush\Desktop\Project\backend\src\main\java\com\hms\common\enums\Role.java
 C:\Users\Piyush\Desktop\Project\backend\src\main\java\com\hms\doctor\service\DoctorService.java
 C:\Users\Piyush\Desktop\Project\backend\src\main\java\com\hms\HospitalManagementSystemApplication.java

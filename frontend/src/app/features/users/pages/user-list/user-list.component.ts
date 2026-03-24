@@ -1,6 +1,6 @@
 import { CommonModule } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
-import { Router, RouterLink } from '@angular/router';
+import { Router } from '@angular/router';
 import { User, Role } from '../../../../core/models/auth.models';
 import { UserService } from '../../../../core/services/user.service';
 import { ApiResponse } from '../../../../core/models/common.models';
@@ -14,7 +14,7 @@ import { Subject, debounceTime, distinctUntilChanged } from 'rxjs';
 @Component({
   selector: 'app-user-list',
   standalone: true,
-  imports: [CommonModule, SidebarComponent, HeaderComponent, RouterLink, TableModule, InputTextModule, FormsModule],
+  imports: [CommonModule, SidebarComponent, HeaderComponent, TableModule, InputTextModule, FormsModule],
   templateUrl: './user-list.component.html',
   styleUrl: './user-list.component.scss'
 })

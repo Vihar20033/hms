@@ -70,7 +70,7 @@ class AppointmentServiceImplTest {
                 .build();
 
         mockPatient = Patient.builder().id(patientId).name("Test Patient").build();
-        mockDoctor = Doctor.builder().id(doctorId).firstName("Test").lastName("Doctor").build();
+        mockDoctor = Doctor.builder().id(doctorId).firstName("Test").lastName("Doctor").department(Department.CARDIOLOGY).build();
         mockAppointment = Appointment.builder()
                 .id(UUID.randomUUID())
                 .patient(mockPatient)
@@ -88,6 +88,8 @@ class AppointmentServiceImplTest {
         when(doctorRepository.findById(doctorId)).thenReturn(Optional.of(mockDoctor));
         when(appointmentRepository.save(any(Appointment.class))).thenReturn(mockAppointment);
         when(appointmentRepository.countByDoctorIdAndAppointmentTimeBetween(any(), any(), any())).thenReturn(0L);
+        when(appointmentRepository.findAndLockConflictingAppointments(any(), any(), any())).thenReturn(java.util.Collections.emptyList());
+        when(appointmentRepository.findAndLockPatientConflictingAppointments(any(), any(), any())).thenReturn(java.util.Collections.emptyList());
 
         // Act
         Appointment result = appointmentService.createAppointment(requestDTO);

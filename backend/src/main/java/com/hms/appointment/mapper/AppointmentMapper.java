@@ -13,7 +13,7 @@ import java.util.List;
 @Mapper(componentModel = "spring", builder = @Builder(disableBuilder = true), unmappedTargetPolicy = ReportingPolicy.IGNORE)
 public interface AppointmentMapper {
 
-    @Mapping(source = "patient.id", target = "patientId" , defaultValue = "")
+    @Mapping(source = "patient.id", target = "patientId")
     @Mapping(source = "patient.name", target = "patientName")
     @Mapping(source = "doctor.id", target = "doctorId")
     @Mapping(target = "doctorName", expression = "java(entity.getDoctor() != null ? entity.getDoctor().getFirstName() + \" \" + entity.getDoctor().getLastName() : null)")

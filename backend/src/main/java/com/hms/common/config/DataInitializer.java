@@ -27,6 +27,7 @@ public class DataInitializer implements CommandLineRunner {
     @Override
     @Transactional
     public void run(String... args) {
+
         log.info("Starting database column initialization...");
         
         // Initialize version to 0 for all entities

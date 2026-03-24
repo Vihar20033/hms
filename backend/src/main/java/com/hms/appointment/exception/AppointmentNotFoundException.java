@@ -6,7 +6,4 @@ public class AppointmentNotFoundException extends RuntimeException {
         super(message);
     }
 
-    public AppointmentNotFoundException(String message, Throwable cause) {
-        super(message, cause);
-    }
 }

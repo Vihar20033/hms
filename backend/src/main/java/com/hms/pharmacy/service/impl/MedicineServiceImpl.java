@@ -1,6 +1,8 @@
 package com.hms.pharmacy.service.impl;
 
+import com.hms.common.audit.AuditLogService;
 import com.hms.pharmacy.dto.request.MedicineRequestDTO;
+import com.hms.pharmacy.dto.response.InventoryTransactionResponseDTO;
 import com.hms.pharmacy.dto.response.MedicineResponseDTO;
 import com.hms.pharmacy.entity.Medicine;
 import com.hms.pharmacy.exception.DuplicateMedicineException;
@@ -12,6 +14,8 @@ import com.hms.pharmacy.mapper.MedicineMapper;
 import com.hms.pharmacy.repository.MedicineRepository;
 import com.hms.pharmacy.service.MedicineService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -25,7 +29,7 @@ public class MedicineServiceImpl implements MedicineService {
     private final MedicineRepository medicineRepository;
     private final MedicineMapper medicineMapper;
     private final InventoryTransactionRepository inventoryTransactionRepository;
-    private final com.hms.common.audit.AuditLogService auditLogService;
+    private final AuditLogService auditLogService;
 
     @Override
     @Transactional
@@ -143,10 +147,10 @@ public class MedicineServiceImpl implements MedicineService {
 
     @Override
     @Transactional(readOnly = true)
-    public List<com.hms.pharmacy.dto.response.InventoryTransactionResponseDTO> getAllTransactions() {
+    public List<InventoryTransactionResponseDTO> getAllTransactions() {
         return inventoryTransactionRepository.findAll().stream()
                 .sorted((t1, t2) -> t2.getCreatedAt().compareTo(t1.getCreatedAt())) // Recent first
-                .map(t -> com.hms.pharmacy.dto.response.InventoryTransactionResponseDTO.builder()
+                .map(t -> InventoryTransactionResponseDTO.builder()
                         .id(t.getId())
                         .medicineId(t.getMedicine().getId())
                         .medicineName(t.getMedicine().getName())
@@ -162,7 +166,7 @@ public class MedicineServiceImpl implements MedicineService {
     }
 
     private String getCurrentUsername() {
-        org.springframework.security.core.Authentication auth = org.springframework.security.core.context.SecurityContextHolder.getContext().getAuthentication();
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         return (auth != null && auth.isAuthenticated()) ? auth.getName() : "system";
     }
 }

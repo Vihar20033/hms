@@ -1,4 +1,4 @@
-import { CommonModule, CurrencyPipe, DatePipe, DecimalPipe } from '@angular/common';
+import { CommonModule, DatePipe, DecimalPipe } from '@angular/common';
 import { HttpErrorResponse } from '@angular/common/http';
 import { ChangeDetectionStrategy, Component, OnInit, signal, computed } from '@angular/core';
 import { FormArray, FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
@@ -38,7 +38,6 @@ import { SidebarComponent } from '../../../../shared/components/layout/sidebar/s
     InputTextModule,
     InputTextareaModule,
     TableModule,
-    CurrencyPipe,
     DatePipe,
     DecimalPipe
   ],
