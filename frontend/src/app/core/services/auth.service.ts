@@ -14,12 +14,10 @@ export class AuthService {
   private readonly tokenStorageKey = 'hms_token';
   private readonly userStorageKey = 'hms_user';
   
-  // High-performance state management using Signals
+
   private currentUserSignal = signal<User | null>(this.getUserFromStorage());
   public currentUser = this.currentUserSignal.asReadonly();
   public isAuthenticated = computed(() => !!this.currentUser());
-
-  // Compatibility layer for RxJS users
   private currentUserSubject = new BehaviorSubject<User | null>(this.currentUserSignal());
   public currentUser$ = this.currentUserSubject.asObservable();
 
@@ -78,7 +76,7 @@ export class AuthService {
         )
         .subscribe({
           error: () => {
-            // Client-side logout still proceeds even if token revocation request fails.
+            this.clearSession();
           },
         });
     }

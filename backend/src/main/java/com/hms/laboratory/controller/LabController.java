@@ -44,37 +44,36 @@ public class LabController {
     @PreAuthorize("hasAnyRole('ADMIN','DOCTOR','LABORATORY_STAFF')")
     @GetMapping("/{id}")
     public ResponseEntity<ApiResponse<LabTestResponseDTO>> getTestById(
-            @PathVariable UUID id) {
+            @PathVariable("id") UUID id) {
         return ResponseEntity.ok(ApiResponse.success(labService.getTestById(id)));
     }
 
     @PreAuthorize("hasAnyRole('ADMIN','DOCTOR','LABORATORY_STAFF')")
     @PutMapping("/{id}")
     public ResponseEntity<ApiResponse<LabTestResponseDTO>> updateTest(
-            @PathVariable UUID id, @Valid @RequestBody LabTestRequestDTO dto) {
+            @PathVariable("id") UUID id, @Valid @RequestBody LabTestRequestDTO dto) {
         return ResponseEntity.ok(ApiResponse.success(labService.updateTest(id, dto)));
     }
 
     @PreAuthorize("hasRole('LABORATORY_STAFF')")
     @PatchMapping("/{id}/status")
     public ResponseEntity<ApiResponse<LabTestResponseDTO>> updateStatus(
-            @PathVariable UUID id, @RequestParam("status") TestStatus status) {
+            @PathVariable("id") UUID id, @RequestParam("status") TestStatus status) {
         return ResponseEntity.ok(ApiResponse.success(labService.updateTestStatus(id, status)));
     }
 
     @DeleteMapping("/{id}")
     @PreAuthorize("hasAnyRole('ADMIN','LABORATORY_STAFF')")
     public ResponseEntity<ApiResponse<Void>> deleteTest(
-            @PathVariable UUID id) {
+            @PathVariable("id") UUID id) {
         labService.deleteTest(id);
         return ResponseEntity.ok(ApiResponse.success(null));
     }
 
 
-    @PreAuthorize("hasRole('LABORATORY_STAFF')")
     @PostMapping("/{testId}/report")
     public ResponseEntity<ApiResponse<LabReportResponseDTO>> createReport(
-            @PathVariable UUID testId,
+            @PathVariable("testId") UUID testId,
             @Valid @RequestBody LabReportRequestDTO dto) {
         dto.setLabTestId(testId);
         return ResponseEntity.status(HttpStatus.CREATED)
@@ -85,7 +84,7 @@ public class LabController {
     @PreAuthorize("hasAnyRole('LABORATORY_STAFF','ADMIN','DOCTOR')")
     @GetMapping("/{testId}/report")
     public ResponseEntity<ApiResponse<LabReportResponseDTO>> getReportByTestId(
-            @PathVariable UUID testId) {
+            @PathVariable("testId") UUID testId) {
         return ResponseEntity.ok(ApiResponse.success(labService.getReportByTestId(testId)));
     }
 
@@ -98,7 +97,7 @@ public class LabController {
     @DeleteMapping("/report/{reportId}")
     @PreAuthorize("hasAnyRole('ADMIN','LABORATORY_STAFF')")
     public ResponseEntity<ApiResponse<Void>> deleteReport(
-            @PathVariable UUID reportId) {
+            @PathVariable("reportId") UUID reportId) {
         labService.deleteReport(reportId);
         return ResponseEntity.ok(ApiResponse.success(null));
     }

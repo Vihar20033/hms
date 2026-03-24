@@ -51,6 +51,7 @@ public class AppointmentController {
 
     @PreAuthorize("hasAnyRole('ADMIN','RECEPTIONIST','DOCTOR','NURSE')")
     @GetMapping
+    @org.springframework.transaction.annotation.Transactional(readOnly = true)
     public ResponseEntity<ApiResponse<PagedResponse<AppointmentResponseDTO>>> searchAppointments(
             @PageableDefault(sort = "appointmentTime", direction = Sort.Direction.DESC) Pageable pageable,
             @RequestParam(name = "doctorId", required = false) UUID doctorId,
@@ -71,7 +72,7 @@ public class AppointmentController {
     @PreAuthorize("hasAnyRole('ADMIN','DOCTOR','NURSE','RECEPTIONIST')")
     @GetMapping("/{id}")
     public ResponseEntity<ApiResponse<AppointmentResponseDTO>> getAppointmentById(
-            @PathVariable UUID id) {
+            @PathVariable("id") UUID id) {
         return ResponseEntity.ok(ApiResponse.success(
                 appointmentMapper.toDto(appointmentService.getAppointmentById(id))
         ));
@@ -80,7 +81,7 @@ public class AppointmentController {
     @PreAuthorize("hasAnyRole('ADMIN','RECEPTIONIST')")
     @PutMapping("/{id}")
     public ResponseEntity<ApiResponse<AppointmentResponseDTO>> updateAppointment(
-            @PathVariable UUID id,
+            @PathVariable("id") UUID id,
             @Valid @RequestBody AppointmentRequestDTO dto) {
         return ResponseEntity.ok(ApiResponse.success(
                 appointmentMapper.toDto(appointmentService.updateAppointment(id, dto))));
@@ -89,7 +90,7 @@ public class AppointmentController {
     @PreAuthorize("hasAnyRole('ADMIN','DOCTOR','RECEPTIONIST')")
     @PatchMapping("/{id}/status")
     public ResponseEntity<ApiResponse<AppointmentResponseDTO>> updateStatus(
-            @PathVariable UUID id,
+            @PathVariable("id") UUID id,
             @RequestParam("status") AppointmentStatus status) {
         return ResponseEntity
                 .ok(ApiResponse.success(
@@ -99,7 +100,7 @@ public class AppointmentController {
     @PreAuthorize("hasAnyRole('ADMIN','RECEPTIONIST')")
     @DeleteMapping("/{id}")
     public ResponseEntity<ApiResponse<Void>> deleteAppointment(
-            @PathVariable UUID id) {
+            @PathVariable("id") UUID id) {
         appointmentService.deleteAppointment(id);
         return ResponseEntity.ok(ApiResponse.success(null));
     }
@@ -107,7 +108,7 @@ public class AppointmentController {
     @PreAuthorize("hasAnyRole('ADMIN','NURSE','RECEPTIONIST')")
     @PatchMapping("/{id}/check-in")
     public ResponseEntity<ApiResponse<AppointmentResponseDTO>> checkInAppointment(
-            @PathVariable UUID id) {
+            @PathVariable("id") UUID id) {
         return ResponseEntity
                 .ok(ApiResponse.success(
                         appointmentMapper.toDto(appointmentService.updateStatus(id, AppointmentStatus.CHECKED_IN))));
@@ -116,7 +117,7 @@ public class AppointmentController {
     @PreAuthorize("hasAnyRole('ADMIN','DOCTOR')")
     @PatchMapping("/{id}/start")
     public ResponseEntity<ApiResponse<AppointmentResponseDTO>> startConsultation(
-            @PathVariable UUID id) {
+            @PathVariable("id") UUID id) {
         return ResponseEntity
                 .ok(ApiResponse.success(
                         appointmentMapper.toDto(appointmentService.updateStatus(id, AppointmentStatus.IN_CONSULTATION))));
@@ -125,7 +126,7 @@ public class AppointmentController {
     @PreAuthorize("hasAnyRole('ADMIN','DOCTOR')")
     @PatchMapping("/{id}/complete")
     public ResponseEntity<ApiResponse<AppointmentResponseDTO>> completeConsultation(
-            @PathVariable UUID id) {
+            @PathVariable("id") UUID id) {
         return ResponseEntity
                 .ok(ApiResponse.success(
                         appointmentMapper.toDto(appointmentService.updateStatus(id, AppointmentStatus.COMPLETED))));
