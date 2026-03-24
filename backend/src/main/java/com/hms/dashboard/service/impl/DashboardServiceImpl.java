@@ -23,6 +23,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Locale;
+import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
@@ -44,24 +45,16 @@ public class DashboardServiceImpl implements DashboardService {
         long todayAppointments = appointmentRepository.countByAppointmentTimeBetween(startOfDay, endOfDay);
         long totalDoctors = doctorRepository.count();
         
-        long lowStock = medicineRepository.findAll().stream()
-                .filter(m -> m.getQuantityInStock() <= (m.getReorderLevel() != null ? m.getReorderLevel() : 10))
-                .count();
+        long lowStock = medicineRepository.countLowStock();
 
-        BigDecimal todayRevenue = billingRepository.findAll().stream()
-                .filter(b -> b.getCreatedAt() != null && b.getCreatedAt().isAfter(startOfDay))
-                .filter(b -> b.getPaymentStatus() == com.hms.common.enums.PaymentStatus.PAID)
-                .map(b -> b.getNetAmount() != null ? b.getNetAmount() : BigDecimal.ZERO)
-                .reduce(BigDecimal.ZERO, BigDecimal::add);
+        BigDecimal todayRevenue = billingRepository.sumTodayRevenue(startOfDay, endOfDay);
+        if (todayRevenue == null) todayRevenue = BigDecimal.ZERO;
 
-        BigDecimal totalRevenue = billingRepository.findAll().stream()
-                .filter(b -> b.getPaymentStatus() == com.hms.common.enums.PaymentStatus.PAID)
-                .map(b -> b.getNetAmount() != null ? b.getNetAmount() : BigDecimal.ZERO)
-                .reduce(BigDecimal.ZERO, BigDecimal::add);
+        BigDecimal totalRevenue = billingRepository.sumTotalRevenue();
+        if (totalRevenue == null) totalRevenue = BigDecimal.ZERO;
 
-        long pendingLabs = labRepository.findAll().stream()
-                .filter(l -> l.getStatus() == TestStatus.PENDING || l.getStatus() == TestStatus.IN_PROGRESS)
-                .count();
+        long pendingLabs = labRepository.countByStatusIn(
+                Arrays.asList(com.hms.common.enums.TestStatus.PENDING, com.hms.common.enums.TestStatus.IN_PROGRESS));
 
         // New Stats
         long inQueue = appointmentRepository.countByStatusInAndAppointmentTimeBetween(
@@ -74,9 +67,7 @@ public class DashboardServiceImpl implements DashboardService {
                 startOfDay, endOfDay
         );
 
-        long totalConsultations = appointmentRepository.findAll().stream()
-                .filter(a -> a.getStatus() == AppointmentStatus.COMPLETED)
-                .count();
+        long totalConsultations = appointmentRepository.countByStatus(AppointmentStatus.COMPLETED);
 
         // Weekly Stats for Charts
         List<WeeklyStatisticsDTO> weeklyStats = new ArrayList<>();

@@ -1,8 +1,11 @@
 package com.hms.auth.service.impl;
 
+import com.hms.doctor.repository.DoctorRepository;
+import com.hms.doctor.entity.Doctor;
 import com.hms.auth.dto.request.ChangePasswordRequest;
 import com.hms.auth.dto.request.LoginRequest;
 import com.hms.auth.dto.request.RegisterRequest;
+import com.hms.auth.dto.request.TokenRefreshRequest;
 import com.hms.auth.dto.response.AuthResponse;
 import com.hms.auth.service.AuthService;
 import com.hms.common.audit.AuditLogService;
@@ -30,6 +33,7 @@ public class AuthServiceImpl implements AuthService {
     private final AuthenticationManager authenticationManager;
     private final JwtUtil jwtUtil;
     private final AuditLogService auditLogService;
+    private final DoctorRepository doctorRepository;
 
     @Override
     public void register(RegisterRequest request) {
@@ -51,7 +55,20 @@ public class AuthServiceImpl implements AuthService {
         user.setEnabled(true);
         user.setPasswordChangeRequired(false);
 
-        userRepository.save(user);
+        User savedUser = userRepository.save(user);
+
+        // Auto-create Doctor profile if role is DOCTOR
+        if (request.getRole() == com.hms.common.enums.Role.DOCTOR) {
+            doctorRepository.save(Doctor.builder()
+                    .userId(savedUser.getId())
+                    .firstName(savedUser.getUsername())
+                    .lastName("(Auto-Generated)")
+                    .specialization("General")
+                    .registrationNumber("REG-" + savedUser.getId().toString().substring(0, 8))
+                    .email(savedUser.getEmail())
+                    .isAvailable(true)
+                    .build());
+        }
     }
 
     @Override
@@ -86,6 +103,34 @@ public class AuthServiceImpl implements AuthService {
                 .refreshToken(jwtUtil.generateRefreshToken( user.getUsername(),
                                                             user.getTokenVersion()
                 ))
+                .username(user.getUsername())
+                .email(user.getEmail())
+                .role(user.getRole().name())
+                .passwordChangeRequired(user.getPasswordChangeRequired())
+                .build();
+    }
+
+    @Override
+    public AuthResponse refreshToken(TokenRefreshRequest request) {
+        String refreshToken = request.getRefreshToken();
+
+        if (!jwtUtil.validateToken(refreshToken)) {
+            throw new InvalidCredentialsException("Invalid refresh token");
+        }
+
+        String username = jwtUtil.extractUsername(refreshToken);
+        User user = userRepository.findByUsername(username)
+                .orElseThrow(() -> new UserNotFoundException("User not found"));
+
+        // Verify token version for rotation & global logout capability
+        Integer tokenVersion = jwtUtil.extractTokenVersion(refreshToken);
+        if (!user.getTokenVersion().equals(tokenVersion)) {
+            throw new InvalidCredentialsException("Token version mismatch. Please log in again.");
+        }
+
+        return AuthResponse.builder()
+                .token(jwtUtil.generateAccessToken(user.getUsername(), user.getRole().name(), user.getTokenVersion()))
+                .refreshToken(jwtUtil.generateRefreshToken(user.getUsername(), user.getTokenVersion()))
                 .username(user.getUsername())
                 .email(user.getEmail())
                 .role(user.getRole().name())

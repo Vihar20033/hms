@@ -1,35 +1,30 @@
-import { CommonModule } from '@angular/common';
-import { Component, OnInit } from '@angular/core';
+import { CommonModule, DatePipe } from '@angular/common';
+import { ChangeDetectionStrategy, Component, computed } from '@angular/core';
 import { Router } from '@angular/router';
-import { User } from '../../../../core/models/auth.models';
 import { AuthService } from '../../../../core/services/auth.service';
 
 @Component({
   selector: 'app-header',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, DatePipe],
   templateUrl: './header.component.html',
   styleUrl: './header.component.scss',
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class HeaderComponent implements OnInit {
+export class HeaderComponent {
   
-  user: User | null = null;
+  user = this.authService.currentUser;
   today = new Date();
+
+  roleLabel = computed(() => {
+    const role = this.user()?.role;
+    return role ? role.replaceAll('_', ' ') : 'Staff';
+  });
 
   constructor(
     private authService: AuthService,
     private router: Router,
   ) {}
-
-  ngOnInit(): void {
-    this.authService.currentUser$.subscribe((user) => {
-      this.user = user;
-    });
-  }
-
-  get roleLabel(): string {
-    return this.user?.role ? this.user.role.replaceAll('_', ' ') : 'Staff';
-  }
 
   onLogout(): void {
     this.authService.logout();

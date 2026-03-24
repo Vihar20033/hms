@@ -11,7 +11,9 @@ public interface PatientRepository
         extends JpaRepository
         <Patient, UUID>, JpaSpecificationExecutor<Patient>, PatientRepositoryCustom
 {
+    // SELECT EXISTS(SELECT 1 FROM patients WHERE contact_number = :contactNumber AND deleted = false)
     boolean existsByContactNumber(String contactNumber);
 
+    // SELECT COUNT(*) FROM patients WHERE created_at BETWEEN :start AND :end AND deleted = false
     long countByCreatedAtBetween(LocalDateTime start, LocalDateTime end);
 }

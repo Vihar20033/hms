@@ -10,91 +10,105 @@
           <h1>Hospital Operations Overview</h1>
           <p>
             Welcome back,
-            <span class="username">{{ (currentUser$ | async)?.username || 'User' }}</span
-            >. Monitor patient flow, care activity, and daily service delivery from one place.
+            <span class="username">{{ currentUser()?.username || 'User' }}</span>. 
+            Monitor patient flow, care activity, and daily service delivery from one place.
           </p>
         </div>
         <div class="header-btns">
-          <a class="btn-primary" *ngFor="let action of quickActions" [routerLink]="action.link">
-            <i [class]="action.icon"></i>
-            {{ action.label }}
-          </a>
+          @for (action of quickActions; track action.label) {
+            <a class="btn-primary" [routerLink]="action.link">
+              <i [class]="action.icon"></i>
+              {{ action.label }}
+            </a>
+          }
         </div>
       </div>
 
-      <div class="hero-panel" *ngIf="summary">
-        <div class="hero-copy">
-          <span class="eyebrow">Hospital Lifetime Overview</span>
-          <h2>A glance at the overall impact of the hospital</h2>
-          <p>
-            Over the entire operations, we have served
-            {{ summary.totalPatients | number }} patients and completed
-            {{ summary.totalCompletedConsultations | number }} consultations.
-          </p>
+      @if (isLoading()) {
+        <div class="loading-state">
+          <i class="ri-loader-4-line ri-spin"></i>
+          <span>Generating Analytics...</span>
         </div>
-        <div class="hero-metrics">
-          <div class="hero-metric">
-            <strong>{{ summary.totalPatients | number }}</strong>
-            <span>Total Patients</span>
-          </div>
-          <div class="hero-metric">
-            <strong>{{ summary.totalCompletedConsultations | number }}</strong>
-            <span>Total Consultations</span>
-          </div>
-          <div class="hero-metric">
-            <strong>{{ summary.totalRevenue | currency }}</strong>
-            <span>Lifetime Revenue</span>
-          </div>
-        </div>
-      </div>
+      }
 
-      <div class="stats-grid" *ngIf="summary">
-        <div class="stat-card">
-          <div class="stat-icon appointment">
-            <i class="ri-group-line"></i>
+      @if (summary(); as data) {
+        <div class="hero-panel">
+          <div class="hero-copy">
+            <span class="eyebrow">Hospital Lifetime Overview</span>
+            <h2>A glance at the overall impact of the hospital</h2>
+            <p>
+              Over the entire operations, we have served
+              {{ data.totalPatients | number }} patients and completed
+              {{ data.totalCompletedConsultations | number }} consultations.
+            </p>
           </div>
-          <div class="stat-info">
-            <span class="label">In Queue Today</span>
-            <span class="value">{{ summary.patientsInQueue }}</span>
-            <span class="trend"><i class="ri-time-line"></i> Active Now</span>
+          <div class="hero-metrics">
+            <div class="hero-metric">
+              <strong>{{ data.totalPatients | number }}</strong>
+              <span>Total Patients</span>
+            </div>
+            <div class="hero-metric">
+              <strong>{{ data.totalCompletedConsultations | number }}</strong>
+              <span>Total Consultations</span>
+            </div>
+            <div class="hero-metric">
+              <strong>{{ data.totalRevenue | currency }}</strong>
+              <span>Lifetime Revenue</span>
+            </div>
           </div>
         </div>
 
-        <div class="stat-card">
-          <div class="stat-icon surgery">
-            <i class="ri-check-double-line"></i>
+        <div class="stats-grid">
+          <div class="stat-card">
+            <div class="stat-icon appointment">
+              <i class="ri-group-line"></i>
+            </div>
+            <div class="stat-info">
+              <span class="label">In Queue Today</span>
+              <span class="value">{{ data.patientsInQueue }}</span>
+              <span class="trend"><i class="ri-time-line"></i> Active Now</span>
+            </div>
           </div>
-          <div class="stat-info">
-            <span class="label">Completed Today</span>
-            <span class="value">{{ summary.completedConsultations }}</span>
-            <span class="trend up"><i class="ri-arrow-up-line"></i> Today</span>
+
+          <div class="stat-card">
+            <div class="stat-icon surgery">
+              <i class="ri-check-double-line"></i>
+            </div>
+            <div class="stat-info">
+              <span class="label">Completed Today</span>
+              <span class="value">{{ data.completedConsultations }}</span>
+              <span class="trend up"><i class="ri-arrow-up-line"></i> Today</span>
+            </div>
+          </div>
+
+          @if (isAdminOrStaff()) {
+            <div class="stat-card">
+              <div class="stat-icon earnings">
+                <i class="ri-money-dollar-circle-line"></i>
+              </div>
+              <div class="stat-info">
+                <span class="label">Today's Revenue</span>
+                <span class="value">{{ data.todayRevenue | currency }}</span>
+                <span class="trend up"><i class="ri-arrow-up-line"></i> Daily</span>
+              </div>
+            </div>
+          }
+
+          <div class="stat-card">
+            <div class="stat-icon patient">
+              <i class="ri-test-tube-line"></i>
+            </div>
+            <div class="stat-info">
+              <span class="label">Pending Labs</span>
+              <span class="value">{{ data.pendingLabTests }}</span>
+              <span class="trend"><i class="ri-time-line"></i> Waiting</span>
+            </div>
           </div>
         </div>
+      }
 
-        <div class="stat-card" *ngIf="isAdminOrStaff">
-          <div class="stat-icon earnings">
-            <i class="ri-money-dollar-circle-line"></i>
-          </div>
-          <div class="stat-info">
-            <span class="label">Today's Revenue</span>
-            <span class="value">{{ summary.todayRevenue | currency }}</span>
-            <span class="trend up"><i class="ri-arrow-up-line"></i> Daily</span>
-          </div>
-        </div>
-
-        <div class="stat-card">
-          <div class="stat-icon patient">
-            <i class="ri-test-tube-line"></i>
-          </div>
-          <div class="stat-info">
-            <span class="label">Pending Labs</span>
-            <span class="value">{{ summary.pendingLabTests }}</span>
-            <span class="trend"><i class="ri-time-line"></i> Waiting</span>
-          </div>
-        </div>
-      </div>
-
-      <div class="dashboard-grid">
+      <!-- Chart is always in the DOM so @ViewChild resolves immediately -->
+      <div class="dashboard-grid" [class.hidden]="!summary()">
         <div class="grid-card chart-container full-width">
           <div class="card-header">
             <div>
@@ -109,8 +123,6 @@
             </div>
           </div>
         </div>
-
-
       </div>
     </main>
   </div>

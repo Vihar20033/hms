@@ -7,7 +7,7 @@ import { DialogModule } from 'primeng/dialog';
 import { TableModule } from 'primeng/table';
 import { Appointment } from '../../../../core/models/appointment.models';
 import { Vitals } from '../../../../core/models/clinical.models';
-import { ApiResponse } from '../../../../core/models/common.models';
+import { ApiResponse, PagedResponse } from '../../../../core/models/common.models';
 import { AppointmentService } from '../../../../core/services/appointment.service';
 import { AuthService } from '../../../../core/services/auth.service';
 import { VitalsService } from '../../../../core/services/vitals.service';
@@ -71,10 +71,10 @@ export class VitalsListComponent implements OnInit {
 
   loadData(): void {
     this.isLoading = true;
-    // Step 1: Fetch appointments
-    this.appointmentService.getAll().subscribe({
-      next: (res: ApiResponse<Appointment[]>) => {
-        const filteredAppointments = (res.data || []).filter((a) => a.status !== 'CANCELLED');
+    // Step 1: Fetch appointments (limited to 100 recent for brevity in vitals)
+    this.appointmentService.search({ size: 100 }).subscribe({
+      next: (res: ApiResponse<PagedResponse<Appointment>>) => {
+        const filteredAppointments = (res.data.content || []).filter((a) => a.status !== 'CANCELLED');
 
         // Step 2: Fetch all vitals for today to match
         this.vitalsService.getAllToday().subscribe({

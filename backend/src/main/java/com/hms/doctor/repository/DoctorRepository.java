@@ -10,13 +10,18 @@ import java.util.UUID;
 
 @Repository
 public interface DoctorRepository extends JpaRepository<Doctor, UUID> {
+    // SELECT * FROM doctors WHERE registration_number = :registrationNumber AND deleted = false
     Optional<Doctor> findByRegistrationNumber(String registrationNumber);
 
+    // SELECT * FROM doctors WHERE department = :department AND deleted = false
     List<Doctor> findByDepartment(com.hms.common.enums.Department department);
 
+    // SELECT * FROM doctors WHERE user_id = :userId AND deleted = false
     Optional<Doctor> findByUserId(UUID userId);
 
+    // SELECT * FROM doctors WHERE specialization LIKE %:specialization% AND deleted = false
     List<Doctor> findBySpecializationContaining(String specialization);
 
+    // SELECT EXISTS(SELECT 1 FROM doctors WHERE user_id = :userId AND deleted = false)
     boolean existsByUserId(UUID userId);
 }

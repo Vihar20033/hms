@@ -9,7 +9,7 @@ import { InputTextModule } from 'primeng/inputtext';
 import { InputTextareaModule } from 'primeng/inputtextarea';
 import { TableModule } from 'primeng/table';
 import { Appointment } from '../../../../core/models/appointment.models';
-import { ApiResponse } from '../../../../core/models/common.models';
+import { ApiResponse, PagedResponse } from '../../../../core/models/common.models';
 import { LabTest, TestStatus } from '../../../../core/models/lab.models';
 import { Patient } from '../../../../core/models/patient.models';
 import { AppointmentService } from '../../../../core/services/appointment.service';
@@ -94,8 +94,8 @@ export class LabListComponent implements OnInit {
       this.patientAppointments = [];
       this.labForm.get('appointmentId')?.setValue('', { emitEvent: false });
       if (patientId) {
-        this.appointmentService.getByPatientId(patientId).subscribe((res) => {
-          this.patientAppointments = res.data.filter((a) => a.status === 'COMPLETED' || a.status === 'CHECKED_IN');
+        this.appointmentService.getByPatientId(patientId).subscribe((res: ApiResponse<PagedResponse<Appointment>>) => {
+          this.patientAppointments = (res.data.content || []).filter((a: Appointment) => a.status === 'COMPLETED' || a.status === 'CHECKED_IN');
         });
       }
     });

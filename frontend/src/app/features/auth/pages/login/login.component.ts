@@ -41,7 +41,7 @@ export class LoginComponent {
       this.authService.login(this.loginForm.value).subscribe({
         next: (response) => {
           this.isLoading = false;
-          if (response.passwordChangeRequired) {
+          if (response.data && response.data.passwordChangeRequired) {
             this.router.navigate(['/change-password'], { replaceUrl: true });
             return;
           }

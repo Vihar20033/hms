@@ -25,6 +25,12 @@ public class AppointmentController {
     private final AppointmentService appointmentService;
     private final AppointmentMapper appointmentMapper;
 
+    @PreAuthorize("hasAnyRole('ADMIN','RECEPTIONIST','DOCTOR','NURSE')")
+    @GetMapping("/summary")
+    public ResponseEntity<ApiResponse<com.hms.appointment.dto.response.AppointmentSummaryDTO>> getSummary() {
+        return ResponseEntity.ok(ApiResponse.success(appointmentService.getAppointmentSummary()));
+    }
+
     @PreAuthorize("hasAnyRole('ADMIN','RECEPTIONIST','DOCTOR')")
     @PostMapping
     public ResponseEntity<ApiResponse<AppointmentResponseDTO>> create(@Valid @RequestBody AppointmentRequestDTO dto) {
@@ -32,35 +38,23 @@ public class AppointmentController {
                 .body(ApiResponse.success(appointmentMapper.toDto(appointmentService.createAppointment(dto)), "Appointment scheduled successfully", org.springframework.http.HttpStatus.CREATED));
     }
 
-    /**
-     * View all appointments in the system. Restricted to management staff.
-     */
-    @PreAuthorize("hasAnyRole('ADMIN','RECEPTIONIST')")
+    @PreAuthorize("hasAnyRole('ADMIN','RECEPTIONIST','DOCTOR','NURSE')")
     @GetMapping
-    public ResponseEntity<ApiResponse<List<AppointmentResponseDTO>>> getAllAppointments() {
-        return ResponseEntity
-                .ok(ApiResponse.success(appointmentMapper.toDtoList(appointmentService.getAllAppointments())));
-    }
-
-    /**
-     * View the logged-in doctor's personal queue of appointments.
-     */
-    @PreAuthorize("hasRole('DOCTOR')")
-    @GetMapping("/my")
-    public ResponseEntity<ApiResponse<List<AppointmentResponseDTO>>> getMyAppointments() {
-        return ResponseEntity.ok(ApiResponse.success(appointmentMapper.toDtoList(appointmentService.getMyAppointments())));
-    }
-
-    @PreAuthorize("hasAnyRole('ADMIN','RECEPTIONIST')")
-    @GetMapping("/department/{department}")
-    public ResponseEntity<ApiResponse<List<AppointmentResponseDTO>>> getAppointmentsByDepartment(@PathVariable("department") Department department) {
-        return ResponseEntity.ok(ApiResponse.success(appointmentMapper.toDtoList(appointmentService.getAppointmentsByDepartment(department))));
-    }
-
-    @PreAuthorize("hasAnyRole('ADMIN','DOCTOR','NURSE','RECEPTIONIST')")
-    @GetMapping("/patient/{patientId}")
-    public ResponseEntity<ApiResponse<List<AppointmentResponseDTO>>> getAppointmentsByPatient(@PathVariable("patientId") UUID patientId) {
-        return ResponseEntity.ok(ApiResponse.success(appointmentMapper.toDtoList(appointmentService.getAppointmentsByPatient(patientId))));
+    public ResponseEntity<ApiResponse<com.hms.common.response.PagedResponse<AppointmentResponseDTO>>> searchAppointments(
+            @org.springframework.data.web.PageableDefault(size = 10, sort = "appointmentTime", direction = org.springframework.data.domain.Sort.Direction.DESC) org.springframework.data.domain.Pageable pageable,
+            @RequestParam(name = "doctorId", required = false) UUID doctorId,
+            @RequestParam(name = "patientId", required = false) UUID patientId,
+            @RequestParam(name = "status", required = false) AppointmentStatus status,
+            @RequestParam(name = "department", required = false) Department department,
+            @RequestParam(name = "start", required = false) @org.springframework.format.annotation.DateTimeFormat(iso = org.springframework.format.annotation.DateTimeFormat.ISO.DATE_TIME) java.time.LocalDateTime start,
+            @RequestParam(name = "end", required = false) @org.springframework.format.annotation.DateTimeFormat(iso = org.springframework.format.annotation.DateTimeFormat.ISO.DATE_TIME) java.time.LocalDateTime end,
+            @RequestParam(name = "isEmergency", required = false) Boolean isEmergency) {
+        
+        org.springframework.data.domain.Page<com.hms.appointment.entity.Appointment> page = 
+                appointmentService.findAppointments(pageable, doctorId, patientId, status, department, start, end, isEmergency);
+        
+        return ResponseEntity.ok(ApiResponse.success(
+                com.hms.common.response.PagedResponse.from(page, appointmentMapper::toDto)));
     }
 
     /**

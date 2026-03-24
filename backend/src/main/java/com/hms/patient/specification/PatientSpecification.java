@@ -1,16 +1,19 @@
 package com.hms.patient.specification;
 
+import com.hms.common.enums.BloodGroup;
 import com.hms.patient.entity.Patient;
 import com.hms.common.enums.UrgencyLevel;
 import org.springframework.data.jpa.domain.Specification;
 
 public class PatientSpecification {
 
+    // Equivalent to where Deleted = false
     public static Specification<Patient> notDeleted() {
         return (root, query, cb) ->
                 cb.isFalse(root.get("deleted"));
     }
 
+    // WHERE LOWER(name) LIKE '%john%'
     public static Specification<Patient> hasName(String name) {
         return (root, query, cb) ->
                 (name == null || name.isBlank()) ? null :
@@ -18,6 +21,7 @@ public class PatientSpecification {
                                 "%" + name.toLowerCase() + "%");
     }
 
+    // WHERE blood_group = 'A_POSITIVE'
     public static Specification<Patient> hasBloodGroup(String bloodGroup) {
         return (root, query, cb) -> {
             if (bloodGroup == null || bloodGroup.isBlank()) {
@@ -25,7 +29,7 @@ public class PatientSpecification {
             }
             try {
                 // Try matching by enum name or enum label
-                for (com.hms.common.enums.BloodGroup bg : com.hms.common.enums.BloodGroup.values()) {
+                for (BloodGroup bg : BloodGroup.values()) {
                     if (bg.getLabel().equalsIgnoreCase(bloodGroup) || bg.name().equalsIgnoreCase(bloodGroup)) {
                         return cb.equal(root.get("bloodGroup"), bg);
                     }
@@ -36,6 +40,7 @@ public class PatientSpecification {
             }
         };
     }
+
 
     public static Specification<Patient> hasUrgencyLevel(String urgencyLevel) {
         return (root, query, cb) -> {
@@ -53,6 +58,7 @@ public class PatientSpecification {
         };
     }
 
+    // WHERE email = 'abc@gmail.com'
     public static Specification<Patient> hasEmail(String email) {
         return (root, query, cb) ->
                 (email == null || email.isBlank()) ? null :

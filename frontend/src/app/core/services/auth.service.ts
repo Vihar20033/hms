@@ -1,9 +1,10 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { Injectable } from '@angular/core';
+import { Injectable, computed, signal } from '@angular/core';
 import { BehaviorSubject, Observable, timer } from 'rxjs';
 import { retry, tap, timeout } from 'rxjs/operators';
 import { environment } from '../../../environments/environment';
 import { AuthResponse, ChangePasswordRequest, LoginRequest, RegisterRequest, User } from '../models/auth.models';
+import { ApiResponse } from '../models/common.models';
 import { AccessFeedbackService } from './access-feedback.service';
 
 @Injectable({
@@ -12,7 +13,14 @@ import { AccessFeedbackService } from './access-feedback.service';
 export class AuthService {
   private readonly tokenStorageKey = 'hms_token';
   private readonly userStorageKey = 'hms_user';
-  private currentUserSubject = new BehaviorSubject<User | null>(this.getUserFromStorage());
+  
+  // High-performance state management using Signals
+  private currentUserSignal = signal<User | null>(this.getUserFromStorage());
+  public currentUser = this.currentUserSignal.asReadonly();
+  public isAuthenticated = computed(() => !!this.currentUser());
+
+  // Compatibility layer for RxJS users
+  private currentUserSubject = new BehaviorSubject<User | null>(this.currentUserSignal());
   public currentUser$ = this.currentUserSubject.asObservable();
 
   constructor(
@@ -21,37 +29,40 @@ export class AuthService {
   ) {
     this.clearLegacyLocalStorage();
 
-    if (!this.currentUserSubject.value || !this.getToken()) {
+    if (!this.currentUserSignal() || !this.getToken()) {
       this.clearSession();
     }
   }
 
   public get currentUserValue(): User | null {
-    return this.currentUserSubject.value;
+    return this.currentUserSignal();
   }
 
-  login(request: LoginRequest): Observable<AuthResponse> {
-    return this.http.post<AuthResponse>(`${environment.apiUrl}/auth/login`, request).pipe(
+  login(request: LoginRequest): Observable<ApiResponse<AuthResponse>> {
+    return this.http.post<ApiResponse<AuthResponse>>(`${environment.apiUrl}/auth/login`, request).pipe(
       retry({ count: 3, delay: (error, retryCount) => timer(Math.pow(2, retryCount) * 1000) }),
       timeout(10000),
       tap((res) => {
-        this.clearAuthArtifacts();
-        sessionStorage.setItem(this.tokenStorageKey, res.token);
-        const user: User = {
-          username: res.username,
-          email: res.email,
-          role: res.role,
-          passwordChangeRequired: res.passwordChangeRequired,
-        };
-        this.currentUserSubject.next(user);
-        sessionStorage.setItem(this.userStorageKey, JSON.stringify(user));
+        if (res.success && res.data) {
+          this.clearAuthArtifacts();
+          sessionStorage.setItem(this.tokenStorageKey, res.data.token);
+          const user: User = {
+            username: res.data.username,
+            email: res.data.email,
+            role: res.data.role,
+            passwordChangeRequired: res.data.passwordChangeRequired,
+          };
+          this.currentUserSignal.set(user);
+          this.currentUserSubject.next(user);
+          sessionStorage.setItem(this.userStorageKey, JSON.stringify(user));
+        }
       }),
     );
   }
 
-  register(request: RegisterRequest): Observable<string> {
+  register(request: RegisterRequest): Observable<ApiResponse<string>> {
     return this.http
-      .post(`${environment.apiUrl}/auth/register`, request, { responseType: 'text' })
+      .post<ApiResponse<string>>(`${environment.apiUrl}/auth/register`, request)
       .pipe(retry({ count: 3, delay: (error, retryCount) => timer(Math.pow(2, retryCount) * 1000) }), timeout(10000));
   }
 
@@ -85,25 +96,22 @@ export class AuthService {
     return sessionStorage.getItem(this.tokenStorageKey);
   }
 
-  isAuthenticated(): boolean {
-    return !!this.getToken() && !!this.currentUserValue;
-  }
-
   getUserRole(): string | null {
-    return this.currentUserValue?.role || null;
+    return this.currentUserSignal()?.role || null;
   }
 
   isPasswordChangeRequired(): boolean {
-    return !!this.currentUserValue?.passwordChangeRequired;
+    return !!this.currentUserSignal()?.passwordChangeRequired;
   }
 
   markPasswordChanged(): void {
-    const currentUser = this.currentUserValue;
+    const currentUser = this.currentUserSignal();
     if (!currentUser) {
       return;
     }
 
     const updatedUser = { ...currentUser, passwordChangeRequired: false };
+    this.currentUserSignal.set(updatedUser);
     this.currentUserSubject.next(updatedUser);
     sessionStorage.setItem(this.userStorageKey, JSON.stringify(updatedUser));
   }
@@ -125,6 +133,7 @@ export class AuthService {
 
   private clearSession(): void {
     this.clearAuthArtifacts();
+    this.currentUserSignal.set(null);
     this.currentUserSubject.next(null);
   }
 
@@ -139,3 +148,4 @@ export class AuthService {
     this.accessFeedbackService.close();
   }
 }
+

@@ -1,6 +1,6 @@
 package com.hms.security.jwt;
 
-import com.hms.common.enums.MedicineCategory;
+import com.hms.common.enums.TokenType;
 import com.hms.user.entity.User;
 import com.hms.user.service.CustomUserDetailsService;
 import jakarta.servlet.FilterChain;
@@ -62,7 +62,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
             }
 
             // Ensure we only process ACCESS tokens in the filter chain
-            if (jwtUtil.extractTokenType(jwt) != MedicineCategory.TokenType.ACCESS) {
+            if (jwtUtil.extractTokenType(jwt) != TokenType.ACCESS) {
                 log.warn("Attempted to use REFRESH token as ACCESS token by: {}", request.getRemoteAddr());
                 filterChain.doFilter(request, response);
                 return;

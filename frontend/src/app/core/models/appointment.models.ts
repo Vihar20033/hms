@@ -49,3 +49,12 @@ export interface AppointmentRequest {
   notes?: string;
   isEmergency: boolean;
 }
+
+export interface AppointmentSummary {
+  total: number;
+  scheduled: number;
+  checkedIn: number;
+  inConsultation: number;
+  completed: number;
+  cancelled: number;
+}

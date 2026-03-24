@@ -4,8 +4,8 @@ import { HttpClient } from '@angular/common/http';
 import { Observable, timer } from 'rxjs';
 import { retry, timeout } from 'rxjs/operators';
 import { environment } from '../../../environments/environment';
-import { Appointment, AppointmentRequest, AppointmentStatus } from '../models/appointment.models';
-import { ApiResponse } from '../models/common.models';
+import { Appointment, AppointmentRequest, AppointmentStatus, AppointmentSummary } from '../models/appointment.models';
+import { ApiResponse, PagedResponse } from '../models/common.models';
 
 @Injectable({
   providedIn: 'root',
@@ -15,34 +15,44 @@ export class AppointmentService {
 
   constructor(private http: HttpClient) {}
 
-  getAll(): Observable<ApiResponse<Appointment[]>> {
+  getSummary(): Observable<ApiResponse<AppointmentSummary>> {
     return this.http
-      .get<ApiResponse<Appointment[]>>(this.apiUrl)
-      .pipe(retry({ count: 3, delay: (error, retryCount) => timer(Math.pow(2, retryCount) * 1000) }), timeout(10000));
+      .get<ApiResponse<AppointmentSummary>>(`${this.apiUrl}/summary`)
+      .pipe(retry({ count: 2, delay: 1000 }), timeout(8000));
   }
 
-  getMyAppointments(): Observable<ApiResponse<Appointment[]>> {
-    return this.http
-      .get<ApiResponse<Appointment[]>>(`${this.apiUrl}/my`)
-      .pipe(retry({ count: 2, delay: 1000 }), timeout(10000));
-  }
+  search(params: {
+    page?: number;
+    size?: number;
+    sort?: string;
+    doctorId?: string;
+    patientId?: string;
+    status?: AppointmentStatus;
+    department?: string;
+    start?: string;
+    end?: string;
+    isEmergency?: boolean;
+  }): Observable<ApiResponse<PagedResponse<Appointment>>> {
+    const httpParams: any = {};
+    Object.keys(params).forEach(key => {
+      if ((params as any)[key] !== undefined && (params as any)[key] !== null) {
+        httpParams[key] = (params as any)[key].toString();
+      }
+    });
 
-  getByPatientId(patientId: string): Observable<ApiResponse<Appointment[]>> {
     return this.http
-      .get<ApiResponse<Appointment[]>>(`${this.apiUrl}/patient/${patientId}`)
-      .pipe(retry({ count: 3, delay: (error, retryCount) => timer(Math.pow(2, retryCount) * 1000) }), timeout(10000));
+      .get<ApiResponse<PagedResponse<Appointment>>>(this.apiUrl, { params: httpParams })
+      .pipe(retry({ count: 2, delay: 1000 }), timeout(12000));
   }
 
   getById(id: string): Observable<ApiResponse<Appointment>> {
     return this.http
       .get<ApiResponse<Appointment>>(`${this.apiUrl}/${id}`)
-      .pipe(retry({ count: 3, delay: (error, retryCount) => timer(Math.pow(2, retryCount) * 1000) }), timeout(10000));
+      .pipe(retry({ count: 2, delay: 1000 }), timeout(10000));
   }
 
-  getByDepartment(dept: string): Observable<ApiResponse<Appointment[]>> {
-    return this.http
-      .get<ApiResponse<Appointment[]>>(`${this.apiUrl}/department/${dept}`)
-      .pipe(retry({ count: 3, delay: (error, retryCount) => timer(Math.pow(2, retryCount) * 1000) }), timeout(10000));
+  getByPatientId(patientId: string): Observable<ApiResponse<PagedResponse<Appointment>>> {
+    return this.search({ patientId });
   }
 
   create(appointment: AppointmentRequest): Observable<ApiResponse<Appointment>> {

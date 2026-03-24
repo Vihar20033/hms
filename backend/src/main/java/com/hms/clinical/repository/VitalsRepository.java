@@ -10,6 +10,9 @@ import java.util.UUID;
 
 @Repository
 public interface VitalsRepository extends JpaRepository<Vitals, UUID> {
+    // SELECT * FROM vitals WHERE appointment_id = :appointmentId AND deleted = false
     Optional<Vitals> findByAppointmentId(UUID appointmentId);
+
+    // SELECT v.* FROM vitals v JOIN appointments a ON v.appointment_id = a.id WHERE a.patient_id = :patientId AND v.deleted = false ORDER BY v.created_at DESC
     List<Vitals> findByAppointmentPatientIdOrderByCreatedAtDesc(UUID patientId);
 }

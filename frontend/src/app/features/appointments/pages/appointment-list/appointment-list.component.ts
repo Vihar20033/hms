@@ -1,14 +1,15 @@
 import { CommonModule } from '@angular/common';
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, Component, OnDestroy, OnInit, signal, computed } from '@angular/core';
 import { Router, RouterLink } from '@angular/router';
 import { TableModule } from 'primeng/table';
-import { Appointment, AppointmentStatus } from '../../../../core/models/appointment.models';
+import { Appointment, AppointmentStatus, AppointmentSummary } from '../../../../core/models/appointment.models';
 import { Billing } from '../../../../core/models/billing.models';
-import { ApiResponse } from '../../../../core/models/common.models';
+import { ApiResponse, PagedResponse } from '../../../../core/models/common.models';
 import { AppointmentService } from '../../../../core/services/appointment.service';
 import { AuthService } from '../../../../core/services/auth.service';
 import { BillingService } from '../../../../core/services/billing.service';
 import { ExcelExportService } from '../../../../core/services/excel-export.service';
+import { PaginatorModule } from 'primeng/paginator';
 
 import { HeaderComponent } from '../../../../shared/components/layout/header/header.component';
 import { SidebarComponent } from '../../../../shared/components/layout/sidebar/sidebar.component';
@@ -16,22 +17,44 @@ import { SidebarComponent } from '../../../../shared/components/layout/sidebar/s
 @Component({
   selector: 'app-appointment-list',
   standalone: true,
-  imports: [CommonModule, SidebarComponent, HeaderComponent, RouterLink, TableModule],
+  imports: [CommonModule, SidebarComponent, HeaderComponent, RouterLink, TableModule, PaginatorModule],
   templateUrl: './appointment-list.component.html',
   styleUrl: './appointment-list.component.scss',
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class AppointmentListComponent implements OnInit, OnDestroy {
-  appointments: Appointment[] = [];
-  filteredAppointments: Appointment[] = [];
-  isLoading = true;
+  // Primary State using Signals
+  pagedResponse = signal<PagedResponse<Appointment> | null>(null);
+  summary = signal<AppointmentSummary | null>(null);
+  isLoading = signal<boolean>(true);
+  
+  // Pagination & Filtering Parameters
+  selectedStatusFilter = signal<'ALL' | AppointmentStatus>('ALL');
+  page = signal<number>(0);
+  size = signal<number>(10);
+  
+  // Derived State (Highly efficient)
+  appointments = computed(() => this.pagedResponse()?.content || []);
+  totalElements = computed(() => this.pagedResponse()?.totalElements || 0);
+
+  // Enums for template access
   statusEnum = AppointmentStatus;
-  userRole: string | null = null;
-  selectedStatusFilter: 'ALL' | AppointmentStatus = 'ALL';
-  scheduledCount = 0;
-  checkedInCount = 0;
-  inConsultationCount = 0;
-  completedCount = 0;
-  pageLead = 'View and manage all medical consultations.';
+
+  // Accurately reflect global counts from the summary signal
+  scheduledCount = computed(() => this.summary()?.scheduled || 0);
+  checkedInCount = computed(() => this.summary()?.checkedIn || 0);
+  inConsultationCount = computed(() => this.summary()?.inConsultation || 0);
+  completedCount = computed(() => this.summary()?.completed || 0);
+  totalVisitsCount = computed(() => this.summary()?.total || 0);
+  
+  userRole = computed(() => this.authService.currentUser()?.role || null);
+  
+  pageLead = computed(() => {
+    const role = this.userRole();
+    if (role === 'DOCTOR') return 'Track only the patients assigned to you and start each consultation from here.';
+    if (role === 'RECEPTIONIST') return 'Manage arrivals, move patients into the doctor queue, and keep the OPD flowing.';
+    return 'View and manage all medical consultations.';
+  });
 
   constructor(
     private appointmentService: AppointmentService,
@@ -42,51 +65,64 @@ export class AppointmentListComponent implements OnInit, OnDestroy {
   ) {}
 
   ngOnInit(): void {
-    this.userRole = this.authService.getUserRole();
-    if (this.userRole === 'RECEPTIONIST') {
-      this.selectedStatusFilter = AppointmentStatus.SCHEDULED;
+    if (this.authService.getUserRole() === 'RECEPTIONIST') {
+      this.selectedStatusFilter.set(AppointmentStatus.SCHEDULED);
     }
-    this.pageLead = this.getPageLead();
+    this.loadSummary();
     this.loadAppointments();
+  }
+
+  loadSummary(): void {
+    this.appointmentService.getSummary().subscribe({
+      next: (res: ApiResponse<AppointmentSummary>) => this.summary.set(res.data)
+    });
   }
 
   ngOnDestroy(): void {}
 
   loadAppointments(): void {
-    this.isLoading = true;
+    this.isLoading.set(true);
     
-    // Pattern: Use getMyAppointments() for Doctors, getAll() for Staff
-    const isClinicalStaff = ['ADMIN', 'RECEPTIONIST', 'NURSE'].includes(this.userRole || '');
-    const request = isClinicalStaff 
-      ? this.appointmentService.getAll() 
-      : this.appointmentService.getMyAppointments();
+    const params = {
+      page: this.page(),
+      size: this.size(),
+      status: this.selectedStatusFilter() === 'ALL' ? undefined : this.selectedStatusFilter() as AppointmentStatus,
+    };
 
-    request.subscribe({
-      next: (res: ApiResponse<Appointment[]>) => {
-        this.appointments = res.data || [];
-        this.refreshQueueView();
-        this.isLoading = false;
+    this.appointmentService.search(params).subscribe({
+      next: (res: ApiResponse<PagedResponse<Appointment>>) => {
+        this.pagedResponse.set(res.data);
+        this.isLoading.set(false);
       },
       error: () => {
-        this.isLoading = false;
+        this.isLoading.set(false);
       },
     });
   }
 
+  onPageChange(event: any): void {
+    this.page.set(event.page);
+    this.size.set(event.rows);
+    this.loadAppointments();
+  }
+
   onCheckIn(id: string): void {
     this.appointmentService.checkIn(id).subscribe(() => {
+      this.loadSummary();
       this.loadAppointments();
     });
   }
 
   onStart(id: string): void {
     this.appointmentService.startConsultation(id).subscribe(() => {
+      this.loadSummary();
       this.loadAppointments();
     });
   }
 
   onComplete(id: string): void {
     this.appointmentService.completeConsultation(id).subscribe(() => {
+      this.loadSummary();
       this.loadAppointments();
     });
   }
@@ -96,30 +132,26 @@ export class AppointmentListComponent implements OnInit, OnDestroy {
   }
 
   onDelete(id: string): void {
-    if (!confirm('Delete this appointment?')) {
-      return;
-    }
-
+    if (!confirm('Delete this appointment?')) return;
     this.appointmentService.delete(id).subscribe(() => {
+      this.loadSummary();
       this.loadAppointments();
     });
   }
 
   onGenerateBill(appointmentId: string): void {
-    this.isLoading = true;
+    this.isLoading.set(true);
     this.billingService.generateFromAppointment(appointmentId).subscribe({
-      next: (_res: ApiResponse<Billing>) => {
-        this.isLoading = false;
+      next: () => {
+        this.isLoading.set(false);
         this.router.navigate(['/billing']);
       },
-      error: () => {
-        this.isLoading = false;
-      },
+      error: () => this.isLoading.set(false),
     });
   }
 
   exportToExcel(): void {
-    const dataToExport = this.filteredAppointments.map((app) => ({
+    const dataToExport = this.appointments().map((app) => ({
       'Patient Name': app.patientName,
       'Doctor Name': app.doctorName,
       Department: app.department.replace('_', ' '),
@@ -133,12 +165,14 @@ export class AppointmentListComponent implements OnInit, OnDestroy {
   }
 
   canManageAppointment(): boolean {
-    return this.userRole === 'ADMIN' || this.userRole === 'RECEPTIONIST';
+    const role = this.userRole();
+    return role === 'ADMIN' || role === 'RECEPTIONIST';
   }
 
   setStatusFilter(filter: 'ALL' | AppointmentStatus): void {
-    this.selectedStatusFilter = filter;
-    this.applyStatusFilter();
+    this.selectedStatusFilter.set(filter);
+    this.page.set(0); // Reset to first page on filter change
+    this.loadAppointments();
   }
 
   getStatusClass(status: string): string {
@@ -146,11 +180,12 @@ export class AppointmentListComponent implements OnInit, OnDestroy {
   }
 
   getWorkflowLabel(appointment: Appointment): string {
+    const role = this.userRole();
     switch (appointment.status) {
       case AppointmentStatus.SCHEDULED:
-        return this.userRole === 'DOCTOR' ? 'Waiting for reception check-in' : 'Scheduled and awaiting arrival';
+        return role === 'DOCTOR' ? 'Waiting for reception check-in' : 'Scheduled and awaiting arrival';
       case AppointmentStatus.CHECKED_IN:
-        return this.userRole === 'DOCTOR' ? 'Ready to start consultation' : 'Vitals and doctor handoff pending';
+        return role === 'DOCTOR' ? 'Ready to start consultation' : 'Vitals and doctor handoff pending';
       case AppointmentStatus.IN_CONSULTATION:
         return 'Consultation in progress';
       case AppointmentStatus.COMPLETED:
@@ -163,43 +198,9 @@ export class AppointmentListComponent implements OnInit, OnDestroy {
   }
 
   canDoctorStart(appointment: Appointment): boolean {
+    const role = this.userRole();
     return (
-      appointment.status === AppointmentStatus.CHECKED_IN && (this.userRole === 'DOCTOR' || this.userRole === 'ADMIN')
+      appointment.status === AppointmentStatus.CHECKED_IN && (role === 'DOCTOR' || role === 'ADMIN')
     );
-  }
-
-  private getPageLead(): string {
-    if (this.userRole === 'DOCTOR') {
-      return 'Track only the patients assigned to you and start each consultation from here.';
-    }
-
-    if (this.userRole === 'RECEPTIONIST') {
-      return 'Manage arrivals, move patients into the doctor queue, and keep the OPD flowing.';
-    }
-
-    return 'View and manage all medical consultations.';
-  }
-
-  private refreshQueueView(): void {
-    this.scheduledCount = this.appointments.filter(
-      (appointment) => appointment.status === AppointmentStatus.SCHEDULED,
-    ).length;
-    this.checkedInCount = this.appointments.filter(
-      (appointment) => appointment.status === AppointmentStatus.CHECKED_IN,
-    ).length;
-    this.inConsultationCount = this.appointments.filter(
-      (appointment) => appointment.status === AppointmentStatus.IN_CONSULTATION,
-    ).length;
-    this.completedCount = this.appointments.filter(
-      (appointment) => appointment.status === AppointmentStatus.COMPLETED,
-    ).length;
-    this.applyStatusFilter();
-  }
-
-  private applyStatusFilter(): void {
-    this.filteredAppointments =
-      this.selectedStatusFilter === 'ALL'
-        ? [...this.appointments]
-        : this.appointments.filter((appointment) => appointment.status === this.selectedStatusFilter);
   }
 }

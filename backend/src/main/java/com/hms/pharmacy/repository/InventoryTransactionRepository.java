@@ -9,6 +9,9 @@ import java.util.UUID;
 
 @Repository
 public interface InventoryTransactionRepository extends JpaRepository<InventoryTransaction, UUID> {
+    // SELECT * FROM inventory_transactions WHERE medicine_id = :medicineId AND deleted = false
     List<InventoryTransaction> findByMedicineId(UUID medicineId);
+
+    // SELECT * FROM inventory_transactions WHERE reference_id = :referenceId AND deleted = false
     List<InventoryTransaction> findByReferenceId(UUID referenceId);
 }

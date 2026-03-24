@@ -1,6 +1,6 @@
 package com.hms.security.jwt;
 
-import com.hms.common.enums.MedicineCategory;
+import com.hms.common.enums.TokenType;
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
@@ -39,11 +39,11 @@ public class JwtUtil {
     }
 
     public String generateAccessToken(String username, String role, Integer tokenVersion) {
-        return buildToken(username, Map.of("role", role, "tokenVersion", tokenVersion, "type", MedicineCategory.TokenType.ACCESS), accessExpiration);
+        return buildToken(username, Map.of("role", role, "tokenVersion", tokenVersion, "type", TokenType.ACCESS), accessExpiration);
     }
 
     public String generateRefreshToken(String username, Integer tokenVersion) {
-        return buildToken(username, Map.of("tokenVersion", tokenVersion, "type", MedicineCategory.TokenType.REFRESH), refreshExpiration);
+        return buildToken(username, Map.of("tokenVersion", tokenVersion, "type", TokenType.REFRESH), refreshExpiration);
     }
 
     private String buildToken(String username, Map<String, Object> claims, long expiration) {
@@ -77,9 +77,9 @@ public class JwtUtil {
         return extractClaim(token, claims -> claims.get("tokenVersion", Integer.class));
     }
 
-    public MedicineCategory.TokenType extractTokenType(String token) {
+    public TokenType extractTokenType(String token) {
         String type = extractClaim(token, claims -> claims.get("type", String.class));
-        return MedicineCategory.TokenType.valueOf(type);
+        return TokenType.valueOf(type);
     }
 
     public boolean validateToken(String token) {

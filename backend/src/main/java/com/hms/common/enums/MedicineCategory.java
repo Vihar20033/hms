@@ -8,9 +8,4 @@ public enum MedicineCategory {
     CARDIAC,
     DIABETIC,
     OTHER;
-
-    public enum TokenType {
-        ACCESS,
-        REFRESH
-    }
 }

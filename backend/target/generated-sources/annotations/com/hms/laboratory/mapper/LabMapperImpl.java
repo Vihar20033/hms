@@ -10,14 +10,15 @@ import com.hms.patient.entity.Patient;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
-import javax.annotation.processing.Generated;
 import org.springframework.stereotype.Component;
 
+/*
 @Generated(
     value = "org.mapstruct.ap.MappingProcessor",
-    date = "2026-03-23T18:50:32+0530",
-    comments = "version: 1.5.5.Final, compiler: javac, environment: Java 21.0.10 (Eclipse Adoptium)"
+    date = "2026-03-24T11:43:23+0530",
+    comments = "version: 1.5.5.Final, compiler: Eclipse JDT (IDE) 3.45.0.v20260224-0835, environment: Java 21.0.10 (Eclipse Adoptium)"
 )
+*/
 @Component
 public class LabMapperImpl implements LabMapper {
 
@@ -50,12 +51,12 @@ public class LabMapperImpl implements LabMapper {
         labTestResponseDTO.setTestCode( entity.getTestCode() );
         labTestResponseDTO.setPatientId( entityPatientId( entity ) );
         labTestResponseDTO.setPatientName( entityPatientName( entity ) );
-        labTestResponseDTO.setId( entity.getId() );
         labTestResponseDTO.setCategory( entity.getCategory() );
-        labTestResponseDTO.setPrice( entity.getPrice() );
-        labTestResponseDTO.setStatus( entity.getStatus() );
-        labTestResponseDTO.setRequestedDate( entity.getRequestedDate() );
         labTestResponseDTO.setCompletedDate( entity.getCompletedDate() );
+        labTestResponseDTO.setId( entity.getId() );
+        labTestResponseDTO.setPrice( entity.getPrice() );
+        labTestResponseDTO.setRequestedDate( entity.getRequestedDate() );
+        labTestResponseDTO.setStatus( entity.getStatus() );
 
         mapDoctorDetails( labTestResponseDTO, entity );
 
@@ -85,11 +86,11 @@ public class LabMapperImpl implements LabMapper {
         LabReport labReport = new LabReport();
 
         labReport.setFindings( dto.getFindings() );
-        labReport.setResult( dto.getResult() );
-        labReport.setUnit( dto.getUnit() );
+        labReport.setPerformedBy( dto.getPerformedBy() );
         labReport.setReferenceRange( dto.getReferenceRange() );
         labReport.setRemarks( dto.getRemarks() );
-        labReport.setPerformedBy( dto.getPerformedBy() );
+        labReport.setResult( dto.getResult() );
+        labReport.setUnit( dto.getUnit() );
 
         return labReport;
     }
@@ -106,14 +107,14 @@ public class LabMapperImpl implements LabMapper {
         labReportResponseDTO.setTestName( entityLabTestTestName( entity ) );
         labReportResponseDTO.setTestCode( entityLabTestTestCode( entity ) );
         labReportResponseDTO.setPatientName( entityLabTestPatientName( entity ) );
-        labReportResponseDTO.setId( entity.getId() );
+        labReportResponseDTO.setCreatedAt( entity.getCreatedAt() );
         labReportResponseDTO.setFindings( entity.getFindings() );
-        labReportResponseDTO.setResult( entity.getResult() );
-        labReportResponseDTO.setUnit( entity.getUnit() );
+        labReportResponseDTO.setId( entity.getId() );
+        labReportResponseDTO.setPerformedBy( entity.getPerformedBy() );
         labReportResponseDTO.setReferenceRange( entity.getReferenceRange() );
         labReportResponseDTO.setRemarks( entity.getRemarks() );
-        labReportResponseDTO.setPerformedBy( entity.getPerformedBy() );
-        labReportResponseDTO.setCreatedAt( entity.getCreatedAt() );
+        labReportResponseDTO.setResult( entity.getResult() );
+        labReportResponseDTO.setUnit( entity.getUnit() );
         labReportResponseDTO.setUpdatedAt( entity.getUpdatedAt() );
 
         return labReportResponseDTO;

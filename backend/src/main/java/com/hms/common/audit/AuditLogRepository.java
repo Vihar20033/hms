@@ -7,6 +7,9 @@ import java.util.UUID;
 
 @Repository
 public interface AuditLogRepository extends JpaRepository<AuditLog, UUID> {
+    // SELECT * FROM audit_logs WHERE username = :username ORDER BY created_at DESC
     java.util.List<AuditLog> findByUsernameOrderByCreatedAtDesc(String username);
+
+    // SELECT * FROM audit_logs WHERE entity_type = :entityType AND entity_id = :entityId ORDER BY created_at DESC
     java.util.List<AuditLog> findByEntityTypeAndEntityIdOrderByCreatedAtDesc(String entityType, String entityId);
 }

@@ -12,9 +12,11 @@
           <p>Standardized clinical database management</p>
         </div>
         <div class="header-actions">
-          <button class="btn-primary" routerLink="/patients/register" *ngIf="canRegister()">
-            <i class="ri-user-add-line"></i> Register Patient
-          </button>
+          @if (canRegister()) {
+            <button class="btn-primary" routerLink="/patients/register">
+              <i class="ri-user-add-line"></i> Register Patient
+            </button>
+          }
         </div>
       </div>
 
@@ -24,27 +26,29 @@
           <i class="ri-search-line"></i>
           <input
             type="text"
-            [(ngModel)]="searchTerm"
-            (input)="onSearchInput()"
+            [ngModel]="searchTerm()"
+            (ngModelChange)="searchTerm.set($event); onSearchInput()"
             placeholder="Search by name, ID or contact..."
           />
         </div>
 
         <div class="filter-options">
-          <button class="btn-excel" (click)="exportToExcel()" *ngIf="patients.length > 0">
-            <i class="ri-file-excel-2-line"></i> Download Excel
-          </button>
+          @if (patients().length > 0) {
+            <button class="btn-excel" (click)="exportToExcel()">
+              <i class="ri-file-excel-2-line"></i> Download Excel
+            </button>
+          }
         </div>
       </div>
 
       <!-- Simplified Patient Table -->
       <div class="card p-0 table-container">
         <p-table
-          [value]="patients"
-          [loading]="isLoading"
+          [value]="patients()"
+          [loading]="isLoading()"
           [paginator]="true"
-          [rows]="pageSize"
-          [totalRecords]="totalElements"
+          [rows]="pageSize()"
+          [totalRecords]="totalElements()"
           [lazy]="true"
           (onLazyLoad)="onPageChange($event)"
           styleClass="p-datatable-sm clinical-table"
@@ -87,24 +91,26 @@
               <td class="action-cell">
                 <div class="action-buttons" (click)="$event.stopPropagation()" (keydown.enter)="$event.stopPropagation()" role="group" aria-label="Patient actions">
                   <!-- Edit Patient -->
-                  <button
-                    class="btn-icon btn-edit"
-                    (click)="editPatient(patient.id)"
-                    *ngIf="canEdit()"
-                    title="Modify Data"
-                  >
-                    <i class="ri-edit-line"></i>
-                  </button>
+                  @if (canEdit()) {
+                    <button
+                      class="btn-icon btn-edit"
+                      (click)="editPatient(patient.id)"
+                      title="Modify Data"
+                    >
+                      <i class="ri-edit-line"></i>
+                    </button>
+                  }
 
                   <!-- Delete Record -->
-                  <button
-                    class="btn-icon btn-delete"
-                    (click)="deletePatient(patient.id)"
-                    *ngIf="canDelete()"
-                    title="Remove Patient"
-                  >
-                    <i class="ri-delete-bin-line"></i>
-                  </button>
+                  @if (canDelete()) {
+                    <button
+                      class="btn-icon btn-delete"
+                      (click)="deletePatient(patient.id)"
+                      title="Remove Patient"
+                    >
+                      <i class="ri-delete-bin-line"></i>
+                    </button>
+                  }
                 </div>
               </td>
             </tr>

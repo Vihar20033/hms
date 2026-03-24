@@ -45,6 +45,36 @@ public class AppointmentServiceImpl implements AppointmentService {
     private final com.hms.common.audit.AuditLogService auditLogService;
 
     @Override
+    @Transactional(readOnly = true)
+    public com.hms.appointment.dto.response.AppointmentSummaryDTO getAppointmentSummary() {
+        User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        com.hms.appointment.dto.response.AppointmentSummaryDTO.AppointmentSummaryDTOBuilder builder = 
+                com.hms.appointment.dto.response.AppointmentSummaryDTO.builder();
+
+        if (user.getRole() == com.hms.common.enums.Role.DOCTOR) {
+            Doctor doctor = doctorRepository.findByUserId(user.getId())
+                    .orElseThrow(() -> new BadRequestException("Current user is not registered as a doctor."));
+            UUID doctorId = doctor.getId();
+
+            builder.total(appointmentRepository.countByDoctorId(doctorId))
+                   .scheduled(appointmentRepository.countByDoctorIdAndStatus(doctorId, AppointmentStatus.SCHEDULED))
+                   .checkedIn(appointmentRepository.countByDoctorIdAndStatus(doctorId, AppointmentStatus.CHECKED_IN))
+                   .inConsultation(appointmentRepository.countByDoctorIdAndStatus(doctorId, AppointmentStatus.IN_CONSULTATION))
+                   .completed(appointmentRepository.countByDoctorIdAndStatus(doctorId, AppointmentStatus.COMPLETED))
+                   .cancelled(appointmentRepository.countByDoctorIdAndStatus(doctorId, AppointmentStatus.CANCELLED));
+        } else {
+            builder.total(appointmentRepository.count())
+                   .scheduled(appointmentRepository.countByStatus(AppointmentStatus.SCHEDULED))
+                   .checkedIn(appointmentRepository.countByStatus(AppointmentStatus.CHECKED_IN))
+                   .inConsultation(appointmentRepository.countByStatus(AppointmentStatus.IN_CONSULTATION))
+                   .completed(appointmentRepository.countByStatus(AppointmentStatus.COMPLETED))
+                   .cancelled(appointmentRepository.countByStatus(AppointmentStatus.CANCELLED));
+        }
+
+        return builder.build();
+    }
+
+    @Override
     @Transactional
     public Appointment createAppointment(com.hms.appointment.dto.request.AppointmentRequestDTO dto) {
         Appointment appointment = appointmentMapper.toEntity(dto);
@@ -224,12 +254,33 @@ public class AppointmentServiceImpl implements AppointmentService {
 
     @Override
     @Transactional(readOnly = true)
-    public List<Appointment> getMyAppointments() {
-        User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        Doctor doctor = doctorRepository.findByUserId(user.getId())
-                .orElseThrow(() -> new BadRequestException("Current user is not registered as a doctor."));
+    public org.springframework.data.domain.Page<Appointment> findAppointments(
+            org.springframework.data.domain.Pageable pageable,
+            UUID doctorId,
+            UUID patientId,
+            AppointmentStatus status,
+            com.hms.common.enums.Department department,
+            LocalDateTime start,
+            LocalDateTime end,
+            Boolean isEmergency) {
         
-        return appointmentRepository.findByDoctorId(doctor.getId());
+        org.springframework.data.jpa.domain.Specification<Appointment> spec = org.springframework.data.jpa.domain.Specification.where(null);
+        
+        User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        if (user.getRole() == com.hms.common.enums.Role.DOCTOR) {
+            spec = spec.and(com.hms.appointment.specification.AppointmentSpecification.hasDoctorUserId(user.getId()));
+        } else if (user.getRole() == com.hms.common.enums.Role.PATIENT) {
+             // Future: filter for patient's own record
+        }
+
+        if (doctorId != null) spec = spec.and(com.hms.appointment.specification.AppointmentSpecification.hasDoctorId(doctorId));
+        if (patientId != null) spec = spec.and(com.hms.appointment.specification.AppointmentSpecification.hasPatientId(patientId));
+        if (status != null) spec = spec.and(com.hms.appointment.specification.AppointmentSpecification.hasStatus(status));
+        if (department != null) spec = spec.and(com.hms.appointment.specification.AppointmentSpecification.hasDepartment(department));
+        if (start != null || end != null) spec = spec.and(com.hms.appointment.specification.AppointmentSpecification.hasTimeBetween(start, end));
+        if (isEmergency != null) spec = spec.and(com.hms.appointment.specification.AppointmentSpecification.isEmergency(isEmergency));
+
+        return appointmentRepository.findAll(spec, pageable);
     }
 
     @Override
@@ -248,12 +299,6 @@ public class AppointmentServiceImpl implements AppointmentService {
     @Transactional(readOnly = true)
     public List<Appointment> getAppointmentsByPatient(UUID patientId) {
         return appointmentRepository.findByPatientId(patientId);
-    }
-
-    @Override
-    @Transactional(readOnly = true)
-    public List<Appointment> getAllAppointments() {
-        return appointmentRepository.findAll();
     }
 
     @Override

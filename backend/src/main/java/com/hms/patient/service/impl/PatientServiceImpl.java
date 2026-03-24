@@ -35,13 +35,14 @@ public class PatientServiceImpl implements PatientService {
     private final AuditLogService auditLogService;
     private final PatientMapper mapper;
 
+    // Prevents Invalid Sorting  , Large Page Size performance issue -> Defensive programing
     private static final List<String> ALLOWED_SORT_FIELDS = List.of("name", "age", "createdAt");
     private static final int MAX_PAGE_SIZE = 100;
 
     @Override
     public PatientResponseDTO create(PatientRequestDTO dto) {
-        log.info("Creating patient with contact number: {}", dto.getContactNumber());
 
+        log.info("Creating patient with contact number: {}", dto.getContactNumber());
         if (repository.existsByContactNumber(dto.getContactNumber())) {
             throw new DuplicatePatientException("Patient already exists");
         }
@@ -75,7 +76,7 @@ public class PatientServiceImpl implements PatientService {
     @Transactional(readOnly = true)
     public PatientResponseDTO getById(UUID id) {
         Patient patient = repository.findById(id)
-                .filter(p -> !p.isDeleted())
+                .filter(p -> !p.isDeleted()) // Soft Delete check
                 .orElseThrow(() -> new PatientNotFoundException("Patient not found"));
 
         return mapper.toResponse(patient);
@@ -107,7 +108,8 @@ public class PatientServiceImpl implements PatientService {
         repository.save(patient);
         log.info("Patient soft deleted with ID: {}", id);
         auditLogService.log(SecurityUtils.getCurrentUsername(), "PATIENT_DELETE", "Patient", id.toString(), "name=" + patient.getName());
-        
+
+        // Linked User Deletion => If patient has user account → delete it
         userRepository.findByEmail(patient.getEmail()).ifPresent(user -> {
             userService.deleteUser(user.getId());
         });

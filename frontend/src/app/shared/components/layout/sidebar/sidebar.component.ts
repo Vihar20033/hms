@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component } from '@angular/core';
+import { ChangeDetectionStrategy, Component } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import { User } from '../../../../core/models/auth.models';
 import { AuthService } from '../../../../core/services/auth.service';
@@ -18,9 +18,10 @@ interface SidebarMenuItem {
   imports: [CommonModule, RouterLink],
   templateUrl: './sidebar.component.html',
   styleUrl: './sidebar.component.scss',
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class SidebarComponent {
-  currentUser$ = this.authService.currentUser$;
+  currentUser = this.authService.currentUser;
 
   menuItems: SidebarMenuItem[] = [
     {

@@ -27,3 +27,12 @@ export interface DashboardSummary {
   totalCompletedConsultations: number;
   weeklyStats: WeeklyStatistics[];
 }
+
+export interface PagedResponse<T> {
+  content: T[];
+  pageNumber: number;
+  pageSize: number;
+  totalElements: number;
+  totalPages: number;
+  last: boolean;
+}

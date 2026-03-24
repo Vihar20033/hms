@@ -8,7 +8,7 @@ import { DropdownModule } from 'primeng/dropdown';
 import { TableModule } from 'primeng/table';
 import { Appointment } from '../../../../core/models/appointment.models';
 import { Vitals } from '../../../../core/models/clinical.models';
-import { ApiResponse } from '../../../../core/models/common.models';
+import { ApiResponse, PagedResponse } from '../../../../core/models/common.models';
 import { Patient } from '../../../../core/models/patient.models';
 import { AppointmentService } from '../../../../core/services/appointment.service';
 import { AuthService } from '../../../../core/services/auth.service';
@@ -107,11 +107,11 @@ export class PatientDetailComponent implements OnInit {
 
   loadAppointments(patientId: string): void {
     this.appointmentService.getByPatientId(patientId).subscribe({
-      next: (res: ApiResponse<Appointment[]>) => {
+      next: (res: ApiResponse<PagedResponse<Appointment>>) => {
         // Only show scheduled or checked-in appointments for vitals
-        this.appointments = res.data
-          .filter((a) => a.status !== 'CANCELLED' && a.status !== 'COMPLETED')
-          .map((a) => ({ ...a, label: new Date(a.appointmentTime).toLocaleString() }));
+        this.appointments = (res.data.content || [])
+          .filter((a: Appointment) => a.status !== 'CANCELLED' && a.status !== 'COMPLETED')
+          .map((a: Appointment) => ({ ...a, label: new Date(a.appointmentTime).toLocaleString() }));
       },
     });
   }

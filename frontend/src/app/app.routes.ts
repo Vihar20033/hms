@@ -2,62 +2,32 @@ import { Routes } from '@angular/router';
 import { authGuard } from './core/guards/auth.guard';
 import { guestGuard } from './core/guards/guest.guard';
 import { roleGuard } from './core/guards/role.guard';
-import { ChangePasswordComponent } from './features/auth/pages/change-password/change-password.component';
-import { LoginComponent } from './features/auth/pages/login/login.component';
-import { RegisterComponent } from './features/auth/pages/register/register.component';
-import { UnauthorizedComponent } from './features/auth/pages/unauthorized/unauthorized.component';
-import { DashboardComponent } from './features/dashboard/pages/dashboard.component';
-import { UserListComponent } from './features/users/pages/user-list/user-list.component';
-
-// Patient Components
-import { PatientListComponent } from './features/patients/pages/patient-list/patient-list.component';
-import { PatientRegistrationComponent } from './features/patients/pages/patient-registration/patient-registration.component';
-
-// Appointment Components
-import { AppointmentBookingComponent } from './features/appointments/pages/appointment-booking/appointment-booking.component';
-import { AppointmentListComponent } from './features/appointments/pages/appointment-list/appointment-list.component';
-
-// Staff Components
-import { DoctorListComponent } from './features/staff/pages/doctor-list/doctor-list.component';
-import { DoctorRegistrationComponent } from './features/staff/pages/doctor-registration/doctor-registration.component';
-import { DoctorScheduleComponent } from './features/staff/pages/doctor-schedule/doctor-schedule.component';
-
-// Clinical Components
-import { VitalsListComponent } from './features/clinical/pages/vitals-list/vitals-list.component';
-import { VitalsRecordComponent } from './features/clinical/pages/vitals-record/vitals-record.component';
-
-// Prescription Components
-import { PrescriptionCreateComponent } from './features/prescription/pages/prescription-create/prescription-create.component';
-import { PrescriptionDetailComponent } from './features/prescription/pages/prescription-detail/prescription-detail.component';
-import { PrescriptionListComponent } from './features/prescription/pages/prescription-list/prescription-list.component';
-
-// Pharmacy Components
-import { InventoryLogComponent } from './features/pharmacy/pages/inventory-log/inventory-log.component';
-import { PharmacyListComponent } from './features/pharmacy/pages/pharmacy-list/pharmacy-list.component';
-
-// Billing Components
-import { BillingListComponent } from './features/billing/pages/billing-list/billing-list.component';
-
-// Lab Components
-import { LabListComponent } from './features/lab/pages/lab-list/lab-list.component';
 
 export const routes: Routes = [
   { path: '', redirectTo: 'login', pathMatch: 'full' },
-  { path: 'login', component: LoginComponent, canActivate: [guestGuard] },
-  { path: 'register', component: RegisterComponent, canActivate: [guestGuard] },
+  { 
+    path: 'login', 
+    loadComponent: () => import('./features/auth/pages/login/login.component').then(m => m.LoginComponent),
+    canActivate: [guestGuard] 
+  },
+  { 
+    path: 'register', 
+    loadComponent: () => import('./features/auth/pages/register/register.component').then(m => m.RegisterComponent),
+    canActivate: [guestGuard] 
+  },
   {
     path: 'change-password',
-    component: ChangePasswordComponent,
+    loadComponent: () => import('./features/auth/pages/change-password/change-password.component').then(m => m.ChangePasswordComponent),
     canActivate: [authGuard],
   },
   {
     path: 'unauthorized',
-    component: UnauthorizedComponent,
+    loadComponent: () => import('./features/auth/pages/unauthorized/unauthorized.component').then(m => m.UnauthorizedComponent),
     canActivate: [authGuard],
   },
   {
     path: 'dashboard',
-    component: DashboardComponent,
+    loadComponent: () => import('./features/dashboard/pages/dashboard.component').then(m => m.DashboardComponent),
     canActivate: [authGuard, roleGuard],
     data: {
       roles: ['ADMIN', 'DOCTOR', 'NURSE', 'RECEPTIONIST', 'PHARMACIST', 'LABORATORY_STAFF'],
@@ -65,7 +35,7 @@ export const routes: Routes = [
   },
   {
     path: 'users',
-    component: UserListComponent,
+    loadComponent: () => import('./features/users/pages/user-list/user-list.component').then(m => m.UserListComponent),
     canActivate: [authGuard, roleGuard],
     data: { roles: ['ADMIN'] },
   },
@@ -78,14 +48,14 @@ export const routes: Routes = [
     children: [
       {
         path: '',
-        component: PatientListComponent,
+        loadComponent: () => import('./features/patients/pages/patient-list/patient-list.component').then(m => m.PatientListComponent),
         data: {
           roles: ['ADMIN', 'DOCTOR', 'NURSE', 'RECEPTIONIST', 'PHARMACIST'],
         },
       },
       {
         path: 'register',
-        component: PatientRegistrationComponent,
+        loadComponent: () => import('./features/patients/pages/patient-registration/patient-registration.component').then(m => m.PatientRegistrationComponent),
         data: { roles: ['ADMIN', 'RECEPTIONIST'] },
       },
     ],
@@ -99,14 +69,14 @@ export const routes: Routes = [
     children: [
       {
         path: '',
-        component: AppointmentListComponent,
+        loadComponent: () => import('./features/appointments/pages/appointment-list/appointment-list.component').then(m => m.AppointmentListComponent),
         data: {
           roles: ['ADMIN', 'DOCTOR', 'NURSE', 'RECEPTIONIST'],
         },
       },
       {
         path: 'book',
-        component: AppointmentBookingComponent,
+        loadComponent: () => import('./features/appointments/pages/appointment-booking/appointment-booking.component').then(m => m.AppointmentBookingComponent),
         data: { roles: ['ADMIN', 'RECEPTIONIST'] },
       },
     ],
@@ -120,17 +90,17 @@ export const routes: Routes = [
     children: [
       {
         path: '',
-        component: DoctorListComponent,
+        loadComponent: () => import('./features/staff/pages/doctor-list/doctor-list.component').then(m => m.DoctorListComponent),
         data: { roles: ['ADMIN', 'RECEPTIONIST'] },
       },
       {
         path: 'register',
-        component: DoctorRegistrationComponent,
+        loadComponent: () => import('./features/staff/pages/doctor-registration/doctor-registration.component').then(m => m.DoctorRegistrationComponent),
         data: { roles: ['ADMIN'] },
       },
       {
         path: 'schedule/:id',
-        component: DoctorScheduleComponent,
+        loadComponent: () => import('./features/staff/pages/doctor-schedule/doctor-schedule.component').then(m => m.DoctorScheduleComponent),
         data: { roles: ['ADMIN', 'RECEPTIONIST'] },
       },
     ],
@@ -144,12 +114,12 @@ export const routes: Routes = [
     children: [
       {
         path: 'vitals-list',
-        component: VitalsListComponent,
+        loadComponent: () => import('./features/clinical/pages/vitals-list/vitals-list.component').then(m => m.VitalsListComponent),
         data: { roles: ['ADMIN', 'NURSE'] },
       },
       {
         path: 'vitals/:appointmentId',
-        component: VitalsRecordComponent,
+        loadComponent: () => import('./features/clinical/pages/vitals-record/vitals-record.component').then(m => m.VitalsRecordComponent),
         data: { roles: ['ADMIN', 'NURSE'] },
       },
     ],
@@ -163,17 +133,17 @@ export const routes: Routes = [
     children: [
       {
         path: '',
-        component: PrescriptionListComponent,
+        loadComponent: () => import('./features/prescription/pages/prescription-list/prescription-list.component').then(m => m.PrescriptionListComponent),
         data: { roles: ['ADMIN', 'DOCTOR', 'PHARMACIST'] },
       },
       {
         path: 'create/:appointmentId',
-        component: PrescriptionCreateComponent,
+        loadComponent: () => import('./features/prescription/pages/prescription-create/prescription-create.component').then(m => m.PrescriptionCreateComponent),
         data: { roles: ['ADMIN', 'DOCTOR'] },
       },
       {
         path: ':id',
-        component: PrescriptionDetailComponent,
+        loadComponent: () => import('./features/prescription/pages/prescription-detail/prescription-detail.component').then(m => m.PrescriptionDetailComponent),
         data: { roles: ['ADMIN', 'DOCTOR', 'PHARMACIST'] },
       },
     ],
@@ -187,12 +157,12 @@ export const routes: Routes = [
     children: [
       {
         path: '',
-        component: PharmacyListComponent,
+        loadComponent: () => import('./features/pharmacy/pages/pharmacy-list/pharmacy-list.component').then(m => m.PharmacyListComponent),
         data: { roles: ['ADMIN', 'PHARMACIST'] },
       },
       {
         path: 'inventory-log',
-        component: InventoryLogComponent,
+        loadComponent: () => import('./features/pharmacy/pages/inventory-log/inventory-log.component').then(m => m.InventoryLogComponent),
         data: { roles: ['ADMIN', 'PHARMACIST'] },
       },
     ],
@@ -206,7 +176,7 @@ export const routes: Routes = [
     children: [
       {
         path: '',
-        component: BillingListComponent,
+        loadComponent: () => import('./features/billing/pages/billing-list/billing-list.component').then(m => m.BillingListComponent),
         data: { roles: ['ADMIN', 'RECEPTIONIST'] },
       },
     ],
@@ -220,7 +190,7 @@ export const routes: Routes = [
     children: [
       {
         path: '',
-        component: LabListComponent,
+        loadComponent: () => import('./features/lab/pages/lab-list/lab-list.component').then(m => m.LabListComponent),
         data: { roles: ['ADMIN', 'DOCTOR', 'LABORATORY_STAFF'] },
       },
     ],
@@ -228,3 +198,4 @@ export const routes: Routes = [
 
   { path: '**', redirectTo: 'login' },
 ];
+

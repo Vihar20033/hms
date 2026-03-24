@@ -8,14 +8,15 @@ import com.hms.patient.entity.Patient;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
-import javax.annotation.processing.Generated;
 import org.springframework.stereotype.Component;
 
+/*
 @Generated(
     value = "org.mapstruct.ap.MappingProcessor",
-    date = "2026-03-23T18:50:31+0530",
-    comments = "version: 1.5.5.Final, compiler: javac, environment: Java 21.0.10 (Eclipse Adoptium)"
+    date = "2026-03-24T12:15:01+0530",
+    comments = "version: 1.5.5.Final, compiler: Eclipse JDT (IDE) 3.45.0.v20260224-0835, environment: Java 21.0.10 (Eclipse Adoptium)"
 )
+*/
 @Component
 public class AppointmentMapperImpl implements AppointmentMapper {
 
@@ -27,7 +28,13 @@ public class AppointmentMapperImpl implements AppointmentMapper {
 
         AppointmentResponseDTO appointmentResponseDTO = new AppointmentResponseDTO();
 
-        appointmentResponseDTO.setPatientId( entityPatientId( entity ) );
+        UUID id = entityPatientId( entity );
+        if ( id != null ) {
+            appointmentResponseDTO.setPatientId( id );
+        }
+        else {
+            appointmentResponseDTO.setPatientId( UUID.fromString( "" ) );
+        }
         appointmentResponseDTO.setPatientName( entityPatientName( entity ) );
         appointmentResponseDTO.setDoctorId( entityDoctorId( entity ) );
         appointmentResponseDTO.setId( entity.getId() );

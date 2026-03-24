@@ -1,5 +1,6 @@
 package com.hms.appointment.dto.request;
 
+import com.hms.common.enums.Department;
 import jakarta.validation.constraints.*;
 import lombok.*;
 
@@ -24,10 +25,10 @@ public class AppointmentRequestDTO {
     private UUID patientId;
 
     @NotNull(message = "Doctor ID is required")
-    private java.util.UUID doctorId;
+    private UUID doctorId;
 
-    @jakarta.validation.constraints.NotNull(message = "Department is required")
-    private com.hms.common.enums.Department department;
+    @NotNull(message = "Department is required")
+    private Department department;
 
     @NotNull(message = "Appointment date is required")
     @FutureOrPresent(message = "Appointment date must be today or in the future")

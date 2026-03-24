@@ -1,6 +1,6 @@
-import { CommonModule } from '@angular/common';
+import { CommonModule, CurrencyPipe, DatePipe, DecimalPipe } from '@angular/common';
 import { HttpErrorResponse } from '@angular/common/http';
-import { Component, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, Component, OnInit, signal, computed } from '@angular/core';
 import { FormArray, FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { jsPDF } from 'jspdf';
 import autoTable from 'jspdf-autotable';
@@ -12,7 +12,7 @@ import { InputTextareaModule } from 'primeng/inputtextarea';
 import { TableModule } from 'primeng/table';
 import { Appointment } from '../../../../core/models/appointment.models';
 import { Billing, PaymentMethod, PaymentStatus } from '../../../../core/models/billing.models';
-import { ApiResponse } from '../../../../core/models/common.models';
+import { ApiResponse, PagedResponse } from '../../../../core/models/common.models';
 import { Patient } from '../../../../core/models/patient.models';
 import { AppointmentService } from '../../../../core/services/appointment.service';
 import { AuthService } from '../../../../core/services/auth.service';
@@ -38,35 +38,42 @@ import { SidebarComponent } from '../../../../shared/components/layout/sidebar/s
     InputTextModule,
     InputTextareaModule,
     TableModule,
+    CurrencyPipe,
+    DatePipe,
+    DecimalPipe
   ],
   templateUrl: './billing-list.component.html',
   styleUrl: './billing-list.component.scss',
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class BillingListComponent implements OnInit {
-  billings: Billing[] = [];
-  patients: Patient[] = [];
-  isLoading = true;
-  userRole: string | null = null;
-  showCreateForm = false;
+  // Signal-based state
+  billings = signal<Billing[]>([]);
+  patients = signal<Patient[]>([]);
+  isLoading = signal<boolean>(true);
+  showCreateForm = signal<boolean>(false);
+  isSubmitting = signal<boolean>(false);
+  exportingId = signal<string | null>(null);
+  selectedBilling = signal<Billing | null>(null);
+  showViewModal = signal<boolean>(false);
+  
   billingForm!: FormGroup;
-  isSubmitting = false;
-  exportingId: string | null = null;
-  selectedBilling: Billing | null = null;
-  showViewModal = false;
   today: Date = new Date();
 
   paymentStatuses = Object.values(PaymentStatus);
   paymentMethods = Object.values(PaymentMethod);
   PaymentStatus = PaymentStatus;
 
-  showAutoGenerateModal = false;
-  selectedPatientIdForAuto = '';
-  patientAppointments: Appointment[] = [];
-  selectedAppointmentId: string = '';
+  showAutoGenerateModal = signal<boolean>(false);
+  selectedPatientIdForAuto = signal<string>('');
+  patientAppointments = signal<Appointment[]>([]);
+  selectedAppointmentId = signal<string>('');
 
-  manualPatientAppointments: Appointment[] = [];
-  isSyncingItems = false;
-  isGenerating = false;
+  manualPatientAppointments = signal<Appointment[]>([]);
+  isSyncingItems = signal<boolean>(false);
+  isGenerating = signal<boolean>(false);
+
+  userRole = this.authService.currentUser;
 
   constructor(
     private billingService: BillingService,
@@ -78,10 +85,9 @@ export class BillingListComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    this.userRole = this.authService.getUserRole();
     this.initForm();
     this.loadBillings();
-    this.patientService.getAll().subscribe((res: ApiResponse<Patient[]>) => (this.patients = res.data));
+    this.patientService.getAll().subscribe((res: ApiResponse<Patient[]>) => this.patients.set(res.data));
   }
 
   initForm(): void {
@@ -146,70 +152,74 @@ export class BillingListComponent implements OnInit {
   }
 
   loadBillings(): void {
-    this.isLoading = true;
+    this.isLoading.set(true);
     this.billingService.getAll().subscribe({
       next: (res: ApiResponse<Billing[]>) => {
-        this.billings = res.data;
-        this.isLoading = false;
+        this.billings.set(res.data);
+        this.isLoading.set(false);
       },
       error: (error) => {
         console.error('Error loading billings:', error);
-        this.isLoading = false;
+        this.isLoading.set(false);
       },
     });
   }
 
   openCreateForm(): void {
-    this.showCreateForm = true;
+    this.showCreateForm.set(true);
   }
 
   closeForm(): void {
-    this.showCreateForm = false;
+    this.showCreateForm.set(false);
   }
 
   onView(bill: Billing): void {
-    this.selectedBilling = bill;
-    this.showViewModal = true;
+    this.selectedBilling.set(bill);
+    this.showViewModal.set(true);
   }
 
   closeViewModal(): void {
-    this.showViewModal = false;
-    this.selectedBilling = null;
+    this.showViewModal.set(false);
+    this.selectedBilling.set(null);
   }
 
   openAutoGenerateModal(): void {
-    this.showAutoGenerateModal = true;
-    this.selectedPatientIdForAuto = '';
-    this.patientAppointments = [];
-    this.selectedAppointmentId = '';
+    this.showAutoGenerateModal.set(true);
+    this.selectedPatientIdForAuto.set('');
+    this.patientAppointments.set([]);
+    this.selectedAppointmentId.set('');
   }
 
   onPatientSelectedForAuto(patientId: string): void {
-    this.selectedPatientIdForAuto = patientId;
-    this.patientAppointments = [];
-    this.selectedAppointmentId = '';
+    this.selectedPatientIdForAuto.set(patientId);
+    this.patientAppointments.set([]);
+    this.selectedAppointmentId.set('');
 
     if (patientId) {
       this.appointmentService.getByPatientId(patientId).subscribe({
-        next: (res) => {
-          this.patientAppointments = res.data
-            .filter((a) => a.status === 'COMPLETED' || a.status === 'CHECKED_IN')
-            .map((a) => ({ ...a, label: `${new Date(a.appointmentTime).toLocaleDateString()} - ${a.department}` }));
+        next: (res: ApiResponse<PagedResponse<Appointment>>) => {
+          this.patientAppointments.set(
+            (res.data.content || [])
+              .filter((a: Appointment) => a.status === 'COMPLETED' || a.status === 'CHECKED_IN')
+              .map((a: Appointment) => ({ ...a, label: `${new Date(a.appointmentTime).toLocaleDateString()} - ${a.department}` }))
+          );
         },
       });
     }
   }
 
   onPatientSelectedForManual(patientId: string): void {
-    this.manualPatientAppointments = [];
+    this.manualPatientAppointments.set([]);
     this.billingForm.get('appointment')?.setValue(null, { emitEvent: false });
 
     if (patientId) {
       this.appointmentService.getByPatientId(patientId).subscribe({
-        next: (res) => {
-          this.manualPatientAppointments = res.data
-            .filter((a) => a.status === 'COMPLETED' || a.status === 'CHECKED_IN')
-            .map((a) => ({ ...a, label: `${new Date(a.appointmentTime).toLocaleDateString()} - ${a.department}` }));
+        next: (res: ApiResponse<PagedResponse<Appointment>>) => {
+          this.manualPatientAppointments.set(
+            (res.data.content || [])
+              .filter((a: Appointment) => a.status === 'COMPLETED' || a.status === 'CHECKED_IN')
+              .map((a: Appointment) => ({ ...a, label: `${new Date(a.appointmentTime).toLocaleDateString()} - ${a.department}` }))
+          );
         },
       });
     }
@@ -218,11 +228,11 @@ export class BillingListComponent implements OnInit {
   onAppointmentSelectedForManual(appointment: any): void {
     if (!appointment || !appointment.id) return;
 
-    this.isSyncingItems = true;
+    this.isSyncingItems.set(true);
     this.billingService.getPreviewFromAppointment(appointment.id).subscribe({
       next: (res) => {
         const suggested = res.data;
-        this.isSyncingItems = false;
+        this.isSyncingItems.set(false);
 
         if (suggested.items && suggested.items.length > 0) {
           suggested.items.forEach((item) => {
@@ -237,19 +247,19 @@ export class BillingListComponent implements OnInit {
         }
       },
       error: () => {
-        this.isSyncingItems = false;
+        this.isSyncingItems.set(false);
       },
     });
   }
 
   generateFromAppointment(): void {
-    if (!this.selectedAppointmentId) return;
+    if (!this.selectedAppointmentId()) return;
 
-    this.isGenerating = true;
-    this.billingService.generateFromAppointment(this.selectedAppointmentId).subscribe({
-      next: (_res) => {
-        this.isGenerating = false;
-        this.showAutoGenerateModal = false;
+    this.isGenerating.set(true);
+    this.billingService.generateFromAppointment(this.selectedAppointmentId()).subscribe({
+      next: () => {
+        this.isGenerating.set(false);
+        this.showAutoGenerateModal.set(false);
         this.statusModalService.showSuccess(
           'Bill Generated',
           'Invoice auto-calculated from consultation, lab tests, and medicines.',
@@ -257,7 +267,7 @@ export class BillingListComponent implements OnInit {
         this.loadBillings();
       },
       error: (err: HttpErrorResponse) => {
-        this.isGenerating = false;
+        this.isGenerating.set(false);
         const msg = err.error?.message || err.message || 'Could not auto-generate bill for this appointment.';
         this.statusModalService.showError('Generation Failed', msg);
       },
@@ -269,7 +279,7 @@ export class BillingListComponent implements OnInit {
       this.billingForm.markAllAsTouched();
       return;
     }
-    this.isSubmitting = true;
+    this.isSubmitting.set(true);
     const formValues = this.billingForm.value;
     const payload = {
       ...formValues,
@@ -277,10 +287,6 @@ export class BillingListComponent implements OnInit {
       totalAmount: this.getSubtotal(),
       taxAmount: this.billingForm.get('taxAmount')?.value || 0,
       netAmount: this.getNetTotal(),
-      insuranceProvider: formValues.insuranceProvider,
-      insuranceClaimNumber: formValues.insuranceClaimNumber,
-      insuranceAmount: formValues.insuranceAmount,
-      insuranceStatus: formValues.insuranceStatus,
       paymentStatus: 'UNPAID',
       billingDate: this.formatLocalDateTime(new Date()),
       dueDate: this.formatDate(this.billingForm.get('dueDate')?.value),
@@ -295,7 +301,7 @@ export class BillingListComponent implements OnInit {
 
     this.billingService.create(payload).subscribe({
       next: (response: ApiResponse<Billing>) => {
-        this.isSubmitting = false;
+        this.isSubmitting.set(false);
         this.closeForm();
         this.loadBillings();
         this.statusModalService.showSuccess(
@@ -304,7 +310,7 @@ export class BillingListComponent implements OnInit {
         );
       },
       error: (error: HttpErrorResponse) => {
-        this.isSubmitting = false;
+        this.isSubmitting.set(false);
         this.statusModalService.showError('Creation Failed', error.error?.message || 'Could not create invoice.');
       },
     });
@@ -312,20 +318,17 @@ export class BillingListComponent implements OnInit {
 
   onUpdateStatus(id: string, status: PaymentStatus): void {
     this.billingService.updateStatus(id, status).subscribe({
-      next: () => {
-        this.loadBillings();
-      },
+      next: () => this.loadBillings(),
       error: () => {},
     });
   }
 
   onExportPdf(billing: Billing): void {
-    this.exportingId = billing.id;
+    this.exportingId.set(billing.id);
     try {
       const doc = new jsPDF();
 
       doc.text('Artemis Health System', 105, 20, { align: 'center' });
-
       doc.setFontSize(10);
       doc.text('Medical Center Excellence | 123 Healthcare Blvd, Medical City', 105, 26, { align: 'center' });
 
@@ -376,11 +379,10 @@ export class BillingListComponent implements OnInit {
       });
 
       doc.save(`invoice-${billing.invoiceNumber}.pdf`);
-
-      this.exportingId = null;
+      this.exportingId.set(null);
     } catch (error) {
       console.error('PDF Generation Error:', error);
-      this.exportingId = null;
+      this.exportingId.set(null);
     }
   }
 
@@ -398,26 +400,17 @@ export class BillingListComponent implements OnInit {
   onDelete(id: string): void {
     if (!confirm('Delete this billing record?')) return;
     this.billingService.delete(id).subscribe({
-      next: () => {
-        this.loadBillings();
-      },
+      next: () => this.loadBillings(),
       error: () => {},
     });
   }
 
-  patientOptions(): Array<{ label: string; value: string }> {
-    return this.patients.map((patient) => ({ label: patient.name, value: patient.id }));
-  }
-
-  paymentMethodOptions(): Array<{ label: string; value: string }> {
-    return this.paymentMethods.map((method) => ({ label: method, value: method }));
-  }
+  patientOptions = computed(() => this.patients().map(p => ({ label: p.name, value: p.id })));
+  
+  paymentMethodOptions = computed(() => this.paymentMethods.map(m => ({ label: m, value: m })));
 
   private formatDate(value: Date | null): string | null {
-    if (!value) {
-      return null;
-    }
-
+    if (!value) return null;
     const year = value.getFullYear();
     const month = String(value.getMonth() + 1).padStart(2, '0');
     const day = String(value.getDate()).padStart(2, '0');
