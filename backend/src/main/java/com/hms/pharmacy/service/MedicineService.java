@@ -1,6 +1,8 @@
 package com.hms.pharmacy.service;
 
+import com.hms.pharmacy.dto.request.DispenseMedicineRequestDTO;
 import com.hms.pharmacy.dto.request.MedicineRequestDTO;
+import com.hms.pharmacy.dto.response.InventoryTransactionResponseDTO;
 import com.hms.pharmacy.dto.response.MedicineResponseDTO;
 
 import java.util.List;
@@ -24,9 +26,9 @@ public interface MedicineService {
 
     boolean existsByMedicineCode(String medicineCode);
 
-    void dispenseMedicines(com.hms.pharmacy.dto.request.DispenseMedicineRequestDTO request);
+    void dispenseMedicines(DispenseMedicineRequestDTO request);
 
+    void restockMedicine(UUID id, Integer quantity);
 
-
-    java.util.List<com.hms.pharmacy.dto.response.InventoryTransactionResponseDTO> getAllTransactions();
+    List<InventoryTransactionResponseDTO> getAllTransactions();
 }

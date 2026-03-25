@@ -4,6 +4,14 @@ import com.hms.appointment.exception.AppointmentNotFoundException;
 import com.hms.appointment.exception.DoctorUnavailableException;
 import com.hms.appointment.exception.SlotAlreadyBookedException;
 import com.hms.auth.exception.SelfRegistrationRoleNotAllowedException;
+import com.hms.billing.exception.BillingNotFoundException;
+import com.hms.clinical.exception.VitalsNotFoundException;
+import com.hms.doctor.exception.DoctorNotFoundException;
+import com.hms.doctor.exception.DoctorScheduleNotFoundException;
+import com.hms.laboratory.exception.LabReportNotFoundException;
+import com.hms.laboratory.exception.LabTestNotFoundException;
+import com.hms.prescription.exception.PrescriptionNotFoundException;
+import com.hms.user.exception.UserNotFoundException;
 
 import com.hms.common.response.ApiError;
 import com.hms.common.response.ValidationError;
@@ -105,6 +113,66 @@ public class GlobalExceptionHandler {
         public ResponseEntity<ApiError> handleInsufficientStock(InsufficientStockException ex, HttpServletRequest request) {
                 log.warn("Pharmacy stock low for {}: {}", ex.getMedicineName(), ex.getMessage());
                 return buildResponse(HmsErrorCode.INSUFFICIENT_STOCK, HttpStatus.BAD_REQUEST, ex.getMessage(), request);
+        }
+
+        // ========== Doctor Exceptions ==========
+
+        @ExceptionHandler(DoctorNotFoundException.class)
+        public ResponseEntity<ApiError> handleDoctorNotFound(DoctorNotFoundException ex, HttpServletRequest request) {
+                log.warn("Doctor not found: {}", ex.getMessage());
+                return buildResponse(HmsErrorCode.DOCTOR_NOT_FOUND, HttpStatus.NOT_FOUND, ex.getMessage(), request);
+        }
+
+        @ExceptionHandler(DoctorScheduleNotFoundException.class)
+        public ResponseEntity<ApiError> handleScheduleNotFound(DoctorScheduleNotFoundException ex, HttpServletRequest request) {
+                log.warn("Doctor schedule not found: {}", ex.getMessage());
+                return buildResponse(HmsErrorCode.SCHEDULE_NOT_FOUND, HttpStatus.NOT_FOUND, ex.getMessage(), request);
+        }
+
+        // ========== Laboratory Exceptions ==========
+
+        @ExceptionHandler(LabTestNotFoundException.class)
+        public ResponseEntity<ApiError> handleLabTestNotFound(LabTestNotFoundException ex, HttpServletRequest request) {
+                log.warn("Lab test not found: {}", ex.getMessage());
+                return buildResponse(HmsErrorCode.TEST_NOT_FOUND, HttpStatus.NOT_FOUND, ex.getMessage(), request);
+        }
+
+        @ExceptionHandler(LabReportNotFoundException.class)
+        public ResponseEntity<ApiError> handleLabReportNotFound(LabReportNotFoundException ex, HttpServletRequest request) {
+                log.warn("Lab report not found: {}", ex.getMessage());
+                return buildResponse(HmsErrorCode.REPORT_NOT_FOUND, HttpStatus.NOT_FOUND, ex.getMessage(), request);
+        }
+
+        // ========== Billing Exceptions ==========
+
+        @ExceptionHandler(BillingNotFoundException.class)
+        public ResponseEntity<ApiError> handleBillingNotFound(BillingNotFoundException ex, HttpServletRequest request) {
+                log.warn("Billing record not found: {}", ex.getMessage());
+                return buildResponse(HmsErrorCode.BILLING_NOT_FOUND, HttpStatus.NOT_FOUND, ex.getMessage(), request);
+        }
+
+        // ========== Clinical Exceptions ==========
+
+        @ExceptionHandler(VitalsNotFoundException.class)
+        public ResponseEntity<ApiError> handleVitalsNotFound(VitalsNotFoundException ex, HttpServletRequest request) {
+                log.warn("Vitals not found: {}", ex.getMessage());
+                return buildResponse(HmsErrorCode.VITALS_NOT_FOUND, HttpStatus.NOT_FOUND, ex.getMessage(), request);
+        }
+
+        // ========== Prescription Exceptions ==========
+
+        @ExceptionHandler(PrescriptionNotFoundException.class)
+        public ResponseEntity<ApiError> handlePrescriptionNotFound(PrescriptionNotFoundException ex, HttpServletRequest request) {
+                log.warn("Prescription not found: {}", ex.getMessage());
+                return buildResponse(HmsErrorCode.PRESCRIPTION_NOT_FOUND, HttpStatus.NOT_FOUND, ex.getMessage(), request);
+        }
+
+        // ========== User Exceptions ==========
+
+        @ExceptionHandler(UserNotFoundException.class)
+        public ResponseEntity<ApiError> handleUserNotFound(UserNotFoundException ex, HttpServletRequest request) {
+                log.warn("User not found: {}", ex.getMessage());
+                return buildResponse(HmsErrorCode.USER_NOT_FOUND, HttpStatus.NOT_FOUND, ex.getMessage(), request);
         }
 
         // ========== Validation & Security ==========

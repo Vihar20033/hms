@@ -1,12 +1,13 @@
 package com.hms.security.jwt;
 
 import com.hms.common.enums.TokenType;
+import com.hms.security.config.JwtProperties;
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
 import io.jsonwebtoken.security.SignatureException;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 import javax.crypto.SecretKey;
@@ -18,32 +19,22 @@ import static java.lang.System.currentTimeMillis;
 
 @Component
 @Slf4j
+@RequiredArgsConstructor
 public class JwtUtil {
 
-    private final String secret;
-    private final long accessExpiration;
-    private final long refreshExpiration;
-
-    public JwtUtil(
-            @Value("${hms.jwt.secret}") String secret,
-            @Value("${hms.jwt.expirationMs:3600000}") long accessExpiration,
-            @Value("${hms.jwt.refreshExpirationMs:604800000}") long refreshExpiration) {
-        this.secret = secret;
-        this.accessExpiration = accessExpiration;
-        this.refreshExpiration = refreshExpiration;
-    }
+    private final JwtProperties jwtProperties;
 
     private SecretKey getSigningKey() {
-        byte[] keyBytes = Decoders.BASE64.decode(secret);
+        byte[] keyBytes = Decoders.BASE64.decode(jwtProperties.getSecret());
         return Keys.hmacShaKeyFor(keyBytes);
     }
 
     public String generateAccessToken(String username, String role, Integer tokenVersion) {
-        return buildToken(username, Map.of("role", role, "tokenVersion", tokenVersion, "type", TokenType.ACCESS), accessExpiration);
+        return buildToken(username, Map.of("role", role, "tokenVersion", tokenVersion, "type", TokenType.ACCESS), jwtProperties.getExpirationMs());
     }
 
     public String generateRefreshToken(String username, Integer tokenVersion) {
-        return buildToken(username, Map.of("tokenVersion", tokenVersion, "type", TokenType.REFRESH), refreshExpiration);
+        return buildToken(username, Map.of("tokenVersion", tokenVersion, "type", TokenType.REFRESH), jwtProperties.getRefreshExpirationMs());
     }
 
     private String buildToken(String username, Map<String, Object> claims, long expiration) {
@@ -53,7 +44,7 @@ public class JwtUtil {
                 .setIssuedAt(new Date(currentTimeMillis()))
                 .setExpiration(new Date(currentTimeMillis() + expiration))
                 .signWith(getSigningKey(), SignatureAlgorithm.HS256)
-                .compact();     // Convert it to string
+                .compact();
     }
 
     public <T> T extractClaim(String token, Function<Claims, T> claimsResolver) {
@@ -95,7 +86,9 @@ public class JwtUtil {
         } catch (UnsupportedJwtException e) {
             log.error("JWT token is unsupported: {}", e.getMessage());
         } catch (IllegalArgumentException e) {
-            log.error("JWT claims string is empty: {}", e.getMessage());
+            log.error("JWT claims string is empty or null: {}", e.getMessage());
+        } catch (Exception e) {
+            log.error("Unexpected error during JWT validation: {} - Type: {}", e.getMessage(), e.getClass().getName());
         }
         return false;
     }

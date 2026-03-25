@@ -3,9 +3,6 @@ package com.hms.common.exception;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 
-/**
- * Standardized error codes for the HMS system
- */
 @Getter
 @RequiredArgsConstructor
 public enum HmsErrorCode {
@@ -32,8 +29,15 @@ public enum HmsErrorCode {
     SLOT_OCCUPIED("APP_002", "Selected time slot is already booked"),
     DOCTOR_UNAVAILABLE("APP_003", "Doctor is not available at the requested time"),
 
+    // Doctor Errors
+    DOCTOR_NOT_FOUND("DOC_001", "Doctor record not found"),
+    SCHEDULE_NOT_FOUND("DOC_002", "Doctor schedule not found"),
+
     // Request Errors
     BAD_REQUEST("REQ_001", "The request is invalid"),
+    
+    // User Errors
+    USER_NOT_FOUND("AUTH_006", "User record not found"),
     
     // Pharmacy Errors
     MEDICINE_NOT_FOUND("PHR_001", "Medicine not found in inventory"),
@@ -41,7 +45,17 @@ public enum HmsErrorCode {
     
     // Lab Errors
     TEST_NOT_FOUND("LAB_001", "Lab test request not found"),
-    REPORT_ALREADY_GENERATED("LAB_002", "Report has already been finalized");
+    REPORT_ALREADY_GENERATED("LAB_002", "Report has already been finalized"),
+    REPORT_NOT_FOUND("LAB_003", "Lab report not found"),
+
+    // Billing Errors
+    BILLING_NOT_FOUND("BIL_001", "Billing record not found"),
+
+    // Clinical Errors
+    VITALS_NOT_FOUND("CLI_001", "Vital signs records not found"),
+
+    // Prescription Errors
+    PRESCRIPTION_NOT_FOUND("PRE_001", "Prescription not found");
 
     private final String code;
     private final String defaultMessage;

@@ -34,17 +34,5 @@ public class BillingResponseDTO {
     private List<BillingItemResponseDTO> items;
     private LocalDateTime createdAt;
 
-    @Data
-    @Builder
-    @NoArgsConstructor
-    @AllArgsConstructor
-    public static class BillingItemResponseDTO {
-        private UUID id;
-        private String itemName;
-        private Integer quantity;
-        private BigDecimal unitPrice;
-        private BigDecimal totalValue;
-    }
 }
-
 

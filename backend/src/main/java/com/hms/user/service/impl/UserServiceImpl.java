@@ -2,6 +2,7 @@ package com.hms.user.service.impl;
 
 import com.hms.user.dto.UserResponseDTO;
 import com.hms.user.entity.User;
+import com.hms.user.exception.UserNotFoundException;
 import com.hms.user.mapper.UserMapper;
 import com.hms.user.repository.UserRepository;
 import com.hms.user.service.UserService;
@@ -26,7 +27,7 @@ public class UserServiceImpl implements UserService {
     public UserResponseDTO getCurrentUser() {
         String username = SecurityContextHolder.getContext().getAuthentication().getName();
         User user = userRepository.findByUsername(username)
-                .orElseThrow(() -> new RuntimeException("Current user not found"));
+                .orElseThrow(() -> new UserNotFoundException("Current user not found: " + username));
         return userMapper.toResponseDTO(user);
     }
 
@@ -44,7 +45,7 @@ public class UserServiceImpl implements UserService {
     public void deleteUser(UUID id) {
         User user = userRepository.findById(id)
                 .filter(existingUser -> !existingUser.isDeleted())
-                .orElseThrow(() -> new RuntimeException("User not found"));
+                .orElseThrow(() -> new UserNotFoundException("User not found", id.toString()));
         
         retireUserIdentity(user);
         user.setDeleted(true);

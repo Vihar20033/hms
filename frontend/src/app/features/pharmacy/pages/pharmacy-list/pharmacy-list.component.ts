@@ -46,8 +46,11 @@ export class PharmacyListComponent implements OnInit, OnDestroy {
   private destroy$ = new Subject<void>();
   showAddForm = false;
   showEditForm = false;
+  showRestockForm = false;
   editingMedicine: Medicine | null = null;
+  restockingMedicine: Medicine | null = null;
   medicineForm!: FormGroup;
+  restockForm!: FormGroup;
   isSubmitting = false;
   errorMessage = '';
   successMessage = '';
@@ -89,6 +92,10 @@ export class PharmacyListComponent implements OnInit, OnDestroy {
       quantityInStock: [0, [Validators.required, Validators.min(0)]],
       reorderLevel: [10, [Validators.required, Validators.min(0)]],
       expiryDate: [null],
+    });
+
+    this.restockForm = this.fb.group({
+      quantity: [1, [Validators.required, Validators.min(1)]],
     });
   }
 
@@ -136,7 +143,9 @@ export class PharmacyListComponent implements OnInit, OnDestroy {
   openAddForm(): void {
     this.showAddForm = true;
     this.showEditForm = false;
+    this.showRestockForm = false;
     this.editingMedicine = null;
+    this.restockingMedicine = null;
     this.medicineForm.reset({ unitPrice: null, quantityInStock: 0, reorderLevel: 10 });
     this.errorMessage = '';
     this.successMessage = '';
@@ -146,6 +155,8 @@ export class PharmacyListComponent implements OnInit, OnDestroy {
     this.editingMedicine = med;
     this.showEditForm = true;
     this.showAddForm = false;
+    this.showRestockForm = false;
+    this.restockingMedicine = null;
     this.medicineForm.patchValue({
       name: med.name,
       medicineCode: med.medicineCode,
@@ -161,10 +172,23 @@ export class PharmacyListComponent implements OnInit, OnDestroy {
     this.successMessage = '';
   }
 
-  closeForm(): void {
+  openRestockForm(med: Medicine): void {
+    this.restockingMedicine = med;
+    this.showRestockForm = true;
     this.showAddForm = false;
     this.showEditForm = false;
     this.editingMedicine = null;
+    this.restockForm.reset({ quantity: 10 });
+    this.errorMessage = '';
+    this.successMessage = '';
+  }
+
+  closeForm(): void {
+    this.showAddForm = false;
+    this.showEditForm = false;
+    this.showRestockForm = false;
+    this.editingMedicine = null;
+    this.restockingMedicine = null;
   }
 
   onSubmit(): void {
@@ -206,6 +230,28 @@ export class PharmacyListComponent implements OnInit, OnDestroy {
         },
       });
     }
+  }
+
+  onRestockSubmit(): void {
+    if (this.restockForm.invalid || !this.restockingMedicine) {
+      this.restockForm.markAllAsTouched();
+      return;
+    }
+    this.isSubmitting = true;
+    const quantity = this.restockForm.value.quantity;
+
+    this.pharmacyService.restock(this.restockingMedicine.id, quantity).subscribe({
+      next: () => {
+        this.successMessage = `Restocked ${this.restockingMedicine!.name} with ${quantity} units!`;
+        this.isSubmitting = false;
+        this.closeForm();
+        this.loadMedicines();
+      },
+      error: (err: HttpErrorResponse) => {
+        this.errorMessage = err.error?.message || 'Restock failed.';
+        this.isSubmitting = false;
+      },
+    });
   }
 
   onDelete(id: string): void {

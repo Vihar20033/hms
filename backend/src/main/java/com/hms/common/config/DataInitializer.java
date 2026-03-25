@@ -29,12 +29,10 @@ public class DataInitializer implements CommandLineRunner {
     public void run(String... args) {
 
         log.info("Starting database column initialization...");
-        
-        // Initialize version to 0 for all entities
+
         for (String entityName : ENTITY_NAMES) {
             try {
-                int updatedCount = entityManager.createQuery(
-                        "UPDATE " + entityName + " e SET e.version = 0 WHERE e.version IS NULL")
+                int updatedCount = entityManager.createQuery("UPDATE " + entityName + " e SET e.version = 0 WHERE e.version IS NULL")
                         .executeUpdate();
                 if (updatedCount > 0) {
                     log.info("Updated {} records for entity {} setting version to 0", updatedCount, entityName);
@@ -43,8 +41,7 @@ public class DataInitializer implements CommandLineRunner {
                 log.warn("Failed to update version for entity {}: {}", entityName, e.getMessage());
             }
         }
-        
-        // Additional User-specific initialization for the new primitive fields
+
         try {
             int userCount = entityManager.createQuery(
                     "UPDATE User u SET u.tokenVersion = 0 WHERE u.tokenVersion IS NULL")

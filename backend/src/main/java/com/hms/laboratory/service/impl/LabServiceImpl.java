@@ -1,12 +1,14 @@
 package com.hms.laboratory.service.impl;
 
 import com.hms.appointment.entity.Appointment;
+import com.hms.appointment.exception.AppointmentNotFoundException;
 import com.hms.appointment.repository.AppointmentRepository;
 import com.hms.common.audit.AuditLogService;
 import com.hms.common.enums.Role;
 import com.hms.common.enums.TestStatus;
 import com.hms.common.exception.BadRequestException;
 import com.hms.doctor.entity.Doctor;
+import com.hms.doctor.exception.DoctorNotFoundException;
 import com.hms.doctor.repository.DoctorRepository;
 import com.hms.laboratory.dto.request.LabReportRequestDTO;
 import com.hms.laboratory.dto.request.LabTestRequestDTO;
@@ -14,11 +16,14 @@ import com.hms.laboratory.dto.response.LabReportResponseDTO;
 import com.hms.laboratory.dto.response.LabTestResponseDTO;
 import com.hms.laboratory.entity.LabReport;
 import com.hms.laboratory.entity.LabTest;
+import com.hms.laboratory.exception.LabReportNotFoundException;
+import com.hms.laboratory.exception.LabTestNotFoundException;
 import com.hms.laboratory.mapper.LabMapper;
 import com.hms.laboratory.repository.LabReportRepository;
 import com.hms.laboratory.repository.LabTestRepository;
 import com.hms.laboratory.service.LabService;
 import com.hms.patient.entity.Patient;
+import com.hms.patient.exception.PatientNotFoundException;
 import com.hms.patient.repository.PatientRepository;
 import com.hms.user.entity.User;
 import com.hms.user.dto.UserResponseDTO;
@@ -26,6 +31,7 @@ import com.hms.user.service.UserService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.access.AccessDeniedException;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -66,7 +72,7 @@ public class LabServiceImpl implements LabService {
         }
 
         Patient patient = patientRepository.findById(dto.getPatientId())
-                .orElseThrow(() -> new RuntimeException("Patient not found"));
+                .orElseThrow(() -> new PatientNotFoundException("Patient not found: " + dto.getPatientId()));
 
         LabTest labTest = labMapper.toEntity(dto);
         labTest.setPatient(patient);
@@ -75,13 +81,13 @@ public class LabServiceImpl implements LabService {
 
         if (dto.getAppointmentId() != null) {
             Appointment appointment = appointmentRepository.findById(dto.getAppointmentId())
-                    .orElseThrow(() -> new RuntimeException("Appointment not found"));
+                    .orElseThrow(() -> new AppointmentNotFoundException("Appointment not found: " + dto.getAppointmentId()));
             labTest.setAppointment(appointment);
         }
 
         if (dto.getDoctorId() != null) {
             Doctor doctor = doctorRepository.findById(dto.getDoctorId())
-                    .orElseThrow(() -> new RuntimeException("Doctor not found"));
+                    .orElseThrow(() -> new DoctorNotFoundException("Doctor not found: " + dto.getDoctorId()));
             labTest.setRequestedBy(doctor);
         } else {
             UserResponseDTO currentUser = userService.getCurrentUser();
@@ -111,7 +117,7 @@ public class LabServiceImpl implements LabService {
     @Transactional
     public LabTestResponseDTO updateTest(UUID testId, LabTestRequestDTO dto) {
         LabTest labTest = labTestRepository.findById(testId)
-                .orElseThrow(() -> new RuntimeException("Lab test not found: " + testId));
+                .orElseThrow(() -> new LabTestNotFoundException("Lab test not found: " + testId, testId.toString()));
 
         if (dto.getTestName() != null) labTest.setTestName(dto.getTestName());
         if (dto.getTestCode() != null) labTest.setTestCode(dto.getTestCode());
@@ -121,7 +127,7 @@ public class LabServiceImpl implements LabService {
 
         if (dto.getAppointmentId() != null) {
             Appointment appointment = appointmentRepository.findById(dto.getAppointmentId())
-                    .orElseThrow(() -> new RuntimeException("Appointment not found"));
+                    .orElseThrow(() -> new AppointmentNotFoundException("Appointment not found: " + dto.getAppointmentId()));
             labTest.setAppointment(appointment);
         }
 
@@ -134,7 +140,7 @@ public class LabServiceImpl implements LabService {
     @Transactional
     public LabTestResponseDTO updateTestStatus(UUID testId, TestStatus status) {
         LabTest labTest = labTestRepository.findById(testId)
-                .orElseThrow(() -> new RuntimeException("Lab test not found"));
+                .orElseThrow(() -> new LabTestNotFoundException("Lab test not found: " + testId, testId.toString()));
 
         labTest.setStatus(status);
         if (status == TestStatus.COMPLETED) {
@@ -150,7 +156,7 @@ public class LabServiceImpl implements LabService {
     @Transactional(readOnly = true)
     public LabTestResponseDTO getTestById(UUID id) {
         LabTest test = labTestRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Lab test not found"));
+                .orElseThrow(() -> new LabTestNotFoundException("Lab test not found: " + id, id.toString()));
         
         checkOwnership(test);
         return labMapper.toDto(test);
@@ -188,7 +194,7 @@ public class LabServiceImpl implements LabService {
     @Transactional
     public void deleteTest(UUID id) {
         LabTest labTest = labTestRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Lab test not found"));
+                .orElseThrow(() -> new LabTestNotFoundException("Lab test not found: " + id, id.toString()));
         labTest.setDeleted(true);
         labTestRepository.save(labTest);
         auditLogService.log(getCurrentUsername(), "LAB_TEST_DELETE", "LabTest", id.toString(), "deleted=true");
@@ -198,9 +204,11 @@ public class LabServiceImpl implements LabService {
     @Transactional
     public LabReportResponseDTO createReport(LabReportRequestDTO dto) {
         LabTest labTest = labTestRepository.findById(dto.getLabTestId())
-                .orElseThrow(() -> new RuntimeException("Lab test not found"));
+                .orElseThrow(() -> new LabTestNotFoundException
+                        ("Lab test not found: " + dto.getLabTestId(), dto.getLabTestId().toString()));
 
-        Optional<LabReport> existingReportOpt = labReportRepository.findByLabTestId(dto.getLabTestId());
+        Optional<LabReport> existingReportOpt =
+                labReportRepository.findByLabTestId(dto.getLabTestId());
 
         LabReport report;
         if (existingReportOpt.isPresent()) {
@@ -228,7 +236,7 @@ public class LabServiceImpl implements LabService {
     @Transactional
     public LabReportResponseDTO updateReport(UUID reportId, LabReportRequestDTO dto) {
         LabReport report = labReportRepository.findById(reportId)
-                .orElseThrow(() -> new RuntimeException("Lab report not found"));
+                .orElseThrow(() -> new LabReportNotFoundException("Lab report not found: " + reportId, reportId.toString()));
 
         report.setFindings(dto.getFindings());
         report.setResult(dto.getResult());
@@ -245,7 +253,7 @@ public class LabServiceImpl implements LabService {
     @Transactional(readOnly = true)
     public LabReportResponseDTO getReportByTestId(UUID testId) {
         LabReport report = labReportRepository.findByLabTestId(testId)
-                .orElseThrow(() -> new RuntimeException("Lab report not found"));
+                .orElseThrow(() -> new LabReportNotFoundException("Lab report not found for test: " + testId, testId.toString()));
         
         checkOwnership(report.getLabTest());
         return labMapper.toReportDto(report);
@@ -255,7 +263,7 @@ public class LabServiceImpl implements LabService {
     @Transactional(readOnly = true)
     public LabReportResponseDTO getReportById(UUID reportId) {
         LabReport report = labReportRepository.findById(reportId)
-                .orElseThrow(() -> new RuntimeException("Lab report not found"));
+                .orElseThrow(() -> new LabReportNotFoundException("Lab report not found: " + reportId, reportId.toString()));
         
         checkOwnership(report.getLabTest());
         return labMapper.toReportDto(report);
@@ -271,7 +279,7 @@ public class LabServiceImpl implements LabService {
     @Transactional
     public void deleteReport(UUID reportId) {
         LabReport report = labReportRepository.findById(reportId)
-                .orElseThrow(() -> new RuntimeException("Lab report not found"));
+                .orElseThrow(() -> new LabReportNotFoundException("Lab report not found: " + reportId, reportId.toString()));
         report.setDeleted(true);
         labReportRepository.save(report);
     }
@@ -294,7 +302,7 @@ public class LabServiceImpl implements LabService {
     }
 
     private String getCurrentUsername() {
-        org.springframework.security.core.Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         return (auth != null && auth.isAuthenticated()) ? auth.getName() : "system";
     }
 }

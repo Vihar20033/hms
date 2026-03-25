@@ -1,5 +1,6 @@
 package com.hms.auth.service.impl;
 
+import com.hms.common.enums.Role;
 import com.hms.doctor.repository.DoctorRepository;
 import com.hms.doctor.entity.Doctor;
 import com.hms.auth.dto.request.ChangePasswordRequest;
@@ -58,7 +59,7 @@ public class AuthServiceImpl implements AuthService {
         User savedUser = userRepository.save(user);
 
         // Auto-create Doctor profile if role is DOCTOR
-        if (request.getRole() == com.hms.common.enums.Role.DOCTOR) {
+        if (request.getRole() == Role.DOCTOR) {
             doctorRepository.save(Doctor.builder()
                     .userId(savedUser.getId())
                     .firstName(savedUser.getUsername())

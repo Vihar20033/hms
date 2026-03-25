@@ -1,10 +1,12 @@
 package com.hms.clinical.service.impl;
 
 import com.hms.appointment.entity.Appointment;
+import com.hms.appointment.exception.AppointmentNotFoundException;
 import com.hms.appointment.repository.AppointmentRepository;
 import com.hms.clinical.dto.request.VitalsRequestDTO;
 import com.hms.clinical.dto.response.VitalsResponseDTO;
 import com.hms.clinical.entity.Vitals;
+import com.hms.clinical.exception.VitalsNotFoundException;
 import com.hms.clinical.mapper.VitalsMapper;
 import com.hms.clinical.repository.VitalsRepository;
 import com.hms.clinical.service.VitalsService;
@@ -28,7 +30,7 @@ public class VitalsServiceImpl implements VitalsService {
     @Transactional
     public VitalsResponseDTO recordVitals(VitalsRequestDTO dto) {
         Appointment appointment = appointmentRepository.findById(dto.getAppointmentId())
-                .orElseThrow(() -> new RuntimeException("Appointment not found"));
+                .orElseThrow(() -> new AppointmentNotFoundException("Appointment not found: " + dto.getAppointmentId()));
 
         Vitals vitals = vitalsMapper.toEntity(dto);
         vitals.setAppointment(appointment);
@@ -42,14 +44,14 @@ public class VitalsServiceImpl implements VitalsService {
     public VitalsResponseDTO getVitalsByAppointment(UUID appointmentId) {
         return vitalsRepository.findByAppointmentId(appointmentId)
                 .map(vitalsMapper::toDto)
-                .orElseThrow(() -> new RuntimeException("Vitals not found for this appointment"));
+                .orElseThrow(() -> new VitalsNotFoundException("Vitals not found for appointment: " + appointmentId));
     }
 
     @Override
     @Transactional
     public VitalsResponseDTO updateVitals(UUID id, VitalsRequestDTO dto) {
         Vitals vitals = vitalsRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Vitals record not found"));
+                .orElseThrow(() -> new VitalsNotFoundException("Vitals record not found", id.toString()));
 
         vitals.setTemperature(dto.getTemperature());
         vitals.setSystolicBP(dto.getSystolicBP());
@@ -78,7 +80,7 @@ public class VitalsServiceImpl implements VitalsService {
     @Transactional
     public void deleteVitals(UUID id) {
         if (!vitalsRepository.existsById(id)) {
-            throw new RuntimeException("Vitals record not found");
+            throw new VitalsNotFoundException("Vitals record not found", id.toString());
         }
         vitalsRepository.deleteById(id);
     }

@@ -6,10 +6,7 @@ import com.hms.laboratory.dto.response.LabReportResponseDTO;
 import com.hms.laboratory.dto.response.LabTestResponseDTO;
 import com.hms.laboratory.entity.LabReport;
 import com.hms.laboratory.entity.LabTest;
-import org.mapstruct.Builder;
-import org.mapstruct.Mapper;
-import org.mapstruct.Mapping;
-import org.mapstruct.ReportingPolicy;
+import org.mapstruct.*;
 
 import java.util.List;
 
@@ -36,7 +33,7 @@ public interface LabMapper {
     @Mapping(target = "doctorName", ignore = true)
     LabTestResponseDTO toDto(LabTest entity);
 
-    @org.mapstruct.AfterMapping
+    @AfterMapping
     default void mapDoctorDetails(@org.mapstruct.MappingTarget LabTestResponseDTO dto, LabTest entity) {
         if (entity.getRequestedBy() != null) {
             dto.setDoctorId(entity.getRequestedBy().getId());
@@ -46,7 +43,6 @@ public interface LabMapper {
 
     List<LabTestResponseDTO> toDtoList(List<LabTest> entities);
 
-    // LabReport Mappings
     @Mapping(target = "labTest", ignore = true)
     LabReport toReportEntity(LabReportRequestDTO dto);
 

@@ -1,21 +1,28 @@
 package com.hms.prescription.service.impl;
 
 import com.hms.appointment.entity.Appointment;
+import com.hms.appointment.exception.AppointmentNotFoundException;
 import com.hms.appointment.repository.AppointmentRepository;
 import com.hms.common.audit.AuditLogService;
+import com.hms.common.enums.Role;
 import com.hms.doctor.entity.Doctor;
+import com.hms.doctor.exception.DoctorNotFoundException;
 import com.hms.doctor.repository.DoctorRepository;
 import com.hms.patient.entity.Patient;
+import com.hms.patient.exception.PatientNotFoundException;
 import com.hms.patient.repository.PatientRepository;
 import com.hms.pharmacy.entity.InventoryTransaction;
 import com.hms.pharmacy.entity.Medicine;
 import com.hms.pharmacy.exception.InsufficientStockException;
+import com.hms.pharmacy.exception.MedicineNotFoundException;
 import com.hms.pharmacy.repository.InventoryTransactionRepository;
 import com.hms.pharmacy.repository.MedicineRepository;
+import com.hms.prescription.dto.request.PrescriptionMedicineRequestDTO;
 import com.hms.prescription.dto.request.PrescriptionRequestDTO;
 import com.hms.prescription.dto.response.PrescriptionResponseDTO;
 import com.hms.prescription.entity.Prescription;
 import com.hms.prescription.entity.PrescriptionMedicine;
+import com.hms.prescription.exception.PrescriptionNotFoundException;
 import com.hms.prescription.mapper.PrescriptionMapper;
 import com.hms.prescription.repository.PrescriptionRepository;
 import com.hms.prescription.service.PrescriptionService;
@@ -46,13 +53,13 @@ public class PrescriptionServiceImpl implements PrescriptionService {
     private final AuditLogService auditLogService;
 
     @Override
-    @Transactional
+    @Transactional(rollbackFor = Exception.class)
     public PrescriptionResponseDTO createPrescription(PrescriptionRequestDTO dto) {
         Patient patient = patientRepository.findById(dto.getPatientId())
-                .orElseThrow(() -> new RuntimeException("Patient not found"));
+                .orElseThrow(() -> new PatientNotFoundException("Patient not found: " + dto.getPatientId()));
 
         Doctor doctor = doctorRepository.findById(dto.getDoctorId())
-                .orElseThrow(() -> new RuntimeException("Doctor not found"));
+                .orElseThrow(() -> new DoctorNotFoundException("Doctor not found: " + dto.getDoctorId()));
 
         Prescription prescription = prescriptionMapper.toEntity(dto);
         prescription.setPatient(patient);
@@ -60,13 +67,13 @@ public class PrescriptionServiceImpl implements PrescriptionService {
 
         if (dto.getAppointmentId() != null) {
             Appointment appointment = appointmentRepository.findById(dto.getAppointmentId())
-                    .orElseThrow(() -> new RuntimeException("Appointment not found"));
+                    .orElseThrow(() -> new AppointmentNotFoundException("Appointment not found: " + dto.getAppointmentId()));
             prescription.setAppointment(appointment);
         }
 
         if (dto.getMedicines() != null && !dto.getMedicines().isEmpty()) {
             prescription.getMedicines().clear();
-            for (PrescriptionRequestDTO.PrescriptionMedicineRequestDTO medicineDto : dto.getMedicines()) {
+            for (PrescriptionMedicineRequestDTO medicineDto : dto.getMedicines()) {
                 PrescriptionMedicine medicine = prescriptionMapper.toMedicineEntity(medicineDto);
                 prescription.addMedicine(medicine);
             }
@@ -75,9 +82,10 @@ public class PrescriptionServiceImpl implements PrescriptionService {
         Prescription savedPrescription = prescriptionRepository.save(prescription);
 
         if (dto.getMedicines() != null && !dto.getMedicines().isEmpty()) {
-            for (PrescriptionRequestDTO.PrescriptionMedicineRequestDTO medicineDto : dto.getMedicines()) {
+
+            for (PrescriptionMedicineRequestDTO medicineDto : dto.getMedicines()) {
                 Medicine med = medicineRepository.findByNameIgnoreCase(medicineDto.getMedicineName())
-                        .orElseThrow(() -> new IllegalArgumentException("Medicine not found: " + medicineDto.getMedicineName()));
+                        .orElseThrow(() -> new MedicineNotFoundException("Medicine not found: " + medicineDto.getMedicineName()));
                 
                 Integer qty = medicineDto.getQuantity() != null ? medicineDto.getQuantity() : 1;
                 
@@ -93,7 +101,7 @@ public class PrescriptionServiceImpl implements PrescriptionService {
                 
                 InventoryTransaction transaction = InventoryTransaction.builder()
                         .medicine(med)
-                        .transactionType("OUT")
+                        .transactionType("DISPENSE")
                         .quantity(qty)
                         .referenceId(savedPrescription.getId())
                         .notes("Dispensed")
@@ -109,7 +117,7 @@ public class PrescriptionServiceImpl implements PrescriptionService {
     @Transactional(readOnly = true)
     public PrescriptionResponseDTO getPrescriptionById(UUID id) {
         Prescription prescription = prescriptionRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Prescription not found"));
+                .orElseThrow(() -> new PrescriptionNotFoundException("Prescription not found: " + id, id.toString()));
         
         checkOwnership(prescription);
         return prescriptionMapper.toDto(prescription);
@@ -119,16 +127,15 @@ public class PrescriptionServiceImpl implements PrescriptionService {
     @Transactional(readOnly = true)
     public List<PrescriptionResponseDTO> getAllPrescriptions() {
         User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        com.hms.common.enums.Role role = user.getRole();
+        Role role = user.getRole();
 
-        if (role == com.hms.common.enums.Role.ADMIN || role == com.hms.common.enums.Role.PHARMACIST) {
+        if (role == Role.ADMIN || role == Role.PHARMACIST) {
             return prescriptionMapper.toDtoList(prescriptionRepository.findAll());
         }
 
-        if (role == com.hms.common.enums.Role.DOCTOR) {
+        if (role == Role.DOCTOR) {
             return prescriptionMapper.toDtoList(prescriptionRepository.findByDoctorUserId(user.getId()));
         }
-
         return Collections.emptyList();
     }
 
@@ -153,7 +160,7 @@ public class PrescriptionServiceImpl implements PrescriptionService {
     @Transactional
     public void deletePrescription(UUID id) {
         Prescription prescription = prescriptionRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Prescription not found"));
+                .orElseThrow(() -> new PrescriptionNotFoundException("Prescription not found: " + id, id.toString()));
         
         if (prescription.getMedicines() != null && !prescription.getMedicines().isEmpty()) {
             for (PrescriptionMedicine pm : prescription.getMedicines()) {

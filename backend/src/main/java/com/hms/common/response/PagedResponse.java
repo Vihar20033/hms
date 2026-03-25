@@ -4,7 +4,12 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.springframework.data.domain.Page;
+
+
+import java.util.stream.Collectors;
 import java.util.List;
+import java.util.function.Function;
 
 @Data
 @Builder
@@ -18,9 +23,9 @@ public class PagedResponse<T> {
     private int totalPages;
     private boolean last;
     
-    public static <R, E> PagedResponse<R> from(org.springframework.data.domain.Page<E> page, java.util.function.Function<E, R> mapper) {
+    public static <R, E> PagedResponse<R> from(Page<E> page, Function<E, R> mapper) {
         return PagedResponse.<R>builder()
-                .content(page.getContent().stream().map(mapper).collect(java.util.stream.Collectors.toList()))
+                .content(page.getContent().stream().map(mapper).collect(Collectors.toList()))
                 .pageNumber(page.getNumber())
                 .pageSize(page.getSize())
                 .totalElements(page.getTotalElements())

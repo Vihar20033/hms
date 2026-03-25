@@ -1,6 +1,8 @@
 package com.hms.prescription.mapper;
 
+import com.hms.prescription.dto.request.PrescriptionMedicineRequestDTO;
 import com.hms.prescription.dto.request.PrescriptionRequestDTO;
+import com.hms.prescription.dto.response.PrescriptionMedicineResponseDTO;
 import com.hms.prescription.dto.response.PrescriptionResponseDTO;
 import com.hms.prescription.entity.Prescription;
 import com.hms.prescription.entity.PrescriptionMedicine;
@@ -25,8 +27,8 @@ public interface PrescriptionMapper {
 
     List<PrescriptionResponseDTO> toDtoList(List<Prescription> entities);
 
-    PrescriptionResponseDTO.PrescriptionMedicineResponseDTO toMedicineDto(PrescriptionMedicine entity);
+    PrescriptionMedicineResponseDTO toMedicineDto(PrescriptionMedicine entity);
 
     @Mapping(target = "prescription", ignore = true)
-    PrescriptionMedicine toMedicineEntity(PrescriptionRequestDTO.PrescriptionMedicineRequestDTO dto);
+    PrescriptionMedicine toMedicineEntity(PrescriptionMedicineRequestDTO dto);
 }

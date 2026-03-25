@@ -44,8 +44,7 @@ public class AppointmentController {
     @PostMapping
     public ResponseEntity<ApiResponse<AppointmentResponseDTO>> create(
             @Valid @RequestBody AppointmentRequestDTO dto) {
-        return ResponseEntity.status(201)
-                .body(ApiResponse.success(
+        return ResponseEntity.status(201).body(ApiResponse.success(
                         appointmentMapper.toDto(appointmentService.createAppointment(dto)), "Appointment scheduled successfully", org.springframework.http.HttpStatus.CREATED));
     }
 
@@ -109,8 +108,7 @@ public class AppointmentController {
     @PatchMapping("/{id}/check-in")
     public ResponseEntity<ApiResponse<AppointmentResponseDTO>> checkInAppointment(
             @PathVariable("id") UUID id) {
-        return ResponseEntity
-                .ok(ApiResponse.success(
+        return ResponseEntity.ok(ApiResponse.success(
                         appointmentMapper.toDto(appointmentService.updateStatus(id, AppointmentStatus.CHECKED_IN))));
     }
 
@@ -118,8 +116,7 @@ public class AppointmentController {
     @PatchMapping("/{id}/start")
     public ResponseEntity<ApiResponse<AppointmentResponseDTO>> startConsultation(
             @PathVariable("id") UUID id) {
-        return ResponseEntity
-                .ok(ApiResponse.success(
+        return ResponseEntity.ok(ApiResponse.success(
                         appointmentMapper.toDto(appointmentService.updateStatus(id, AppointmentStatus.IN_CONSULTATION))));
     }
 
@@ -127,8 +124,7 @@ public class AppointmentController {
     @PatchMapping("/{id}/complete")
     public ResponseEntity<ApiResponse<AppointmentResponseDTO>> completeConsultation(
             @PathVariable("id") UUID id) {
-        return ResponseEntity
-                .ok(ApiResponse.success(
+        return ResponseEntity.ok(ApiResponse.success(
                         appointmentMapper.toDto(appointmentService.updateStatus(id, AppointmentStatus.COMPLETED))));
     }
 }

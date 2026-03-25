@@ -15,6 +15,7 @@ public class CorsConfig {
 
         @Bean
         public CorsConfigurationSource defaultCorsConfigurationSource() {
+
                 CorsConfiguration configuration = new CorsConfiguration();
 
                 // In development, we allow common localhost ports used by Angular/React/Vite

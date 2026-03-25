@@ -31,8 +31,9 @@ public class LocalDateTimeDeserializer extends StdDeserializer<LocalDateTime> {
     }
 
     @Override
-    public LocalDateTime deserialize(JsonParser p, DeserializationContext ctxt)
+    public LocalDateTime deserialize(JsonParser p, DeserializationContext text)
             throws IOException {
+
         String dateString = p.getValueAsString();
 
         if (dateString == null || dateString.isEmpty()) {
@@ -83,7 +84,7 @@ public class LocalDateTimeDeserializer extends StdDeserializer<LocalDateTime> {
             LocalDate date = LocalDate.parse(dateString, DATE_FORMATTER);
             return date.atTime(LocalTime.MIDNIGHT);
         } catch (Exception e) {
-            throw ctxt.weirdStringException(dateString, LocalDateTime.class,
+            throw text.weirdStringException(dateString, LocalDateTime.class,
                 "Invalid date/datetime format. Accepted: 'yyyy-MM-dd', 'yyyy-MM-ddTHH:mm:ss', 'yyyy-MM-ddTHH:mm:ss.SSS', or ISO-8601 with timezone.");
         }
     }

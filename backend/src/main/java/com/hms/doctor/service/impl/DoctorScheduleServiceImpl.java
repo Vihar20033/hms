@@ -4,6 +4,8 @@ import com.hms.doctor.dto.request.DoctorScheduleRequestDTO;
 import com.hms.doctor.dto.response.DoctorScheduleResponseDTO;
 import com.hms.doctor.entity.Doctor;
 import com.hms.doctor.entity.DoctorSchedule;
+import com.hms.doctor.exception.DoctorNotFoundException;
+import com.hms.doctor.exception.DoctorScheduleNotFoundException;
 import com.hms.doctor.repository.DoctorRepository;
 import com.hms.doctor.repository.DoctorScheduleRepository;
 import com.hms.doctor.service.DoctorScheduleService;
@@ -28,7 +30,7 @@ public class DoctorScheduleServiceImpl implements DoctorScheduleService {
     public DoctorScheduleResponseDTO createSchedule(DoctorScheduleRequestDTO request) {
         Doctor doctor = doctorRepository.findById(request.getDoctorId())
                 .filter(existingDoctor -> !existingDoctor.isDeleted())
-                .orElseThrow(() -> new RuntimeException("Doctor not found"));
+                .orElseThrow(() -> new DoctorNotFoundException(request.getDoctorId()));
 
         DoctorSchedule schedule = DoctorSchedule.builder()
                 .doctor(doctor)
@@ -62,7 +64,7 @@ public class DoctorScheduleServiceImpl implements DoctorScheduleService {
     public void deleteSchedule(UUID id) {
         DoctorSchedule schedule = doctorScheduleRepository.findById(id)
                 .filter(existingSchedule -> !existingSchedule.isDeleted())
-                .orElseThrow(() -> new RuntimeException("Doctor schedule not found"));
+                .orElseThrow(() -> new DoctorScheduleNotFoundException("Doctor schedule not found", id.toString()));
         schedule.setDeleted(true);
         doctorScheduleRepository.save(schedule);
     }

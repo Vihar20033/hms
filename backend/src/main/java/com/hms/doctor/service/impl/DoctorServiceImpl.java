@@ -1,5 +1,6 @@
 package com.hms.doctor.service.impl;
 
+import com.hms.common.audit.AuditLogService;
 import com.hms.common.enums.Role;
 import com.hms.common.util.SecurityUtils;
 import com.hms.doctor.dto.request.CreateDoctorRequest;
@@ -7,6 +8,7 @@ import com.hms.doctor.dto.request.UpdateDoctorRequest;
 import com.hms.doctor.dto.response.DoctorOnboardingResponse;
 import com.hms.doctor.dto.response.DoctorResponseDTO;
 import com.hms.doctor.entity.Doctor;
+import com.hms.doctor.exception.DoctorNotFoundException;
 import com.hms.doctor.mapper.DoctorMapper;
 import com.hms.doctor.repository.DoctorRepository;
 import com.hms.doctor.service.DoctorService;
@@ -32,7 +34,7 @@ public class DoctorServiceImpl implements DoctorService {
     private final UserService userService;
     private final PasswordEncoder passwordEncoder;
     private final DoctorMapper doctorMapper;
-    private final com.hms.common.audit.AuditLogService auditLogService;
+    private final AuditLogService auditLogService;
 
     @Override
     @Transactional
@@ -102,14 +104,14 @@ public class DoctorServiceImpl implements DoctorService {
     @Transactional(readOnly = true)
     public Doctor getDoctorById(UUID id) {
         return doctorRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Doctor not found"));
+                .orElseThrow(() -> new DoctorNotFoundException(id));
     }
 
     @Override
     @Transactional(readOnly = true)
     public Doctor getDoctorByUserId(UUID userId) {
         return doctorRepository.findByUserId(userId)
-                .orElseThrow(() -> new RuntimeException("Doctor profile not found for user: " + userId));
+                .orElseThrow(() -> new DoctorNotFoundException("Doctor profile not found for user: " + userId, userId.toString()));
     }
 
     @Override

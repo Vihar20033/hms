@@ -1,5 +1,8 @@
 package com.hms.common.enums;
 
+import lombok.Getter;
+
+@Getter
 public enum BloodGroup {
     A_POSITIVE("A+"),
     A_NEGATIVE("A-"),
@@ -16,7 +19,4 @@ public enum BloodGroup {
         this.label = label;
     }
 
-    public String getLabel() {
-        return label;
-    }
 }

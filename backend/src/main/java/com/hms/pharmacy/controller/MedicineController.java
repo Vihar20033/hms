@@ -2,6 +2,7 @@ package com.hms.pharmacy.controller;
 
 import com.hms.common.response.ApiResponse;
 import com.hms.pharmacy.dto.request.MedicineRequestDTO;
+import com.hms.pharmacy.dto.request.RestockMedicineRequestDTO;
 import com.hms.pharmacy.dto.response.MedicineResponseDTO;
 import com.hms.pharmacy.service.MedicineService;
 import jakarta.validation.Valid;
@@ -12,7 +13,6 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.Map;
 import java.util.UUID;
 
 @RestController
@@ -97,4 +97,16 @@ public class MedicineController {
         return ResponseEntity.ok(ApiResponse.success(null));
     }
 
+    @PreAuthorize("hasAnyRole('ADMIN','PHARMACIST')")
+    @PatchMapping("/{id}/restock")
+    public ResponseEntity<ApiResponse<Void>> restockMedicine(
+            @PathVariable UUID id,
+            @Valid @RequestBody RestockMedicineRequestDTO request) {
+        medicineService.restockMedicine(id, request.getQuantity());
+        ApiResponse<Void> response = ApiResponse.success(null);
+        response.setMessage("Medicine restocked successfully");
+        return ResponseEntity.ok(response);
+    }
+
 }
+

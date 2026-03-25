@@ -2,12 +2,13 @@ package com.hms.billing.mapper;
 
 import com.hms.billing.dto.request.BillingRequestDTO;
 import com.hms.billing.dto.response.BillingResponseDTO;
+import com.hms.billing.dto.request.BillingItemRequestDTO;
+import com.hms.billing.dto.response.BillingItemResponseDTO;
 import com.hms.billing.entity.Billing;
 import com.hms.billing.entity.BillingItem;
 import org.mapstruct.Builder;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
-import org.mapstruct.MappingTarget;
 import org.mapstruct.ReportingPolicy;
 
 import java.util.List;
@@ -24,8 +25,8 @@ public interface BillingMapper {
 
     List<BillingResponseDTO> toDtoList(List<Billing> entities);
 
-    BillingResponseDTO.BillingItemResponseDTO toItemDto(BillingItem entity);
+    BillingItemResponseDTO toItemDto(BillingItem entity);
 
     @Mapping(target = "billing", ignore = true)
-    BillingItem toItemEntity(BillingRequestDTO.BillingItemRequestDTO dto);
+    BillingItem toItemEntity(BillingItemRequestDTO dto);
 }

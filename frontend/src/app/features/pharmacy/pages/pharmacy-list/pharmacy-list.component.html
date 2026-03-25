@@ -150,6 +150,30 @@
         </form>
       </div>
 
+      <div class="form-card form-card-elevated restock-form" *ngIf="showRestockForm && restockingMedicine">
+        <div class="form-card-header">
+          <h3>Restock: {{ restockingMedicine.name }}</h3>
+          <button class="icon-btn" (click)="closeForm()"><i class="ri-close-line"></i></button>
+        </div>
+        <form [formGroup]="restockForm" (ngSubmit)="onRestockSubmit()">
+          <div class="form-shell">
+            <div class="form-section">
+              <div class="form-group">
+                <label class="form-label">Quantity to Add *</label>
+                <p-inputNumber formControlName="quantity" [useGrouping]="false" [min]="1" class="w-full"></p-inputNumber>
+                <small class="text-gray-500 mt-1 block">Current Stock: {{ restockingMedicine.quantityInStock }}</small>
+              </div>
+            </div>
+            <div class="form-actions">
+              <button type="button" class="btn-outline" (click)="closeForm()">Cancel</button>
+              <button type="submit" class="btn-primary" [disabled]="isSubmitting">
+                {{ isSubmitting ? 'Restocking...' : 'Add Stock' }}
+              </button>
+            </div>
+          </div>
+        </form>
+      </div>
+
       <div class="appointments-card">
         <div class="table-responsive" *ngIf="!isLoading">
           <p-table [value]="filteredMedicines" responsiveLayout="scroll" styleClass="data-table">
@@ -192,6 +216,9 @@
                 </td>
                 <td *ngIf="userRole === 'ADMIN' || userRole === 'PHARMACIST'">
                   <div class="action-buttons">
+                    <button class="btn-icon" title="Restock" (click)="openRestockForm(med)">
+                      <i class="ri-add-circle-line"></i>
+                    </button>
                     <button class="btn-icon start" title="Edit" (click)="openEditForm(med)">
                       <i class="ri-edit-line"></i>
                     </button>

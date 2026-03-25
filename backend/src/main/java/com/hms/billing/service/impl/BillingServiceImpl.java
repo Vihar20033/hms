@@ -1,21 +1,26 @@
 package com.hms.billing.service.impl;
 
 import com.hms.appointment.entity.Appointment;
+import com.hms.appointment.exception.AppointmentNotFoundException;
 import com.hms.appointment.repository.AppointmentRepository;
 import com.hms.billing.dto.request.BillingRequestDTO;
+import com.hms.billing.dto.request.BillingItemRequestDTO;
 import com.hms.billing.dto.response.BillingResponseDTO;
 import com.hms.billing.entity.Billing;
 import com.hms.billing.entity.BillingItem;
+import com.hms.billing.exception.BillingNotFoundException;
 import com.hms.billing.mapper.BillingMapper;
 import com.hms.billing.repository.BillingRepository;
 import com.hms.billing.service.BillingService;
 import com.hms.common.enums.PaymentMethod;
 import com.hms.common.enums.PaymentStatus;
 import com.hms.common.enums.Role;
+import com.hms.common.exception.BadRequestException;
 import com.hms.doctor.entity.Doctor;
 import com.hms.laboratory.entity.LabTest;
 import com.hms.laboratory.repository.LabTestRepository;
 import com.hms.patient.entity.Patient;
+import com.hms.patient.exception.PatientNotFoundException;
 import com.hms.patient.repository.PatientRepository;
 import com.hms.pharmacy.entity.Medicine;
 import com.hms.pharmacy.repository.MedicineRepository;
@@ -56,7 +61,7 @@ public class BillingServiceImpl implements BillingService {
     @Transactional
     public BillingResponseDTO createBilling(BillingRequestDTO dto) {
         Patient patient = patientRepository.findById(dto.getPatientId())
-                .orElseThrow(() -> new RuntimeException("Patient not found"));
+                .orElseThrow(() -> new PatientNotFoundException("Patient not found: " + dto.getPatientId()));
 
         Billing billing = new Billing();
         billing.setPatient(patient);
@@ -78,12 +83,12 @@ public class BillingServiceImpl implements BillingService {
 
         if (dto.getAppointmentId() != null) {
             Appointment appointment = appointmentRepository.findById(dto.getAppointmentId())
-                    .orElseThrow(() -> new RuntimeException("Appointment not found"));
+                    .orElseThrow(() -> new AppointmentNotFoundException("Appointment not found: " + dto.getAppointmentId()));
             billing.setAppointment(appointment);
         }
 
         if (dto.getItems() != null) {
-            for (BillingRequestDTO.BillingItemRequestDTO itemDto : dto.getItems()) {
+            for (BillingItemRequestDTO itemDto : dto.getItems()) {
                 BillingItem item = new BillingItem();
                 item.setItemName(itemDto.getItemName());
                 item.setQuantity(itemDto.getQuantity());
@@ -107,7 +112,7 @@ public class BillingServiceImpl implements BillingService {
     @Transactional
     public BillingResponseDTO updateBilling(UUID id, BillingRequestDTO dto) {
         Billing existing = billingRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Billing not found"));
+                .orElseThrow(() -> new BillingNotFoundException("Billing not found: " + id, id.toString()));
 
         existing.setTotalAmount(dto.getTotalAmount());
         existing.setNetAmount(dto.getNetAmount());
@@ -124,7 +129,7 @@ public class BillingServiceImpl implements BillingService {
     @Transactional(readOnly = true)
     public BillingResponseDTO getBillingById(UUID id) {
         Billing billing = billingRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Billing not found"));
+                .orElseThrow(() -> new BillingNotFoundException("Billing not found: " + id, id.toString()));
 
         checkOwnership(billing);
 
@@ -154,7 +159,7 @@ public class BillingServiceImpl implements BillingService {
     @Transactional
     public BillingResponseDTO updatePaymentStatus(UUID id, PaymentStatus status) {
         Billing billing = billingRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Billing not found"));
+                .orElseThrow(() -> new BillingNotFoundException("Billing not found: " + id, id.toString()));
         billing.setPaymentStatus(status);
         Billing saved = billingRepository.save(billing);
         auditLogService.log(getCurrentUsername(), "BILLING_PAYMENT_UPDATE", "Billing", id.toString(), "status=" + status);
@@ -165,7 +170,7 @@ public class BillingServiceImpl implements BillingService {
     @Transactional
     public void deleteBilling(UUID id) {
         Billing billing = billingRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Billing not found"));
+                .orElseThrow(() -> new BillingNotFoundException("Billing not found: " + id, id.toString()));
         billing.setDeleted(true);
         billingRepository.save(billing);
         auditLogService.log(getCurrentUsername(), "BILLING_DELETE", "Billing", id.toString(), "deleted=true");
@@ -194,13 +199,13 @@ public class BillingServiceImpl implements BillingService {
 
     private Billing prepareBillingFromAppointment(UUID appointmentId) {
         Appointment appointment = appointmentRepository.findById(appointmentId)
-                .orElseThrow(() -> new RuntimeException("Appointment not found: " + appointmentId));
+                .orElseThrow(() -> new AppointmentNotFoundException("Appointment not found: " + appointmentId));
 
         Patient patient = appointment.getPatient();
         Doctor doctor = appointment.getDoctor();
         
         if (patient == null) {
-            throw new RuntimeException("No patient associated with appointment: " + appointmentId);
+            throw new BadRequestException("No patient associated with appointment: " + appointmentId);
         }
 
         Billing billing = new Billing();
@@ -267,11 +272,6 @@ public class BillingServiceImpl implements BillingService {
         return billing;
     }
 
-    /**
-     * Verifies financial data access.
-     * Allowed: ADMIN, RECEPTIONIST.
-     * Specific access: Related PATIENT (via email link).
-     */
     private void checkOwnership(Billing billing) {
         User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         Role role = user.getRole();

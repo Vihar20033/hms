@@ -9,6 +9,9 @@ import java.time.LocalDateTime;
 import java.util.List;
 import java.util.UUID;
 
+/**
+ * Data Transfer Object representing the response details of a prescription.
+ */
 @Data
 @Builder
 @NoArgsConstructor
@@ -26,17 +29,4 @@ public class PrescriptionResponseDTO {
     private String advice;
     private String notes;
     private LocalDateTime createdAt;
-
-    @Data
-    @Builder
-    @NoArgsConstructor
-    @AllArgsConstructor
-    public static class PrescriptionMedicineResponseDTO {
-        private UUID id;
-        private String medicineName;
-        private String dosage;
-        private String duration;
-        private Integer quantity;
-        private String instructions;
-    }
 }

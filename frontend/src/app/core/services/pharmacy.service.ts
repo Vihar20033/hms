@@ -44,4 +44,8 @@ export class PharmacyService {
     return this.http.delete<ApiResponse<void>>(`${this.apiUrl}/${id}`);
   }
 
+  restock(id: string, quantity: number): Observable<ApiResponse<void>> {
+    return this.http.patch<ApiResponse<void>>(`${this.apiUrl}/${id}/restock`, { quantity });
+  }
+
 }

@@ -1,11 +1,13 @@
 package com.hms.pharmacy.service.impl;
 
 import com.hms.common.audit.AuditLogService;
+import com.hms.common.enums.MedicineCategory;
 import com.hms.pharmacy.dto.request.MedicineRequestDTO;
 import com.hms.pharmacy.dto.response.InventoryTransactionResponseDTO;
 import com.hms.pharmacy.dto.response.MedicineResponseDTO;
 import com.hms.pharmacy.entity.Medicine;
 import com.hms.pharmacy.exception.DuplicateMedicineException;
+import com.hms.pharmacy.exception.InsufficientStockException;
 import com.hms.pharmacy.exception.MedicineNotFoundException;
 import com.hms.pharmacy.dto.request.DispenseMedicineRequestDTO;
 import com.hms.pharmacy.entity.InventoryTransaction;
@@ -34,6 +36,7 @@ public class MedicineServiceImpl implements MedicineService {
     @Override
     @Transactional
     public MedicineResponseDTO createMedicine(MedicineRequestDTO dto) {
+
         if (medicineRepository.existsByMedicineCode(dto.getMedicineCode())) {
             throw new DuplicateMedicineException("Medicine code already exists: " + dto.getMedicineCode());
         }
@@ -108,7 +111,7 @@ public class MedicineServiceImpl implements MedicineService {
     @Override
     @Transactional(readOnly = true)
     public List<MedicineResponseDTO> getMedicinesByCategory(String category) {
-        return medicineMapper.toDtoList(medicineRepository.findByCategory(category));
+        return medicineMapper.toDtoList(medicineRepository.findByCategory(MedicineCategory.valueOf(category)));
     }
 
 
@@ -119,7 +122,7 @@ public class MedicineServiceImpl implements MedicineService {
     }
 
     @Override
-    @Transactional
+    @Transactional(rollbackFor = Exception.class)
     public void dispenseMedicines(DispenseMedicineRequestDTO request) {
         for (DispenseMedicineRequestDTO.DispenseItemDTO item : request.getItems()) {
             Medicine medicine = medicineRepository.findById(item.getMedicineId())
@@ -127,7 +130,7 @@ public class MedicineServiceImpl implements MedicineService {
 
             int updatedRows = medicineRepository.deductStockAtomic(medicine.getId(), item.getQuantity());
             if (updatedRows == 0) {
-                throw new RuntimeException("Insufficient stock for medicine: " + medicine.getName());
+                throw new InsufficientStockException(medicine.getName(), "Insufficient stock for medicine: " + medicine.getName());
             }
 
             InventoryTransaction transaction = InventoryTransaction.builder()
@@ -135,12 +138,32 @@ public class MedicineServiceImpl implements MedicineService {
                     .transactionType("OUT")
                     .quantity(item.getQuantity())
                     .referenceId(request.getPrescriptionId())
-                    .notes("Dispensed against prescription")
+                    .notes("Dispensed against manual request")
                     .build();
 
             inventoryTransactionRepository.save(transaction);
             auditLogService.log(getCurrentUsername(), "MEDICINE_DISPENSE", "Medicine", item.getMedicineId().toString(), "qty=" + item.getQuantity());
         }
+    }
+
+    @Override
+    @Transactional(rollbackFor = Exception.class)
+    public void restockMedicine(UUID id, Integer quantity) {
+        Medicine medicine = medicineRepository.findById(id)
+                .orElseThrow(() -> new MedicineNotFoundException("Medicine not found with ID: " + id));
+
+        medicineRepository.addStockAtomic(medicine.getId(), quantity);
+
+        InventoryTransaction transaction = InventoryTransaction.builder()
+                .medicine(medicine)
+                .transactionType("IN")
+                .quantity(quantity)
+                .referenceId(id)
+                .notes("Manual Restock")
+                .build();
+
+        inventoryTransactionRepository.save(transaction);
+        auditLogService.log(getCurrentUsername(), "MEDICINE_RESTOCK", "Medicine", id.toString(), "qty=" + quantity);
     }
 
 
