@@ -31,7 +31,7 @@ public class VitalsController {
     @PreAuthorize("hasAnyRole('ADMIN', 'DOCTOR', 'NURSE')")
     @GetMapping("/appointment/{appointmentId}")
     public ResponseEntity<ApiResponse<VitalsResponseDTO>> getVitalsByAppointment(
-            @PathVariable UUID appointmentId) {
+            @PathVariable("appointmentId") UUID appointmentId) {
         return ResponseEntity.ok(ApiResponse.success(
                 vitalsService.getVitalsByAppointment(appointmentId)));
     }
@@ -46,7 +46,7 @@ public class VitalsController {
     @PreAuthorize("hasAnyRole('ADMIN', 'DOCTOR', 'NURSE')")
     @GetMapping("/patient/{patientId}")
     public ResponseEntity<ApiResponse<List<VitalsResponseDTO>>> getVitalsByPatient(
-            @PathVariable UUID patientId) {
+            @PathVariable("patientId") UUID patientId) {
         return ResponseEntity.ok(ApiResponse.success(
                 vitalsService.getVitalsByPatientId(patientId)));
     }
@@ -54,7 +54,7 @@ public class VitalsController {
     @PreAuthorize("hasAnyRole('ADMIN', 'NURSE')")
     @PutMapping("/{id}")
     public ResponseEntity<ApiResponse<VitalsResponseDTO>> updateVitals(
-            @PathVariable UUID id, @Valid @RequestBody VitalsRequestDTO dto) {
+            @PathVariable("id") UUID id, @Valid @RequestBody VitalsRequestDTO dto) {
         return ResponseEntity.ok(ApiResponse.success(
                 vitalsService.updateVitals(id, dto)));
     }
@@ -62,7 +62,7 @@ public class VitalsController {
     @PreAuthorize("hasAnyRole('ADMIN', 'NURSE')")
     @DeleteMapping("/{id}")
     public ResponseEntity<ApiResponse<Void>> deleteVitals(
-            @PathVariable UUID id) {
+            @PathVariable("id") UUID id) {
         vitalsService.deleteVitals(id);
         return ResponseEntity.ok(ApiResponse.success(null));
     }

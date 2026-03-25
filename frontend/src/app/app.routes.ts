@@ -7,27 +7,32 @@ export const routes: Routes = [
   { path: '', redirectTo: 'login', pathMatch: 'full' },
   { 
     path: 'login', 
-    loadComponent: () => import('./features/auth/pages/login/login.component').then(m => m.LoginComponent),
+    loadComponent: () => import('./features/auth/pages/login/login.component')
+    .then(m => m.LoginComponent),
     canActivate: [guestGuard] 
   },
   { 
     path: 'register', 
-    loadComponent: () => import('./features/auth/pages/register/register.component').then(m => m.RegisterComponent),
+    loadComponent: () => import('./features/auth/pages/register/register.component')
+    .then(m => m.RegisterComponent),
     canActivate: [guestGuard] 
   },
   {
     path: 'change-password',
-    loadComponent: () => import('./features/auth/pages/change-password/change-password.component').then(m => m.ChangePasswordComponent),
+    loadComponent: () => import('./features/auth/pages/change-password/change-password.component')
+    .then(m => m.ChangePasswordComponent),
     canActivate: [authGuard],
   },
   {
     path: 'unauthorized',
-    loadComponent: () => import('./features/auth/pages/unauthorized/unauthorized.component').then(m => m.UnauthorizedComponent),
+    loadComponent: () => import('./features/auth/pages/unauthorized/unauthorized.component')
+    .then(m => m.UnauthorizedComponent),
     canActivate: [authGuard],
   },
   {
     path: 'dashboard',
-    loadComponent: () => import('./features/dashboard/pages/dashboard.component').then(m => m.DashboardComponent),
+    loadComponent: () => import('./features/dashboard/pages/dashboard.component')
+    .then(m => m.DashboardComponent),
     canActivate: [authGuard, roleGuard],
     data: {
       roles: ['ADMIN', 'DOCTOR', 'NURSE', 'RECEPTIONIST', 'PHARMACIST', 'LABORATORY_STAFF'],

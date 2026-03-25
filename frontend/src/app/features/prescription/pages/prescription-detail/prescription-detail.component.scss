@@ -207,21 +207,29 @@
 }
 
 @media print {
-  .prescription-report {
+  .no-print {
+    display: none !important;
+  }
+
+  .prescription-report-container {
     padding: 0;
   }
+
   .report-frame {
     box-shadow: none;
     border: none;
     padding: 0;
     max-width: 100%;
     width: 100%;
+    margin: 0;
   }
+
   .action-bar {
-    display: none;
+    display: none !important;
   }
-  .app-sidebar,
-  .app-header {
-    display: none;
+
+  /* Ensure standard margins for PDF/Paper */
+  @page {
+    margin: 2cm;
   }
 }

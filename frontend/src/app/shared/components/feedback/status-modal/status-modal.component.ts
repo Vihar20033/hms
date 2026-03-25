@@ -12,6 +12,7 @@ import { StatusModalService, StatusModalState } from '../../../../core/services/
   styleUrl: './status-modal.component.scss'
 })
 export class StatusModalComponent implements OnInit {
+  
   visible = false;
   state: StatusModalState = { visible: false, type: 'success', title: '', message: '' };
 

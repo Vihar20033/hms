@@ -32,20 +32,20 @@ public class DoctorScheduleController {
 
     @PreAuthorize("hasAnyRole('ADMIN','DOCTOR','RECEPTIONIST')")
     @GetMapping("/doctor/{doctorId}")
-    public ResponseEntity<ApiResponse<List<DoctorScheduleResponseDTO>>> getDoctorSchedules(@PathVariable UUID doctorId) {
+    public ResponseEntity<ApiResponse<List<DoctorScheduleResponseDTO>>> getDoctorSchedules(@PathVariable("doctorId") UUID doctorId) {
         return ResponseEntity.ok(ApiResponse.success(doctorScheduleService.getDoctorSchedules(doctorId)));
     }
 
     @PreAuthorize("hasAnyRole('ADMIN','DOCTOR','RECEPTIONIST')")
     @GetMapping("/doctor/{doctorId}/day/{dayOfWeek}")
     public ResponseEntity<ApiResponse<List<DoctorScheduleResponseDTO>>> getDoctorSchedulesByDay(
-            @PathVariable UUID doctorId, @PathVariable DayOfWeek dayOfWeek) {
+            @PathVariable("doctorId") UUID doctorId, @PathVariable("dayOfWeek") DayOfWeek dayOfWeek) {
         return ResponseEntity.ok(ApiResponse.success(doctorScheduleService.getDoctorSchedulesByDay(doctorId, dayOfWeek)));
     }
 
     @PreAuthorize("hasRole('ADMIN')")
     @DeleteMapping("/{id}")
-    public ResponseEntity<ApiResponse<Void>> deleteSchedule(@PathVariable UUID id) {
+    public ResponseEntity<ApiResponse<Void>> deleteSchedule(@PathVariable("id") UUID id) {
         doctorScheduleService.deleteSchedule(id);
         return ResponseEntity.ok(ApiResponse.success(null));
     }

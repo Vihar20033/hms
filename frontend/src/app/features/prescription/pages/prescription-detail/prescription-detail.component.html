@@ -1,8 +1,8 @@
-<div class="dashboard-layout no-print">
-  <app-sidebar></app-sidebar>
+<div class="dashboard-layout">
+  <app-sidebar class="no-print"></app-sidebar>
 
   <div class="main-content">
-    <app-header></app-header>
+    <app-header class="no-print"></app-header>
 
     <main class="page-body">
       <div class="prescription-report-container" *ngIf="!isLoading && prescription">
@@ -153,15 +153,3 @@
   </div>
 </div>
 
-<style>
-  @keyframes spin {
-    to {
-      transform: rotate(360deg);
-    }
-  }
-  @media print {
-    .no-print {
-      display: none !important;
-    }
-  }
-</style>

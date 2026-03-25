@@ -32,7 +32,7 @@ public class DoctorController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<ApiResponse<DoctorResponseDTO>> getDoctorById(@PathVariable UUID id) {
+    public ResponseEntity<ApiResponse<DoctorResponseDTO>> getDoctorById(@PathVariable("id") UUID id) {
         return ResponseEntity.ok(ApiResponse.success(doctorMapper.toDto(doctorService.getDoctorById(id))));
     }
 
@@ -46,25 +46,25 @@ public class DoctorController {
     @PutMapping("/{id}")
     @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<ApiResponse<DoctorResponseDTO>> updateDoctor(
-            @PathVariable UUID id,
+            @PathVariable("id") UUID id,
             @Valid @RequestBody UpdateDoctorRequest request) {
         return ResponseEntity.ok(ApiResponse.success(doctorMapper.toDto(doctorService.updateDoctor(id, request))));
     }
 
     @DeleteMapping("/{id}")
     @PreAuthorize("hasRole('ADMIN')")
-    public ResponseEntity<ApiResponse<Void>> deleteDoctor(@PathVariable UUID id) {
+    public ResponseEntity<ApiResponse<Void>> deleteDoctor(@PathVariable("id") UUID id) {
         doctorService.deleteDoctor(id);
         return ResponseEntity.ok(ApiResponse.success(null));
     }
 
     @GetMapping("/me")
-    public ResponseEntity<ApiResponse<DoctorResponseDTO>> getMyProfile(@RequestParam UUID userId) {
+    public ResponseEntity<ApiResponse<DoctorResponseDTO>> getMyProfile(@RequestParam("userId") UUID userId) {
         return ResponseEntity.ok(ApiResponse.success(doctorMapper.toDto(doctorService.getDoctorByUserId(userId))));
     }
 
     @GetMapping("/department/{department}")
-    public ResponseEntity<ApiResponse<List<DoctorResponseDTO>>> getDoctorsByDepartment(@PathVariable com.hms.common.enums.Department department) {
+    public ResponseEntity<ApiResponse<List<DoctorResponseDTO>>> getDoctorsByDepartment(@PathVariable("department") com.hms.common.enums.Department department) {
         return ResponseEntity.ok(ApiResponse.success(doctorMapper.toDtoList(doctorService.getDoctorsByDepartment(department))));
     }
 }

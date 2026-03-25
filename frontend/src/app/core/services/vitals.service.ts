@@ -7,7 +7,7 @@ import { ApiResponse } from '../models/common.models';
 
 @Injectable({
   providedIn: 'root',
-})
+})  
 export class VitalsService {
   private apiUrl = `${environment.apiUrl}/vitals`;
 

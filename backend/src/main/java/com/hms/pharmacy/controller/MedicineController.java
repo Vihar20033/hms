@@ -37,7 +37,7 @@ public class MedicineController {
     @PreAuthorize("hasAnyRole('ADMIN','PHARMACIST')")
     @PutMapping("/{id}")
     public ResponseEntity<ApiResponse<MedicineResponseDTO>> updateMedicine(
-            @PathVariable UUID id,
+            @PathVariable("id") UUID id,
             @Valid @RequestBody MedicineRequestDTO dto) {
         MedicineResponseDTO updated = medicineService.updateMedicine(id, dto);
         ApiResponse<MedicineResponseDTO> response = ApiResponse.success(updated);
@@ -47,7 +47,7 @@ public class MedicineController {
 
     @PreAuthorize("hasAnyRole('ADMIN','PHARMACIST')")
     @DeleteMapping("/{id}")
-    public ResponseEntity<ApiResponse<Void>> deleteMedicine(@PathVariable UUID id) {
+    public ResponseEntity<ApiResponse<Void>> deleteMedicine(@PathVariable("id") UUID id) {
         medicineService.deleteMedicine(id);
         ApiResponse<Void> response = ApiResponse.success(null);
         response.setMessage("Medicine deleted successfully");
@@ -56,7 +56,7 @@ public class MedicineController {
 
     @PreAuthorize("hasAnyRole('ADMIN','DOCTOR','PHARMACIST')")
     @GetMapping("/{id}")
-    public ResponseEntity<ApiResponse<MedicineResponseDTO>> getMedicineById(@PathVariable UUID id) {
+    public ResponseEntity<ApiResponse<MedicineResponseDTO>> getMedicineById(@PathVariable("id") UUID id) {
         MedicineResponseDTO medicine = medicineService.getMedicineById(id);
         return ResponseEntity.ok(ApiResponse.success(medicine));
     }
@@ -78,14 +78,14 @@ public class MedicineController {
     @PreAuthorize("hasAnyRole('ADMIN','DOCTOR','PHARMACIST')")
     @GetMapping("/category/{category}")
     public ResponseEntity<ApiResponse<List<MedicineResponseDTO>>> getMedicinesByCategory(
-            @PathVariable String category) {
+            @PathVariable("category") String category) {
         List<MedicineResponseDTO> medicines = medicineService.getMedicinesByCategory(category);
         return ResponseEntity.ok(ApiResponse.success(medicines));
     }
 
 
     @GetMapping("/check-code/{code}")
-    public ResponseEntity<ApiResponse<Boolean>> checkMedicineCodeExists(@PathVariable String code) {
+    public ResponseEntity<ApiResponse<Boolean>> checkMedicineCodeExists(@PathVariable("code") String code) {
         boolean exists = medicineService.existsByMedicineCode(code);
         return ResponseEntity.ok(ApiResponse.success(exists));
     }
@@ -100,7 +100,7 @@ public class MedicineController {
     @PreAuthorize("hasAnyRole('ADMIN','PHARMACIST')")
     @PatchMapping("/{id}/restock")
     public ResponseEntity<ApiResponse<Void>> restockMedicine(
-            @PathVariable UUID id,
+            @PathVariable("id") UUID id,
             @Valid @RequestBody RestockMedicineRequestDTO request) {
         medicineService.restockMedicine(id, request.getQuantity());
         ApiResponse<Void> response = ApiResponse.success(null);

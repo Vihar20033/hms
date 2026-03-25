@@ -42,7 +42,7 @@ public class PrescriptionController {
     @PreAuthorize("hasAnyRole('ADMIN','DOCTOR','PHARMACIST')")
     @GetMapping("/patient/{patientId}")
     public ResponseEntity<ApiResponse<List<PrescriptionResponseDTO>>> getByPatientId(
-            @PathVariable UUID patientId) {
+            @PathVariable("patientId") UUID patientId) {
         return ResponseEntity.ok(ApiResponse.success(
                 prescriptionService.getPrescriptionsByPatientId(patientId)));
     }
@@ -50,7 +50,7 @@ public class PrescriptionController {
     @PreAuthorize("hasAnyRole('ADMIN','DOCTOR','PHARMACIST')")
     @GetMapping("/{id}")
     public ResponseEntity<ApiResponse<PrescriptionResponseDTO>> getPrescriptionById(
-            @PathVariable UUID id) {
+            @PathVariable("id") UUID id) {
         return ResponseEntity.ok(ApiResponse.success(
                 prescriptionService.getPrescriptionById(id)));
     }
@@ -58,7 +58,7 @@ public class PrescriptionController {
     @PreAuthorize("hasAnyRole('ADMIN','DOCTOR')")
     @DeleteMapping("/{id}")
     public ResponseEntity<ApiResponse<Void>> deletePrescription(
-            @PathVariable UUID id) {
+            @PathVariable("id") UUID id) {
         prescriptionService.deletePrescription(id);
         return ResponseEntity.ok(ApiResponse.success(
                 null));

@@ -13,6 +13,8 @@ export interface StatusModalState {
 @Injectable({
   providedIn: 'root',
 })
+
+// Service to manage the state of a status modal (success, error, info, warning)
 export class StatusModalService {
   private state = new BehaviorSubject<StatusModalState>({
     visible: false,

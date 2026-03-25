@@ -43,7 +43,7 @@ public class BillingController {
     @PreAuthorize("hasAnyRole('ADMIN','RECEPTIONIST')")
     @GetMapping("/patient/{patientId}")
     public ResponseEntity<ApiResponse<List<BillingResponseDTO>>> getBillingsByPatientId(
-            @PathVariable UUID patientId) {
+            @PathVariable("patientId") UUID patientId) {
         return ResponseEntity.ok(ApiResponse.success(
                 billingService.getBillingsByPatientId(patientId)));
     }
@@ -51,7 +51,7 @@ public class BillingController {
     @PreAuthorize("hasAnyRole('ADMIN','RECEPTIONIST')")
     @GetMapping("/preview-appointment/{appointmentId}")
     public ResponseEntity<ApiResponse<BillingResponseDTO>> previewBillingJson(
-            @PathVariable UUID appointmentId) {
+            @PathVariable("appointmentId") UUID appointmentId) {
         return ResponseEntity.ok(ApiResponse.success(
                 billingService.calculatePreviewBilling(appointmentId)));
     }
@@ -59,7 +59,7 @@ public class BillingController {
     @PreAuthorize("hasAnyRole('ADMIN','RECEPTIONIST')")
     @GetMapping("/{id}")
     public ResponseEntity<ApiResponse<BillingResponseDTO>> getBillingById(
-            @PathVariable UUID id) {
+            @PathVariable("id") UUID id) {
         return ResponseEntity.ok(ApiResponse.success(
                 billingService.getBillingById(id)));
     }
@@ -67,7 +67,7 @@ public class BillingController {
     @PreAuthorize("hasAnyRole('ADMIN','RECEPTIONIST')")
     @PatchMapping("/{id}/status")
     public ResponseEntity<ApiResponse<BillingResponseDTO>> updatePaymentStatus(
-            @PathVariable UUID id, @RequestParam("status") PaymentStatus status) {
+            @PathVariable("id") UUID id, @RequestParam("status") PaymentStatus status) {
         return ResponseEntity.ok(ApiResponse.success(
                 billingService.updatePaymentStatus(id, status)));
     }
@@ -75,7 +75,7 @@ public class BillingController {
     @PreAuthorize("hasAnyRole('ADMIN','RECEPTIONIST')")
     @PostMapping("/generate/appointment/{appointmentId}")
     public ResponseEntity<ApiResponse<BillingResponseDTO>> generateBilling(
-            @PathVariable UUID appointmentId) {
+            @PathVariable("appointmentId") UUID appointmentId) {
         return ResponseEntity.status(HttpStatus.CREATED)
                 .body(ApiResponse.success(
                         billingService.generateBillingFromAppointment(appointmentId)));
@@ -84,7 +84,7 @@ public class BillingController {
     @PreAuthorize("hasRole('ADMIN')")
     @DeleteMapping("/{id}")
     public ResponseEntity<ApiResponse<Void>> deleteBilling(
-            @PathVariable UUID id) {
+            @PathVariable("id") UUID id) {
         billingService.deleteBilling(id);
         return ResponseEntity.ok(ApiResponse.success(null));
     }

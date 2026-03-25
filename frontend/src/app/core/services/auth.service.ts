@@ -11,13 +11,15 @@ import { AccessFeedbackService } from './access-feedback.service';
   providedIn: 'root',
 })
 export class AuthService {
+
   private readonly tokenStorageKey = 'hms_token';
   private readonly userStorageKey = 'hms_user';
   
-
   private currentUserSignal = signal<User | null>(this.getUserFromStorage());
   public currentUser = this.currentUserSignal.asReadonly();
+
   public isAuthenticated = computed(() => !!this.currentUser());
+
   private currentUserSubject = new BehaviorSubject<User | null>(this.currentUserSignal());
   public currentUser$ = this.currentUserSubject.asObservable();
 
@@ -66,7 +68,6 @@ export class AuthService {
 
   logout(): void {
     const token = this.getToken();
-
     if (token) {
       this.http
         .post(

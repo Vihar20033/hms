@@ -50,19 +50,19 @@ public class PatientController {
 
     @PreAuthorize("hasAnyRole('ADMIN','DOCTOR','NURSE','RECEPTIONIST','PHARMACIST')")
     @GetMapping("/{id}")
-    public ApiResponse<PatientResponseDTO> getById(@PathVariable UUID id) {
+    public ApiResponse<PatientResponseDTO> getById(@PathVariable("id") UUID id) {
         return ApiResponse.success(service.getById(id));
     }
 
     @PreAuthorize("hasAnyRole('ADMIN','DOCTOR','RECEPTIONIST')")
     @PutMapping("/{id}")
-    public ApiResponse<PatientResponseDTO> update(@PathVariable UUID id, @Valid @RequestBody PatientRequestDTO dto) {
+    public ApiResponse<PatientResponseDTO> update(@PathVariable("id") UUID id, @Valid @RequestBody PatientRequestDTO dto) {
         return ApiResponse.success(service.update(id, dto));
     }
 
     @PreAuthorize("hasAnyRole('ADMIN','RECEPTIONIST','NURSE')")
     @DeleteMapping("/{id}")
-    public ApiResponse<Void> delete(@PathVariable UUID id) {
+    public ApiResponse<Void> delete(@PathVariable("id") UUID id) {
         service.delete(id);
         return ApiResponse.success(null);
     }

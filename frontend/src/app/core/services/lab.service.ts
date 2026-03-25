@@ -41,9 +41,6 @@ export class LabService {
       patientId: String(labTest.patientId), // Ensure patientId is string UUID
       doctorId: labTest.doctorId ? String(labTest.doctorId) : undefined,
     };
-
-    // console.log('Lab Test Request Payload:', payload);
-
     return this.http.post<ApiResponse<LabTest>>(this.apiUrl, payload).pipe(
       retry({
         count: 3,
@@ -60,7 +57,6 @@ export class LabService {
       patientId: String(labTest.patientId),
       doctorId: labTest.doctorId ? String(labTest.doctorId) : undefined,
     };
-
     return this.http.put<ApiResponse<LabTest>>(`${this.apiUrl}/${id}`, payload).pipe(
       retry({
         count: 3,

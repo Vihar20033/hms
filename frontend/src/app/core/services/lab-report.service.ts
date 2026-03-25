@@ -12,11 +12,9 @@ export class LabReportService {
 
   constructor(private http: HttpClient) {}
 
-  /**
-   * Create a new lab report for a test
-   */
   createReport(testId: string, report: LabReportRequest): Observable<ApiResponse<LabReportResponse>> {
-    return this.http.post<ApiResponse<LabReportResponse>>(`${this.apiUrl}/${testId}/report`, report).pipe(
+    return this.http.post<ApiResponse<LabReportResponse>>
+    (`${this.apiUrl}/${testId}/report`, report).pipe(
       retry({
         count: 3,
         delay: (error, retryCount) => timer(Math.pow(2, retryCount) * 1000),
@@ -24,10 +22,6 @@ export class LabReportService {
       timeout(10000),
     );
   }
-
-  /**
-   * Update an existing lab report
-   */
   updateReport(reportId: string, report: LabReportRequest): Observable<ApiResponse<LabReportResponse>> {
     return this.http.put<ApiResponse<LabReportResponse>>(`${this.apiUrl}/report/${reportId}`, report).pipe(
       retry({
@@ -38,9 +32,6 @@ export class LabReportService {
     );
   }
 
-  /**
-   * Get lab report by test ID
-   */
   getReportByTestId(testId: string): Observable<ApiResponse<LabReportResponse>> {
     return this.http.get<ApiResponse<LabReportResponse>>(`${this.apiUrl}/${testId}/report`).pipe(
       retry({
@@ -51,9 +42,6 @@ export class LabReportService {
     );
   }
 
-  /**
-   * Get lab report by report ID
-   */
   getReportById(reportId: string): Observable<ApiResponse<LabReportResponse>> {
     return this.http.get<ApiResponse<LabReportResponse>>(`${this.apiUrl}/report/${reportId}`).pipe(
       retry({
@@ -64,9 +52,6 @@ export class LabReportService {
     );
   }
 
-  /**
-   * Get all lab reports
-   */
   getAllReports(): Observable<ApiResponse<LabReportResponse[]>> {
     return this.http.get<ApiResponse<LabReportResponse[]>>(`${this.apiUrl}/reports/list`).pipe(
       retry({
@@ -77,9 +62,6 @@ export class LabReportService {
     );
   }
 
-  /**
-   * Delete a lab report
-   */
   deleteReport(reportId: string): Observable<ApiResponse<void>> {
     return this.http.delete<ApiResponse<void>>(`${this.apiUrl}/report/${reportId}`).pipe(
       retry({
@@ -90,9 +72,6 @@ export class LabReportService {
     );
   }
 
-  /**
-   * Generate PDF for lab report
-   */
   downloadReportPDF(testId: string): Observable<Blob> {
     return this.http.get(`${this.apiUrl}/${testId}/report/pdf`, { responseType: 'blob' }).pipe(
       retry({

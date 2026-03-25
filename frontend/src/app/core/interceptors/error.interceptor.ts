@@ -42,8 +42,7 @@ export const errorInterceptor: HttpInterceptorFn = (req, next) => {
             errorMessage = err.error?.message || err.statusText || `HTTP error ${err.status}`;
         }
       }
-
-      console.error('API Error:', errorMessage);
+      
       return throwError(() => err.error?.message || errorMessage);
     }),
   );
