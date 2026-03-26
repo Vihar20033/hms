@@ -5,3 +5,29 @@
 2026-03-26 10:08:01.458 | admin | DOCTOR_CREATE | Doctor | 7fac3944-e533-4524-aed0-44f3df6576db | name=xyz zu
 2026-03-26 11:03:19.011 | admin | DOCTOR_DELETE | Doctor | 7fac3944-e533-4524-aed0-44f3df6576db | name=xyz zu
 2026-03-26 11:03:22.232 | admin | DOCTOR_DELETE | Doctor | 8dbcbf4b-4cec-4f0f-aeb1-58f974e2667a | name=abc xyz
+2026-03-26 12:03:45.727 | admin | USER_LOGIN | User | 1 | role=ADMIN
+2026-03-26 12:10:14.788 | admin | PATIENT_CREATE | Patient | 1 | name=Krishna
+2026-03-26 12:14:09.802 | admin | DOCTOR_CREATE | Doctor | 1 | name=Chintan Patel
+2026-03-26 12:30:37.066 | admin | USER_LOGOUT | User | 1 | 
+2026-03-26 12:31:19.727 | recep | USER_LOGIN | User | 3 | role=RECEPTIONIST
+2026-03-26 12:32:05.605 | recep | APPOINTMENT_CREATE | Appointment | 1 | patient=Krishna
+2026-03-26 12:38:29.421 | recep | APPOINTMENT_STATUS_UPDATE | Appointment | 1 | status=CHECKED_IN
+2026-03-26 12:42:13.190 | recep | USER_LOGOUT | User | 3 | 
+2026-03-26 12:42:34.373 | Chintan | USER_LOGIN | User | 2 | role=DOCTOR
+2026-03-26 12:42:56.346 | Chintan | PASSWORD_CHANGE | User | 2 | 
+2026-03-26 12:43:01.572 | Chintan | USER_LOGIN | User | 2 | role=DOCTOR
+2026-03-26 12:43:28.596 | Chintan | APPOINTMENT_STATUS_UPDATE | Appointment | 1 | status=IN_CONSULTATION
+2026-03-26 12:44:17.604 | Chintan | USER_LOGOUT | User | 2 | 
+2026-03-26 12:44:48.809 | farm | USER_LOGIN | User | 4 | role=PHARMACIST
+2026-03-26 12:45:58.972 | farm | MEDICINE_CREATE | Medicine | 1 | name=PCM
+2026-03-26 12:46:07.117 | farm | USER_LOGOUT | User | 4 | 
+2026-03-26 12:46:12.430 | Chintan | USER_LOGIN | User | 2 | role=DOCTOR
+2026-03-26 12:48:21.086 | Chintan | APPOINTMENT_STATUS_UPDATE | Appointment | 1 | status=COMPLETED
+2026-03-26 12:48:43.688 | Chintan | USER_LOGOUT | User | 2 | 
+2026-03-26 12:48:49.261 | farm | USER_LOGIN | User | 4 | role=PHARMACIST
+2026-03-26 12:48:56.639 | farm | USER_LOGOUT | User | 4 | 
+2026-03-26 12:49:02.671 | recep | USER_LOGIN | User | 3 | role=RECEPTIONIST
+2026-03-26 12:53:18.229 | recep | USER_LOGOUT | User | 3 | 
+2026-03-26 12:53:25.820 | farm | USER_LOGIN | User | 4 | role=PHARMACIST
+2026-03-26 13:00:25.345 | farm | USER_LOGOUT | User | 4 | 
+2026-03-26 13:00:29.075 | recep | USER_LOGIN | User | 3 | role=RECEPTIONIST

@@ -22,8 +22,6 @@ public interface DoctorRepository extends JpaRepository<Doctor, Long>, JpaSpecif
     // SELECT * FROM doctors WHERE user_id = :userId AND deleted = false
     Optional<Doctor> findByUserId(Long userId);
 
-    // SELECT * FROM doctors WHERE specialization LIKE %:specialization% AND deleted = false
-    List<Doctor> findBySpecializationContaining(String specialization);
 
     // SELECT EXISTS(SELECT 1 FROM doctors WHERE user_id = :userId AND deleted = false)
     boolean existsByUserId(Long userId);

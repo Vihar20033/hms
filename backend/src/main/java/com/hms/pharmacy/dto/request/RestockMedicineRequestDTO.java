@@ -12,7 +12,9 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class RestockMedicineRequestDTO {
+
     @NotNull(message = "Quantity to add is required")
     @Min(value = 1, message = "Quantity must be at least 1")
     private Integer quantity;
+   
 }

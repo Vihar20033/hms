@@ -97,7 +97,7 @@ export class BillingListComponent implements OnInit {
       taxAmount: [0, Validators.min(0)],
       discountAmount: [0, Validators.min(0)],
       notes: ['', Validators.maxLength(1000)],
-      dueDate: [null, [Validators.required, futureOrTodayDateValidator()]],
+      dueDate: [null, [futureOrTodayDateValidator()]],
       insuranceProvider: [''],
       insuranceClaimNumber: [''],
       insuranceAmount: [0, Validators.min(0)],
@@ -165,6 +165,8 @@ export class BillingListComponent implements OnInit {
   }
 
   openCreateForm(): void {
+    this.initForm();
+    this.manualPatientAppointments.set([]);
     this.showCreateForm.set(true);
   }
 
@@ -234,6 +236,10 @@ export class BillingListComponent implements OnInit {
         this.isSyncingItems.set(false);
 
         if (suggested.items && suggested.items.length > 0) {
+          // Clear any existing item rows before adding synced ones
+          while (this.items.length) {
+            this.items.removeAt(0);
+          }
           suggested.items.forEach((item) => {
             this.items.push(
               this.fb.group({
@@ -247,6 +253,7 @@ export class BillingListComponent implements OnInit {
       },
       error: () => {
         this.isSyncingItems.set(false);
+        this.statusModalService.showError('Sync Failed', 'Could not load items from this appointment.');
       },
     });
   }
@@ -276,6 +283,15 @@ export class BillingListComponent implements OnInit {
   onSubmit(): void {
     if (this.billingForm.invalid) {
       this.billingForm.markAllAsTouched();
+      const errors: string[] = [];
+      if (this.billingForm.get('patientId')?.invalid) errors.push('Patient is required.');
+      if (this.billingForm.get('dueDate')?.invalid) errors.push('Due date is invalid.');
+      const invalidItems = this.items.controls.some(c => c.invalid);
+      if (invalidItems) errors.push('One or more billing items are incomplete or invalid.');
+      this.statusModalService.showError(
+        'Please fix the form',
+        errors.length ? errors.join(' ') : 'Some required fields are missing or invalid.'
+      );
       return;
     }
     this.isSubmitting.set(true);
@@ -388,12 +404,14 @@ export class BillingListComponent implements OnInit {
   getStatusClass(status: PaymentStatus): string {
     const map: Record<string, string> = {
       PAID: 'status-completed',
+      UNPAID: 'status-scheduled',
       PENDING: 'status-scheduled',
       PARTIAL: 'status-checked-in',
       OVERDUE: 'status-cancelled',
       CANCELLED: 'status-cancelled',
+      REFUNDED: 'status-checked-in',
     };
-    return map[status] || '';
+    return map[status] || 'status-scheduled';
   }
 
   onDelete(id: number): void {

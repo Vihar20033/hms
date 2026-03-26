@@ -8,7 +8,6 @@ import { ApiResponse, PagedResponse } from '../../../../core/models/common.model
 import { AppointmentService } from '../../../../core/services/appointment.service';
 import { AuthService } from '../../../../core/services/auth.service';
 import { BillingService } from '../../../../core/services/billing.service';
-import { ExcelExportService } from '../../../../core/services/excel-export.service';
 import { PaginatorModule } from 'primeng/paginator';
 
 import { HeaderComponent } from '../../../../shared/components/layout/header/header.component';
@@ -57,7 +56,6 @@ export class AppointmentListComponent implements OnInit, OnDestroy {
     private authService: AuthService,
     private router: Router,
     private billingService: BillingService,
-    private excelExportService: ExcelExportService,
   ) {}
 
   ngOnInit(): void {
@@ -146,19 +144,6 @@ export class AppointmentListComponent implements OnInit, OnDestroy {
     });
   }
 
-  exportToExcel(): void {
-    const dataToExport = this.appointments().map((app) => ({
-      'Patient Name': app.patientName,
-      'Doctor Name': app.doctorName,
-      Department: app.department.replace('_', ' '),
-      'Appointment Date': new Date(app.appointmentTime).toLocaleDateString(),
-      'Appointment Time': new Date(app.appointmentTime).toLocaleTimeString(),
-      Status: app.status,
-      Reason: app.reason || 'N/A',
-    }));
-
-    this.excelExportService.exportAsExcelFile(dataToExport, 'Appointments_Export');
-  }
 
   canManageAppointment(): boolean {
     const role = this.userRole();

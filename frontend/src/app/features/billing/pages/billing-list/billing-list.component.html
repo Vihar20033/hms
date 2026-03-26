@@ -12,9 +12,6 @@
         </div>
         @if (userRole()?.role === 'ADMIN' || userRole()?.role === 'RECEPTIONIST') {
           <div class="header-actions">
-            <button class="btn-outline" (click)="openAutoGenerateModal()">
-              <i class="ri-flashlight-line"></i> Auto-Generate
-            </button>
             <button class="btn-primary" (click)="openCreateForm()"><i class="ri-add-line"></i> Create Invoice</button>
           </div>
         }
@@ -363,7 +360,7 @@
         <div class="hospital-branding">
           <div class="logo-circle"><i class="ri-hospital-line"></i></div>
           <div class="brand-copy">
-            <h2>Artemis Health System</h2>
+            <h2>Artem Health System</h2>
             <p>Medical Center Excellence</p>
           </div>
         </div>
@@ -454,125 +451,3 @@
   </div>
 }
 
-<!-- Auto-Generate Modal -->
-@if (showAutoGenerateModal()) {
-  <div
-    class="modal-overlay"
-    (click)="showAutoGenerateModal.set(false)"
-    tabindex="0"
-    (keyup.enter)="showAutoGenerateModal.set(false)"
-  >
-    <div class="modal-content small-modal" (click)="$event.stopPropagation()" tabindex="0">
-      <div class="modal-header">
-        <div class="header-icon-wrapper">
-          <i class="ri-flashlight-line"></i>
-        </div>
-        <div class="header-text">
-          <h3>Auto-Generate Bill</h3>
-          <p>Instant invoice calculation</p>
-        </div>
-        <button class="icon-btn close-modal-btn" (click)="showAutoGenerateModal.set(false)">
-          <i class="ri-close-line"></i>
-        </button>
-      </div>
-
-      <div class="modal-body step-modal-body">
-        <div class="steps-info-banner">
-          <i class="ri-information-line"></i>
-          <span>This will auto-calculate fees for consultation, lab tests, and medicines.</span>
-        </div>
-
-        <div class="billing-step" [class.active-step]="true">
-          <div class="step-indicator">
-            <span class="step-num">1</span>
-            <span class="step-label">Select Patient</span>
-          </div>
-          <div class="step-content">
-            <p-dropdown
-              [options]="patientOptions()"
-              [ngModel]="selectedPatientIdForAuto()"
-              (ngModelChange)="onPatientSelectedForAuto($event)"
-              placeholder="Search patient record..."
-              styleClass="w-full modern-dropdown"
-              [filter]="true"
-              filterBy="label"
-              appendTo="body"
-            >
-            </p-dropdown>
-          </div>
-        </div>
-
-        <div
-          class="billing-step"
-          [class.active-step]="selectedPatientIdForAuto()"
-          [class.locked-step]="!selectedPatientIdForAuto()"
-        >
-          <div class="step-indicator">
-            <span class="step-num">2</span>
-            <span class="step-label">Select Appointment</span>
-            @if (!selectedPatientIdForAuto()) {
-              <i class="ri-lock-line lock-icon"></i>
-            }
-          </div>
-          <div class="step-content">
-            @if (selectedPatientIdForAuto()) {
-              <p-dropdown
-                [options]="patientAppointments()"
-                [ngModel]="selectedAppointmentId()"
-                (ngModelChange)="selectedAppointmentId.set($event)"
-                optionValue="id"
-                optionLabel="label"
-                [filter]="true"
-                filterBy="label"
-                placeholder="Choose billable encounter..."
-                styleClass="w-full modern-dropdown"
-                appendTo="body"
-              >
-                <ng-template let-item pTemplate="item">
-                  <div class="appointment-option-modern">
-                    <div class="appt-main">
-                      <i class="ri-calendar-event-line"></i>
-                      <strong>{{ item.appointmentTime | date: 'dd MMM yyyy, HH:mm' }}</strong>
-                    </div>
-                    <div class="appt-meta">
-                      <span class="dept-tag">{{ item.department }}</span>
-                      <span class="status-dot" [ngClass]="getStatusClass(item.status)">{{ item.status }}</span>
-                    </div>
-                  </div>
-                </ng-template>
-              </p-dropdown>
-            }
-            @if (selectedPatientIdForAuto() && patientAppointments().length === 0) {
-              <div class="no-appt-fallback">
-                <i class="ri-error-warning-line"></i>
-                No completed appointments found for this patient.
-              </div>
-            }
-            @if (!selectedPatientIdForAuto()) {
-              <div class="lock-placeholder">
-                Complete Step 1 to see available appointments
-              </div>
-            }
-          </div>
-        </div>
-      </div>
-
-      <div class="modal-footer footer-gradient">
-        <button class="btn-ghost" (click)="showAutoGenerateModal.set(false)">Discard</button>
-        <button
-          class="btn-primary-gradient"
-          [disabled]="!selectedAppointmentId() || isGenerating()"
-          (click)="generateFromAppointment()"
-        >
-          @if (isGenerating()) {
-            <i class="ri-loader-4-line spin"></i>
-          }
-          <span>{{ isGenerating() ? 'Generating...' : 'Calculate & Generate Bill' }}</span>
-          @if (!isGenerating()) {
-            <i class="ri-arrow-right-line"></i>
-          }
-        </button>
-      </div>
-    </div>
-  </div>
-}

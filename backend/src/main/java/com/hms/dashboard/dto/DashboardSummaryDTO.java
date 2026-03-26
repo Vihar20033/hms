@@ -17,7 +17,6 @@ public class DashboardSummaryDTO {
     private long todayAppointments;
     private long totalDoctors;
     private long lowStockMedicines;
-    private BigDecimal todayRevenue;
     private BigDecimal totalRevenue;
     private long patientsInQueue;
     private long completedConsultations;

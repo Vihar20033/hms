@@ -8,9 +8,8 @@ import com.hms.common.enums.Department;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
-
-import java.time.LocalDateTime;
 import java.util.List;
+import com.hms.appointment.dto.request.AppointmentSearchCriteria;
 
 
 public interface AppointmentService {
@@ -27,16 +26,7 @@ public interface AppointmentService {
 
     Appointment updateStatus(Long id, AppointmentStatus status);
 
-    Page<Appointment> findAppointments(
-            String query,
-            Pageable pageable,
-            Long doctorId,
-            Long patientId,
-            AppointmentStatus status,
-            Department department,
-            LocalDateTime start,
-            LocalDateTime end,
-            Boolean isEmergency);
+    Page<Appointment> findAppointments(AppointmentSearchCriteria criteria, Pageable pageable);
 
 
     List<Appointment> getAppointmentsByDoctor(Long doctorId);

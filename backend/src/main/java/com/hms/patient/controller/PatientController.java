@@ -2,6 +2,7 @@ package com.hms.patient.controller;
 
 import com.hms.common.response.ApiResponse;
 import com.hms.patient.dto.request.PatientRequestDTO;
+import com.hms.patient.dto.request.PatientSearchCriteria;
 import com.hms.patient.dto.response.PatientResponseDTO;
 import com.hms.patient.service.PatientService;
 import jakarta.validation.Valid;
@@ -31,16 +32,12 @@ public class PatientController {
     @PreAuthorize("hasAnyRole('ADMIN','DOCTOR','NURSE','RECEPTIONIST','PHARMACIST')")
     @GetMapping
     public ApiResponse<Slice<PatientResponseDTO>> search(
-            @RequestParam(name = "query", required = false) String query,
-            @RequestParam(name = "name", required = false) String name,
-            @RequestParam(name = "email", required = false) String email,
-            @RequestParam(name = "bloodGroup", required = false) String bloodGroup,
-            @RequestParam(name = "urgencyLevel", required = false) String urgencyLevel,
+            @ModelAttribute PatientSearchCriteria criteria,
             @RequestParam(name = "page", defaultValue = "0") int page,
             @RequestParam(name = "size", defaultValue = "10") int size,
             @RequestParam(name = "sortBy", defaultValue = "createdAt") String sortBy) {
 
-        return ApiResponse.success(service.search(query, name, email, bloodGroup, urgencyLevel, page, size, sortBy));
+        return ApiResponse.success(service.search(criteria, page, size, sortBy));
     }
 
     @PreAuthorize("hasAnyRole('ADMIN','RECEPTIONIST','DOCTOR','NURSE')")

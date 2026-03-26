@@ -22,16 +22,12 @@ public class MedicineResponseDTO {
     private String description;
     private MedicineCategory category;
     private String manufacturer;
-    private String batchNumber;
     private LocalDate expiryDate;
     private Integer quantityInStock;
     private BigDecimal unitPrice;
     private Integer reorderLevel;
-    private String storageLocation;
     private String dosage;
-    private String sideEffects;
     private Boolean isActive;
-    private Boolean requiresPrescription;
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
 }

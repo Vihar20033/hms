@@ -34,6 +34,7 @@ import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.Arrays;
 import java.util.List;
+import com.hms.appointment.dto.request.AppointmentSearchCriteria;
 
 
 @Service
@@ -259,16 +260,7 @@ public class AppointmentServiceImpl implements AppointmentService {
 
     @Override
     @Transactional(readOnly = true)
-    public Page<Appointment> findAppointments(
-            String query,
-            Pageable pageable,
-            Long doctorId,
-            Long patientId,
-            AppointmentStatus status,
-            Department department,
-            LocalDateTime start,
-            LocalDateTime end,
-            Boolean isEmergency) {
+    public Page<Appointment> findAppointments(AppointmentSearchCriteria criteria, Pageable pageable) {
         
         Specification<Appointment> spec = Specification.where(null);
         
@@ -277,13 +269,13 @@ public class AppointmentServiceImpl implements AppointmentService {
             spec = spec.and(AppointmentSpecification.hasDoctorUserId(user.getId()));
         } 
 
-        if (query != null && !query.isEmpty()) spec = spec.and(AppointmentSpecification.fuzzySearch(query));
-        if (doctorId != null) spec = spec.and(AppointmentSpecification.hasDoctorId(doctorId));
-        if (patientId != null) spec = spec.and(AppointmentSpecification.hasPatientId(patientId));
-        if (status != null) spec = spec.and(AppointmentSpecification.hasStatus(status));
-        if (department != null) spec = spec.and(AppointmentSpecification.hasDepartment(department));
-        if (start != null || end != null) spec = spec.and(AppointmentSpecification.hasTimeBetween(start, end));
-        if (isEmergency != null) spec = spec.and(AppointmentSpecification.isEmergency(isEmergency));
+        if (criteria.getQuery() != null && !criteria.getQuery().isEmpty()) spec = spec.and(AppointmentSpecification.fuzzySearch(criteria.getQuery()));
+        if (criteria.getDoctorId() != null) spec = spec.and(AppointmentSpecification.hasDoctorId(criteria.getDoctorId()));
+        if (criteria.getPatientId() != null) spec = spec.and(AppointmentSpecification.hasPatientId(criteria.getPatientId()));
+        if (criteria.getStatus() != null) spec = spec.and(AppointmentSpecification.hasStatus(criteria.getStatus()));
+        if (criteria.getDepartment() != null) spec = spec.and(AppointmentSpecification.hasDepartment(criteria.getDepartment()));
+        if (criteria.getStart() != null || criteria.getEnd() != null) spec = spec.and(AppointmentSpecification.hasTimeBetween(criteria.getStart(), criteria.getEnd()));
+        if (criteria.getIsEmergency() != null) spec = spec.and(AppointmentSpecification.isEmergency(criteria.getIsEmergency()));
 
         return appointmentRepository.findAll(spec, pageable);
     }

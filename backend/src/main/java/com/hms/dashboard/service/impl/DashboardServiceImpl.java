@@ -22,70 +22,66 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Locale;
 
-
 @Service
 @RequiredArgsConstructor
 public class DashboardServiceImpl implements DashboardService {
 
-    private final PatientRepository patientRepository;
-    private final AppointmentRepository appointmentRepository;
-    private final DoctorRepository doctorRepository;
-    private final MedicineRepository medicineRepository;
-    private final BillingRepository billingRepository;
+        private final PatientRepository patientRepository;
+        private final AppointmentRepository appointmentRepository;
+        private final DoctorRepository doctorRepository;
+        private final MedicineRepository medicineRepository;
+        private final BillingRepository billingRepository;
 
-    @Override
-    public DashboardSummaryDTO getSummary() {
-        LocalDateTime startOfDay = LocalDateTime.of(LocalDate.now(), LocalTime.MIN);
-        LocalDateTime endOfDay = LocalDateTime.of(LocalDate.now(), LocalTime.MAX);
+        @Override
+        public DashboardSummaryDTO getSummary() {
+                LocalDateTime startOfDay = LocalDateTime.of(LocalDate.now(), LocalTime.MIN);
+                LocalDateTime endOfDay = LocalDateTime.of(LocalDate.now(), LocalTime.MAX);
 
-        long totalPatients = patientRepository.count();
-        long todayAppointments = appointmentRepository.countByAppointmentTimeBetween(startOfDay, endOfDay);
-        long totalDoctors = doctorRepository.count();
-        
-        long lowStock = medicineRepository.countLowStock();
+                long totalPatients = patientRepository.count();
+                long todayAppointments = appointmentRepository.countByAppointmentTimeBetween(startOfDay, endOfDay);
+                long totalDoctors = doctorRepository.count();
 
-        BigDecimal todayRevenue = billingRepository.sumTodayRevenue(startOfDay, endOfDay);
-        if (todayRevenue == null) todayRevenue = BigDecimal.ZERO;
+                long lowStock = medicineRepository.countLowStock();
 
-        BigDecimal totalRevenue = billingRepository.sumTotalRevenue();
-        if (totalRevenue == null) totalRevenue = BigDecimal.ZERO;
+                BigDecimal totalRevenue = billingRepository.sumTotalRevenue();
+                if (totalRevenue == null)
+                        totalRevenue = BigDecimal.ZERO;
 
-        long inQueue = appointmentRepository.countByStatusInAndAppointmentTimeBetween(
-                Arrays.asList(AppointmentStatus.CHECKED_IN, AppointmentStatus.IN_CONSULTATION, AppointmentStatus.CONFIRMED),
-                startOfDay, endOfDay
-        );
+                long inQueue = appointmentRepository.countByStatusInAndAppointmentTimeBetween(
+                                Arrays.asList(AppointmentStatus.CHECKED_IN, AppointmentStatus.IN_CONSULTATION,
+                                                AppointmentStatus.CONFIRMED),
+                                startOfDay, endOfDay);
 
-        long consultations = appointmentRepository.countByStatusAndAppointmentTimeBetween(
-                AppointmentStatus.COMPLETED,
-                startOfDay, endOfDay
-        );
+                long consultations = appointmentRepository.countByStatusAndAppointmentTimeBetween(
+                                AppointmentStatus.COMPLETED,
+                                startOfDay, endOfDay);
 
-        long totalConsultations = appointmentRepository.countByStatus(AppointmentStatus.COMPLETED);
+                long totalConsultations = appointmentRepository.countByStatus(AppointmentStatus.COMPLETED);
 
-        List<WeeklyStatisticsDTO> weeklyStats = new ArrayList<>();
-        for (int i = 6; i >= 0; i--) {
-            LocalDate date = LocalDate.now().minusDays(i);
-            LocalDateTime start = LocalDateTime.of(date, LocalTime.MIN);
-            LocalDateTime end = LocalDateTime.of(date, LocalTime.MAX);
-            
-            weeklyStats.add(WeeklyStatisticsDTO.builder()
-                    .day(date.getDayOfWeek().getDisplayName(TextStyle.SHORT, Locale.ENGLISH))
-                    .appointments(appointmentRepository.countByAppointmentTimeBetween(start, end))
-                    .patients(patientRepository.countByCreatedAtBetween(start, end))
-                    .build());
+                List<WeeklyStatisticsDTO> weeklyStats = new ArrayList<>();
+                for (int i = 6; i >= 0; i--) {
+                        LocalDate date = LocalDate.now().minusDays(i);
+                        LocalDateTime start = LocalDateTime.of(date, LocalTime.MIN);
+                        LocalDateTime end = LocalDateTime.of(date, LocalTime.MAX);
+
+                        weeklyStats.add(WeeklyStatisticsDTO.builder()
+                                        .day(date.getDayOfWeek().getDisplayName(TextStyle.SHORT, Locale.ENGLISH))
+                                        .appointments(appointmentRepository.countByAppointmentTimeBetween(start, end))
+                                        .patients(patientRepository.countByCreatedAtBetween(start, end))
+                                        .build());
+                }
+
+                return DashboardSummaryDTO.builder()
+                                .totalPatients(totalPatients)
+                                .todayAppointments(todayAppointments)
+                                .totalDoctors(totalDoctors)
+                                .lowStockMedicines(lowStock)
+
+                                .totalRevenue(totalRevenue)
+                                .patientsInQueue(inQueue)
+                                .completedConsultations(consultations)
+                                .totalCompletedConsultations(totalConsultations)
+                                .weeklyStats(weeklyStats)
+                                .build();
         }
-
-        return DashboardSummaryDTO.builder()
-                .totalPatients(totalPatients)
-                .todayAppointments(todayAppointments)
-                .totalDoctors(totalDoctors)
-                .lowStockMedicines(lowStock)
-                .todayRevenue(todayRevenue)
-                .totalRevenue(totalRevenue)
-                .patientsInQueue(inQueue)
-                .completedConsultations(consultations)
-                .totalCompletedConsultations(totalConsultations)
-                .weeklyStats(weeklyStats)
-                .build();
-    }
 }

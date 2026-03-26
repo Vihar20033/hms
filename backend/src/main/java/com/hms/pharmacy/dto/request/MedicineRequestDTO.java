@@ -36,8 +36,6 @@ public class MedicineRequestDTO {
     @Pattern(regexp = "^[A-Za-z0-9][A-Za-z0-9 .,&'()/-]{1,99}$", message = "Manufacturer contains invalid characters")
     private String manufacturer;
 
-    @Size(max = 50, message = "Batch number must not exceed 50 characters")
-    private String batchNumber;
 
     @Future(message = "Expiry date must be in the future")
     private LocalDate expiryDate;
@@ -54,18 +52,12 @@ public class MedicineRequestDTO {
     @Min(value = 0, message = "Reorder level must be non-negative")
     private Integer reorderLevel;
 
-    @Size(max = 100, message = "Storage location must not exceed 100 characters")
-    private String storageLocation;
 
     @Size(max = 200, message = "Dosage must not exceed 200 characters")
     private String dosage;
 
-    @Size(max = 500, message = "Side effects must not exceed 500 characters")
-    private String sideEffects;
 
     @Builder.Default
     private Boolean isActive = true;
 
-    @Builder.Default
-    private Boolean requiresPrescription = false;
 }

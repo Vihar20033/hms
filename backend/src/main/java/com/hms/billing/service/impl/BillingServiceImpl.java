@@ -20,9 +20,9 @@ import com.hms.common.exception.BadRequestException;
 import com.hms.doctor.entity.Doctor;
 import com.hms.patient.entity.Patient;
 import com.hms.patient.exception.PatientNotFoundException;
-import com.hms.patient.repository.PatientRepository;
 import com.hms.pharmacy.entity.Medicine;
 import com.hms.pharmacy.repository.MedicineRepository;
+import com.hms.patient.repository.PatientRepository;
 import com.hms.prescription.repository.PrescriptionRepository;
 import com.hms.user.entity.User;
 import lombok.RequiredArgsConstructor;
@@ -37,7 +37,6 @@ import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
-
 
 @Service
 @RequiredArgsConstructor
@@ -81,7 +80,8 @@ public class BillingServiceImpl implements BillingService {
 
         if (dto.getAppointmentId() != null) {
             Appointment appointment = appointmentRepository.findById(dto.getAppointmentId())
-                    .orElseThrow(() -> new AppointmentNotFoundException("Appointment not found: " + dto.getAppointmentId()));
+                    .orElseThrow(
+                            () -> new AppointmentNotFoundException("Appointment not found: " + dto.getAppointmentId()));
             billing.setAppointment(appointment);
         }
 
@@ -96,13 +96,16 @@ public class BillingServiceImpl implements BillingService {
             }
         }
 
-        if (billing.getTaxAmount().compareTo(BigDecimal.ZERO) == 0 && billing.getTotalAmount().compareTo(BigDecimal.ZERO) > 0) {
+        if (billing.getTaxAmount().compareTo(BigDecimal.ZERO) == 0
+                && billing.getTotalAmount().compareTo(BigDecimal.ZERO) > 0) {
             billing.setTaxAmount(billing.getTotalAmount().multiply(taxRate != null ? taxRate : new BigDecimal("0.05")));
-            billing.setNetAmount(billing.getTotalAmount().add(billing.getTaxAmount()).subtract(billing.getDiscountAmount()));
+            billing.setNetAmount(
+                    billing.getTotalAmount().add(billing.getTaxAmount()).subtract(billing.getDiscountAmount()));
         }
 
         Billing savedBilling = billingRepository.save(billing);
-        auditLogService.log(getCurrentUsername(), "BILLING_CREATE", "Billing", savedBilling.getId().toString(), "invoice=" + savedBilling.getInvoiceNumber());
+        auditLogService.log(getCurrentUsername(), "BILLING_CREATE", "Billing", savedBilling.getId().toString(),
+                "invoice=" + savedBilling.getInvoiceNumber());
         return billingMapper.toDto(savedBilling);
     }
 
@@ -119,7 +122,8 @@ public class BillingServiceImpl implements BillingService {
         existing.setNotes(dto.getNotes());
 
         Billing updated = billingRepository.save(existing);
-        auditLogService.log(getCurrentUsername(), "BILLING_UPDATE", "Billing", id.toString(), "status=" + updated.getPaymentStatus());
+        auditLogService.log(getCurrentUsername(), "BILLING_UPDATE", "Billing", id.toString(),
+                "status=" + updated.getPaymentStatus());
         return billingMapper.toDto(updated);
     }
 
@@ -140,16 +144,15 @@ public class BillingServiceImpl implements BillingService {
         return billingMapper.toDtoList(billingRepository.findAll());
     }
 
-
     @Override
     @Transactional(readOnly = true)
     public List<BillingResponseDTO> getBillingsByPatientId(Long patientId) {
         List<Billing> billings = billingRepository.findByPatientId(patientId);
-        
+
         if (!billings.isEmpty()) {
             checkOwnership(billings.get(0));
         }
-        
+
         return billingMapper.toDtoList(billings);
     }
 
@@ -160,7 +163,8 @@ public class BillingServiceImpl implements BillingService {
                 .orElseThrow(() -> new BillingNotFoundException("Billing not found: " + id, id.toString()));
         billing.setPaymentStatus(status);
         Billing saved = billingRepository.save(billing);
-        auditLogService.log(getCurrentUsername(), "BILLING_PAYMENT_UPDATE", "Billing", id.toString(), "status=" + status);
+        auditLogService.log(getCurrentUsername(), "BILLING_PAYMENT_UPDATE", "Billing", id.toString(),
+                "status=" + status);
         return billingMapper.toDto(saved);
     }
 
@@ -200,7 +204,7 @@ public class BillingServiceImpl implements BillingService {
 
         Patient patient = appointment.getPatient();
         Doctor doctor = appointment.getDoctor();
-        
+
         if (patient == null) {
             throw new BadRequestException("No patient associated with appointment: " + appointmentId);
         }
@@ -213,7 +217,7 @@ public class BillingServiceImpl implements BillingService {
         billing.setPaymentMethod(PaymentMethod.CASH);
         billing.setPaymentStatus(PaymentStatus.PENDING);
         billing.setItems(new ArrayList<>());
-        
+
         BigDecimal rate = (this.taxRate != null) ? this.taxRate : new BigDecimal("0.05");
 
         if (doctor != null && doctor.getConsultationFee() != null) {
@@ -231,7 +235,7 @@ public class BillingServiceImpl implements BillingService {
                     BigDecimal price = medicineRepository.findByNameIgnoreCase(pm.getMedicineName())
                             .map(Medicine::getUnitPrice)
                             .orElse(BigDecimal.ZERO);
-                    
+
                     int qty = (pm.getQuantity() != null) ? pm.getQuantity() : 1;
                     BigDecimal lineTotal = price.multiply(BigDecimal.valueOf(qty));
 
@@ -253,7 +257,7 @@ public class BillingServiceImpl implements BillingService {
         billing.setTaxAmount(subtotal.multiply(rate));
         billing.setDiscountAmount(BigDecimal.ZERO);
         billing.setNetAmount(subtotal.add(billing.getTaxAmount()));
-        
+
         return billing;
     }
 
@@ -266,8 +270,7 @@ public class BillingServiceImpl implements BillingService {
             return;
         }
 
-
-        log.warn("Security Alert: User {} with role {} attempted unauthorized access to invoice {}.", 
+        log.warn("Security Alert: User {} with role {} attempted unauthorized access to invoice {}.",
                 user.getUsername(), role, billing.getInvoiceNumber());
         throw new AccessDeniedException("You do not have permission to access this billing record.");
     }

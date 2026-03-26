@@ -1,6 +1,7 @@
 package com.hms.patient.service;
 
 import com.hms.patient.dto.request.PatientRequestDTO;
+import com.hms.patient.dto.request.PatientSearchCriteria;
 import com.hms.patient.dto.response.PatientResponseDTO;
 import org.springframework.data.domain.Slice;
 
@@ -12,11 +13,7 @@ public interface PatientService {
     PatientResponseDTO create(PatientRequestDTO dto);
 
     Slice<PatientResponseDTO> search(
-            String query,
-            String name,
-            String email,
-            String bloodGroup,
-            String urgencyLevel,
+            PatientSearchCriteria criteria,
             int page,
             int size,
             String sortBy

@@ -14,16 +14,13 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
-import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
-import java.time.LocalDateTime;
-
-import com.hms.common.enums.Department;
 import jakarta.validation.Valid;
 import com.hms.appointment.dto.request.AppointmentRequestDTO;
+import com.hms.appointment.dto.request.AppointmentSearchCriteria;
 
 @RestController
 @RequestMapping("/api/v1/appointments")
@@ -53,18 +50,11 @@ public class AppointmentController {
     @GetMapping
     @Transactional(readOnly = true)
     public ResponseEntity<ApiResponse<PagedResponse<AppointmentResponseDTO>>> searchAppointments(
-            @RequestParam(name = "query", required = false) String query,
-            @RequestParam(name = "doctorId", required = false) Long doctorId,
-            @RequestParam(name = "patientId", required = false) Long patientId,
-            @RequestParam(name = "status", required = false) AppointmentStatus status,
-            @RequestParam(name = "department", required = false) Department department,
-            @RequestParam(name = "start", required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime start,
-            @RequestParam(name = "end", required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime end,
-            @RequestParam(name = "isEmergency", required = false) Boolean isEmergency,
+            @ModelAttribute AppointmentSearchCriteria criteria,
             @PageableDefault(sort = "appointmentTime", direction = Sort.Direction.DESC, size = 20) Pageable pageable) {
         
         Page<Appointment> appointments = appointmentService.findAppointments(
-                query, pageable, doctorId, patientId, status, department, start, end, isEmergency);
+                criteria, pageable);
         
         return ResponseEntity.ok(ApiResponse.success(
                 PagedResponse.from(appointments, appointmentMapper::toDto)));

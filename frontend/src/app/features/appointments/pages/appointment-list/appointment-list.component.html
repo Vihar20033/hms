@@ -11,11 +11,6 @@
           <p>{{ pageLead() }}</p>
         </div>
         <div class="header-actions">
-          @if (appointments().length > 0) {
-            <button class="btn-excel" (click)="exportToExcel()">
-              <i class="ri-file-excel-2-line"></i> Download Excel
-            </button>
-          }
           @if (userRole() !== 'DOCTOR') {
             <button class="btn-primary" routerLink="/appointments/book">
               <i class="ri-calendar-todo-line"></i> Book Appointment
@@ -83,10 +78,6 @@
               <strong>Front desk workflow</strong>
               <span>Use `Check In` when the patient arrives. That moves the visit into the doctor queue and unlocks consultation for the assigned doctor.</span>
             </div>
-            <button type="button" class="btn-outline reception-shortcut" (click)="setStatusFilter(statusEnum.SCHEDULED)">
-              <i class="ri-user-received-line"></i>
-              Open Reception Queue
-            </button>
           </div>
         }
 

@@ -3,6 +3,7 @@ package com.hms.patient.service.impl;
 import com.hms.common.audit.AuditLogService;
 import com.hms.common.util.SecurityUtils;
 import com.hms.patient.dto.request.PatientRequestDTO;
+import com.hms.patient.dto.request.PatientSearchCriteria;
 import com.hms.patient.dto.response.PatientResponseDTO;
 import com.hms.patient.entity.Patient;
 import com.hms.patient.exception.DuplicatePatientException;
@@ -56,17 +57,18 @@ public class PatientServiceImpl implements PatientService {
 
     @Override
     @Transactional(readOnly = true)
-    public Slice<PatientResponseDTO> search(String query, String name, String email, String bloodGroup, String urgencyLevel, int page, int size, String sortBy) {
+    public Slice<PatientResponseDTO> search(PatientSearchCriteria criteria, int page, int size, String sortBy) {
         if (!ALLOWED_SORT_FIELDS.contains(sortBy)) sortBy = "createdAt";
         if (size > MAX_PAGE_SIZE) size = MAX_PAGE_SIZE;
         if (size < 1) size = 10;
 
-        Specification<Patient> spec = Specification.where(PatientSpecification.fuzzySearch(query))
-                .and(PatientSpecification.fuzzySearch(query))
-                .and(PatientSpecification.hasName(name))
-                .and(PatientSpecification.hasEmail(email))
-                .and(PatientSpecification.hasBloodGroup(bloodGroup))
-                .and(PatientSpecification.hasUrgencyLevel(urgencyLevel));
+        Specification<Patient> spec = Specification.where(null);
+        
+        if (criteria.getQuery() != null && !criteria.getQuery().isEmpty()) spec = spec.and(PatientSpecification.fuzzySearch(criteria.getQuery()));
+        if (criteria.getName() != null && !criteria.getName().isEmpty()) spec = spec.and(PatientSpecification.hasName(criteria.getName()));
+        if (criteria.getEmail() != null && !criteria.getEmail().isEmpty()) spec = spec.and(PatientSpecification.hasEmail(criteria.getEmail()));
+        if (criteria.getBloodGroup() != null && !criteria.getBloodGroup().isEmpty()) spec = spec.and(PatientSpecification.hasBloodGroup(criteria.getBloodGroup()));
+        if (criteria.getUrgencyLevel() != null && !criteria.getUrgencyLevel().isEmpty()) spec = spec.and(PatientSpecification.hasUrgencyLevel(criteria.getUrgencyLevel()));
 
         Pageable pageable = PageRequest.of(page, size, Sort.by(sortBy).descending());
         Slice<Patient> slice = repository.findAllAsSlice(spec, pageable);

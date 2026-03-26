@@ -19,9 +19,7 @@ export interface DashboardSummary {
   todayAppointments: number;
   totalDoctors: number;
   lowStockMedicines: number;
-  todayRevenue: number;
   totalRevenue: number;
-  pendingLabTests: number;
   patientsInQueue: number;
   completedConsultations: number;
   totalCompletedConsultations: number;

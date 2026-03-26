@@ -81,29 +81,9 @@
             </div>
           </div>
 
-          @if (isAdminOrStaff()) {
-            <div class="stat-card">
-              <div class="stat-icon earnings">
-                <i class="ri-money-dollar-circle-line"></i>
-              </div>
-              <div class="stat-info">
-                <span class="label">Today's Revenue</span>
-                <span class="value">{{ data.todayRevenue | currency }}</span>
-                <span class="trend up"><i class="ri-arrow-up-line"></i> Daily</span>
-              </div>
-            </div>
-          }
 
-          <div class="stat-card">
-            <div class="stat-icon patient">
-              <i class="ri-test-tube-line"></i>
-            </div>
-            <div class="stat-info">
-              <span class="label">Pending Labs</span>
-              <span class="value">{{ data.pendingLabTests }}</span>
-              <span class="trend"><i class="ri-time-line"></i> Waiting</span>
-            </div>
-          </div>
+
+
 
           @if (role() === 'ADMIN') {
             <div class="stat-card" [class.health-down]="healthStatus()?.status === 'DOWN'">

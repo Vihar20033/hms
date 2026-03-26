@@ -13,9 +13,6 @@ public interface PrescriptionRepository extends JpaRepository<Prescription, Long
     // SELECT * FROM prescriptions WHERE patient_id = :patientId AND deleted = false
     List<Prescription> findByPatientId(Long patientId);
 
-    // SELECT * FROM prescriptions WHERE patient_email = :email AND deleted = false
-    List<Prescription> findByPatientEmail(String email);
-
     // SELECT * FROM prescriptions WHERE doctor_id = :doctorId AND deleted = false
     List<Prescription> findByDoctorId(Long doctorId);
 
