@@ -58,7 +58,7 @@ export class AppointmentBookingComponent implements OnInit {
   departments = BOOKABLE_DEPARTMENTS;
   selectedDepartment: string = '';
   filteredDoctors: Doctor[] = [];
-  formSubmitted = false;
+  formSubmitted = false;          // Prevents past dates from being selected
   readonly minDate = new Date();
 
   constructor(
@@ -70,6 +70,8 @@ export class AppointmentBookingComponent implements OnInit {
     private route: ActivatedRoute,
     public authService: AuthService,
   ) {
+
+    // Initialize form with validators
     this.bookingForm = this.fb.group({
       patientId: ['', Validators.required],
       department: ['', Validators.required],
@@ -93,6 +95,7 @@ export class AppointmentBookingComponent implements OnInit {
     });
   }
 
+  // Initialize component and load data
   ngOnInit(): void {
     this.loadData();
     this.route.queryParams.subscribe((params) => {

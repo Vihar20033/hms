@@ -5,6 +5,7 @@
     <app-header></app-header>
 
     <div class="page-body">
+
       <div class="content-header">
         <div class="title-section">
           <h1>Appointments Schedule</h1>
@@ -136,17 +137,13 @@
                   </td>
                   <td>
                     <div class="action-buttons">
-                      @if (apt.status === statusEnum.SCHEDULED && (userRole() === 'ADMIN' || userRole() === 'RECEPTIONIST')) {
+                      @if (apt.status === statusEnum.SCHEDULED && (userRole() === 'RECEPTIONIST')) {
                         <button class="btn-icon btn-checkin" title="Check In Patient" (click)="onCheckIn(apt.id)">
                           <i class="ri-user-received-line"></i>
                         </button>
                       }
-                      @if (apt.status === statusEnum.CHECKED_IN && (userRole() === 'ADMIN' || userRole() === 'RECEPTIONIST' || userRole() === 'NURSE')) {
-                        <button class="btn-icon btn-start" title="Record Vitals" [routerLink]="['/clinical/vitals', apt.id]">
-                          <i class="ri-pulse-line"></i>
-                        </button>
-                      }
-                      @if (apt.status === statusEnum.CHECKED_IN && (userRole() === 'ADMIN' || userRole() === 'RECEPTIONIST' || userRole() === 'DOCTOR')) {
+
+                      @if (apt.status === statusEnum.CHECKED_IN && (userRole() === 'RECEPTIONIST' || userRole() === 'DOCTOR')) {
                         <button class="btn-icon btn-play" title="Start Consultation" (click)="onStart(apt.id)">
                           <i class="ri-play-line"></i>
                         </button>
@@ -159,7 +156,7 @@
                         <span class="action-hint ready">Start from this row</span>
                       }
 
-                      @if (apt.status === statusEnum.IN_CONSULTATION && (userRole() === 'ADMIN' || userRole() === 'DOCTOR')) {
+                      @if (apt.status === statusEnum.IN_CONSULTATION && (userRole() === 'DOCTOR')) {
                         <button class="btn-icon btn-start" title="New Prescription" [routerLink]="['/prescriptions/create', apt.id]">
                           <i class="ri-capsule-line"></i>
                         </button>

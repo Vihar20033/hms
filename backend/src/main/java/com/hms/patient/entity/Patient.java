@@ -4,8 +4,7 @@ import com.hms.common.entity.Auditable;
 import com.hms.common.enums.BloodGroup;
 import com.hms.common.enums.UrgencyLevel;
 import jakarta.persistence.*;
-import org.hibernate.annotations.SQLDelete;
-import org.hibernate.annotations.SQLRestriction;
+
 import jakarta.validation.constraints.*;
 import lombok.*;
 import lombok.experimental.SuperBuilder;

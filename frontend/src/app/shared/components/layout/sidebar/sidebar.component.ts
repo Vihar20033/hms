@@ -51,13 +51,7 @@ export class SidebarComponent {
       roles: ['ADMIN', 'DOCTOR', 'NURSE', 'RECEPTIONIST'],
       summary: 'Queue and consultations',
     },
-    {
-      title: 'Vitals Collection',
-      icon: 'ri-heart-pulse-line',
-      link: '/clinical/vitals-list',
-      roles: ['ADMIN', 'NURSE'],
-      summary: 'Patient vital signs',
-    },
+
     {
       title: 'Staff',
       icon: 'ri-stethoscope-line',

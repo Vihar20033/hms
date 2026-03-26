@@ -1,5 +1,4 @@
 com\hms\doctor\dto\request\UpdateDoctorRequest$UpdateDoctorRequestBuilder.class
-com\hms\clinical\dto\request\VitalsRequestDTO.class
 com\hms\dashboard\dto\WeeklyStatisticsDTO$WeeklyStatisticsDTOBuilder.class
 com\hms\pharmacy\entity\Medicine.class
 com\hms\common\config\JacksonConfiguration.class
@@ -14,7 +13,6 @@ com\hms\common\entity\Auditable.class
 com\hms\pharmacy\controller\MedicineController.class
 com\hms\appointment\repository\AppointmentRepositoryCustom.class
 com\hms\doctor\dto\request\UpdateDoctorRequest.class
-com\hms\clinical\exception\VitalsNotFoundException.class
 com\hms\pharmacy\mapper\MedicineMapper.class
 com\hms\common\response\PagedResponse$PagedResponseBuilder.class
 com\hms\appointment\dto\response\AppointmentSummaryDTO$AppointmentSummaryDTOBuilder.class
@@ -24,7 +22,6 @@ com\hms\security\jwt\JwtAuthenticationFilter.class
 com\hms\common\response\ValidationError.class
 com\hms\user\mapper\UserMapper.class
 com\hms\appointment\mapper\AppointmentMapper.class
-com\hms\clinical\mapper\VitalsMapper.class
 com\hms\patient\repository\PatientRepositoryCustom.class
 com\hms\auth\service\AuthService.class
 com\hms\prescription\dto\request\PrescriptionRequestDTO$PrescriptionRequestDTOBuilder.class
@@ -80,8 +77,8 @@ com\hms\prescription\dto\request\PrescriptionRequestDTO.class
 com\hms\pharmacy\repository\InventoryTransactionRepository.class
 com\hms\patient\entity\Patient$PatientBuilder.class
 com\hms\doctor\mapper\DoctorMapper.class
-com\hms\clinical\controller\VitalsController.class
 com\hms\prescription\repository\PrescriptionRepository.class
+com\hms\appointment\dto\request\AppointmentSearchCriteria.class
 com\hms\user\entity\User$UserBuilder.class
 com\hms\pharmacy\entity\InventoryTransaction.class
 com\hms\dashboard\service\impl\DashboardServiceImpl.class
@@ -99,7 +96,6 @@ com\hms\billing\entity\BillingItem.class
 com\hms\appointment\dto\response\AppointmentResponseDTO$AppointmentResponseDTOBuilder.class
 com\hms\prescription\controller\PrescriptionController.class
 com\hms\auth\exception\SelfRegistrationRoleNotAllowedException.class
-com\hms\clinical\mapper\VitalsMapperImpl.class
 com\hms\patient\specification\PatientSpecification.class
 com\hms\common\exception\GlobalExceptionHandler.class
 com\hms\common\response\ApiResponse.class
@@ -114,9 +110,7 @@ com\hms\billing\mapper\BillingMapperImpl.class
 com\hms\common\exception\BadRequestException.class
 com\hms\patient\service\impl\PatientServiceImpl.class
 com\hms\doctor\dto\response\DoctorResponse.class
-com\hms\clinical\entity\Vitals$VitalsBuilder.class
 com\hms\pharmacy\dto\request\DispenseMedicineRequestDTO.class
-com\hms\clinical\dto\response\VitalsResponseDTO.class
 com\hms\auth\dto\request\TokenRefreshRequest.class
 com\hms\billing\dto\response\BillingResponseDTO$BillingResponseDTOBuilder.class
 com\hms\dashboard\service\DashboardService.class
@@ -124,7 +118,6 @@ com\hms\patient\repository\PatientRepositoryImpl.class
 com\hms\appointment\repository\AppointmentRepositoryImpl.class
 com\hms\pharmacy\service\impl\MedicineServiceImpl.class
 com\hms\prescription\entity\Prescription$PrescriptionBuilder.class
-com\hms\clinical\entity\Vitals.class
 com\hms\billing\service\BillingService.class
 com\hms\doctor\entity\Doctor$DoctorBuilderImpl.class
 com\hms\pharmacy\dto\request\MedicineRequestDTO.class
@@ -141,7 +134,6 @@ com\hms\user\exception\EmailAlreadyExistsException.class
 com\hms\dashboard\dto\WeeklyStatisticsDTO.class
 com\hms\user\service\CustomUserDetailsService.class
 com\hms\auth\dto\request\RegisterRequest.class
-com\hms\clinical\service\impl\VitalsServiceImpl.class
 com\hms\billing\dto\response\BillingItemResponseDTO.class
 com\hms\pharmacy\dto\request\RestockMedicineRequestDTO.class
 com\hms\billing\dto\request\BillingItemRequestDTO$BillingItemRequestDTOBuilder.class
@@ -169,7 +161,6 @@ com\hms\pharmacy\dto\response\InventoryTransactionResponseDTO.class
 com\hms\patient\repository\PatientRepository.class
 com\hms\pharmacy\exception\MedicineNotFoundException.class
 com\hms\common\util\SecurityUtils.class
-com\hms\clinical\repository\VitalsRepository.class
 com\hms\common\enums\PaymentMethod.class
 com\hms\appointment\entity\Appointment$AppointmentBuilderImpl.class
 com\hms\doctor\controller\DoctorController.class
@@ -181,7 +172,6 @@ com\hms\prescription\entity\Prescription.class
 com\hms\patient\controller\PatientController.class
 com\hms\billing\controller\BillingController.class
 com\hms\pharmacy\dto\request\DispenseMedicineRequestDTO$DispenseItemDTO.class
-com\hms\clinical\service\VitalsService.class
 com\hms\common\response\PagedResponse.class
 com\hms\appointment\specification\AppointmentSpecification.class
 com\hms\common\enums\UrgencyLevel.class
@@ -189,6 +179,7 @@ com\hms\pharmacy\exception\InsufficientStockException.class
 com\hms\patient\dto\request\PatientRequestDTO.class
 com\hms\billing\dto\request\BillingRequestDTO.class
 com\hms\billing\entity\Billing$BillingBuilder.class
+com\hms\patient\dto\request\PatientSearchCriteria.class
 com\hms\appointment\mapper\AppointmentMapperImpl.class
 com\hms\prescription\dto\response\PrescriptionMedicineResponseDTO.class
 com\hms\doctor\dto\response\DoctorResponseDTO.class

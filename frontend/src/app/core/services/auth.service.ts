@@ -1,7 +1,7 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable, computed, signal } from '@angular/core';
-import { BehaviorSubject, Observable, timer } from 'rxjs';
-import { retry, tap, timeout } from 'rxjs/operators';
+import { BehaviorSubject, Observable, throwError, timer } from 'rxjs';
+import { catchError, retry, tap, timeout } from 'rxjs/operators';
 import { environment } from '../../../environments/environment';
 import { AuthResponse, ChangePasswordRequest, LoginRequest, RegisterRequest, User } from '../models/auth.models';
 import { ApiResponse } from '../models/common.models';
@@ -13,6 +13,7 @@ import { AccessFeedbackService } from './access-feedback.service';
 export class AuthService {
 
   private readonly tokenStorageKey = 'hms_token';
+  private readonly refreshTokenStorageKey = 'hms_refresh_token';
   private readonly userStorageKey = 'hms_user';
   
   private currentUserSignal = signal<User | null>(this.getUserFromStorage());
@@ -46,6 +47,7 @@ export class AuthService {
         if (res.success && res.data) {
           this.clearAuthArtifacts();
           sessionStorage.setItem(this.tokenStorageKey, res.data.token);
+          sessionStorage.setItem(this.refreshTokenStorageKey, res.data.refreshToken);
           const user: User = {
             username: res.data.username,
             email: res.data.email,
@@ -93,6 +95,35 @@ export class AuthService {
 
   getToken(): string | null {
     return sessionStorage.getItem(this.tokenStorageKey);
+  }
+
+  getRefreshToken(): string | null {
+    return sessionStorage.getItem(this.refreshTokenStorageKey);
+  }
+
+  refreshToken(): Observable<ApiResponse<AuthResponse>> {
+    const refreshToken = this.getRefreshToken();
+    if (!refreshToken) {
+      this.logout();
+      return throwError(() => 'No refresh token available');
+    }
+
+    return this.http
+      .post<ApiResponse<AuthResponse>>(`${environment.apiUrl}/auth/refresh-token`, { 
+        refreshToken 
+      })
+      .pipe(
+        tap((res) => {
+          if (res.success && res.data) {
+            sessionStorage.setItem(this.tokenStorageKey, res.data.token);
+            sessionStorage.setItem(this.refreshTokenStorageKey, res.data.refreshToken);
+          }
+        }),
+        catchError((error) => {
+          this.logout();
+          return throwError(() => error);
+        })
+      );
   }
 
   getUserRole(): string | null {
@@ -143,6 +174,7 @@ export class AuthService {
 
   private clearAuthArtifacts(): void {
     sessionStorage.removeItem(this.tokenStorageKey);
+    sessionStorage.removeItem(this.refreshTokenStorageKey);
     sessionStorage.removeItem(this.userStorageKey);
     this.accessFeedbackService.close();
   }

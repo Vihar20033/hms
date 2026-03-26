@@ -46,9 +46,6 @@ public enum HmsErrorCode {
     // Billing Errors
     BILLING_NOT_FOUND("BIL_001", "Billing record not found"),
 
-    // Clinical Errors
-    VITALS_NOT_FOUND("CLI_001", "Vital signs records not found"),
-
     // Prescription Errors
     PRESCRIPTION_NOT_FOUND("PRE_001", "Prescription not found");
 

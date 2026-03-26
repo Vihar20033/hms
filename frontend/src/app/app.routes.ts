@@ -106,24 +106,6 @@ export const routes: Routes = [
     ],
   },
 
-  // Clinical Routes
-  {
-    path: 'clinical',
-    canActivate: [authGuard],
-    canActivateChild: [authGuard, roleGuard],
-    children: [
-      {
-        path: 'vitals-list',
-        loadComponent: () => import('./features/clinical/pages/vitals-list/vitals-list.component').then(m => m.VitalsListComponent),
-        data: { roles: ['ADMIN', 'NURSE'] },
-      },
-      {
-        path: 'vitals/:appointmentId',
-        loadComponent: () => import('./features/clinical/pages/vitals-record/vitals-record.component').then(m => m.VitalsRecordComponent),
-        data: { roles: ['ADMIN', 'NURSE'] },
-      },
-    ],
-  },
 
   // Prescription Routes
   {

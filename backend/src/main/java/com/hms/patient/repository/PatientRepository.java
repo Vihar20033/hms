@@ -4,7 +4,6 @@ import com.hms.patient.entity.Patient;
 import org.springframework.data.jpa.repository.*;
 
 import java.time.LocalDateTime;
-import java.util.Optional;
 
 
 public interface PatientRepository

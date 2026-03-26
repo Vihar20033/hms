@@ -31,3 +31,11 @@
 2026-03-26 12:53:25.820 | farm | USER_LOGIN | User | 4 | role=PHARMACIST
 2026-03-26 13:00:25.345 | farm | USER_LOGOUT | User | 4 | 
 2026-03-26 13:00:29.075 | recep | USER_LOGIN | User | 3 | role=RECEPTIONIST
+2026-03-26 13:19:57.535 | recep | BILLING_CREATE | Billing | 7 | invoice=INV-F6096230
+2026-03-26 13:20:11.108 | recep | BILLING_PAYMENT_UPDATE | Billing | 7 | status=PAID
+2026-03-26 13:49:43.085 | recep | USER_LOGOUT | User | 3 | 
+2026-03-26 14:26:36.051 | admin | USER_LOGIN | User | 1 | role=ADMIN
+2026-03-26 14:55:23.284 | admin | USER_LOGOUT | User | 1 | 
+2026-03-26 14:55:53.050 | doctor | USER_LOGIN | User | 5 | role=DOCTOR
+2026-03-26 14:56:01.592 | doctor | USER_LOGOUT | User | 5 | 
+2026-03-26 14:56:06.151 | admin | USER_LOGIN | User | 1 | role=ADMIN

@@ -1,7 +1,7 @@
 import { HttpErrorResponse, HttpInterceptorFn } from '@angular/common/http';
 import { inject } from '@angular/core';
 import { Router } from '@angular/router';
-import { catchError, throwError } from 'rxjs';
+import { catchError, switchMap, throwError } from 'rxjs';
 import { AuthService } from '../services/auth.service';
 
 export const errorInterceptor: HttpInterceptorFn = (req, next) => {
@@ -10,6 +10,30 @@ export const errorInterceptor: HttpInterceptorFn = (req, next) => {
 
   return next(req).pipe(
     catchError((err: HttpErrorResponse) => {
+      // Handle Unauthorized error (401)
+      if (err.status === 401 && !req.url.includes('/auth/login') && !req.url.includes('/auth/refresh-token')) {
+        return authService.refreshToken().pipe(
+          switchMap((res) => {
+            if (res.success && res.data) {
+              const retryReq = req.clone({
+                setHeaders: {
+                  Authorization: `Bearer ${res.data.token}`,
+                },
+              });
+              return next(retryReq);
+            }
+            authService.logout();
+            router.navigate(['/login']);
+            return throwError(() => 'Refresh token failed');
+          }),
+          catchError((refreshErr) => {
+            authService.logout();
+            router.navigate(['/login']);
+            return throwError(() => refreshErr);
+          })
+        );
+      }
+
       let errorMessage = 'An unknown error occurred';
 
       if (err.error instanceof ErrorEvent) {
@@ -21,6 +45,7 @@ export const errorInterceptor: HttpInterceptorFn = (req, next) => {
             errorMessage = 'Unable to connect to server. Please check your internet connection.';
             break;
           case 401:
+            // If we're here, it means either the refresh token failed or it was a login attempt
             authService.logout();
             router.navigate(['/login']);
             errorMessage = 'Please log in again.';

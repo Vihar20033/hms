@@ -52,7 +52,7 @@ public class DashboardServiceImpl implements DashboardService {
                                                 AppointmentStatus.CONFIRMED),
                                 startOfDay, endOfDay);
 
-                long consultations = appointmentRepository.countByStatusAndAppointmentTimeBetween(
+                long consultations = appointmentRepository.countByStatusAndUpdatedAtBetween(
                                 AppointmentStatus.COMPLETED,
                                 startOfDay, endOfDay);
 

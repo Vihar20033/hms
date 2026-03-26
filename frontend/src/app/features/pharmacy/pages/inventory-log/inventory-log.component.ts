@@ -18,6 +18,7 @@ import { Subject, debounceTime, distinctUntilChanged, takeUntil } from 'rxjs';
   styleUrl: './inventory-log.component.scss',
 })
 export class InventoryLogComponent implements OnInit, OnDestroy {
+  
   transactions: InventoryTransaction[] = [];
   filteredTransactions: InventoryTransaction[] = [];
   isLoading = true;

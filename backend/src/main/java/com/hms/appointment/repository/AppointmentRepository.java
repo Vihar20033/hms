@@ -73,6 +73,9 @@ public interface AppointmentRepository extends JpaRepository
         // SELECT COUNT(*) FROM appointments WHERE status = :status AND appointment_time BETWEEN :start AND :end AND deleted = false
         long countByStatusAndAppointmentTimeBetween(AppointmentStatus status, LocalDateTime start, LocalDateTime end);
 
+        // SELECT COUNT(*) FROM appointments WHERE status = :status AND updated_at BETWEEN :start AND :end AND deleted = false
+        long countByStatusAndUpdatedAtBetween(AppointmentStatus status, LocalDateTime start, LocalDateTime end);
+
         // SELECT COUNT(*) FROM appointments WHERE status IN (:statuses) AND appointment_time BETWEEN :start AND :end AND deleted = false
         long countByStatusInAndAppointmentTimeBetween(Collection<AppointmentStatus> statuses, LocalDateTime start, LocalDateTime end);
 

@@ -5,7 +5,6 @@ import com.hms.appointment.exception.DoctorUnavailableException;
 import com.hms.appointment.exception.SlotAlreadyBookedException;
 import com.hms.auth.exception.SelfRegistrationRoleNotAllowedException;
 import com.hms.billing.exception.BillingNotFoundException;
-import com.hms.clinical.exception.VitalsNotFoundException;
 import com.hms.doctor.exception.DoctorNotFoundException;
 import com.hms.prescription.exception.PrescriptionNotFoundException;
 import com.hms.user.exception.UserNotFoundException;
@@ -128,13 +127,6 @@ public class GlobalExceptionHandler {
                 return buildResponse(HmsErrorCode.BILLING_NOT_FOUND, HttpStatus.NOT_FOUND, ex.getMessage(), request);
         }
 
-        // ========== Clinical Exceptions ==========
-
-        @ExceptionHandler(VitalsNotFoundException.class)
-        public ResponseEntity<ApiError> handleVitalsNotFound(VitalsNotFoundException ex, HttpServletRequest request) {
-                log.warn("Vitals not found: {}", ex.getMessage());
-                return buildResponse(HmsErrorCode.VITALS_NOT_FOUND, HttpStatus.NOT_FOUND, ex.getMessage(), request);
-        }
 
         // ========== Prescription Exceptions ==========
 

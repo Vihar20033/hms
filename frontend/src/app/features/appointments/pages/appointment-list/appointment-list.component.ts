@@ -1,15 +1,14 @@
 import { CommonModule } from '@angular/common';
-import { ChangeDetectionStrategy, Component, OnDestroy, OnInit, signal, computed } from '@angular/core';
+import { 
+  ChangeDetectionStrategy, Component, OnDestroy, OnInit, signal, computed } from '@angular/core';
 import { Router, RouterLink } from '@angular/router';
 import { TableModule } from 'primeng/table';
 import { Appointment, AppointmentStatus, AppointmentSummary } from '../../../../core/models/appointment.models';
-import { Billing } from '../../../../core/models/billing.models';
 import { ApiResponse, PagedResponse } from '../../../../core/models/common.models';
 import { AppointmentService } from '../../../../core/services/appointment.service';
 import { AuthService } from '../../../../core/services/auth.service';
 import { BillingService } from '../../../../core/services/billing.service';
 import { PaginatorModule } from 'primeng/paginator';
-
 import { HeaderComponent } from '../../../../shared/components/layout/header/header.component';
 import { SidebarComponent } from '../../../../shared/components/layout/sidebar/sidebar.component';
 
