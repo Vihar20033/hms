@@ -21,7 +21,7 @@ interface SidebarMenuItem {
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class SidebarComponent {
-  currentUser = this.authService.currentUser;
+  get currentUser() { return this.authService.currentUser; }
 
   menuItems: SidebarMenuItem[] = [
     {

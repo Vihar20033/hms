@@ -10,7 +10,7 @@
           <h1>Hospital Operations Overview</h1>
           <p>
             Welcome back,
-            <span class="username">{{ currentUser()?.username || 'User' }}</span>. 
+            <span class="username">{{ currentUser?.username || 'User' }}</span>. 
             Monitor patient flow, care activity, and daily service delivery from one place.
           </p>
         </div>
@@ -24,14 +24,14 @@
         </div>
       </div>
 
-      @if (isLoading()) {
+      @if (isLoading) {
         <div class="loading-state">
           <i class="ri-loader-4-line ri-spin"></i>
           <span>Generating Analytics...</span>
         </div>
       }
 
-      @if (summary(); as data) {
+      @if (summary; as data) {
         <div class="hero-panel">
           <div class="hero-copy">
             <span class="eyebrow">Hospital Lifetime Overview</span>
@@ -81,21 +81,17 @@
             </div>
           </div>
 
-
-
-
-
-          @if (role() === 'ADMIN') {
-            <div class="stat-card" [class.health-down]="healthStatus()?.status === 'DOWN'">
-              <div class="stat-icon" [ngClass]="healthStatus()?.status === 'UP' ? 'ok' : 'cancelled'">
-                <i [class]="healthStatus()?.status === 'UP' ? 'ri-server-line' : 'ri-error-warning-line'"></i>
+          @if (role === 'ADMIN') {
+            <div class="stat-card" [class.health-down]="healthStatus?.status === 'DOWN'">
+              <div class="stat-icon" [ngClass]="healthStatus?.status === 'UP' ? 'ok' : 'cancelled'">
+                <i [class]="healthStatus?.status === 'UP' ? 'ri-server-line' : 'ri-error-warning-line'"></i>
               </div>
               <div class="stat-info">
                 <span class="label">System Health</span>
-                <span class="value">{{ healthStatus()?.status || '...' }}</span>
-                <span class="trend" [class.up]="healthStatus()?.status === 'UP'" [class.down]="healthStatus()?.status === 'DOWN'">
-                  <i [class]="healthStatus()?.status === 'UP' ? 'ri-shield-check-line' : 'ri-shield-cross-line'"></i>
-                  {{ healthStatus()?.status === 'UP' ? 'Operations Normal' : 'Check Actuator' }}
+                <span class="value">{{ healthStatus?.status || '...' }}</span>
+                <span class="trend" [class.up]="healthStatus?.status === 'UP'" [class.down]="healthStatus?.status === 'DOWN'">
+                  <i [class]="healthStatus?.status === 'UP' ? 'ri-shield-check-line' : 'ri-shield-cross-line'"></i>
+                  {{ healthStatus?.status === 'UP' ? 'Operations Normal' : 'Check Actuator' }}
                 </span>
               </div>
             </div>
@@ -103,8 +99,7 @@
         </div>
       }
 
-      <!-- Chart is always in the DOM so @ViewChild resolves immediately -->
-      <div class="dashboard-grid" [class.hidden]="!summary()">
+      <div class="dashboard-grid" [class.hidden]="!summary">
         <div class="grid-card chart-container full-width">
           <div class="card-header">
             <div>

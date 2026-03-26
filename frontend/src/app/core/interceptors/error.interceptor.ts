@@ -11,27 +11,10 @@ export const errorInterceptor: HttpInterceptorFn = (req, next) => {
   return next(req).pipe(
     catchError((err: HttpErrorResponse) => {
       // Handle Unauthorized error (401)
-      if (err.status === 401 && !req.url.includes('/auth/login') && !req.url.includes('/auth/refresh-token')) {
-        return authService.refreshToken().pipe(
-          switchMap((res) => {
-            if (res.success && res.data) {
-              const retryReq = req.clone({
-                setHeaders: {
-                  Authorization: `Bearer ${res.data.token}`,
-                },
-              });
-              return next(retryReq);
-            }
-            authService.logout();
-            router.navigate(['/login']);
-            return throwError(() => 'Refresh token failed');
-          }),
-          catchError((refreshErr) => {
-            authService.logout();
-            router.navigate(['/login']);
-            return throwError(() => refreshErr);
-          })
-        );
+      if (err.status === 401 && !req.url.includes('/auth/login')) {
+        authService.logout();
+        router.navigate(['/login']);
+        return throwError(() => 'Session expired. Please log in again.');
       }
 
       let errorMessage = 'An unknown error occurred';

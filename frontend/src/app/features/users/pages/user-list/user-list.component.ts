@@ -20,11 +20,14 @@ import { Subject, debounceTime, distinctUntilChanged } from 'rxjs';
 })
 
 export class UserListComponent implements OnInit {
+
   users: User[] = [];
   filteredUsers: User[] = [];
   isLoading = true;
   Role = Role;
   searchTerm = '';
+
+  // Event Emitter for search input 
   private searchSubject = new Subject<string>();
 
   constructor(
@@ -35,8 +38,8 @@ export class UserListComponent implements OnInit {
   ngOnInit(): void {
     this.loadUsers();
     this.searchSubject.pipe(
-      debounceTime(300),
-      distinctUntilChanged()
+      debounceTime(300),         // Wait for 300ms of inactivity before emitting
+      distinctUntilChanged()    // Only emit when the value changes
     ).subscribe(term => {
       this.filterUsers(term);
     });

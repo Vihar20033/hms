@@ -22,7 +22,6 @@ public class AppointmentRepositoryImpl implements AppointmentRepositoryCustom {
 
     private final EntityManager entityManager;
 
-
     // Method checks doctor already booked at this time
     @Override
     public List<Appointment> findAndLockConflictingAppointments(
@@ -40,9 +39,12 @@ public class AppointmentRepositoryImpl implements AppointmentRepositoryCustom {
 
     private List<Appointment> findAndLockConflictByEntity(
             String relationName, Long entityId, LocalDateTime dateTime, List<AppointmentStatus> statuses) {
-        
+
+        // CB used to build custom queries
         CriteriaBuilder cb = entityManager.getCriteriaBuilder();
+        // Query type on Appointment
         CriteriaQuery<Appointment> cq = cb.createQuery(Appointment.class);
+        //Represent table
         Root<Appointment> root = cq.from(Appointment.class);
 
         List<Predicate> predicates = new ArrayList<>();

@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, OnInit } from '@angular/core';
+import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
 import { HttpErrorResponse } from '@angular/common/http';
 import { FormArray, FormBuilder, FormGroup, ReactiveFormsModule, ValidationErrors, Validators } from '@angular/forms';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
@@ -46,6 +46,7 @@ export class PrescriptionCreateComponent implements OnInit {
     private pharmacyService: PharmacyService,
     private route: ActivatedRoute,
     private router: Router,
+    private cdr: ChangeDetectorRef,
   ) {}
 
   ngOnInit(): void {
@@ -62,6 +63,7 @@ export class PrescriptionCreateComponent implements OnInit {
     this.pharmacyService.getActive().subscribe((res: ApiResponse<Medicine[]>) => {
       this.availableMedicines = res.data;
       this.filteredMedicines = [...this.availableMedicines];
+      this.cdr.markForCheck();
     });
   }
 
@@ -177,7 +179,7 @@ export class PrescriptionCreateComponent implements OnInit {
   }
 
   private loadAppointmentDetails(): void {
-    this.appointmentService.getById(this.appointmentId!).subscribe((res: ApiResponse<Appointment>) => {
+        this.appointmentService.getById(this.appointmentId!).subscribe((res: ApiResponse<Appointment>) => {
       const appt = res.data;
       if (appt) {
         this.appointment = appt;
@@ -186,14 +188,16 @@ export class PrescriptionCreateComponent implements OnInit {
 
         if (appt.doctorId) {
           this.doctorId = appt.doctorId;
+          this.cdr.markForCheck();
         } else {
-          const user = this.authService.currentUserValue;
+          const user = this.authService.currentUser;
           if (user?.role === 'DOCTOR') {
             this.doctorService.getAll().subscribe((doctorsRes: ApiResponse<Doctor[]>) => {
               const currentDoctor = doctorsRes.data.find((d) => d.email === user.email);
               if (currentDoctor) {
                 this.doctorId = currentDoctor.id;
               }
+              this.cdr.markForCheck();
             });
           }
         }

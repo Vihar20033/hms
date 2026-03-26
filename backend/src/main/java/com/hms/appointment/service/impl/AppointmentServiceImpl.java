@@ -59,7 +59,6 @@ public class AppointmentServiceImpl implements AppointmentService {
     @Transactional(readOnly = true)
     public AppointmentSummaryDTO getAppointmentSummary() {
 
-        // Get the user (logged-in)
         User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         AppointmentSummaryDTO.AppointmentSummaryDTOBuilder builder = AppointmentSummaryDTO.builder();
 

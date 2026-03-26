@@ -1,6 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { 
-  ChangeDetectionStrategy, Component, OnDestroy, OnInit, signal, computed } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnDestroy, OnInit } from '@angular/core';
 import { Router, RouterLink } from '@angular/router';
 import { TableModule } from 'primeng/table';
 import { Appointment, AppointmentStatus, AppointmentSummary } from '../../../../core/models/appointment.models';
@@ -8,7 +7,7 @@ import { ApiResponse, PagedResponse } from '../../../../core/models/common.model
 import { AppointmentService } from '../../../../core/services/appointment.service';
 import { AuthService } from '../../../../core/services/auth.service';
 import { BillingService } from '../../../../core/services/billing.service';
-import { PaginatorModule } from 'primeng/paginator';
+import { PaginatorModule, PaginatorState } from 'primeng/paginator';
 import { HeaderComponent } from '../../../../shared/components/layout/header/header.component';
 import { SidebarComponent } from '../../../../shared/components/layout/sidebar/sidebar.component';
 
@@ -20,82 +19,87 @@ import { SidebarComponent } from '../../../../shared/components/layout/sidebar/s
   styleUrl: './appointment-list.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class AppointmentListComponent implements OnInit, OnDestroy {
-  
-  pagedResponse = signal<PagedResponse<Appointment> | null>(null);
-  summary = signal<AppointmentSummary | null>(null);
-  isLoading = signal<boolean>(true);
-  
-  selectedStatusFilter = signal<'ALL' | AppointmentStatus>('ALL');
-  page = signal<number>(0);
-  size = signal<number>(10);
-  
-  appointments = computed(() => this.pagedResponse()?.content || []);
-  totalElements = computed(() => this.pagedResponse()?.totalElements || 0);
 
+export class AppointmentListComponent implements OnInit {
+  
+  appointments: Appointment[] = [];
+  summary: AppointmentSummary | null = null;
+  isLoading = true;
+  
+  selectedStatusFilter: 'ALL' | AppointmentStatus = 'ALL';
+  page = 0;
+  size = 10;
+  totalElements = 0;
+  
   statusEnum = AppointmentStatus;
-  
-  scheduledCount = computed(() => this.summary()?.scheduled || 0);
-  checkedInCount = computed(() => this.summary()?.checkedIn || 0);
-  inConsultationCount = computed(() => this.summary()?.inConsultation || 0);
-  completedCount = computed(() => this.summary()?.completed || 0);
-  totalVisitsCount = computed(() => this.summary()?.total || 0);
-  
-  userRole = computed(() => this.authService.currentUser()?.role || null);
-  
-  pageLead = computed(() => {
-    const role = this.userRole();
-    if (role === 'DOCTOR') return 'Track only the patients assigned to you and start each consultation from here.';
-    if (role === 'RECEPTIONIST') return 'Manage arrivals, move patients into the doctor queue, and keep the OPD flowing.';
-    return 'View and manage all medical consultations.';
-  });
+  userRole: string | null = null;
+  pageLead = '';
 
   constructor(
     private appointmentService: AppointmentService,
     private authService: AuthService,
     private router: Router,
     private billingService: BillingService,
+    private cdr: ChangeDetectorRef,
   ) {}
 
   ngOnInit(): void {
-    if (this.authService.getUserRole() === 'RECEPTIONIST') {
-      this.selectedStatusFilter.set(AppointmentStatus.SCHEDULED);
+    this.userRole = this.authService.getUserRole();
+    
+    if (this.userRole === 'RECEPTIONIST') {
+      this.selectedStatusFilter = AppointmentStatus.SCHEDULED;
     }
+    
+    this.setPageLead();
     this.loadSummary();
     this.loadAppointments();
   }
 
+  setPageLead(): void {
+    if (this.userRole === 'DOCTOR') {
+      this.pageLead = 'Track only the patients assigned to you and start each consultation from here.';
+    } else if (this.userRole === 'RECEPTIONIST') {
+      this.pageLead = 'Manage arrivals, move patients into the doctor queue, and keep the OPD flowing.';
+    } else {
+      this.pageLead = 'View and manage all medical consultations.';
+    }
+  }
+
   loadSummary(): void {
     this.appointmentService.getSummary().subscribe({
-      next: (res: ApiResponse<AppointmentSummary>) => this.summary.set(res.data)
+      next: (res: ApiResponse<AppointmentSummary>) => {
+        this.summary = res.data;
+        this.cdr.markForCheck();
+      }
     });
   }
 
-  ngOnDestroy(): void {}
-
   loadAppointments(): void {
-    this.isLoading.set(true);
+    this.isLoading = true;
     
     const params = {
-      page: this.page(),
-      size: this.size(),
-      status: this.selectedStatusFilter() === 'ALL' ? undefined : this.selectedStatusFilter() as AppointmentStatus,
+      page: this.page,
+      size: this.size,
+      status: this.selectedStatusFilter === 'ALL' ? undefined : this.selectedStatusFilter as AppointmentStatus,
     };
 
     this.appointmentService.search(params).subscribe({
       next: (res: ApiResponse<PagedResponse<Appointment>>) => {
-        this.pagedResponse.set(res.data);
-        this.isLoading.set(false);
+        this.appointments = res.data.content;
+        this.totalElements = res.data.totalElements;
+        this.isLoading = false;
+        this.cdr.markForCheck();
       },
       error: () => {
-        this.isLoading.set(false);
+        this.isLoading = false;
+        this.cdr.markForCheck();
       },
     });
   }
 
-  onPageChange(event: any): void {
-    this.page.set(event.page);
-    this.size.set(event.rows);
+  onPageChange(event: PaginatorState): void {
+    this.page = event.first! / event.rows!;
+    this.size = event.rows!;
     this.loadAppointments();
   }
 
@@ -133,25 +137,27 @@ export class AppointmentListComponent implements OnInit, OnDestroy {
   }
 
   onGenerateBill(appointmentId: number): void {
-    this.isLoading.set(true);
+    this.isLoading = true;
     this.billingService.generateFromAppointment(appointmentId).subscribe({
       next: () => {
-        this.isLoading.set(false);
+        this.isLoading = false;
+        this.cdr.markForCheck();
         this.router.navigate(['/billing']);
       },
-      error: () => this.isLoading.set(false),
+      error: () => {
+        this.isLoading = false;
+        this.cdr.markForCheck();
+      },
     });
   }
 
-
   canManageAppointment(): boolean {
-    const role = this.userRole();
-    return role === 'ADMIN' || role === 'RECEPTIONIST';
+    return this.userRole === 'ADMIN' || this.userRole === 'RECEPTIONIST';
   }
 
   setStatusFilter(filter: 'ALL' | AppointmentStatus): void {
-    this.selectedStatusFilter.set(filter);
-    this.page.set(0); // Reset to first page on filter change
+    this.selectedStatusFilter = filter;
+    this.page = 0; 
     this.loadAppointments();
   }
 
@@ -160,12 +166,11 @@ export class AppointmentListComponent implements OnInit, OnDestroy {
   }
 
   getWorkflowLabel(appointment: Appointment): string {
-    const role = this.userRole();
     switch (appointment.status) {
       case AppointmentStatus.SCHEDULED:
-        return role === 'DOCTOR' ? 'Waiting for reception check-in' : 'Scheduled and awaiting arrival';
+        return this.userRole === 'DOCTOR' ? 'Waiting for reception check-in' : 'Scheduled and awaiting arrival';
       case AppointmentStatus.CHECKED_IN:
-        return role === 'DOCTOR' ? 'Ready to start consultation' : 'Vitals and doctor handoff pending';
+        return this.userRole === 'DOCTOR' ? 'Ready to start consultation' : 'Vitals and doctor handoff pending';
       case AppointmentStatus.IN_CONSULTATION:
         return 'Consultation in progress';
       case AppointmentStatus.COMPLETED:
@@ -178,9 +183,8 @@ export class AppointmentListComponent implements OnInit, OnDestroy {
   }
 
   canDoctorStart(appointment: Appointment): boolean {
-    const role = this.userRole();
     return (
-      appointment.status === AppointmentStatus.CHECKED_IN && (role === 'DOCTOR' || role === 'ADMIN')
+      appointment.status === AppointmentStatus.CHECKED_IN && (this.userRole === 'DOCTOR' || this.userRole === 'ADMIN')
     );
   }
 }

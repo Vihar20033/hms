@@ -26,14 +26,14 @@
           <i class="ri-search-line"></i>
           <input
             type="text"
-            [ngModel]="searchTerm()"
-            (ngModelChange)="searchTerm.set($event); onSearchInput()"
+            [(ngModel)]="searchTerm"
+            (ngModelChange)="onSearchInput()"
             placeholder="Search by name, ID or contact..."
           />
         </div>
 
         <div class="filter-options">
-          @if (patients().length > 0) {
+          @if (patients.length > 0) {
             <button class="btn-excel" (click)="exportToExcel()">
               <i class="ri-file-excel-2-line"></i> Download Excel
             </button>
@@ -44,11 +44,11 @@
       <!-- Simplified Patient Table -->
       <div class="card p-0 table-container">
         <p-table
-          [value]="patients()"
-          [loading]="isLoading()"
+          [value]="patients"
+          [loading]="isLoading"
           [paginator]="true"
-          [rows]="pageSize()"
-          [totalRecords]="totalElements()"
+          [rows]="pageSize"
+          [totalRecords]="totalElements"
           [lazy]="true"
           (onLazyLoad)="onPageChange($event)"
           styleClass="p-datatable-sm clinical-table"

@@ -1,5 +1,5 @@
 import { CommonModule, DatePipe } from '@angular/common';
-import { ChangeDetectionStrategy, Component, computed } from '@angular/core';
+import { ChangeDetectionStrategy, Component } from '@angular/core';
 import { Router } from '@angular/router';
 import { AuthService } from '../../../../core/services/auth.service';
 
@@ -13,13 +13,13 @@ import { AuthService } from '../../../../core/services/auth.service';
 })
 export class HeaderComponent {
   
-  user = this.authService.currentUser;
+  get user() { return this.authService.currentUser; }
   today = new Date();
 
-  roleLabel = computed(() => {
-    const role = this.user()?.role;
+  get roleLabel(): string {
+    const role = this.user?.role;
     return role ? role.replaceAll('_', ' ') : 'Staff';
-  });
+  }
 
   constructor(
     private authService: AuthService,

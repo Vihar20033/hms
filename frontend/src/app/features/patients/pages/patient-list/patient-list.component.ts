@@ -28,33 +28,26 @@ import { SidebarComponent } from '../../../../shared/components/layout/sidebar/s
     TableModule,
   ],
   templateUrl: './patient-list.component.html',
-  styleUrl: './patient-list.component.scss',
-  changeDetection: ChangeDetectionStrategy.OnPush,
+  styleUrl: './patient-list.component.scss'
 })
-export class PatientListComponent implements OnInit, OnDestroy {
-  // Reactive State using Signals
-  patients = signal<Patient[]>([]);
-  isLoading = signal<boolean>(true);
-  errorMessage = signal<string>('');
+export class PatientListComponent implements OnInit {
+  patients: Patient[] = [];
+  isLoading = true;
+  errorMessage = '';
   
-  // Pagination & Filters State
-  currentPage = signal<number>(0);
-  pageSize = signal<number>(10);
-  totalElements = signal<number>(0);
-  isLastPage = signal<boolean>(false);
+  currentPage = 0;
+  pageSize = 10;
+  totalElements = 0;
+  isLastPage = false;
   
-  searchTerm = signal<string>('');
-  selectedBloodGroup = signal<string>('');
-  selectedUrgency = signal<string>('');
+  searchTerm = '';
+  selectedBloodGroup = '';
+  selectedUrgency = '';
 
-  // Derived State
   bloodGroups = Object.values(BloodGroup);
   urgencyLevels = Object.values(UrgencyLevel);
-  
-  private destroy$ = new Subject<void>();
-  
-  // Stream for triggering reloads
-  private reloadTrigger$ = new BehaviorSubject<void>(undefined);
+
+  private searchTimeout: any;
 
   constructor(
     private patientService: PatientService,
@@ -65,53 +58,51 @@ export class PatientListComponent implements OnInit, OnDestroy {
   ) {}
 
   ngOnInit(): void {
-    // Advanced RxJS Implementation: Search logic with debounce and switchMap
-    // This demonstrates senior-level knowledge of handling race conditions and efficiency
-    this.reloadTrigger$.pipe(
-      tap(() => this.isLoading.set(true)),
-      debounceTime(400),
-      switchMap(() => this.patientService.search(
-        this.searchTerm(),
-        undefined,
-        this.selectedBloodGroup(),
-        this.selectedUrgency(),
-        this.currentPage(),
-        this.pageSize()
-      )),
-      takeUntil(this.destroy$)
+    this.loadPatients();
+  }
+
+  loadPatients(): void {
+    this.isLoading = true;
+    this.patientService.search(
+      this.searchTerm,
+      undefined,
+      this.selectedBloodGroup,
+      this.selectedUrgency,
+      this.currentPage,
+      this.pageSize
     ).subscribe({
       next: (res: ApiResponse<PatientSlice>) => {
-        this.patients.set(res.data.content);
-        this.totalElements.set(res.data.totalElements);
-        this.isLastPage.set(res.data.last);
-        this.isLoading.set(false);
+        this.patients = res.data.content;
+        this.totalElements = res.data.totalElements;
+        this.isLastPage = res.data.last;
+        this.isLoading = false;
       },
       error: () => {
-        this.errorMessage.set('Failed to load patients.');
-        this.isLoading.set(false);
+        this.errorMessage = 'Failed to load patients.';
+        this.isLoading = false;
       }
     });
   }
 
-  ngOnDestroy(): void {
-    this.destroy$.next();
-    this.destroy$.complete();
-  }
-
   onSearchInput(): void {
-    this.currentPage.set(0);
-    this.reloadTrigger$.next();
+    this.currentPage = 0;
+    if (this.searchTimeout) {
+      clearTimeout(this.searchTimeout);
+    }
+    this.searchTimeout = setTimeout(() => {
+      this.loadPatients();
+    }, 400);
   }
 
   onFilterChange(): void {
-    this.currentPage.set(0);
-    this.reloadTrigger$.next();
+    this.currentPage = 0;
+    this.loadPatients();
   }
 
   onPageChange(event: any): void {
-    this.currentPage.set(event.first / event.rows);
-    this.pageSize.set(event.rows);
-    this.reloadTrigger$.next();
+    this.currentPage = event.first / event.rows;
+    this.pageSize = event.rows;
+    this.loadPatients();
   }
 
   canRegister(): boolean {
@@ -155,14 +146,13 @@ export class PatientListComponent implements OnInit, OnDestroy {
     if (!confirm('Are you sure you want to delete this patient record?')) return;
 
     this.patientService.delete(patientId).subscribe({
-      next: () => this.reloadTrigger$.next(),
+      next: () => this.loadPatients(),
       error: () => {},
     });
   }
 
   exportToExcel(): void {
-    const data = this.patients();
-    const exportData = data.map((p) => ({
+    const exportData = this.patients.map((p) => ({
       'Patient Name': p.name,
       Email: p.email,
       Age: p.age,

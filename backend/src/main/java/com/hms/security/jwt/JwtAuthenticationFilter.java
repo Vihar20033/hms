@@ -61,7 +61,6 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
                 return;
             }
 
-
             if (jwtUtil.extractTokenType(jwt) != TokenType.ACCESS) {
                 log.warn("Attempted to use REFRESH token as ACCESS token by: {}", request.getRemoteAddr());
                 filterChain.doFilter(request, response);

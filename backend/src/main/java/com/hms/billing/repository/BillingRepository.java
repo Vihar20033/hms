@@ -13,12 +13,8 @@ import java.util.List;
 public interface BillingRepository extends JpaRepository<Billing, Long>, JpaSpecificationExecutor<Billing> {
 
 
-    // SELECT * FROM billings WHERE patient_id = :patientId AND deleted = false
     List<Billing> findByPatientId(Long patientId);
 
-    // SELECT SUM(net_amount) FROM billings WHERE payment_status = 'PAID' AND
-    // deleted = false
     @Query("SELECT SUM(b.netAmount) FROM Billing b WHERE b.paymentStatus = com.hms.common.enums.PaymentStatus.PAID")
     BigDecimal sumTotalRevenue();
-
 }

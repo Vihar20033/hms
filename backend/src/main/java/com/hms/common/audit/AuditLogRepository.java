@@ -8,9 +8,7 @@ import java.util.List;
 
 @Repository
 public interface AuditLogRepository extends JpaRepository<AuditLog, Long> {
-    // SELECT * FROM audit_logs WHERE username = :username ORDER BY created_at DESC
     List<AuditLog> findByUsernameOrderByCreatedAtDesc(String username);
 
-    // SELECT * FROM audit_logs WHERE entity_type = :entityType AND entity_id = :entityId ORDER BY created_at DESC
     List<AuditLog> findByEntityTypeAndEntityIdOrderByCreatedAtDesc(String entityType, String entityId);
 }

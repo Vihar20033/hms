@@ -9,10 +9,10 @@
       <div class="content-header">
         <div class="title-section">
           <h1>Appointments Schedule</h1>
-          <p>{{ pageLead() }}</p>
+          <p>{{ pageLead }}</p>
         </div>
         <div class="header-actions">
-          @if (userRole() !== 'DOCTOR') {
+          @if (userRole !== 'DOCTOR') {
             <button class="btn-primary" routerLink="/appointments/book">
               <i class="ri-calendar-todo-line"></i> Book Appointment
             </button>
@@ -24,47 +24,47 @@
         <button
           type="button"
           class="queue-card"
-          [class.active]="selectedStatusFilter() === 'ALL'"
+          [class.active]="selectedStatusFilter === 'ALL'"
           (click)="setStatusFilter('ALL')"
         >
           <span class="queue-label">All Visits</span>
-          <strong>{{ totalVisitsCount() }}</strong>
+          <strong>{{ summary?.total || 0 }}</strong>
           <small>Full appointment board</small>
         </button>
         <button
           type="button"
           class="queue-card"
-          [class.active]="selectedStatusFilter() === statusEnum.SCHEDULED"
+          [class.active]="selectedStatusFilter === statusEnum.SCHEDULED"
           (click)="setStatusFilter(statusEnum.SCHEDULED)"
         >
           <span class="queue-label">Reception Queue</span>
-          <strong>{{ scheduledCount() }}</strong>
+          <strong>{{ summary?.scheduled || 0 }}</strong>
           <small>Scheduled and waiting</small>
         </button>
         <button
           type="button"
           class="queue-card"
-          [class.active]="selectedStatusFilter() === statusEnum.CHECKED_IN"
+          [class.active]="selectedStatusFilter === statusEnum.CHECKED_IN"
           (click)="setStatusFilter(statusEnum.CHECKED_IN)"
         >
           <span class="queue-label">Doctor Queue</span>
-          <strong>{{ checkedInCount() }}</strong>
+          <strong>{{ summary?.checkedIn || 0 }}</strong>
           <small>Checked in and ready</small>
         </button>
         <button
           type="button"
           class="queue-card"
-          [class.active]="selectedStatusFilter() === statusEnum.IN_CONSULTATION"
+          [class.active]="selectedStatusFilter === statusEnum.IN_CONSULTATION"
           (click)="setStatusFilter(statusEnum.IN_CONSULTATION)"
         >
           <span class="queue-label">In Consultation</span>
-          <strong>{{ inConsultationCount() }}</strong>
+          <strong>{{ summary?.inConsultation || 0 }}</strong>
           <small>Active treatment now</small>
         </button>
       </div>
 
       <div class="appointments-card">
-        @if (userRole() === 'DOCTOR') {
+        @if (userRole === 'DOCTOR') {
           <div class="workflow-banner">
             <div class="workflow-copy">
               <strong>Doctor workflow</strong>
@@ -73,7 +73,7 @@
           </div>
         }
 
-        @if (userRole() === 'RECEPTIONIST' || userRole() === 'ADMIN') {
+        @if (userRole === 'RECEPTIONIST' || userRole === 'ADMIN') {
           <div class="workflow-banner receptionist">
             <div class="workflow-copy">
               <strong>Front desk workflow</strong>
@@ -82,9 +82,9 @@
           </div>
         }
 
-        @if (!isLoading()) {
+        @if (!isLoading) {
           <div class="table-responsive">
-            <p-table [value]="appointments()" responsiveLayout="scroll" styleClass="data-table">
+            <p-table [value]="appointments" responsiveLayout="scroll" styleClass="data-table">
               <ng-template pTemplate="header">
                 <tr>
                   <th>Patient</th>
@@ -137,26 +137,26 @@
                   </td>
                   <td>
                     <div class="action-buttons">
-                      @if (apt.status === statusEnum.SCHEDULED && (userRole() === 'RECEPTIONIST')) {
+                      @if (apt.status === statusEnum.SCHEDULED && (userRole === 'RECEPTIONIST')) {
                         <button class="btn-icon btn-checkin" title="Check In Patient" (click)="onCheckIn(apt.id)">
                           <i class="ri-user-received-line"></i>
                         </button>
                       }
 
-                      @if (apt.status === statusEnum.CHECKED_IN && (userRole() === 'RECEPTIONIST' || userRole() === 'DOCTOR')) {
+                      @if (apt.status === statusEnum.CHECKED_IN && (userRole === 'RECEPTIONIST' || userRole === 'DOCTOR')) {
                         <button class="btn-icon btn-play" title="Start Consultation" (click)="onStart(apt.id)">
                           <i class="ri-play-line"></i>
                         </button>
                       }
                       
-                      @if (userRole() === 'DOCTOR' && apt.status === statusEnum.SCHEDULED) {
+                      @if (userRole === 'DOCTOR' && apt.status === statusEnum.SCHEDULED) {
                         <span class="action-hint">Waiting for check-in</span>
                       }
-                      @if (userRole() === 'DOCTOR' && apt.status === statusEnum.CHECKED_IN) {
+                      @if (userRole === 'DOCTOR' && apt.status === statusEnum.CHECKED_IN) {
                         <span class="action-hint ready">Start from this row</span>
                       }
 
-                      @if (apt.status === statusEnum.IN_CONSULTATION && (userRole() === 'DOCTOR')) {
+                      @if (apt.status === statusEnum.IN_CONSULTATION && (userRole === 'DOCTOR')) {
                         <button class="btn-icon btn-start" title="New Prescription" [routerLink]="['/prescriptions/create', apt.id]">
                           <i class="ri-capsule-line"></i>
                         </button>
@@ -165,7 +165,7 @@
                         </button>
                       }
                       
-                      @if (apt.status === statusEnum.COMPLETED && (userRole() === 'ADMIN' || userRole() === 'RECEPTIONIST')) {
+                      @if (apt.status === statusEnum.COMPLETED && (userRole === 'ADMIN' || userRole === 'RECEPTIONIST')) {
                         <button class="btn-icon btn-view" title="Generate Bill" (click)="onGenerateBill(apt.id)">
                           <i class="ri-bill-line"></i>
                         </button>
@@ -189,8 +189,8 @@
             </p-table>
 
             <p-paginator 
-               [rows]="size()" 
-               [totalRecords]="totalElements()" 
+               [rows]="size" 
+               [totalRecords]="totalElements" 
                [rowsPerPageOptions]="[10, 20, 50]" 
                (onPageChange)="onPageChange($event)">
             </p-paginator>
@@ -198,7 +198,7 @@
         }
 
         <!-- Loading State -->
-        @if (isLoading()) {
+        @if (isLoading) {
           <div class="loading-state">
             <i class="ri-loader-4-line spin"></i>
             <p>Updating schedule...</p>
@@ -206,7 +206,7 @@
         }
 
         <!-- Empty State -->
-        @if (!isLoading() && appointments().length === 0) {
+        @if (!isLoading && appointments.length === 0) {
           <div class="empty-state">
             <i class="ri-calendar-event-line"></i>
             <h3>No appointments in this queue</h3>

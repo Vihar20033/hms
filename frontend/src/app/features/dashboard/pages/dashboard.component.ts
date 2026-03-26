@@ -13,6 +13,7 @@ import {
 } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import { Chart, registerables } from 'chart.js';
+import { User } from '../../../core/models/auth.models';
 import { ApiResponse, DashboardSummary, WeeklyStatistics } from '../../../core/models/common.models';
 import { AuthService } from '../../../core/services/auth.service';
 import { DashboardService } from '../../../core/services/dashboard.service';
@@ -21,6 +22,12 @@ import { HeaderComponent } from '../../../shared/components/layout/header/header
 import { SidebarComponent } from '../../../shared/components/layout/sidebar/sidebar.component';
 
 Chart.register(...registerables);
+
+interface QuickAction {
+  label: string;
+  link: string;
+  icon: string;
+}
 
 @Component({
   selector: 'app-dashboard',
@@ -38,21 +45,18 @@ Chart.register(...registerables);
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class DashboardComponent implements OnInit, AfterViewInit, OnDestroy {
-  /** Canvas is always in the DOM (outside @if) so this always resolves. */
   @ViewChild('patientChart') patientChartCanvas!: ElementRef<HTMLCanvasElement>;
 
-  summary = signal<DashboardSummary | null>(null);
-  isLoading = signal<boolean>(true);
-  healthStatus = signal<HealthResponse | null>(null);
+  summary: DashboardSummary | null = null;
+  isLoading = true;
+  healthStatus: HealthResponse | null = null;
 
-  currentUser = this.authService.currentUser;
-  role = computed(() => this.currentUser()?.role || '');
-  isAdminOrStaff = computed(() => ['ADMIN', 'RECEPTIONIST'].includes(this.role()));
+  currentUser: User | null = null;
+  role = '';
+  isAdminOrStaff = false;
 
   chart: Chart | null = null;
-  quickActions: Array<{ label: string; link: string; icon: string }> = [];
-
-  private viewInitialized = false;
+  quickActions: QuickAction[] = [];
 
   constructor(
     private dashboardService: DashboardService,
@@ -62,51 +66,63 @@ export class DashboardComponent implements OnInit, AfterViewInit, OnDestroy {
   ) {}
 
   ngOnInit(): void {
-    this.quickActions = this.buildQuickActions();
+    this.authService.currentUser$.subscribe(user => {
+      this.currentUser = user;
+      this.role = user?.role || '';
+      this.isAdminOrStaff = ['ADMIN', 'RECEPTIONIST'].includes(this.role);
+      this.quickActions = this.buildQuickActions();
+      
+      if (this.role === 'ADMIN') {
+        this.loadHealth();
+      }
+    });
 
+    this.loadSummary();
+  }
+
+  loadSummary(): void {
     this.dashboardService.getSummary().subscribe({
       next: (res: ApiResponse<DashboardSummary>) => {
-        this.summary.set(res.data);
-        this.isLoading.set(false);
+        this.summary = res.data;
+        this.isLoading = false;
         this.cdr.markForCheck();
-
-        if (this.viewInitialized) {
-          this.initChart(res.data);
-        }
+        
+        // Short delay to ensure canvas is in DOM
+        setTimeout(() => {
+          if (this.summary) {
+            this.initChart(this.summary);
+          }
+        }, 100);
       },
       error: () => {
-        this.isLoading.set(false);
+        this.isLoading = false;
         this.cdr.markForCheck();
       },
     });
+  }
 
-    if (this.role() === 'ADMIN') {
-      this.adminService.getHealth().subscribe({
-        next: (health) => {
-          this.healthStatus.set(health);
-          this.cdr.markForCheck();
-        },
-        error: () => {
-          this.healthStatus.set({ status: 'DOWN' });
-          this.cdr.markForCheck();
-        }
-      });
-    }
+  loadHealth(): void {
+    this.adminService.getHealth().subscribe({
+      next: (health) => {
+        this.healthStatus = health;
+        this.cdr.markForCheck();
+      },
+      error: () => {
+        this.healthStatus = { status: 'DOWN' };
+        this.cdr.markForCheck();
+      }
+    });
   }
 
   ngAfterViewInit(): void {
-    this.viewInitialized = true;
-    const data = this.summary();
-    if (data) {
-      // Data already arrived before the view was ready
-      this.initChart(data);
+    if (this.summary) {
+      this.initChart(this.summary);
     }
   }
 
   ngOnDestroy(): void {
     if (this.chart) {
       this.chart.destroy();
-      this.chart = null;
     }
   }
 
@@ -114,96 +130,51 @@ export class DashboardComponent implements OnInit, AfterViewInit, OnDestroy {
     const canvas = this.patientChartCanvas?.nativeElement;
     if (!canvas) return;
 
-    try {
-      const ctx = canvas.getContext('2d');
-      if (!ctx) return;
+    const ctx = canvas.getContext('2d');
+    if (!ctx) return;
 
-      if (this.chart) {
-        this.chart.destroy();
-        this.chart = null;
-      }
-
-      const stats: WeeklyStatistics[] = data.weeklyStats ?? [];
-      const labels = stats.map((s) => s.day);
-      const appointmentData = stats.map((s) => s.appointments ?? 0);
-      const patientData = stats.map((s) => s.patients ?? 0);
-
-      this.chart = new Chart(ctx, {
-        type: 'line',
-        data: {
-          labels,
-          datasets: [
-            {
-              label: 'Daily Appointments',
-              data: appointmentData,
-              borderColor: '#6366f1',
-              backgroundColor: 'rgba(99, 102, 241, 0.12)',
-              tension: 0.4,
-              fill: true,
-              pointBackgroundColor: '#6366f1',
-              pointBorderColor: '#fff',
-              pointBorderWidth: 2,
-              pointRadius: 5,
-              pointHoverRadius: 7,
-            },
-            {
-              label: 'New Patients',
-              data: patientData,
-              borderColor: '#10b981',
-              backgroundColor: 'rgba(16, 185, 129, 0.08)',
-              tension: 0.4,
-              fill: true,
-              pointBackgroundColor: '#10b981',
-              pointBorderColor: '#fff',
-              pointBorderWidth: 2,
-              pointRadius: 5,
-              pointHoverRadius: 7,
-            },
-          ],
-        },
-        options: {
-          responsive: true,
-          maintainAspectRatio: false,
-          animation: { duration: 600, easing: 'easeInOutQuart' },
-          plugins: {
-            legend: {
-              position: 'bottom',
-              labels: {
-                usePointStyle: true,
-                padding: 20,
-                font: { size: 12 },
-              },
-            },
-            tooltip: {
-              mode: 'index',
-              intersect: false,
-              padding: 12,
-              backgroundColor: 'rgba(15, 23, 42, 0.92)',
-              bodySpacing: 6,
-              titleFont: { weight: 'bold' },
-            },
-          },
-          interaction: { intersect: false, mode: 'index' },
-          scales: {
-            y: {
-              beginAtZero: true,
-              grid: { color: 'rgba(0,0,0,0.06)' },
-              ticks: { precision: 0, stepSize: 1 },
-            },
-            x: {
-              grid: { display: false },
-            },
-          },
-        },
-      });
-    } catch (err) {
-      console.error('[DashboardComponent] Chart init failed:', err);
+    if (this.chart) {
+      this.chart.destroy();
     }
+
+    const stats: WeeklyStatistics[] = data.weeklyStats || [];
+    const labels = stats.map((s) => s.day);
+    const appointmentData = stats.map((s) => s.appointments || 0);
+    const patientData = stats.map((s) => s.patients || 0);
+
+    this.chart = new Chart(ctx, {
+      type: 'line',
+      data: {
+        labels,
+        datasets: [
+          {
+            label: 'Appointments',
+            data: appointmentData,
+            borderColor: '#6366f1',
+            tension: 0.4,
+            fill: true,
+          },
+          {
+            label: 'New Patients',
+            data: patientData,
+            borderColor: '#10b981',
+            tension: 0.4,
+            fill: true,
+          },
+        ],
+      },
+      options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        scales: {
+          y: { beginAtZero: true }
+        }
+      },
+    });
   }
 
-  private buildQuickActions(): Array<{ label: string; link: string; icon: string }> {
-    const currentRole = this.role();
-    if (currentRole === 'DOCTOR') {
+  private buildQuickActions(): QuickAction[] {
+    if (this.role === 'DOCTOR') {
       return [
         { label: 'Open Queue', link: '/appointments', icon: 'ri-stethoscope-line' },
         { label: 'Prescriptions', link: '/prescriptions', icon: 'ri-file-list-3-line' },
@@ -214,3 +185,4 @@ export class DashboardComponent implements OnInit, AfterViewInit, OnDestroy {
     ];
   }
 }
+

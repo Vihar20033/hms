@@ -10,14 +10,14 @@
           <h1>Billing & Invoices</h1>
           <p>Manage patient invoices and payment records</p>
         </div>
-        @if (userRole()?.role === 'ADMIN' || userRole()?.role === 'RECEPTIONIST') {
+        @if (userRole === 'ADMIN' || userRole === 'RECEPTIONIST') {
           <div class="header-actions">
             <button class="btn-primary" (click)="openCreateForm()"><i class="ri-add-line"></i> Create Invoice</button>
           </div>
         }
       </div>
 
-      @if (showCreateForm()) {
+      @if (showCreateForm) {
         <div class="form-card form-card-elevated">
           <div class="form-card-header">
             <h3><i class="ri-bill-line"></i> New Invoice</h3>
@@ -39,7 +39,7 @@
                     <p-dropdown
                       inputId="billPatient"
                       formControlName="patientId"
-                      [options]="patientOptions()"
+                      [options]="getPatientOptions()"
                       optionLabel="label"
                       optionValue="value"
                       [filter]="true"
@@ -53,7 +53,7 @@
                     <p-dropdown
                       inputId="paymentMethod"
                       formControlName="paymentMethod"
-                      [options]="paymentMethodOptions()"
+                      [options]="getPaymentMethodOptions()"
                       optionLabel="label"
                       optionValue="value"
                       [filter]="true"
@@ -61,20 +61,20 @@
                       styleClass="w-full"
                     ></p-dropdown>
                   </div>
-                  @if (manualPatientAppointments().length > 0) {
+                  @if (manualPatientAppointments.length > 0) {
                     <div class="form-group">
                       <label class="form-label" for="syncAppt">Sync Appointment (Optional)</label>
                       <p-dropdown
                         inputId="syncAppt"
                         formControlName="appointment"
-                        [options]="manualPatientAppointments()"
+                        [options]="manualPatientAppointments"
                         optionLabel="label"
                         [filter]="true"
                         filterBy="label"
                         placeholder="Pull data from encounter..."
                         styleClass="w-full sync-dropdown"
                         (onChange)="onAppointmentSelectedForManual($event.value)"
-                        [loading]="isSyncingItems()"
+                        [loading]="isSyncingItems"
                       >
                         <ng-template let-selectedItem pTemplate="selectedItem">
                           @if (selectedItem) {
@@ -248,8 +248,8 @@
 
               <div class="form-actions">
                 <button type="button" class="btn-outline" (click)="closeForm()">Cancel</button>
-                <button type="submit" class="btn-primary" [disabled]="isSubmitting()">
-                  {{ isSubmitting() ? 'Creating...' : 'Create Invoice' }}
+                <button type="submit" class="btn-primary" [disabled]="isSubmitting">
+                  {{ isSubmitting ? 'Creating...' : 'Create Invoice' }}
                 </button>
               </div>
             </div>
@@ -258,9 +258,9 @@
       }
 
       <div class="appointments-card">
-        @if (!isLoading()) {
+        @if (!isLoading) {
           <div class="table-responsive">
-            <p-table [value]="billings()" responsiveLayout="scroll" styleClass="data-table">
+            <p-table [value]="billings" responsiveLayout="scroll" styleClass="data-table">
               <ng-template pTemplate="header">
                 <tr>
                   <th>Invoice #</th>
@@ -295,15 +295,15 @@
                         class="btn-icon btn-start"
                         title="Download PDF"
                         (click)="onExportPdf(bill)"
-                        [disabled]="exportingId() === bill.id"
+                        [disabled]="exportingId === bill.id"
                       >
-                        @if (exportingId() !== bill.id) {
+                        @if (exportingId !== bill.id) {
                           <i class="ri-file-pdf-line"></i>
                         } @else {
                           <i class="ri-loader-4-line spin"></i>
                         }
                       </button>
-                      @if (bill.paymentStatus !== PaymentStatus.PAID && (userRole()?.role === 'ADMIN' || userRole()?.role === 'RECEPTIONIST')) {
+                      @if (bill.paymentStatus !== PaymentStatus.PAID && (userRole === 'ADMIN' || userRole === 'RECEPTIONIST')) {
                         <button
                           class="btn-icon btn-checkin"
                           title="Mark as Paid"
@@ -312,7 +312,7 @@
                           <i class="ri-checkbox-circle-line"></i>
                         </button>
                       }
-                      @if (userRole()?.role === 'ADMIN') {
+                      @if (userRole === 'ADMIN') {
                         <button
                           class="btn-icon btn-delete"
                           title="Delete"
@@ -329,14 +329,14 @@
           </div>
         }
 
-        @if (isLoading()) {
+        @if (isLoading) {
           <div class="loading-state">
             <i class="ri-loader-4-line spin"></i>
             <p>Loading invoices...</p>
           </div>
         }
 
-        @if (!isLoading() && billings().length === 0) {
+        @if (!isLoading && billings.length === 0) {
           <div class="empty-state">
             <i class="ri-bill-line"></i>
             <h3>No invoices found</h3>
@@ -348,7 +348,7 @@
   </main>
 </div>
 
-@if (showViewModal(); as billVisible) {
+@if (showViewModal; as billVisible) {
   <div
     class="modal-overlay"
     (click)="closeViewModal()"
@@ -366,8 +366,8 @@
         </div>
         <div class="invoice-meta">
           <span class="invoice-label">INVOICE</span>
-          <h3 class="invoice-number">#{{ selectedBilling()?.invoiceNumber }}</h3>
-          <p class="invoice-date">Date: {{ selectedBilling()?.billingDate | date: 'dd MMM yyyy' }}</p>
+          <h3 class="invoice-number">#{{ selectedBilling?.invoiceNumber }}</h3>
+          <p class="invoice-date">Date: {{ selectedBilling?.billingDate | date: 'dd MMM yyyy' }}</p>
         </div>
       </div>
 
@@ -375,12 +375,12 @@
         <div class="patient-section">
           <div class="info-group">
             <small>Patient Name</small>
-            <strong>{{ selectedBilling()?.patientName }}</strong>
+            <strong>{{ selectedBilling?.patientName }}</strong>
           </div>
           <div class="info-group text-right">
             <small>Payment Status</small>
-            <span class="receipt-status" [ngClass]="getStatusClass(selectedBilling()?.paymentStatus!)">
-              {{ selectedBilling()?.paymentStatus }}
+            <span class="receipt-status" [ngClass]="getStatusClass(selectedBilling?.paymentStatus!)">
+              {{ selectedBilling?.paymentStatus }}
             </span>
           </div>
         </div>
@@ -393,7 +393,7 @@
             <span class="col-total">Total</span>
           </div>
           <div class="table-body">
-            @for (item of selectedBilling()?.items; track item.itemName) {
+            @for (item of selectedBilling?.items; track item.itemName) {
               <div class="table-row">
                 <span class="col-desc">{{ item.itemName }}</span>
                 <span class="col-qty">{{ item.quantity }}</span>
@@ -407,30 +407,30 @@
         <div class="receipt-summary">
           <div class="summary-row">
             <span>Subtotal</span>
-            <span>₹{{ selectedBilling()?.totalAmount | number: '1.2-2' }}</span>
+            <span>₹{{ selectedBilling?.totalAmount | number: '1.2-2' }}</span>
           </div>
-          @if (selectedBilling()?.taxAmount) {
+          @if (selectedBilling?.taxAmount) {
             <div class="summary-row">
               <span>Taxes (GST 5%)</span>
-              <span>₹{{ selectedBilling()?.taxAmount | number: '1.2-2' }}</span>
+              <span>₹{{ selectedBilling?.taxAmount | number: '1.2-2' }}</span>
             </div>
           }
-          @if (selectedBilling()?.discountAmount) {
+          @if (selectedBilling?.discountAmount) {
             <div class="summary-row">
               <span>Discount Applied</span>
-              <span class="discount-val">-₹{{ selectedBilling()?.discountAmount | number: '1.2-2' }}</span>
+              <span class="discount-val">-₹{{ selectedBilling?.discountAmount | number: '1.2-2' }}</span>
             </div>
           }
           <div class="summary-row net-total">
             <span>Total Payable</span>
-            <span>₹{{ selectedBilling()?.netAmount | number: '1.2-2' }}</span>
+            <span>₹{{ selectedBilling?.netAmount | number: '1.2-2' }}</span>
           </div>
         </div>
 
-        @if (selectedBilling()?.paymentMethod) {
+        @if (selectedBilling?.paymentMethod) {
           <div class="payment-info">
             <p>
-              Payment Method: <strong>{{ selectedBilling()?.paymentMethod }}</strong>
+              Payment Method: <strong>{{ selectedBilling?.paymentMethod }}</strong>
             </p>
           </div>
         }
@@ -443,7 +443,7 @@
 
       <div class="receipt-actions">
         <button class="btn-outline" (click)="closeViewModal()">Close</button>
-        <button class="btn-primary" (click)="onExportPdf(selectedBilling()!)">
+        <button class="btn-primary" (click)="onExportPdf(selectedBilling!)">
           <i class="ri-printer-line"></i> Download PDF
         </button>
       </div>

@@ -15,11 +15,11 @@
       <i class="ri-logout-box-r-line"></i>
     </button>
 
-    @if (user(); as currentUser) {
+    @if (user; as currentUser) {
       <div class="user-profile">
         <div class="user-info">
           <span class="username">{{ currentUser.username }}</span>
-          <span class="role">{{ roleLabel() }}</span>
+          <span class="role">{{ roleLabel }}</span>
         </div>
         <div class="avatar">
           <img [src]="'https://ui-avatars.com/api/?name=' + currentUser.username + '&background=0f6cbd&color=fff'" alt="User" />

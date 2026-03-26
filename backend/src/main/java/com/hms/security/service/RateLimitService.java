@@ -19,10 +19,12 @@ public class RateLimitService {
     @Value("${hms.rate-limit.auth.refill-minutes:1}")
     private int refillMinutes;
 
+    // If Bucket exist  -> Return it
     public Bucket resolveBucket(String key) {
         return buckets.computeIfAbsent(key, this::newBucket);
     }
 
+    // Create a new Bucket
     private Bucket newBucket(String key) {
         return Bucket.builder()
                 .addLimit(limit -> limit.capacity(capacity).refillIntervally(capacity, Duration.ofMinutes(refillMinutes)))
