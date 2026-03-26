@@ -7,13 +7,16 @@ import com.hms.pharmacy.dto.response.MedicineResponseDTO;
 import com.hms.pharmacy.service.MedicineService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.UUID;
+
 
 @RestController
 @RequestMapping("/api/v1/medicines")
@@ -37,7 +40,7 @@ public class MedicineController {
     @PreAuthorize("hasAnyRole('ADMIN','PHARMACIST')")
     @PutMapping("/{id}")
     public ResponseEntity<ApiResponse<MedicineResponseDTO>> updateMedicine(
-            @PathVariable("id") UUID id,
+            @PathVariable("id") Long id,
             @Valid @RequestBody MedicineRequestDTO dto) {
         MedicineResponseDTO updated = medicineService.updateMedicine(id, dto);
         ApiResponse<MedicineResponseDTO> response = ApiResponse.success(updated);
@@ -47,7 +50,7 @@ public class MedicineController {
 
     @PreAuthorize("hasAnyRole('ADMIN','PHARMACIST')")
     @DeleteMapping("/{id}")
-    public ResponseEntity<ApiResponse<Void>> deleteMedicine(@PathVariable("id") UUID id) {
+    public ResponseEntity<ApiResponse<Void>> deleteMedicine(@PathVariable("id") Long id) {
         medicineService.deleteMedicine(id);
         ApiResponse<Void> response = ApiResponse.success(null);
         response.setMessage("Medicine deleted successfully");
@@ -56,16 +59,26 @@ public class MedicineController {
 
     @PreAuthorize("hasAnyRole('ADMIN','DOCTOR','PHARMACIST')")
     @GetMapping("/{id}")
-    public ResponseEntity<ApiResponse<MedicineResponseDTO>> getMedicineById(@PathVariable("id") UUID id) {
+    public ResponseEntity<ApiResponse<MedicineResponseDTO>> getMedicineById(@PathVariable("id") Long id) {
         MedicineResponseDTO medicine = medicineService.getMedicineById(id);
         return ResponseEntity.ok(ApiResponse.success(medicine));
     }
 
-    @PreAuthorize("hasAnyRole('ADMIN','DOCTOR','PHARMACIST')")
+    @PreAuthorize("hasAnyRole('PHARMACIST', 'DOCTOR', 'ADMIN', 'NURSE')")
     @GetMapping
     public ResponseEntity<ApiResponse<List<MedicineResponseDTO>>> getAllMedicines() {
-        List<MedicineResponseDTO> medicines = medicineService.getAllMedicines();
-        return ResponseEntity.ok(ApiResponse.success(medicines));
+        return ResponseEntity.ok(ApiResponse.success(medicineService.getAllMedicines()));
+    }
+
+    @PreAuthorize("hasAnyRole('PHARMACIST', 'DOCTOR', 'ADMIN', 'NURSE')")
+    @GetMapping("/search")
+    public ResponseEntity<ApiResponse<com.hms.common.response.PagedResponse<MedicineResponseDTO>>> searchMedicines(
+            @RequestParam(name = "query", required = false) String query,
+            @RequestParam(name = "category", required = false) String category,
+            @RequestParam(name = "isActive", required = false) Boolean isActive,
+            @PageableDefault(size = 20) Pageable pageable) {
+        Page<MedicineResponseDTO> page = medicineService.searchMedicines(query, category, isActive, pageable);
+        return ResponseEntity.ok(ApiResponse.success(com.hms.common.response.PagedResponse.from(page, dto -> dto)));
     }
 
     @PreAuthorize("hasAnyRole('ADMIN','DOCTOR','PHARMACIST')")
@@ -100,7 +113,7 @@ public class MedicineController {
     @PreAuthorize("hasAnyRole('ADMIN','PHARMACIST')")
     @PatchMapping("/{id}/restock")
     public ResponseEntity<ApiResponse<Void>> restockMedicine(
-            @PathVariable("id") UUID id,
+            @PathVariable("id") Long id,
             @Valid @RequestBody RestockMedicineRequestDTO request) {
         medicineService.restockMedicine(id, request.getQuantity());
         ApiResponse<Void> response = ApiResponse.success(null);

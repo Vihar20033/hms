@@ -9,12 +9,12 @@ import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import lombok.Data;
 import java.math.BigDecimal;
-import java.util.UUID;
+
 
 @Data
 public class VitalsRequestDTO {
     @NotNull(message = "Appointment ID is required")
-    private UUID appointmentId;
+    private Long appointmentId;
     
     @DecimalMin(value = "30.0", message = "Temperature must be at least 30 C")
     @DecimalMax(value = "45.0", message = "Temperature must not exceed 45 C")

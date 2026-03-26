@@ -11,7 +11,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.util.List;
-import java.util.UUID;
+
 
 /**
  * Data Transfer Object for creating or updating a prescription.
@@ -23,12 +23,12 @@ import java.util.UUID;
 public class PrescriptionRequestDTO {
     
     @NotNull(message = "Patient ID is required")
-    private UUID patientId;
+    private Long patientId;
 
     @NotNull(message = "Doctor ID is required")
-    private UUID doctorId;
+    private Long doctorId;
 
-    private UUID appointmentId;
+    private Long appointmentId;
 
     @Size(max = 1000, message = "Symptoms must not exceed 1000 characters")
     private String symptoms;

@@ -29,7 +29,6 @@ export class InventoryLogComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     this.loadTransactions();
-
     this.searchSubject.pipe(debounceTime(400), distinctUntilChanged(), takeUntil(this.destroy$)).subscribe((query) => {
       this.searchQuery = query;
       this.applyFilter();

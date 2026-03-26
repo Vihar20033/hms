@@ -14,7 +14,7 @@ import lombok.NoArgsConstructor;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.List;
-import java.util.UUID;
+
 
 @Data
 @Builder
@@ -23,9 +23,9 @@ import java.util.UUID;
 public class BillingRequestDTO {
 
     @NotNull(message = "Patient ID is required")
-    private UUID patientId;
+    private Long patientId;
 
-    private UUID appointmentId;
+    private Long appointmentId;
 
     @NotNull(message = "Total amount is required")
     @DecimalMin(value = "0.0", inclusive = false, message = "Total amount must be positive")

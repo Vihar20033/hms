@@ -43,14 +43,16 @@ import { SidebarComponent } from '../../../../shared/components/layout/sidebar/s
   templateUrl: './appointment-booking.component.html',
   styleUrl: './appointment-booking.component.scss',
 })
+
 export class AppointmentBookingComponent implements OnInit {
+
   bookingForm: FormGroup;
   patients: Patient[] = [];
   doctors: Doctor[] = [];
   isLoading = false;
   errorMessage = '';
   isEditMode = false;
-  appointmentId: string | null = null;
+  appointmentId: number | null = null;
   currentUser$ = this.authService.currentUser$;
 
   departments = BOOKABLE_DEPARTMENTS;
@@ -83,7 +85,7 @@ export class AppointmentBookingComponent implements OnInit {
     this.bookingForm.get('isEmergency')?.valueChanges.subscribe((isEmergency) => {
       const timeControl = this.bookingForm.get('appointmentTime');
       if (isEmergency) {
-        timeControl?.setValidators([Validators.required]); // SOS: ignore 8-20 rule
+        timeControl?.setValidators([Validators.required]);
       } else {
         timeControl?.setValidators([Validators.required, clinicHoursValidator(8, 20)]);
       }
@@ -95,12 +97,12 @@ export class AppointmentBookingComponent implements OnInit {
     this.loadData();
     this.route.queryParams.subscribe((params) => {
       if (params['patientId']) {
-        this.bookingForm.patchValue({ patientId: params['patientId'] });
+        this.bookingForm.patchValue({ patientId: Number(params['patientId']) });
       }
       if (params['appointmentId']) {
         this.isEditMode = true;
-        this.appointmentId = params['appointmentId'];
-        this.loadAppointmentForEdit(params['appointmentId']);
+        this.appointmentId = Number(params['appointmentId']);
+        this.loadAppointmentForEdit(Number(params['appointmentId']));
       }
     });
   }
@@ -113,7 +115,7 @@ export class AppointmentBookingComponent implements OnInit {
     });
   }
 
-  loadAppointmentForEdit(id: string): void {
+  loadAppointmentForEdit(id: number): void {
     this.isLoading = true;
     this.appointmentService.getById(id).subscribe({
       next: (res: ApiResponse<Appointment>) => {
@@ -196,7 +198,7 @@ export class AppointmentBookingComponent implements OnInit {
 
     const request$ =
       this.isEditMode && this.appointmentId
-        ? this.appointmentService.update(this.appointmentId, payload)
+        ? this.appointmentService.update(this.appointmentId!, payload)
         : this.appointmentService.create(payload);
 
     request$.subscribe({
@@ -210,9 +212,9 @@ export class AppointmentBookingComponent implements OnInit {
     });
   }
 
-  patientOptions(): Array<{ label: string; value: string }> {
+  patientOptions(): Array<{ label: string; value: number }> {
     return this.patients.map((patient) => ({
-      label: `${patient.name} (ID: ${patient.id.substring(0, 8)})`,
+      label: `${patient.name} (ID: ${patient.id})`,
       value: patient.id,
     }));
   }
@@ -224,7 +226,7 @@ export class AppointmentBookingComponent implements OnInit {
     }));
   }
 
-  doctorOptions(): Array<{ label: string; value: string }> {
+  doctorOptions(): Array<{ label: string; value: number }> {
     return this.filteredDoctors.map((doctor) => ({
       label: `Dr. ${doctor.firstName} ${doctor.lastName} - ${doctor.specialization}`,
       value: doctor.id,

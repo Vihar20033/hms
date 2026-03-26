@@ -9,7 +9,7 @@ export enum MedicineCategory {
 }
 
 export interface Medicine {
-  id: string;
+  id: number;
   name: string;
   medicineCode: string;
   category: MedicineCategory | string;
@@ -36,23 +36,23 @@ export interface MedicineRequest {
 }
 
 export interface DispenseMedicineRequest {
-  prescriptionId: string;
+  prescriptionId: number;
   items: DispenseItem[];
 }
 
 export interface DispenseItem {
-  medicineId: string;
+  medicineId: number;
   quantity: number;
 }
 
 export interface InventoryTransaction {
-  id: string;
-  medicineId: string;
+  id: number;
+  medicineId: number;
   medicineName: string;
   medicineCode: string;
   transactionType: 'IN' | 'OUT';
   quantity: number;
-  referenceId?: string;
+  referenceId?: number;
   notes?: string;
   createdAt: string;
   createdBy: string;

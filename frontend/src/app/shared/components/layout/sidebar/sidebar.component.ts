@@ -66,13 +66,6 @@ export class SidebarComponent {
       summary: 'Doctor roster and setup',
     },
     {
-      title: 'Lab Tests',
-      icon: 'ri-test-tube-line',
-      link: '/lab',
-      roles: ['ADMIN', 'DOCTOR', 'LABORATORY_STAFF'],
-      summary: 'Orders and results',
-    },
-    {
       title: 'Prescriptions',
       icon: 'ri-file-text-line',
       link: '/prescriptions',

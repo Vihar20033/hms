@@ -42,7 +42,7 @@ export class PatientService {
       .pipe(retry({ count: 3, delay: (error, retryCount) => timer(Math.pow(2, retryCount) * 1000) }), timeout(10000));
   }
 
-  getById(id: string): Observable<ApiResponse<Patient>> {
+  getById(id: number): Observable<ApiResponse<Patient>> {
     return this.http
       .get<ApiResponse<Patient>>(`${this.apiUrl}/${id}`)
       .pipe(retry({ count: 3, delay: (error, retryCount) => timer(Math.pow(2, retryCount) * 1000) }), timeout(10000));
@@ -54,13 +54,13 @@ export class PatientService {
       .pipe(retry({ count: 3, delay: (error, retryCount) => timer(Math.pow(2, retryCount) * 1000) }), timeout(10000));
   }
 
-  update(id: string, patient: PatientRequest): Observable<ApiResponse<Patient>> {
+  update(id: number, patient: PatientRequest): Observable<ApiResponse<Patient>> {
     return this.http
       .put<ApiResponse<Patient>>(`${this.apiUrl}/${id}`, patient)
       .pipe(retry({ count: 3, delay: (error, retryCount) => timer(Math.pow(2, retryCount) * 1000) }), timeout(10000));
   }
 
-  delete(id: string): Observable<ApiResponse<void>> {
+  delete(id: number): Observable<ApiResponse<void>> {
     return this.http
       .delete<ApiResponse<void>>(`${this.apiUrl}/${id}`)
       .pipe(retry({ count: 3, delay: (error, retryCount) => timer(Math.pow(2, retryCount) * 1000) }), timeout(10000));

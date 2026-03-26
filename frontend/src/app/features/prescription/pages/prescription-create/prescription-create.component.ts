@@ -27,9 +27,9 @@ import { SidebarComponent } from '../../../../shared/components/layout/sidebar/s
 })
 export class PrescriptionCreateComponent implements OnInit {
   prescriptionForm!: FormGroup;
-  appointmentId: string = '';
-  patientId: string = '';
-  doctorId: string = '';
+  appointmentId: number | null = null;
+  patientId: number | null = null;
+  doctorId: number | null = null;
   patientName = '';
   appointment?: Appointment;
   isSubmitting = false;
@@ -49,7 +49,8 @@ export class PrescriptionCreateComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    this.appointmentId = this.route.snapshot.params['appointmentId'] || '';
+    const paramId = this.route.snapshot.params['appointmentId'];
+    this.appointmentId = paramId ? Number(paramId) : null;
     if (this.appointmentId) {
       this.loadAppointmentDetails();
     }
@@ -176,15 +177,15 @@ export class PrescriptionCreateComponent implements OnInit {
   }
 
   private loadAppointmentDetails(): void {
-    this.appointmentService.getById(this.appointmentId).subscribe((res: ApiResponse<Appointment>) => {
+    this.appointmentService.getById(this.appointmentId!).subscribe((res: ApiResponse<Appointment>) => {
       const appt = res.data;
       if (appt) {
         this.appointment = appt;
-        this.patientId = appt.patientId || '';
+        this.patientId = appt.patientId || null;
         this.patientName = appt.patientName || '';
 
         if (appt.doctorId) {
-          this.doctorId = appt.doctorId as string;
+          this.doctorId = appt.doctorId;
         } else {
           const user = this.authService.currentUserValue;
           if (user?.role === 'DOCTOR') {
@@ -205,9 +206,9 @@ export class PrescriptionCreateComponent implements OnInit {
 
     this.isSubmitting = true;
     const request: PrescriptionRequest = {
-      patientId: this.patientId,
-      doctorId: this.doctorId,
-      appointmentId: this.appointmentId,
+      patientId: this.patientId!,
+      doctorId: this.doctorId!,
+      appointmentId: this.appointmentId!,
       ...this.prescriptionForm.value,
     };
 

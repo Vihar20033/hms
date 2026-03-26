@@ -16,6 +16,7 @@ import { Chart, registerables } from 'chart.js';
 import { ApiResponse, DashboardSummary, WeeklyStatistics } from '../../../core/models/common.models';
 import { AuthService } from '../../../core/services/auth.service';
 import { DashboardService } from '../../../core/services/dashboard.service';
+import { AdminService, HealthResponse } from '../../../core/services/admin.service';
 import { HeaderComponent } from '../../../shared/components/layout/header/header.component';
 import { SidebarComponent } from '../../../shared/components/layout/sidebar/sidebar.component';
 
@@ -42,6 +43,7 @@ export class DashboardComponent implements OnInit, AfterViewInit, OnDestroy {
 
   summary = signal<DashboardSummary | null>(null);
   isLoading = signal<boolean>(true);
+  healthStatus = signal<HealthResponse | null>(null);
 
   currentUser = this.authService.currentUser;
   role = computed(() => this.currentUser()?.role || '');
@@ -55,6 +57,7 @@ export class DashboardComponent implements OnInit, AfterViewInit, OnDestroy {
   constructor(
     private dashboardService: DashboardService,
     private authService: AuthService,
+    private adminService: AdminService,
     private cdr: ChangeDetectorRef,
   ) {}
 
@@ -76,6 +79,19 @@ export class DashboardComponent implements OnInit, AfterViewInit, OnDestroy {
         this.cdr.markForCheck();
       },
     });
+
+    if (this.role() === 'ADMIN') {
+      this.adminService.getHealth().subscribe({
+        next: (health) => {
+          this.healthStatus.set(health);
+          this.cdr.markForCheck();
+        },
+        error: () => {
+          this.healthStatus.set({ status: 'DOWN' });
+          this.cdr.markForCheck();
+        }
+      });
+    }
   }
 
   ngAfterViewInit(): void {

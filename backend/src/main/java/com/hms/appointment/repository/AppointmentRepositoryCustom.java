@@ -7,7 +7,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import jakarta.persistence.LockModeType;
 import java.util.List;
-import java.util.UUID;
+
 import java.time.LocalDateTime;
 
 public interface AppointmentRepositoryCustom {
@@ -15,10 +15,9 @@ public interface AppointmentRepositoryCustom {
     @Lock(LockModeType.PESSIMISTIC_WRITE)
     @Query("SELECT a FROM Appointment a WHERE a.doctor.id = :doctorId " +
            "AND a.appointmentTime = :dateTime " +
-           "AND a.deleted = false " +
            "AND a.status IN :statuses")
     List<Appointment> findAndLockConflictingAppointments(
-            @Param("doctorId") UUID doctorId,
+            @Param("doctorId") Long doctorId,
             @Param("dateTime") LocalDateTime dateTime,
             @Param("statuses") List<AppointmentStatus> statuses
     );
@@ -26,10 +25,9 @@ public interface AppointmentRepositoryCustom {
     @Lock(LockModeType.PESSIMISTIC_WRITE)
     @Query("SELECT a FROM Appointment a WHERE a.patient.id = :patientId " +
            "AND a.appointmentTime = :dateTime " +
-           "AND a.deleted = false " +
            "AND a.status IN :statuses")
     List<Appointment> findAndLockPatientConflictingAppointments(
-            @Param("patientId") UUID patientId,
+            @Param("patientId") Long patientId,
             @Param("dateTime") LocalDateTime dateTime,
             @Param("statuses") List<AppointmentStatus> statuses
     );

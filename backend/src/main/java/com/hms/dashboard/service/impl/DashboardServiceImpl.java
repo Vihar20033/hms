@@ -3,12 +3,10 @@ package com.hms.dashboard.service.impl;
 import com.hms.appointment.repository.AppointmentRepository;
 import com.hms.billing.repository.BillingRepository;
 import com.hms.common.enums.AppointmentStatus;
-import com.hms.common.enums.TestStatus;
 import com.hms.dashboard.dto.DashboardSummaryDTO;
 import com.hms.dashboard.dto.WeeklyStatisticsDTO;
 import com.hms.dashboard.service.DashboardService;
 import com.hms.doctor.repository.DoctorRepository;
-import com.hms.laboratory.repository.LabTestRepository;
 import com.hms.patient.repository.PatientRepository;
 import com.hms.pharmacy.repository.MedicineRepository;
 import lombok.RequiredArgsConstructor;
@@ -34,7 +32,6 @@ public class DashboardServiceImpl implements DashboardService {
     private final DoctorRepository doctorRepository;
     private final MedicineRepository medicineRepository;
     private final BillingRepository billingRepository;
-    private final LabTestRepository labRepository;
 
     @Override
     public DashboardSummaryDTO getSummary() {
@@ -52,9 +49,6 @@ public class DashboardServiceImpl implements DashboardService {
 
         BigDecimal totalRevenue = billingRepository.sumTotalRevenue();
         if (totalRevenue == null) totalRevenue = BigDecimal.ZERO;
-
-        long pendingLabs = labRepository.countByStatusIn(
-                Arrays.asList(TestStatus.PENDING, TestStatus.IN_PROGRESS));
 
         long inQueue = appointmentRepository.countByStatusInAndAppointmentTimeBetween(
                 Arrays.asList(AppointmentStatus.CHECKED_IN, AppointmentStatus.IN_CONSULTATION, AppointmentStatus.CONFIRMED),
@@ -88,7 +82,6 @@ public class DashboardServiceImpl implements DashboardService {
                 .lowStockMedicines(lowStock)
                 .todayRevenue(todayRevenue)
                 .totalRevenue(totalRevenue)
-                .pendingLabTests(pendingLabs)
                 .patientsInQueue(inQueue)
                 .completedConsultations(consultations)
                 .totalCompletedConsultations(totalConsultations)

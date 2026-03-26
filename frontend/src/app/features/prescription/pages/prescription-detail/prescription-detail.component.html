@@ -29,7 +29,7 @@
               <span class="value">{{ prescription.createdAt | date: 'mediumDate' }}</span>
               <div style="margin-top: 1rem">
                 <span class="label">Prescription ID</span>
-                <span class="value">#{{ prescription.id | slice: 0 : 8 | uppercase }}</span>
+                <span class="value">#{{ prescription.id  }}</span>
               </div>
             </div>
           </header>
@@ -43,7 +43,7 @@
               </div>
               <div class="info-row">
                 <span class="key">Patient ID:</span>
-                <span class="val">{{ prescription.patientId | slice: 0 : 8 }}</span>
+                <span class="val">{{ prescription.patientId  }}</span>
               </div>
               <div class="info-row"><span class="key">Contact:</span> <span class="val">+91 9988XXXXXX</span></div>
             </div>

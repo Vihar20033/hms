@@ -21,7 +21,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
-import java.util.UUID;
+
 
 @Service
 @RequiredArgsConstructor
@@ -56,12 +56,13 @@ public class PatientServiceImpl implements PatientService {
 
     @Override
     @Transactional(readOnly = true)
-    public Slice<PatientResponseDTO> search(String name, String email, String bloodGroup, String urgencyLevel, int page, int size, String sortBy) {
+    public Slice<PatientResponseDTO> search(String query, String name, String email, String bloodGroup, String urgencyLevel, int page, int size, String sortBy) {
         if (!ALLOWED_SORT_FIELDS.contains(sortBy)) sortBy = "createdAt";
         if (size > MAX_PAGE_SIZE) size = MAX_PAGE_SIZE;
         if (size < 1) size = 10;
 
-        Specification<Patient> spec = Specification.where(PatientSpecification.notDeleted())
+        Specification<Patient> spec = Specification.where(PatientSpecification.fuzzySearch(query))
+                .and(PatientSpecification.fuzzySearch(query))
                 .and(PatientSpecification.hasName(name))
                 .and(PatientSpecification.hasEmail(email))
                 .and(PatientSpecification.hasBloodGroup(bloodGroup))
@@ -74,16 +75,15 @@ public class PatientServiceImpl implements PatientService {
 
     @Override
     @Transactional(readOnly = true)
-    public PatientResponseDTO getById(UUID id) {
+    public PatientResponseDTO getById(Long id) {
         Patient patient = repository.findById(id)
-                .filter(p -> !p.isDeleted()) // Soft Delete check
                 .orElseThrow(() -> new PatientNotFoundException("Patient not found"));
 
         return mapper.toResponse(patient);
     }
 
     @Override
-    public PatientResponseDTO update(UUID id, PatientRequestDTO dto) {
+    public PatientResponseDTO update(Long id, PatientRequestDTO dto) {
         Patient patient = repository.findById(id)
                 .orElseThrow(() -> new PatientNotFoundException("Patient not found"));
 
@@ -100,12 +100,11 @@ public class PatientServiceImpl implements PatientService {
     }
 
     @Override
-    public void delete(UUID id) {
+    public void delete(Long id) {
         Patient patient = repository.findById(id)
                 .orElseThrow(() -> new PatientNotFoundException("Patient not found"));
 
-        patient.setDeleted(true);
-        repository.save(patient);
+        repository.delete(patient);
         log.info("Patient soft deleted with ID: {}", id);
         auditLogService.log(SecurityUtils.getCurrentUsername(), "PATIENT_DELETE", "Patient", id.toString(), "name=" + patient.getName());
 
@@ -119,7 +118,6 @@ public class PatientServiceImpl implements PatientService {
     @Transactional(readOnly = true)
     public List<PatientResponseDTO> getAll() {
         return repository.findAll().stream()
-                .filter(p -> !p.isDeleted())
                 .map(mapper::toResponse)
                 .toList();
     }

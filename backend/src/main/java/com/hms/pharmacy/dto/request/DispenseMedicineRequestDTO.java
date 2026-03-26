@@ -6,12 +6,12 @@ import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
 import lombok.Data;
 import java.util.List;
-import java.util.UUID;
+
 
 @Data
 public class DispenseMedicineRequestDTO {
     @NotNull(message = "Prescription ID is required")
-    private UUID prescriptionId;
+    private Long prescriptionId;
     
     @NotEmpty(message = "Items to dispense cannot be empty")
     @Valid
@@ -20,7 +20,7 @@ public class DispenseMedicineRequestDTO {
     @Data
     public static class DispenseItemDTO {
         @NotNull(message = "Medicine ID is required")
-        private UUID medicineId;
+        private Long medicineId;
         @NotNull(message = "Quantity is required")
         @Min(value = 1, message = "Quantity must be at least 1")
         private Integer quantity;

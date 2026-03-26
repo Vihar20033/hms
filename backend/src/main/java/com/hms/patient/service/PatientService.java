@@ -5,13 +5,14 @@ import com.hms.patient.dto.response.PatientResponseDTO;
 import org.springframework.data.domain.Slice;
 
 import java.util.List;
-import java.util.UUID;
+
 
 public interface PatientService {
 
     PatientResponseDTO create(PatientRequestDTO dto);
 
     Slice<PatientResponseDTO> search(
+            String query,
             String name,
             String email,
             String bloodGroup,
@@ -21,11 +22,11 @@ public interface PatientService {
             String sortBy
     );
 
-    PatientResponseDTO getById(UUID id);
+    PatientResponseDTO getById(Long id);
 
-    PatientResponseDTO update(UUID id, PatientRequestDTO dto);
+    PatientResponseDTO update(Long id, PatientRequestDTO dto);
 
-    void delete(UUID id);
+    void delete(Long id);
 
     List<PatientResponseDTO> getAll();
 }

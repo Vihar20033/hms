@@ -4,7 +4,7 @@ import lombok.*;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
-import java.util.UUID;
+
 
 /**
  * Response DTO for doctor data
@@ -15,8 +15,8 @@ import java.util.UUID;
 @Builder
 public class DoctorResponse {
 
-    private UUID id;
-    private UUID userId;
+    private Long id;
+    private Long userId;
     private String username;
     private String email;
     private String firstName;

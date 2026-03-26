@@ -3,7 +3,7 @@ package com.hms.prescription.entity;
 import jakarta.persistence.*;
 import lombok.*;
 
-import java.util.UUID;
+
 
 @Entity
 @Table(name = "prescription_medicines")
@@ -15,8 +15,8 @@ import java.util.UUID;
 public class PrescriptionMedicine {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.UUID)
-    private UUID id;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "prescription_id", nullable = false)

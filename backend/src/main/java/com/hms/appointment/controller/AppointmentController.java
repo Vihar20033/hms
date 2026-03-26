@@ -1,5 +1,6 @@
 package com.hms.appointment.controller;
 
+import org.springframework.transaction.annotation.Transactional;
 import com.hms.appointment.dto.response.AppointmentSummaryDTO;
 import com.hms.appointment.entity.Appointment;
 import com.hms.common.response.ApiResponse;
@@ -19,7 +20,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDateTime;
-import java.util.UUID;
+
 import com.hms.common.enums.Department;
 import jakarta.validation.Valid;
 import com.hms.appointment.dto.request.AppointmentRequestDTO;
@@ -50,28 +51,29 @@ public class AppointmentController {
 
     @PreAuthorize("hasAnyRole('ADMIN','RECEPTIONIST','DOCTOR','NURSE')")
     @GetMapping
-    @org.springframework.transaction.annotation.Transactional(readOnly = true)
+    @Transactional(readOnly = true)
     public ResponseEntity<ApiResponse<PagedResponse<AppointmentResponseDTO>>> searchAppointments(
-            @PageableDefault(sort = "appointmentTime", direction = Sort.Direction.DESC) Pageable pageable,
-            @RequestParam(name = "doctorId", required = false) UUID doctorId,
-            @RequestParam(name = "patientId", required = false) UUID patientId,
+            @RequestParam(name = "query", required = false) String query,
+            @RequestParam(name = "doctorId", required = false) Long doctorId,
+            @RequestParam(name = "patientId", required = false) Long patientId,
             @RequestParam(name = "status", required = false) AppointmentStatus status,
             @RequestParam(name = "department", required = false) Department department,
-            @RequestParam(name = "start", required = false) @org.springframework.format.annotation.DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime start,
-            @RequestParam(name = "end", required = false) @org.springframework.format.annotation.DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime end,
-            @RequestParam(name = "isEmergency", required = false) Boolean isEmergency) {
+            @RequestParam(name = "start", required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime start,
+            @RequestParam(name = "end", required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime end,
+            @RequestParam(name = "isEmergency", required = false) Boolean isEmergency,
+            @PageableDefault(sort = "appointmentTime", direction = Sort.Direction.DESC, size = 20) Pageable pageable) {
         
-        Page<Appointment> page = appointmentService.findAppointments(
-                pageable, doctorId, patientId, status, department, start, end, isEmergency);
+        Page<Appointment> appointments = appointmentService.findAppointments(
+                query, pageable, doctorId, patientId, status, department, start, end, isEmergency);
         
         return ResponseEntity.ok(ApiResponse.success(
-                PagedResponse.from(page, appointmentMapper::toDto)));
+                PagedResponse.from(appointments, appointmentMapper::toDto)));
     }
 
     @PreAuthorize("hasAnyRole('ADMIN','DOCTOR','NURSE','RECEPTIONIST')")
     @GetMapping("/{id}")
     public ResponseEntity<ApiResponse<AppointmentResponseDTO>> getAppointmentById(
-            @PathVariable("id") UUID id) {
+            @PathVariable("id") Long id) {
         return ResponseEntity.ok(ApiResponse.success(
                 appointmentMapper.toDto(appointmentService.getAppointmentById(id))
         ));
@@ -80,7 +82,7 @@ public class AppointmentController {
     @PreAuthorize("hasAnyRole('ADMIN','RECEPTIONIST')")
     @PutMapping("/{id}")
     public ResponseEntity<ApiResponse<AppointmentResponseDTO>> updateAppointment(
-            @PathVariable("id") UUID id,
+            @PathVariable("id") Long id,
             @Valid @RequestBody AppointmentRequestDTO dto) {
         return ResponseEntity.ok(ApiResponse.success(
                 appointmentMapper.toDto(appointmentService.updateAppointment(id, dto))));
@@ -89,7 +91,7 @@ public class AppointmentController {
     @PreAuthorize("hasAnyRole('ADMIN','DOCTOR','RECEPTIONIST')")
     @PatchMapping("/{id}/status")
     public ResponseEntity<ApiResponse<AppointmentResponseDTO>> updateStatus(
-            @PathVariable("id") UUID id,
+            @PathVariable("id") Long id,
             @RequestParam("status") AppointmentStatus status) {
         return ResponseEntity
                 .ok(ApiResponse.success(
@@ -99,7 +101,7 @@ public class AppointmentController {
     @PreAuthorize("hasAnyRole('ADMIN','RECEPTIONIST')")
     @DeleteMapping("/{id}")
     public ResponseEntity<ApiResponse<Void>> deleteAppointment(
-            @PathVariable("id") UUID id) {
+            @PathVariable("id") Long id) {
         appointmentService.deleteAppointment(id);
         return ResponseEntity.ok(ApiResponse.success(null));
     }
@@ -107,7 +109,7 @@ public class AppointmentController {
     @PreAuthorize("hasAnyRole('ADMIN','NURSE','RECEPTIONIST')")
     @PatchMapping("/{id}/check-in")
     public ResponseEntity<ApiResponse<AppointmentResponseDTO>> checkInAppointment(
-            @PathVariable("id") UUID id) {
+            @PathVariable("id") Long id) {
         return ResponseEntity.ok(ApiResponse.success(
                         appointmentMapper.toDto(appointmentService.updateStatus(id, AppointmentStatus.CHECKED_IN))));
     }
@@ -115,7 +117,7 @@ public class AppointmentController {
     @PreAuthorize("hasAnyRole('ADMIN','DOCTOR')")
     @PatchMapping("/{id}/start")
     public ResponseEntity<ApiResponse<AppointmentResponseDTO>> startConsultation(
-            @PathVariable("id") UUID id) {
+            @PathVariable("id") Long id) {
         return ResponseEntity.ok(ApiResponse.success(
                         appointmentMapper.toDto(appointmentService.updateStatus(id, AppointmentStatus.IN_CONSULTATION))));
     }
@@ -123,7 +125,7 @@ public class AppointmentController {
     @PreAuthorize("hasAnyRole('ADMIN','DOCTOR')")
     @PatchMapping("/{id}/complete")
     public ResponseEntity<ApiResponse<AppointmentResponseDTO>> completeConsultation(
-            @PathVariable("id") UUID id) {
+            @PathVariable("id") Long id) {
         return ResponseEntity.ok(ApiResponse.success(
                         appointmentMapper.toDto(appointmentService.updateStatus(id, AppointmentStatus.COMPLETED))));
     }

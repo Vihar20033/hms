@@ -3,17 +3,14 @@ package com.hms.pharmacy.entity;
 import com.hms.common.entity.Auditable;
 import com.hms.common.enums.MedicineCategory;
 import jakarta.persistence.*;
-import org.hibernate.annotations.SQLDelete;
-import org.hibernate.annotations.SQLRestriction;
 import lombok.*;
 import lombok.experimental.SuperBuilder;
 
 import java.math.BigDecimal;
+import java.time.LocalDate;
 
 @Entity
 @Table(name = "medicines")
-@SQLDelete(sql = "UPDATE medicines SET deleted = true WHERE id=?")
-@SQLRestriction("deleted = false")
 @Getter
 @Setter
 @NoArgsConstructor
@@ -40,7 +37,7 @@ public class Medicine extends Auditable {
     private String batchNumber;
 
     @Column(name = "expiry_date")
-    private String expiryDate;
+    private LocalDate expiryDate;
 
     @Column(name = "quantity_in_stock", nullable = false)
     private Integer quantityInStock;

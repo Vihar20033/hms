@@ -12,18 +12,22 @@ import com.hms.doctor.exception.DoctorNotFoundException;
 import com.hms.doctor.mapper.DoctorMapper;
 import com.hms.doctor.repository.DoctorRepository;
 import com.hms.doctor.service.DoctorService;
+import com.hms.doctor.specification.DoctorSpecification;
 import com.hms.user.entity.User;
 import com.hms.user.exception.EmailAlreadyExistsException;
 import com.hms.user.exception.UsernameAlreadyExistsException;
 import com.hms.user.repository.UserRepository;
 import com.hms.user.service.UserService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
-import java.util.UUID;
+
 
 @Service
 @RequiredArgsConstructor
@@ -40,22 +44,14 @@ public class DoctorServiceImpl implements DoctorService {
     @Transactional
     public DoctorOnboardingResponse createDoctor(CreateDoctorRequest request) {
         
-        UUID userId = request.getUserId();
+        Long userId = request.getUserId();
         if (userId == null) {
-            userRepository.findByEmailIncludingDeleted(request.getEmail()).ifPresent(existingUser -> {
-                if (!existingUser.isDeleted()) {
-                    throw new EmailAlreadyExistsException("Email already exists");
-                }
-                userService.retireUserIdentity(existingUser);
-                userRepository.save(existingUser);
+            userRepository.findByEmail(request.getEmail()).ifPresent(existingUser -> {
+                throw new EmailAlreadyExistsException("Email already exists");
             });
 
-            userRepository.findByUsernameIncludingDeleted(request.getUsername()).ifPresent(existingUser -> {
-                if (!existingUser.isDeleted()) {
-                    throw new UsernameAlreadyExistsException("Username already exists");
-                }
-                userService.retireUserIdentity(existingUser);
-                userRepository.save(existingUser);
+            userRepository.findByUsername(request.getUsername()).ifPresent(existingUser -> {
+                throw new UsernameAlreadyExistsException("Username already exists");
             });
 
             User user = User.builder()
@@ -91,8 +87,19 @@ public class DoctorServiceImpl implements DoctorService {
     }
 
     @Override
+    @Transactional(readOnly = true)
+    public Page<Doctor> searchDoctors(String query, com.hms.common.enums.Department department, Boolean isAvailable, Pageable pageable) {
+        Specification<Doctor> spec = Specification.where(DoctorSpecification.fuzzySearch(query))
+                .and(DoctorSpecification.fuzzySearch(query))
+                .and(DoctorSpecification.hasDepartment(department))
+                .and(DoctorSpecification.isAvailable(isAvailable));
+
+        return doctorRepository.findAll(spec, pageable);
+    }
+
+    @Override
     @Transactional
-    public Doctor updateDoctor(UUID id, UpdateDoctorRequest request) {
+    public Doctor updateDoctor(Long id, UpdateDoctorRequest request) {
         Doctor doctor = getDoctorById(id);
         doctorMapper.updateEntity(request, doctor);
         Doctor saved = doctorRepository.save(doctor);
@@ -102,14 +109,14 @@ public class DoctorServiceImpl implements DoctorService {
 
     @Override
     @Transactional(readOnly = true)
-    public Doctor getDoctorById(UUID id) {
+    public Doctor getDoctorById(Long id) {
         return doctorRepository.findById(id)
                 .orElseThrow(() -> new DoctorNotFoundException(id));
     }
 
     @Override
     @Transactional(readOnly = true)
-    public Doctor getDoctorByUserId(UUID userId) {
+    public Doctor getDoctorByUserId(Long userId) {
         return doctorRepository.findByUserId(userId)
                 .orElseThrow(() -> new DoctorNotFoundException("Doctor profile not found for user: " + userId, userId.toString()));
     }
@@ -128,10 +135,9 @@ public class DoctorServiceImpl implements DoctorService {
 
     @Override
     @Transactional
-    public void deleteDoctor(UUID id) {
+    public void deleteDoctor(Long id) {
         Doctor doctor = getDoctorById(id);
-        doctor.setDeleted(true);
-        doctorRepository.save(doctor);
+        doctorRepository.delete(doctor);
         auditLogService.log(SecurityUtils.getCurrentUsername(), "DOCTOR_DELETE", "Doctor", id.toString(), "name=" + doctor.getFirstName() + " " + doctor.getLastName());
 
         userRepository.findById(doctor.getUserId()).ifPresent(user -> {

@@ -1,5 +1,5 @@
 export interface PrescriptionMedicine {
-  id: string;
+  id: number;
   medicineName: string;
   dosage: string;
   duration: string;
@@ -7,12 +7,12 @@ export interface PrescriptionMedicine {
 }
 
 export interface Prescription {
-  id: string;
-  patientId: string;
+  id: number;
+  patientId: number;
   patientName: string;
-  doctorId: string;
+  doctorId: number;
   doctorName: string;
-  appointmentId?: string;
+  appointmentId?: number;
   symptoms: string;
   diagnosis: string;
   medicines: PrescriptionMedicine[];
@@ -22,9 +22,9 @@ export interface Prescription {
 }
 
 export interface PrescriptionRequest {
-  patientId: string;
-  doctorId: string;
-  appointmentId?: string;
+  patientId: number;
+  doctorId: number;
+  appointmentId?: number;
   symptoms: string;
   diagnosis: string;
   medicines: PrescriptionMedicineRequest[];

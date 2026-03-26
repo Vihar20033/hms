@@ -9,6 +9,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.math.BigDecimal;
+import java.time.LocalDate;
 
 @Data
 @Builder
@@ -38,7 +39,8 @@ public class MedicineRequestDTO {
     @Size(max = 50, message = "Batch number must not exceed 50 characters")
     private String batchNumber;
 
-    private String expiryDate;
+    @Future(message = "Expiry date must be in the future")
+    private LocalDate expiryDate;
 
     @NotNull(message = "Quantity is required")
     @Min(value = 0, message = "Quantity must be non-negative")

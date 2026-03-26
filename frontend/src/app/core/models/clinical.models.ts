@@ -1,6 +1,6 @@
 export interface Vitals {
-  id: string;
-  appointmentId: string;
+  id: number;
+  appointmentId: number;
   temperature?: number;
   systolicBP?: number;
   diastolicBP?: number;
@@ -14,7 +14,7 @@ export interface Vitals {
 }
 
 export interface VitalsRequest {
-  appointmentId: string;
+  appointmentId: number;
   temperature?: number;
   systolicBP?: number;
   diastolicBP?: number;

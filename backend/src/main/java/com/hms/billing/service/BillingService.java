@@ -5,26 +5,26 @@ import com.hms.billing.dto.response.BillingResponseDTO;
 import com.hms.common.enums.PaymentStatus;
 
 import java.util.List;
-import java.util.UUID;
+
 
 public interface BillingService {
     BillingResponseDTO createBilling(BillingRequestDTO dto);
 
-    BillingResponseDTO updateBilling(UUID id, BillingRequestDTO dto);
+    BillingResponseDTO updateBilling(Long id, BillingRequestDTO dto);
 
-    BillingResponseDTO getBillingById(UUID id);
+    BillingResponseDTO getBillingById(Long id);
 
     List<BillingResponseDTO> getAllBillings();
 
-    List<BillingResponseDTO> getBillingsByPatientId(UUID patientId);
+    List<BillingResponseDTO> getBillingsByPatientId(Long patientId);
 
-    BillingResponseDTO updatePaymentStatus(UUID id, PaymentStatus status);
+    BillingResponseDTO updatePaymentStatus(Long id, PaymentStatus status);
 
-    void deleteBilling(UUID id);
+    void deleteBilling(Long id);
 
 
-    BillingResponseDTO generateBillingFromAppointment(UUID appointmentId);
-    BillingResponseDTO calculatePreviewBilling(UUID appointmentId);
-    com.hms.billing.entity.Billing getBillingEntityForPreview(UUID appointmentId);
+    BillingResponseDTO generateBillingFromAppointment(Long appointmentId);
+    BillingResponseDTO calculatePreviewBilling(Long appointmentId);
+    com.hms.billing.entity.Billing getBillingEntityForPreview(Long appointmentId);
 }
 

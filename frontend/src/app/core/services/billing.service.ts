@@ -19,13 +19,13 @@ export class BillingService {
   }
 
 
-  getById(id: string): Observable<ApiResponse<Billing>> {
+  getById(id: number): Observable<ApiResponse<Billing>> {
     return this.http
       .get<ApiResponse<Billing>>(`${this.apiUrl}/${id}`)
       .pipe(retry({ count: 3, delay: (error, retryCount) => timer(Math.pow(2, retryCount) * 1000) }), timeout(10000));
   }
 
-  getByPatient(patientId: string): Observable<ApiResponse<Billing[]>> {
+  getByPatient(patientId: number): Observable<ApiResponse<Billing[]>> {
     return this.http
       .get<ApiResponse<Billing[]>>(`${this.apiUrl}/patient/${patientId}`)
       .pipe(retry({ count: 3, delay: (error, retryCount) => timer(Math.pow(2, retryCount) * 1000) }), timeout(10000));
@@ -37,7 +37,7 @@ export class BillingService {
       .pipe(retry({ count: 3, delay: (error, retryCount) => timer(Math.pow(2, retryCount) * 1000) }), timeout(10000));
   }
 
-  updateStatus(id: string, status: PaymentStatus): Observable<ApiResponse<Billing>> {
+  updateStatus(id: number, status: PaymentStatus): Observable<ApiResponse<Billing>> {
     return this.http
       .patch<ApiResponse<Billing>>(`${this.apiUrl}/${id}/status`, null, {
         params: { status },
@@ -45,17 +45,17 @@ export class BillingService {
       .pipe(retry({ count: 3, delay: (error, retryCount) => timer(Math.pow(2, retryCount) * 1000) }), timeout(10000));
   }
 
-  delete(id: string): Observable<ApiResponse<void>> {
+  delete(id: number): Observable<ApiResponse<void>> {
     return this.http
       .delete<ApiResponse<void>>(`${this.apiUrl}/${id}`)
       .pipe(retry({ count: 3, delay: (error, retryCount) => timer(Math.pow(2, retryCount) * 1000) }), timeout(10000));
   }
 
-  generateFromAppointment(appointmentId: string): Observable<ApiResponse<Billing>> {
+  generateFromAppointment(appointmentId: number): Observable<ApiResponse<Billing>> {
     return this.http.post<ApiResponse<Billing>>(`${this.apiUrl}/generate/appointment/${appointmentId}`, {});
   }
 
-  getPreviewFromAppointment(appointmentId: string): Observable<ApiResponse<Billing>> {
+  getPreviewFromAppointment(appointmentId: number): Observable<ApiResponse<Billing>> {
     return this.http.get<ApiResponse<Billing>>(`${this.apiUrl}/preview-appointment/${appointmentId}`);
   }
 }

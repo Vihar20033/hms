@@ -40,7 +40,7 @@ export class PatientRegistrationComponent implements OnInit {
   errorMessage = '';
   successMessage = '';
   isEditMode = false;
-  patientId: string | null = null;
+  patientId: number | null = null;
 
   bloodGroups = Object.values(BloodGroup);
   urgencyLevels = Object.values(UrgencyLevel);
@@ -67,14 +67,14 @@ export class PatientRegistrationComponent implements OnInit {
   ngOnInit(): void {
     this.route.queryParams.subscribe((params) => {
       if (params['patientId']) {
-        this.patientId = params['patientId'];
+        this.patientId = Number(params['patientId']);
         this.isEditMode = true;
-        this.loadPatient(params['patientId']);
+        this.loadPatient(this.patientId);
       }
     });
   }
 
-  loadPatient(id: string): void {
+  loadPatient(id: number): void {
     this.isLoading = true;
     this.patientService.getById(id).subscribe({
       next: (res: ApiResponse<Patient>) => {
@@ -105,7 +105,7 @@ export class PatientRegistrationComponent implements OnInit {
 
       const request$: Observable<ApiResponse<Patient>> =
         this.isEditMode && this.patientId
-          ? this.patientService.update(this.patientId, this.registrationForm.value)
+          ? this.patientService.update(this.patientId!, this.registrationForm.value)
           : this.patientService.create(this.registrationForm.value);
 
       request$.subscribe({

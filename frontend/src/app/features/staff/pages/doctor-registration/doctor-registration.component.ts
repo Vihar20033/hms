@@ -48,7 +48,7 @@ export class DoctorRegistrationComponent implements OnInit {
   departments = BOOKABLE_DEPARTMENTS;
   isEditMode = false;
   isViewMode = false;
-  doctorId: string | null = null;
+  doctorId: number | null = null;
 
   constructor(
     private fb: FormBuilder,
@@ -88,7 +88,7 @@ export class DoctorRegistrationComponent implements OnInit {
     });
 
     this.route.queryParams.subscribe((params) => {
-      this.doctorId = params['doctorId'] ?? null;
+      this.doctorId = params['doctorId'] ? Number(params['doctorId']) : null;
       this.isViewMode = params['mode'] === 'view';
       this.isEditMode = params['mode'] === 'edit' && !!this.doctorId;
 
@@ -132,7 +132,7 @@ export class DoctorRegistrationComponent implements OnInit {
 
     const request$: Observable<ApiResponse<DoctorOnboardingResponse | Doctor>> =
       this.isEditMode && this.doctorId
-        ? this.doctorService.update(this.doctorId, payload)
+        ? this.doctorService.update(this.doctorId!, payload)
         : this.doctorService.register(payload);
 
     request$.subscribe({
@@ -167,7 +167,7 @@ export class DoctorRegistrationComponent implements OnInit {
     });
   }
 
-  private loadDoctor(id: string): void {
+  private loadDoctor(id: number): void {
     this.isLoading = true;
     this.doctorService.getById(id).subscribe({
       next: (res: ApiResponse<Doctor>) => {

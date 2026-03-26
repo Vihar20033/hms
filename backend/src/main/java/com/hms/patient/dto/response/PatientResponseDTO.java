@@ -9,7 +9,7 @@ import lombok.NoArgsConstructor;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
-import java.util.UUID;
+
 
 @Data
 @Builder
@@ -17,7 +17,7 @@ import java.util.UUID;
 @AllArgsConstructor
 public class PatientResponseDTO {
 
-    private UUID id;
+    private Long id;
     private String name;
     private int age;
     private BloodGroup bloodGroup;

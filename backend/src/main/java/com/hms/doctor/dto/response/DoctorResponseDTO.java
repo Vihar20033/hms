@@ -5,21 +5,20 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.util.UUID;
+
 
 @Data
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
 public class DoctorResponseDTO {
-    private UUID id;
+    private Long id;
     private String firstName;
     private String lastName;
     private String specialization;
     private String registrationNumber;
     private String department;
     private String email;
-    private String contactNumber;
     private String bio;
     private String qualification;
     private Integer experienceYears;

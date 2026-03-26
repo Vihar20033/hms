@@ -34,7 +34,7 @@ import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.Arrays;
 import java.util.List;
-import java.util.UUID;
+
 
 @Service
 @RequiredArgsConstructor
@@ -65,7 +65,7 @@ public class AppointmentServiceImpl implements AppointmentService {
         if (user.getRole() == Role.DOCTOR) {
             Doctor doctor = doctorRepository.findByUserId(user.getId())
                     .orElseThrow(() -> new BadRequestException("Current user is not registered as a doctor."));
-            UUID doctorId = doctor.getId();
+            Long doctorId = doctor.getId();
 
             builder.total(appointmentRepository.countByDoctorId(doctorId))
                    .scheduled(appointmentRepository.countByDoctorIdAndStatus(doctorId, AppointmentStatus.SCHEDULED))
@@ -160,7 +160,7 @@ public class AppointmentServiceImpl implements AppointmentService {
 
     @Override
     @Transactional(readOnly = true)
-    public Appointment getAppointmentById(UUID id) {
+    public Appointment getAppointmentById(Long id) {
         Appointment appointment = appointmentRepository.findById(id)
                 .orElseThrow(() -> new AppointmentNotFoundException("Appointment not found with ID: " + id));
 
@@ -170,7 +170,7 @@ public class AppointmentServiceImpl implements AppointmentService {
 
     @Override
     @Transactional
-    public Appointment updateAppointment(UUID id, AppointmentRequestDTO dto) {
+    public Appointment updateAppointment(Long id, AppointmentRequestDTO dto) {
 
         Appointment appointment = appointmentRepository.findById(id)
                 .orElseThrow(() -> new AppointmentNotFoundException("Appointment not found with ID: " + id));
@@ -201,7 +201,7 @@ public class AppointmentServiceImpl implements AppointmentService {
         return saved;
     }
 
-    private void lockAndCheckAvailability(UUID doctorId, UUID patientId, LocalDateTime time, UUID currentAppointmentId, boolean isEmergency) {
+    private void lockAndCheckAvailability(Long doctorId, Long patientId, LocalDateTime time, Long currentAppointmentId, boolean isEmergency) {
 
         if (isEmergency) return;
         
@@ -218,7 +218,7 @@ public class AppointmentServiceImpl implements AppointmentService {
 
     @Override
     @Transactional
-    public Appointment updateStatus(UUID id, AppointmentStatus status) {
+    public Appointment updateStatus(Long id, AppointmentStatus status) {
 
         Appointment appointment = appointmentRepository.findById(id)
                 .orElseThrow(() -> new AppointmentNotFoundException("Appointment not found with ID: " + id));
@@ -260,9 +260,10 @@ public class AppointmentServiceImpl implements AppointmentService {
     @Override
     @Transactional(readOnly = true)
     public Page<Appointment> findAppointments(
+            String query,
             Pageable pageable,
-            UUID doctorId,
-            UUID patientId,
+            Long doctorId,
+            Long patientId,
             AppointmentStatus status,
             Department department,
             LocalDateTime start,
@@ -276,6 +277,7 @@ public class AppointmentServiceImpl implements AppointmentService {
             spec = spec.and(AppointmentSpecification.hasDoctorUserId(user.getId()));
         } 
 
+        if (query != null && !query.isEmpty()) spec = spec.and(AppointmentSpecification.fuzzySearch(query));
         if (doctorId != null) spec = spec.and(AppointmentSpecification.hasDoctorId(doctorId));
         if (patientId != null) spec = spec.and(AppointmentSpecification.hasPatientId(patientId));
         if (status != null) spec = spec.and(AppointmentSpecification.hasStatus(status));
@@ -288,7 +290,7 @@ public class AppointmentServiceImpl implements AppointmentService {
 
     @Transactional(readOnly = true)
     @Override
-    public List<Appointment> getAppointmentsByDoctor(UUID doctorId) {
+    public List<Appointment> getAppointmentsByDoctor(Long doctorId) {
         return appointmentRepository.findByDoctorId(doctorId);
     }
 
@@ -300,17 +302,16 @@ public class AppointmentServiceImpl implements AppointmentService {
 
     @Transactional(readOnly = true)
     @Override
-    public List<Appointment> getAppointmentsByPatient(UUID patientId) {
+    public List<Appointment> getAppointmentsByPatient(Long patientId) {
         return appointmentRepository.findByPatientId(patientId);
     }
 
     @Override
     @Transactional
-    public void deleteAppointment(UUID id) {
+    public void deleteAppointment(Long id) {
         Appointment appointment = appointmentRepository.findById(id)
                 .orElseThrow(() -> new AppointmentNotFoundException("Appointment not found with ID: " + id));
-        appointment.setDeleted(true);
-        appointmentRepository.save(appointment);
+        appointmentRepository.delete(appointment);
         auditLogService.log(getCurrentUsername(), "APPOINTMENT_DELETE", "Appointment", id.toString(), "deleted=true");
     }
 

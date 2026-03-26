@@ -23,24 +23,20 @@ import { SidebarComponent } from '../../../../shared/components/layout/sidebar/s
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class AppointmentListComponent implements OnInit, OnDestroy {
-  // Primary State using Signals
+  
   pagedResponse = signal<PagedResponse<Appointment> | null>(null);
   summary = signal<AppointmentSummary | null>(null);
   isLoading = signal<boolean>(true);
   
-  // Pagination & Filtering Parameters
   selectedStatusFilter = signal<'ALL' | AppointmentStatus>('ALL');
   page = signal<number>(0);
   size = signal<number>(10);
   
-  // Derived State (Highly efficient)
   appointments = computed(() => this.pagedResponse()?.content || []);
   totalElements = computed(() => this.pagedResponse()?.totalElements || 0);
 
-  // Enums for template access
   statusEnum = AppointmentStatus;
-
-  // Accurately reflect global counts from the summary signal
+  
   scheduledCount = computed(() => this.summary()?.scheduled || 0);
   checkedInCount = computed(() => this.summary()?.checkedIn || 0);
   inConsultationCount = computed(() => this.summary()?.inConsultation || 0);
@@ -106,32 +102,32 @@ export class AppointmentListComponent implements OnInit, OnDestroy {
     this.loadAppointments();
   }
 
-  onCheckIn(id: string): void {
+  onCheckIn(id: number): void {
     this.appointmentService.checkIn(id).subscribe(() => {
       this.loadSummary();
       this.loadAppointments();
     });
   }
 
-  onStart(id: string): void {
+  onStart(id: number): void {
     this.appointmentService.startConsultation(id).subscribe(() => {
       this.loadSummary();
       this.loadAppointments();
     });
   }
 
-  onComplete(id: string): void {
+  onComplete(id: number): void {
     this.appointmentService.completeConsultation(id).subscribe(() => {
       this.loadSummary();
       this.loadAppointments();
     });
   }
 
-  onEdit(id: string): void {
+  onEdit(id: number): void {
     this.router.navigate(['/appointments/book'], { queryParams: { appointmentId: id } });
   }
 
-  onDelete(id: string): void {
+  onDelete(id: number): void {
     if (!confirm('Delete this appointment?')) return;
     this.appointmentService.delete(id).subscribe(() => {
       this.loadSummary();
@@ -139,7 +135,7 @@ export class AppointmentListComponent implements OnInit, OnDestroy {
     });
   }
 
-  onGenerateBill(appointmentId: string): void {
+  onGenerateBill(appointmentId: number): void {
     this.isLoading.set(true);
     this.billingService.generateFromAppointment(appointmentId).subscribe({
       next: () => {

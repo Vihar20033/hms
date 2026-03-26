@@ -7,6 +7,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.math.BigDecimal;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 @Data
@@ -22,7 +23,7 @@ public class MedicineResponseDTO {
     private MedicineCategory category;
     private String manufacturer;
     private String batchNumber;
-    private String expiryDate;
+    private LocalDate expiryDate;
     private Integer quantityInStock;
     private BigDecimal unitPrice;
     private Integer reorderLevel;

@@ -17,9 +17,7 @@ import java.util.List;
 @Getter
 @Setter
 @Entity
-@Table(name = "users", indexes = {
-        @Index(name = "idx_username", columnList = "username", unique = true)
-})
+@Table(name = "users")
 @SuperBuilder
 @NoArgsConstructor
 @AllArgsConstructor

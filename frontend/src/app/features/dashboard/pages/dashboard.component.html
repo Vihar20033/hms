@@ -104,6 +104,22 @@
               <span class="trend"><i class="ri-time-line"></i> Waiting</span>
             </div>
           </div>
+
+          @if (role() === 'ADMIN') {
+            <div class="stat-card" [class.health-down]="healthStatus()?.status === 'DOWN'">
+              <div class="stat-icon" [ngClass]="healthStatus()?.status === 'UP' ? 'ok' : 'cancelled'">
+                <i [class]="healthStatus()?.status === 'UP' ? 'ri-server-line' : 'ri-error-warning-line'"></i>
+              </div>
+              <div class="stat-info">
+                <span class="label">System Health</span>
+                <span class="value">{{ healthStatus()?.status || '...' }}</span>
+                <span class="trend" [class.up]="healthStatus()?.status === 'UP'" [class.down]="healthStatus()?.status === 'DOWN'">
+                  <i [class]="healthStatus()?.status === 'UP' ? 'ri-shield-check-line' : 'ri-shield-cross-line'"></i>
+                  {{ healthStatus()?.status === 'UP' ? 'Operations Normal' : 'Check Actuator' }}
+                </span>
+              </div>
+            </div>
+          }
         </div>
       }
 

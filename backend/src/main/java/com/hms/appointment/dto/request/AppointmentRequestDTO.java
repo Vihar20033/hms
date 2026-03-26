@@ -8,7 +8,7 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
-import java.util.UUID;
+
 
 /**
  * Request DTO for creating and updating appointments.
@@ -22,10 +22,10 @@ import java.util.UUID;
 public class AppointmentRequestDTO {
 
     @NotNull(message = "Patient ID is required")
-    private UUID patientId;
+    private Long patientId;
 
     @NotNull(message = "Doctor ID is required")
-    private UUID doctorId;
+    private Long doctorId;
 
     @NotNull(message = "Department is required")
     private Department department;

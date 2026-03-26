@@ -118,6 +118,21 @@
     background: rgba(16, 152, 104, 0.12);
     color: var(--status-success);
   }
+
+  &.ok {
+    background: rgba(16, 185, 129, 0.12);
+    color: var(--status-success);
+  }
+
+  &.cancelled {
+    background: rgba(239, 68, 68, 0.12);
+    color: #ef4444;
+  }
+}
+
+.stat-card.health-down {
+  border-color: #ef4444;
+  background: rgba(239, 68, 68, 0.02);
 }
 
 .stat-info {
@@ -149,6 +164,10 @@
 
   .trend.up {
     color: var(--status-success);
+  }
+
+  .trend.down {
+    color: #ef4444;
   }
 }
 

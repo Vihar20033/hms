@@ -5,11 +5,11 @@ import org.springframework.data.jpa.repository.*;
 
 import java.time.LocalDateTime;
 import java.util.Optional;
-import java.util.UUID;
+
 
 public interface PatientRepository
         extends JpaRepository
-        <Patient, UUID>, JpaSpecificationExecutor<Patient>, PatientRepositoryCustom
+        <Patient, Long>, JpaSpecificationExecutor<Patient>, PatientRepositoryCustom
 {
     // SELECT EXISTS(SELECT 1 FROM patients WHERE contact_number = :contactNumber AND deleted = false)
     boolean existsByContactNumber(String contactNumber);

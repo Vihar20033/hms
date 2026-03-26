@@ -4,7 +4,7 @@ import com.hms.common.entity.Auditable;
 import jakarta.persistence.*;
 import lombok.*;
 
-import java.util.UUID;
+
 
 @Entity
 @Table(name = "inventory_transactions")
@@ -26,7 +26,7 @@ public class InventoryTransaction extends Auditable {
     private Integer quantity;
 
     @Column(name = "reference_id")
-    private UUID referenceId; // e.g. Prescription ID
+    private Long referenceId; // e.g. Prescription ID
     
     @Column(columnDefinition = "TEXT")
     private String notes;

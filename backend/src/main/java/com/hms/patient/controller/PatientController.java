@@ -11,7 +11,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.UUID;
+
 
 @RestController
 @RequestMapping("/api/v1/patients")
@@ -28,9 +28,10 @@ public class PatientController {
         return ApiResponse.success(service.create(dto));
     }
 
-    @PreAuthorize("hasAnyRole('ADMIN','DOCTOR','NURSE','RECEPTIONIST','PHARMACIST','LABORATORY_STAFF')")
+    @PreAuthorize("hasAnyRole('ADMIN','DOCTOR','NURSE','RECEPTIONIST','PHARMACIST')")
     @GetMapping
     public ApiResponse<Slice<PatientResponseDTO>> search(
+            @RequestParam(name = "query", required = false) String query,
             @RequestParam(name = "name", required = false) String name,
             @RequestParam(name = "email", required = false) String email,
             @RequestParam(name = "bloodGroup", required = false) String bloodGroup,
@@ -39,7 +40,7 @@ public class PatientController {
             @RequestParam(name = "size", defaultValue = "10") int size,
             @RequestParam(name = "sortBy", defaultValue = "createdAt") String sortBy) {
 
-        return ApiResponse.success(service.search(name, email, bloodGroup, urgencyLevel, page, size, sortBy));
+        return ApiResponse.success(service.search(query, name, email, bloodGroup, urgencyLevel, page, size, sortBy));
     }
 
     @PreAuthorize("hasAnyRole('ADMIN','RECEPTIONIST','DOCTOR','NURSE')")
@@ -50,19 +51,19 @@ public class PatientController {
 
     @PreAuthorize("hasAnyRole('ADMIN','DOCTOR','NURSE','RECEPTIONIST','PHARMACIST')")
     @GetMapping("/{id}")
-    public ApiResponse<PatientResponseDTO> getById(@PathVariable("id") UUID id) {
+    public ApiResponse<PatientResponseDTO> getById(@PathVariable("id") Long id) {
         return ApiResponse.success(service.getById(id));
     }
 
     @PreAuthorize("hasAnyRole('ADMIN','DOCTOR','RECEPTIONIST')")
     @PutMapping("/{id}")
-    public ApiResponse<PatientResponseDTO> update(@PathVariable("id") UUID id, @Valid @RequestBody PatientRequestDTO dto) {
+    public ApiResponse<PatientResponseDTO> update(@PathVariable("id") Long id, @Valid @RequestBody PatientRequestDTO dto) {
         return ApiResponse.success(service.update(id, dto));
     }
 
     @PreAuthorize("hasAnyRole('ADMIN','RECEPTIONIST','NURSE')")
     @DeleteMapping("/{id}")
-    public ApiResponse<Void> delete(@PathVariable("id") UUID id) {
+    public ApiResponse<Void> delete(@PathVariable("id") Long id) {
         service.delete(id);
         return ApiResponse.success(null);
     }

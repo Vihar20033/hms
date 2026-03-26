@@ -12,7 +12,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
-import java.util.UUID;
+
 import java.util.stream.Collectors;
 
 @Service
@@ -35,22 +35,17 @@ public class UserServiceImpl implements UserService {
     @Transactional(readOnly = true)
     public List<UserResponseDTO> getAll() {
         return userRepository.findAll().stream()
-                .filter(user -> !user.isDeleted())
                 .map(userMapper::toResponseDTO)
                 .collect(Collectors.toList());
     }
 
     @Override
     @Transactional
-    public void deleteUser(UUID id) {
+    public void deleteUser(Long id) {
         User user = userRepository.findById(id)
-                .filter(existingUser -> !existingUser.isDeleted())
                 .orElseThrow(() -> new UserNotFoundException("User not found", id.toString()));
         
-        retireUserIdentity(user);
-        user.setDeleted(true);
-        user.setEnabled(false);
-        userRepository.save(user);
+        userRepository.delete(user);
     }
 
     @Override

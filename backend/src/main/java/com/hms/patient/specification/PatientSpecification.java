@@ -7,12 +7,6 @@ import org.springframework.data.jpa.domain.Specification;
 
 public class PatientSpecification {
 
-    // Equivalent to where Deleted = false
-    public static Specification<Patient> notDeleted() {
-        return (root, query, cb) ->
-                cb.isFalse(root.get("deleted"));
-    }
-
     // WHERE LOWER(name) LIKE '%john%'
     public static Specification<Patient> hasName(String name) {
         return (root, query, cb) ->
@@ -41,7 +35,6 @@ public class PatientSpecification {
         };
     }
 
-
     public static Specification<Patient> hasUrgencyLevel(String urgencyLevel) {
         return (root, query, cb) -> {
             if (urgencyLevel == null || urgencyLevel.isBlank()) {
@@ -63,5 +56,35 @@ public class PatientSpecification {
         return (root, query, cb) ->
                 (email == null || email.isBlank()) ? null :
                         cb.equal(root.get("email"), email);
+    }
+
+    /**
+     * Advanced Fuzzy Search:
+     * Searches across name, email, and contactNumber using LIKE and SOUNDEX.
+     */
+    public static Specification<Patient> fuzzySearch(String query) {
+        return (root, query1, cb) -> {
+            if (query == null || query.isBlank()) {
+                return null;
+            }
+            
+            String pattern = "%" + query.toLowerCase() + "%";
+            
+            // Name LIKE %query% OR email LIKE %query% OR contactNumber LIKE %query%
+            Specification<Patient> likeName = (root1, query2, cb1) -> cb1.like(cb1.lower(root1.get("name")), pattern);
+            Specification<Patient> likeEmail = (root1, query2, cb1) -> cb1.like(cb1.lower(root1.get("email")), pattern);
+            Specification<Patient> likeContact = (root1, query2, cb1) -> cb1.like(root1.get("contactNumber"), pattern);
+            
+            // For true fuzzy (phonetic), we can use SOUNDEX if the DB supports it
+            Specification<Patient> soundexName = (root1, query2, cb1) -> cb1.equal(cb1.function("SOUNDEX", String.class, root1.get("name")), 
+                                     cb1.function("SOUNDEX", String.class, cb1.literal(query)));
+
+            return cb.or(
+                likeName.toPredicate(root, query1, cb),
+                likeEmail.toPredicate(root, query1, cb),
+                likeContact.toPredicate(root, query1, cb),
+                soundexName.toPredicate(root, query1, cb)
+            );
+        };
     }
 }

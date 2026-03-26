@@ -21,7 +21,7 @@ export class UserService {
     return this.http.get<ApiResponse<User>>(`${this.apiUrl}/me`);
   }
 
-  delete(id: string): Observable<ApiResponse<void>> {
+  delete(id: number): Observable<ApiResponse<void>> {
     return this.http.delete<ApiResponse<void>>(`${this.apiUrl}/${id}`);
   }
 }

@@ -3,12 +3,12 @@ package com.hms.clinical.dto.response;
 import lombok.Data;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
-import java.util.UUID;
+
 
 @Data
 public class VitalsResponseDTO {
-    private UUID id;
-    private UUID appointmentId;
+    private Long id;
+    private Long appointmentId;
     private BigDecimal temperature;
     private Integer systolicBP;
     private Integer diastolicBP;

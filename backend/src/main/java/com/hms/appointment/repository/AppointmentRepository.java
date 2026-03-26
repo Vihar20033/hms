@@ -16,13 +16,13 @@ import org.springframework.stereotype.Repository;
 import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
-import java.util.UUID;
+
 import java.time.LocalDateTime;
 
 @Repository
 public interface AppointmentRepository extends JpaRepository
-        // JPA = Simple CRUD, Custom = Custom Slice logic, JpaSpecificationExecutor = Dynamic filtering
-        <Appointment, UUID>, AppointmentRepositoryCustom, JpaSpecificationExecutor<Appointment> {
+        // JPA = Simple CRUD, MCustom = Custom Slice logic, JpaSpecificationExecutor = Dynamic filtering
+        <Appointment, Long>, AppointmentRepositoryCustom, JpaSpecificationExecutor<Appointment> {
 
         // Eagerly fetch patient & doctor for Specification-based queries (search/filter endpoint)
         @Override
@@ -52,15 +52,15 @@ public interface AppointmentRepository extends JpaRepository
         @Override
         @EntityGraph(attributePaths = {"patient", "doctor"})
         @NonNull
-        Optional<Appointment> findById(@NonNull UUID id);
+        Optional<Appointment> findById(@NonNull Long id);
 
         // SELECT a.*, p.*, d.* FROM appointments a LEFT JOIN patient p ON a.patient_id = p.id LEFT JOIN doctor d ON a.doctor_id = d.id WHERE a.patient_id = :patientId AND a.deleted = false
         @EntityGraph(attributePaths = {"patient", "doctor"})
-        List<Appointment> findByPatientId(UUID patientId);
+        List<Appointment> findByPatientId(Long patientId);
 
         // SELECT a.*, p.*, d.* FROM appointments a LEFT JOIN patient p ON a.patient_id = p.id LEFT JOIN doctor d ON a.doctor_id = d.id WHERE a.doctor_id = :doctorId AND a.deleted = false
         @EntityGraph(attributePaths = {"patient", "doctor"})
-        List<Appointment> findByDoctorId(UUID doctorId);
+        List<Appointment> findByDoctorId(Long doctorId);
 
         // SELECT a.*, p.*, d.* FROM appointments a LEFT JOIN patient p ON a.patient_id = p.id LEFT JOIN doctor d ON a.doctor_id = d.id WHERE a.department = :department AND a.deleted = false
         @EntityGraph(attributePaths = {"patient", "doctor"})
@@ -77,15 +77,15 @@ public interface AppointmentRepository extends JpaRepository
         long countByStatusInAndAppointmentTimeBetween(Collection<AppointmentStatus> statuses, LocalDateTime start, LocalDateTime end);
 
         // SELECT COUNT(*) FROM appointments WHERE doctor_id = :doctorId AND appointment_time BETWEEN :start AND :end AND deleted = false
-        long countByDoctorIdAndAppointmentTimeBetween(UUID doctorId, LocalDateTime start, LocalDateTime end);
+        long countByDoctorIdAndAppointmentTimeBetween(Long doctorId, LocalDateTime start, LocalDateTime end);
 
         // SELECT COUNT(*) FROM appointments WHERE status = :status AND deleted = false
         long countByStatus(AppointmentStatus status);
 
         // SELECT COUNT(*) FROM appointments WHERE doctor_id = :doctorId AND deleted = false
-        long countByDoctorId(UUID doctorId);
+        long countByDoctorId(Long doctorId);
 
         // SELECT COUNT(*) FROM appointments WHERE doctor_id = :doctorId AND status = :status AND deleted = false
-        long countByDoctorIdAndStatus(UUID doctorId, AppointmentStatus status);
+        long countByDoctorIdAndStatus(Long doctorId, AppointmentStatus status);
 }
 

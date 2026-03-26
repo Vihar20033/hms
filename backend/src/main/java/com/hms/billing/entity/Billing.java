@@ -6,8 +6,6 @@ import com.hms.appointment.entity.Appointment;
 import com.hms.common.enums.PaymentMethod;
 import com.hms.common.enums.PaymentStatus;
 import jakarta.persistence.*;
-import org.hibernate.annotations.SQLDelete;
-import org.hibernate.annotations.SQLRestriction;
 import lombok.*;
 import lombok.experimental.SuperBuilder;
 
@@ -18,8 +16,6 @@ import java.util.List;
 
 @Entity
 @Table(name = "billings")
-@SQLDelete(sql = "UPDATE billings SET deleted = true WHERE id=?")
-@SQLRestriction("deleted = false")
 @Getter
 @Setter
 @NoArgsConstructor
@@ -34,7 +30,7 @@ public class Billing extends Auditable {
     @JoinColumn(name = "patient_id", nullable = false)
     private Patient patient;
 
-    @OneToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "appointment_id")
     private Appointment appointment;
 

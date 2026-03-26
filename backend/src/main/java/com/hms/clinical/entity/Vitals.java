@@ -5,7 +5,7 @@ import com.hms.appointment.entity.Appointment;
 import jakarta.persistence.*;
 import lombok.*;
 import java.math.BigDecimal;
-import java.util.UUID;
+
 
 @Entity
 @Table(name = "vitals")
@@ -17,8 +17,8 @@ import java.util.UUID;
 public class Vitals extends Auditable {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.UUID)
-    private UUID id;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
 
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "appointment_id", nullable = false)

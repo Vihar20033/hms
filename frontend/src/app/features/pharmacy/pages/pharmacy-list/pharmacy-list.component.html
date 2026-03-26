@@ -126,7 +126,14 @@
                     [showIcon]="true"
                     dateFormat="yy-mm-dd"
                     styleClass="w-full"
+                    [class.ng-invalid]="medicineForm.get('expiryDate')?.invalid && medicineForm.get('expiryDate')?.touched"
                   ></p-calendar>
+                  <small
+                    class="text-red-500 block mt-1"
+                    *ngIf="medicineForm.get('expiryDate')?.errors?.['notFuture'] && medicineForm.get('expiryDate')?.touched"
+                  >
+                    Expiry date must be in the future
+                  </small>
                 </div>
                 <div class="form-group full-width">
                   <label class="form-label">Description</label>

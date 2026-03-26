@@ -2,6 +2,7 @@ package com.hms.security.config;
 
 import com.hms.common.config.CorsConfig;
 import com.hms.common.enums.Role;
+import com.hms.security.filter.RateLimitFilter;
 import com.hms.security.jwt.JwtAuthenticationFilter;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -26,14 +27,17 @@ import org.springframework.web.servlet.HandlerExceptionResolver;
 public class SecurityConfig {
 
     private final JwtAuthenticationFilter jwtFilter;
+    private final RateLimitFilter rateLimitFilter;
     private final CorsConfig corsConfig;
     private final HandlerExceptionResolver resolver;
 
     public SecurityConfig(
             JwtAuthenticationFilter jwtFilter,
+            RateLimitFilter rateLimitFilter,
             CorsConfig corsConfig,
             @Qualifier("handlerExceptionResolver") HandlerExceptionResolver resolver) {
         this.jwtFilter = jwtFilter;
+        this.rateLimitFilter = rateLimitFilter;
         this.corsConfig = corsConfig;
         this.resolver = resolver;
     }
@@ -68,12 +72,13 @@ public class SecurityConfig {
                         .requestMatchers("/api/v1/auth/login", "/api/v1/auth/register", "/api/v1/auth/refresh").permitAll()
                         .requestMatchers("/api/v1/auth/logout", "/api/v1/auth/change-password").authenticated()
                         .requestMatchers("/swagger-ui/**", "/v3/api-docs/**", "/api-docs/**").permitAll()
+                        .requestMatchers("/actuator/health").permitAll()
+                        .requestMatchers("/actuator/**").hasRole(Role.ADMIN.name())
                         .requestMatchers("/error").permitAll()
 
                         // Role-Based Endpoint Configuration Example (Preferred to be fine-grained using @PreAuthorize)
                         .requestMatchers("/api/v1/admin/**").hasRole(Role.ADMIN.name())
                         .requestMatchers("/api/v1/pharmacy/**").hasAnyRole(Role.ADMIN.name(), Role.PHARMACIST.name())
-                        .requestMatchers("/api/v1/laboratory/**").hasAnyRole(Role.ADMIN.name(), Role.LABORATORY_STAFF.name())
 
                         // Anything else must be authenticated
                         .anyRequest().authenticated())
@@ -94,7 +99,8 @@ public class SecurityConfig {
                             resolver.resolveException(request, response, null, accessDeniedException);
                         }));
 
-        // Insert custom JWT validation filter
+        // Insert custom filters
+        http.addFilterBefore(rateLimitFilter, UsernamePasswordAuthenticationFilter.class);
         http.addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class);
 
         log.info("Production Security configuration successfully initialized.");

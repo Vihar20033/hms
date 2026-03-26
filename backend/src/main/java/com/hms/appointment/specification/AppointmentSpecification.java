@@ -6,21 +6,21 @@ import com.hms.common.enums.Department;
 import org.springframework.data.jpa.domain.Specification;
 
 import java.time.LocalDateTime;
-import java.util.UUID;
+
 
 public class AppointmentSpecification {
 
     private AppointmentSpecification() {
     }
 
-    public static Specification<Appointment> hasDoctorId(UUID doctorId) {
+    public static Specification<Appointment> hasDoctorId(Long doctorId) {
         return (root, query, cb) -> {
             if (doctorId == null) return null;
             return cb.equal(root.get("doctor").get("id"), doctorId);
         };
     }
 
-    public static Specification<Appointment> hasPatientId(UUID patientId) {
+    public static Specification<Appointment> hasPatientId(Long patientId) {
         return (root, query, cb) -> {
             if (patientId == null) return null;
             return cb.equal(root.get("patient").get("id"), patientId);
@@ -57,10 +57,36 @@ public class AppointmentSpecification {
         };
     }
 
-    public static Specification<Appointment> hasDoctorUserId(UUID userId) {
+    public static Specification<Appointment> hasDoctorUserId(Long userId) {
         return (root, query, cb) -> {
             if (userId == null) return null;
             return cb.equal(root.get("doctor").get("userId"), userId);
+        };
+    }
+
+    /**
+     * Fuzzy search for appointments by patient name or doctor name.
+     */
+    public static Specification<Appointment> fuzzySearch(String query) {
+        return (root, query1, cb) -> {
+            if (query == null || query.isBlank()) {
+                return null;
+            }
+
+            String pattern = "%" + query.toLowerCase() + "%";
+
+            // Search patient name
+            Specification<Appointment> patientName = (root1, query2, cb1) -> cb1.like(cb1.lower(root1.get("patient").get("name")), pattern);
+
+            // Search doctor first/last name
+            Specification<Appointment> doctorFirstName = (root1, query2, cb1) -> cb1.like(cb1.lower(root1.get("doctor").get("firstName")), pattern);
+            Specification<Appointment> doctorLastName = (root1, query2, cb1) -> cb1.like(cb1.lower(root1.get("doctor").get("lastName")), pattern);
+
+            return cb.or(
+                patientName.toPredicate(root, query1, cb),
+                doctorFirstName.toPredicate(root, query1, cb),
+                doctorLastName.toPredicate(root, query1, cb)
+            );
         };
     }
 }

@@ -15,7 +15,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
-import java.util.UUID;
+
 import java.util.stream.Collectors;
 
 @Service
@@ -41,7 +41,7 @@ public class VitalsServiceImpl implements VitalsService {
 
     @Override
     @Transactional(readOnly = true)
-    public VitalsResponseDTO getVitalsByAppointment(UUID appointmentId) {
+    public VitalsResponseDTO getVitalsByAppointment(Long appointmentId) {
         return vitalsRepository.findByAppointmentId(appointmentId)
                 .map(vitalsMapper::toDto)
                 .orElseThrow(() -> new VitalsNotFoundException("Vitals not found for appointment: " + appointmentId));
@@ -49,7 +49,7 @@ public class VitalsServiceImpl implements VitalsService {
 
     @Override
     @Transactional
-    public VitalsResponseDTO updateVitals(UUID id, VitalsRequestDTO dto) {
+    public VitalsResponseDTO updateVitals(Long id, VitalsRequestDTO dto) {
         Vitals vitals = vitalsRepository.findById(id)
                 .orElseThrow(() -> new VitalsNotFoundException("Vitals record not found", id.toString()));
 
@@ -69,7 +69,7 @@ public class VitalsServiceImpl implements VitalsService {
 
     @Override
     @Transactional(readOnly = true)
-    public List<VitalsResponseDTO> getVitalsByPatientId(UUID patientId) {
+    public List<VitalsResponseDTO> getVitalsByPatientId(Long patientId) {
         return vitalsRepository.findByAppointmentPatientIdOrderByCreatedAtDesc(patientId)
                 .stream()
                 .map(vitalsMapper::toDto)
@@ -78,7 +78,7 @@ public class VitalsServiceImpl implements VitalsService {
 
     @Override
     @Transactional
-    public void deleteVitals(UUID id) {
+    public void deleteVitals(Long id) {
         if (!vitalsRepository.existsById(id)) {
             throw new VitalsNotFoundException("Vitals record not found", id.toString());
         }

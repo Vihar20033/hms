@@ -14,7 +14,7 @@ import org.springframework.stereotype.Repository;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.UUID;
+
 
 @Repository
 @RequiredArgsConstructor
@@ -26,27 +26,26 @@ public class AppointmentRepositoryImpl implements AppointmentRepositoryCustom {
     // Method checks doctor already booked at this time
     @Override
     public List<Appointment> findAndLockConflictingAppointments(
-            UUID doctorId, LocalDateTime dateTime, List<AppointmentStatus> statuses) {
+            Long doctorId, LocalDateTime dateTime, List<AppointmentStatus> statuses) {
         return findAndLockConflictByEntity("doctor", doctorId, dateTime, statuses);
     }
 
     // Method checks patient already booked that time
     @Override
     public List<Appointment> findAndLockPatientConflictingAppointments(
-            UUID patientId, LocalDateTime dateTime, List<AppointmentStatus> statuses) {
+            Long patientId, LocalDateTime dateTime, List<AppointmentStatus> statuses) {
         return findAndLockConflictByEntity("patient", patientId, dateTime, statuses);
     }
 
 
     private List<Appointment> findAndLockConflictByEntity(
-            String relationName, UUID entityId, LocalDateTime dateTime, List<AppointmentStatus> statuses) {
+            String relationName, Long entityId, LocalDateTime dateTime, List<AppointmentStatus> statuses) {
         
         CriteriaBuilder cb = entityManager.getCriteriaBuilder();
         CriteriaQuery<Appointment> cq = cb.createQuery(Appointment.class);
         Root<Appointment> root = cq.from(Appointment.class);
 
         List<Predicate> predicates = new ArrayList<>();
-        predicates.add(cb.isFalse(root.get("deleted")));
         predicates.add(cb.equal(root.get(relationName).get("id"), entityId));
         predicates.add(cb.equal(root.get("appointmentTime"), dateTime));
         predicates.add(root.get("status").in(statuses));

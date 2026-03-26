@@ -3,9 +3,6 @@ package com.hms.common.entity;
 import jakarta.persistence.*;
 import lombok.*;
 import lombok.experimental.SuperBuilder;
-import org.hibernate.annotations.ColumnDefault;
-
-import java.util.UUID;
 
 @MappedSuperclass
 @Getter
@@ -16,16 +13,7 @@ import java.util.UUID;
 public abstract class BaseEntity {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.UUID)
-    private UUID id;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
 
-    @Column(nullable = false)
-    @ColumnDefault("false")
-    @Builder.Default
-    private boolean deleted = false;
-
-    @Version
-    @Column(nullable = false, columnDefinition = "BIGINT DEFAULT 0")
-    @Builder.Default
-    private Long version = 0L;
 }

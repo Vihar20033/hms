@@ -43,7 +43,7 @@
             <div class="identity-info">
               <h2>{{ patient.name }}</h2>
               <p class="id">
-                ID: <span>{{ patient.id | slice: 0 : 8 | uppercase }}</span>
+                ID: <span>{{ patient.id  }}</span>
               </p>
               <div class="urgency-label" [ngClass]="getUrgencyClass(patient.urgencyLevel)">
                 <i class="ri-error-warning-fill"></i> {{ patient.urgencyLevel }} Priority

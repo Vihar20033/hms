@@ -45,7 +45,7 @@ export class PatientDetailComponent implements OnInit {
   vitalsDialogVisible = false;
   vitalsForm: FormGroup;
   isSavingVitals = false;
-  editingVitalsId: string | null = null;
+  editingVitalsId: number | null = null;
 
   constructor(
     private route: ActivatedRoute,
@@ -70,15 +70,16 @@ export class PatientDetailComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    const id = this.route.snapshot.paramMap.get('id');
-    if (id) {
+    const idParam = this.route.snapshot.paramMap.get('id');
+    if (idParam) {
+      const id = Number(idParam);
       this.loadPatient(id);
       this.loadVitalsHistory(id);
       this.loadAppointments(id);
     }
   }
 
-  loadPatient(id: string): void {
+  loadPatient(id: number): void {
     this.isLoading = true;
     this.patientService.getById(id).subscribe({
       next: (res: ApiResponse<Patient>) => {
@@ -92,7 +93,7 @@ export class PatientDetailComponent implements OnInit {
     });
   }
 
-  loadVitalsHistory(patientId: string): void {
+  loadVitalsHistory(patientId: number): void {
     this.isLoadingVitals = true;
     this.vitalsService.getByPatientId(patientId).subscribe({
       next: (res: ApiResponse<Vitals[]>) => {
@@ -105,7 +106,7 @@ export class PatientDetailComponent implements OnInit {
     });
   }
 
-  loadAppointments(patientId: string): void {
+  loadAppointments(patientId: number): void {
     this.appointmentService.getByPatientId(patientId).subscribe({
       next: (res: ApiResponse<PagedResponse<Appointment>>) => {
         // Only show scheduled or checked-in appointments for vitals
@@ -146,7 +147,7 @@ export class PatientDetailComponent implements OnInit {
     const data = this.vitalsForm.getRawValue();
 
     const request = this.editingVitalsId
-      ? this.vitalsService.updateVitals(this.editingVitalsId, data)
+      ? this.vitalsService.updateVitals(this.editingVitalsId!, data)
       : this.vitalsService.recordVitals(data);
 
     request.subscribe({
@@ -163,7 +164,7 @@ export class PatientDetailComponent implements OnInit {
     });
   }
 
-  deleteVitals(id: string): void {
+  deleteVitals(id: number): void {
     if (confirm('Are you sure you want to delete this vital record?')) {
       this.vitalsService.delete(id).subscribe({
         next: () => {

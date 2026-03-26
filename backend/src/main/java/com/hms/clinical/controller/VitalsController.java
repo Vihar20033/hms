@@ -11,7 +11,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.UUID;
+
 
 @RestController
 @RequestMapping("/api/v1/vitals")
@@ -31,7 +31,7 @@ public class VitalsController {
     @PreAuthorize("hasAnyRole('ADMIN', 'DOCTOR', 'NURSE')")
     @GetMapping("/appointment/{appointmentId}")
     public ResponseEntity<ApiResponse<VitalsResponseDTO>> getVitalsByAppointment(
-            @PathVariable("appointmentId") UUID appointmentId) {
+            @PathVariable("appointmentId") Long appointmentId) {
         return ResponseEntity.ok(ApiResponse.success(
                 vitalsService.getVitalsByAppointment(appointmentId)));
     }
@@ -46,7 +46,7 @@ public class VitalsController {
     @PreAuthorize("hasAnyRole('ADMIN', 'DOCTOR', 'NURSE')")
     @GetMapping("/patient/{patientId}")
     public ResponseEntity<ApiResponse<List<VitalsResponseDTO>>> getVitalsByPatient(
-            @PathVariable("patientId") UUID patientId) {
+            @PathVariable("patientId") Long patientId) {
         return ResponseEntity.ok(ApiResponse.success(
                 vitalsService.getVitalsByPatientId(patientId)));
     }
@@ -54,7 +54,7 @@ public class VitalsController {
     @PreAuthorize("hasAnyRole('ADMIN', 'NURSE')")
     @PutMapping("/{id}")
     public ResponseEntity<ApiResponse<VitalsResponseDTO>> updateVitals(
-            @PathVariable("id") UUID id, @Valid @RequestBody VitalsRequestDTO dto) {
+            @PathVariable("id") Long id, @Valid @RequestBody VitalsRequestDTO dto) {
         return ResponseEntity.ok(ApiResponse.success(
                 vitalsService.updateVitals(id, dto)));
     }
@@ -62,7 +62,7 @@ public class VitalsController {
     @PreAuthorize("hasAnyRole('ADMIN', 'NURSE')")
     @DeleteMapping("/{id}")
     public ResponseEntity<ApiResponse<Void>> deleteVitals(
-            @PathVariable("id") UUID id) {
+            @PathVariable("id") Long id) {
         vitalsService.deleteVitals(id);
         return ResponseEntity.ok(ApiResponse.success(null));
     }

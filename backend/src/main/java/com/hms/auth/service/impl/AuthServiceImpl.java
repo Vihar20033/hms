@@ -65,7 +65,7 @@ public class AuthServiceImpl implements AuthService {
                     .firstName(savedUser.getUsername())
                     .lastName("(Auto-Generated)")
                     .specialization("General")
-                    .registrationNumber("REG-" + savedUser.getId().toString().substring(0, 8))
+                    .registrationNumber("REG-" + savedUser.getId())
                     .email(savedUser.getEmail())
                     .isAvailable(true)
                     .build());
@@ -123,7 +123,6 @@ public class AuthServiceImpl implements AuthService {
         User user = userRepository.findByUsername(username)
                 .orElseThrow(() -> new UserNotFoundException("User not found"));
 
-        // Verify token version for rotation & global logout capability
         Integer tokenVersion = jwtUtil.extractTokenVersion(refreshToken);
         if (!user.getTokenVersion().equals(tokenVersion)) {
             throw new InvalidCredentialsException("Token version mismatch. Please log in again.");

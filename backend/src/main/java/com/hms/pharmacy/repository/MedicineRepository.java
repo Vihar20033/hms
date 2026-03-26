@@ -11,10 +11,10 @@ import org.springframework.stereotype.Repository;
 
 import java.util.List;
 import java.util.Optional;
-import java.util.UUID;
+
 
 @Repository
-public interface MedicineRepository extends JpaRepository<Medicine, UUID>, JpaSpecificationExecutor<Medicine> {
+public interface MedicineRepository extends JpaRepository<Medicine, Long>, JpaSpecificationExecutor<Medicine> {
 
     // SELECT * FROM medicines WHERE medicine_code = :medicineCode AND deleted = false
     Optional<Medicine> findByMedicineCode(String medicineCode);
@@ -37,12 +37,12 @@ public interface MedicineRepository extends JpaRepository<Medicine, UUID>, JpaSp
     @Modifying
     @Query("UPDATE Medicine m SET m.quantityInStock = m.quantityInStock - :qty " +
            "WHERE m.id = :id AND m.quantityInStock >= :qty")
-    int deductStockAtomic(@Param("id") UUID id, @Param("qty") Integer qty);
+    int deductStockAtomic(@Param("id") Long id, @Param("qty") Integer qty);
 
     @Modifying
     @Query("UPDATE Medicine m SET m.quantityInStock = m.quantityInStock + :qty " +
            "WHERE m.id = :id")
-    void addStockAtomic(@Param("id") UUID id, @Param("qty") Integer qty);
+    void addStockAtomic(@Param("id") Long id, @Param("qty") Integer qty);
 
     @Query("SELECT COUNT(m) FROM Medicine m WHERE m.quantityInStock <= m.reorderLevel OR (m.reorderLevel IS NULL AND m.quantityInStock <= 10)")
     long countLowStock();

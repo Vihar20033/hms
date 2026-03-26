@@ -10,18 +10,18 @@ import lombok.NoArgsConstructor;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.List;
-import java.util.UUID;
+
 
 @Data
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
 public class BillingResponseDTO {
-    private UUID id;
+    private Long id;
     private String invoiceNumber;
-    private UUID patientId;
+    private Long patientId;
     private String patientName;
-    private UUID appointmentId;
+    private Long appointmentId;
     private BigDecimal totalAmount;
     private BigDecimal taxAmount;
     private BigDecimal discountAmount;

@@ -4,20 +4,20 @@ import com.hms.prescription.dto.request.PrescriptionRequestDTO;
 import com.hms.prescription.dto.response.PrescriptionResponseDTO;
 
 import java.util.List;
-import java.util.UUID;
+
 
 public interface PrescriptionService {
     PrescriptionResponseDTO createPrescription(PrescriptionRequestDTO dto);
 
-    PrescriptionResponseDTO getPrescriptionById(UUID id);
+    PrescriptionResponseDTO getPrescriptionById(Long id);
 
     List<PrescriptionResponseDTO> getAllPrescriptions();
 
 
 
-    List<PrescriptionResponseDTO> getPrescriptionsByPatientId(UUID patientId);
+    List<PrescriptionResponseDTO> getPrescriptionsByPatientId(Long patientId);
 
-    List<PrescriptionResponseDTO> getPrescriptionsByDoctorId(UUID doctorId);
+    List<PrescriptionResponseDTO> getPrescriptionsByDoctorId(Long doctorId);
 
-    void deletePrescription(UUID id);
+    void deletePrescription(Long id);
 }

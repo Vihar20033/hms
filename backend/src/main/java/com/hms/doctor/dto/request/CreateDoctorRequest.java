@@ -5,7 +5,7 @@ import jakarta.validation.constraints.*;
 import lombok.*;
 
 import java.math.BigDecimal;
-import java.util.UUID;
+
 
 /**
  * Request DTO for creating a new doctor
@@ -16,7 +16,7 @@ import java.util.UUID;
 @Builder
 public class CreateDoctorRequest {
 
-    private UUID userId;
+    private Long userId;
 
     @NotBlank(message = "Username is required")
     @Size(min = 3, max = 50, message = "Username must be between 3 and 50 characters")

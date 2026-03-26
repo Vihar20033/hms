@@ -1,5 +1,6 @@
 package com.hms.billing.service.impl;
 
+import java.util.UUID;
 import com.hms.appointment.entity.Appointment;
 import com.hms.appointment.exception.AppointmentNotFoundException;
 import com.hms.appointment.repository.AppointmentRepository;
@@ -17,8 +18,6 @@ import com.hms.common.enums.PaymentStatus;
 import com.hms.common.enums.Role;
 import com.hms.common.exception.BadRequestException;
 import com.hms.doctor.entity.Doctor;
-import com.hms.laboratory.entity.LabTest;
-import com.hms.laboratory.repository.LabTestRepository;
 import com.hms.patient.entity.Patient;
 import com.hms.patient.exception.PatientNotFoundException;
 import com.hms.patient.repository.PatientRepository;
@@ -38,7 +37,7 @@ import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.UUID;
+
 
 @Service
 @RequiredArgsConstructor
@@ -50,7 +49,6 @@ public class BillingServiceImpl implements BillingService {
     private final AppointmentRepository appointmentRepository;
     private final BillingMapper billingMapper;
     private final PrescriptionRepository prescriptionRepository;
-    private final LabTestRepository labTestRepository;
     private final MedicineRepository medicineRepository;
     private final com.hms.common.audit.AuditLogService auditLogService;
 
@@ -110,7 +108,7 @@ public class BillingServiceImpl implements BillingService {
 
     @Override
     @Transactional
-    public BillingResponseDTO updateBilling(UUID id, BillingRequestDTO dto) {
+    public BillingResponseDTO updateBilling(Long id, BillingRequestDTO dto) {
         Billing existing = billingRepository.findById(id)
                 .orElseThrow(() -> new BillingNotFoundException("Billing not found: " + id, id.toString()));
 
@@ -127,7 +125,7 @@ public class BillingServiceImpl implements BillingService {
 
     @Override
     @Transactional(readOnly = true)
-    public BillingResponseDTO getBillingById(UUID id) {
+    public BillingResponseDTO getBillingById(Long id) {
         Billing billing = billingRepository.findById(id)
                 .orElseThrow(() -> new BillingNotFoundException("Billing not found: " + id, id.toString()));
 
@@ -145,7 +143,7 @@ public class BillingServiceImpl implements BillingService {
 
     @Override
     @Transactional(readOnly = true)
-    public List<BillingResponseDTO> getBillingsByPatientId(UUID patientId) {
+    public List<BillingResponseDTO> getBillingsByPatientId(Long patientId) {
         List<Billing> billings = billingRepository.findByPatientId(patientId);
         
         if (!billings.isEmpty()) {
@@ -157,7 +155,7 @@ public class BillingServiceImpl implements BillingService {
 
     @Override
     @Transactional
-    public BillingResponseDTO updatePaymentStatus(UUID id, PaymentStatus status) {
+    public BillingResponseDTO updatePaymentStatus(Long id, PaymentStatus status) {
         Billing billing = billingRepository.findById(id)
                 .orElseThrow(() -> new BillingNotFoundException("Billing not found: " + id, id.toString()));
         billing.setPaymentStatus(status);
@@ -168,17 +166,16 @@ public class BillingServiceImpl implements BillingService {
 
     @Override
     @Transactional
-    public void deleteBilling(UUID id) {
+    public void deleteBilling(Long id) {
         Billing billing = billingRepository.findById(id)
                 .orElseThrow(() -> new BillingNotFoundException("Billing not found: " + id, id.toString()));
-        billing.setDeleted(true);
-        billingRepository.save(billing);
+        billingRepository.delete(billing);
         auditLogService.log(getCurrentUsername(), "BILLING_DELETE", "Billing", id.toString(), "deleted=true");
     }
 
     @Override
     @Transactional
-    public BillingResponseDTO generateBillingFromAppointment(UUID appointmentId) {
+    public BillingResponseDTO generateBillingFromAppointment(Long appointmentId) {
         Billing billing = prepareBillingFromAppointment(appointmentId);
         Billing saved = billingRepository.save(billing);
         return billingMapper.toDto(saved);
@@ -186,18 +183,18 @@ public class BillingServiceImpl implements BillingService {
 
     @Override
     @Transactional(readOnly = true)
-    public BillingResponseDTO calculatePreviewBilling(UUID appointmentId) {
+    public BillingResponseDTO calculatePreviewBilling(Long appointmentId) {
         Billing billing = prepareBillingFromAppointment(appointmentId);
         return billingMapper.toDto(billing);
     }
 
     @Override
     @Transactional(readOnly = true)
-    public Billing getBillingEntityForPreview(UUID appointmentId) {
+    public Billing getBillingEntityForPreview(Long appointmentId) {
         return prepareBillingFromAppointment(appointmentId);
     }
 
-    private Billing prepareBillingFromAppointment(UUID appointmentId) {
+    private Billing prepareBillingFromAppointment(Long appointmentId) {
         Appointment appointment = appointmentRepository.findById(appointmentId)
                 .orElseThrow(() -> new AppointmentNotFoundException("Appointment not found: " + appointmentId));
 
@@ -226,18 +223,6 @@ public class BillingServiceImpl implements BillingService {
             item.setUnitPrice(doctor.getConsultationFee());
             item.setTotalValue(doctor.getConsultationFee());
             billing.addItem(item);
-        }
-
-        List<LabTest> tests = labTestRepository.findByAppointmentId(appointmentId);
-        if (tests != null) {
-            for (LabTest t : tests) {
-                BillingItem item = new BillingItem();
-                item.setItemName("Test: " + t.getTestName());
-                item.setQuantity(1);
-                item.setUnitPrice(t.getPrice() != null ? t.getPrice() : BigDecimal.ZERO);
-                item.setTotalValue(item.getUnitPrice());
-                billing.addItem(item);
-            }
         }
 
         prescriptionRepository.findByAppointmentId(appointmentId).ifPresent(p -> {

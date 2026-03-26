@@ -1,7 +1,7 @@
 package com.hms.doctor.exception;
 
 import lombok.Getter;
-import java.util.UUID;
+
 
 @Getter
 public class DoctorNotFoundException extends RuntimeException {
@@ -17,7 +17,7 @@ public class DoctorNotFoundException extends RuntimeException {
         this.id = id;
     }
 
-    public DoctorNotFoundException(UUID id) {
+    public DoctorNotFoundException(Long id) {
         super("Doctor profile not found with ID: " + id);
         this.id = id.toString();
     }

@@ -12,7 +12,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.UUID;
+
 
 @RestController
 @RequestMapping("/api/v1/prescriptions")
@@ -42,7 +42,7 @@ public class PrescriptionController {
     @PreAuthorize("hasAnyRole('ADMIN','DOCTOR','PHARMACIST')")
     @GetMapping("/patient/{patientId}")
     public ResponseEntity<ApiResponse<List<PrescriptionResponseDTO>>> getByPatientId(
-            @PathVariable("patientId") UUID patientId) {
+            @PathVariable("patientId") Long patientId) {
         return ResponseEntity.ok(ApiResponse.success(
                 prescriptionService.getPrescriptionsByPatientId(patientId)));
     }
@@ -50,7 +50,7 @@ public class PrescriptionController {
     @PreAuthorize("hasAnyRole('ADMIN','DOCTOR','PHARMACIST')")
     @GetMapping("/{id}")
     public ResponseEntity<ApiResponse<PrescriptionResponseDTO>> getPrescriptionById(
-            @PathVariable("id") UUID id) {
+            @PathVariable("id") Long id) {
         return ResponseEntity.ok(ApiResponse.success(
                 prescriptionService.getPrescriptionById(id)));
     }
@@ -58,7 +58,7 @@ public class PrescriptionController {
     @PreAuthorize("hasAnyRole('ADMIN','DOCTOR')")
     @DeleteMapping("/{id}")
     public ResponseEntity<ApiResponse<Void>> deletePrescription(
-            @PathVariable("id") UUID id) {
+            @PathVariable("id") Long id) {
         prescriptionService.deletePrescription(id);
         return ResponseEntity.ok(ApiResponse.success(
                 null));

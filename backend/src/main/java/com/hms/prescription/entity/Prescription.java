@@ -5,8 +5,6 @@ import com.hms.patient.entity.Patient;
 import com.hms.doctor.entity.Doctor;
 import com.hms.appointment.entity.Appointment;
 import jakarta.persistence.*;
-import org.hibernate.annotations.SQLDelete;
-import org.hibernate.annotations.SQLRestriction;
 import lombok.*;
 import lombok.experimental.SuperBuilder;
 
@@ -15,8 +13,6 @@ import java.util.List;
 
 @Entity
 @Table(name = "prescriptions")
-@SQLDelete(sql = "UPDATE prescriptions SET deleted = true WHERE id=?")
-@SQLRestriction("deleted = false")
 @Getter
 @Setter
 @NoArgsConstructor

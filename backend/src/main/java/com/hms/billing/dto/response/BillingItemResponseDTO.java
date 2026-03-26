@@ -6,14 +6,14 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.math.BigDecimal;
-import java.util.UUID;
+
 
 @Data
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
 public class BillingItemResponseDTO {
-    private UUID id;
+    private Long id;
     private String itemName;
     private Integer quantity;
     private BigDecimal unitPrice;

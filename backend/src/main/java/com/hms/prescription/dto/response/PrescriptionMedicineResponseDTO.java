@@ -5,7 +5,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.util.UUID;
+
 
 /**
  * Data Transfer Object for medicine details within a prescription response.
@@ -15,7 +15,7 @@ import java.util.UUID;
 @NoArgsConstructor
 @AllArgsConstructor
 public class PrescriptionMedicineResponseDTO {
-    private UUID id;
+    private Long id;
     private String medicineName;
     private String dosage;
     private String duration;

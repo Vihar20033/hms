@@ -15,7 +15,7 @@ export enum PaymentMethod {
 }
 
 export interface BillingItem {
-  id?: string;
+  id?: number;
   itemName: string;
   quantity: number;
   unitPrice: number;
@@ -23,11 +23,11 @@ export interface BillingItem {
 }
 
 export interface Billing {
-  id: string;
+  id: number;
   invoiceNumber: string;
-  patientId: string;
+  patientId: number;
   patientName: string;
-  appointmentId?: string;
+  appointmentId?: number;
   totalAmount: number;
   taxAmount: number;
   discountAmount: number;
@@ -46,8 +46,8 @@ export interface Billing {
 }
 
 export interface BillingRequest {
-  patientId: string;
-  appointmentId?: string;
+  patientId: number;
+  appointmentId?: number;
   items: BillingItemRequest[];
   totalAmount: number;
   netAmount: number;

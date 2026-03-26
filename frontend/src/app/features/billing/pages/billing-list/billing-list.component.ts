@@ -52,7 +52,7 @@ export class BillingListComponent implements OnInit {
   isLoading = signal<boolean>(true);
   showCreateForm = signal<boolean>(false);
   isSubmitting = signal<boolean>(false);
-  exportingId = signal<string | null>(null);
+  exportingId = signal<number | null>(null);
   selectedBilling = signal<Billing | null>(null);
   showViewModal = signal<boolean>(false);
   
@@ -64,9 +64,9 @@ export class BillingListComponent implements OnInit {
   PaymentStatus = PaymentStatus;
 
   showAutoGenerateModal = signal<boolean>(false);
-  selectedPatientIdForAuto = signal<string>('');
+  selectedPatientIdForAuto = signal<number | null>(null);
   patientAppointments = signal<Appointment[]>([]);
-  selectedAppointmentId = signal<string>('');
+  selectedAppointmentId = signal<number | null>(null);
 
   manualPatientAppointments = signal<Appointment[]>([]);
   isSyncingItems = signal<boolean>(false);
@@ -184,15 +184,15 @@ export class BillingListComponent implements OnInit {
 
   openAutoGenerateModal(): void {
     this.showAutoGenerateModal.set(true);
-    this.selectedPatientIdForAuto.set('');
+    this.selectedPatientIdForAuto.set(null);
     this.patientAppointments.set([]);
-    this.selectedAppointmentId.set('');
+    this.selectedAppointmentId.set(null);
   }
 
-  onPatientSelectedForAuto(patientId: string): void {
+  onPatientSelectedForAuto(patientId: number): void {
     this.selectedPatientIdForAuto.set(patientId);
     this.patientAppointments.set([]);
-    this.selectedAppointmentId.set('');
+    this.selectedAppointmentId.set(null);
 
     if (patientId) {
       this.appointmentService.getByPatientId(patientId).subscribe({
@@ -207,7 +207,7 @@ export class BillingListComponent implements OnInit {
     }
   }
 
-  onPatientSelectedForManual(patientId: string): void {
+  onPatientSelectedForManual(patientId: number): void {
     this.manualPatientAppointments.set([]);
     this.billingForm.get('appointment')?.setValue(null, { emitEvent: false });
 
@@ -255,13 +255,13 @@ export class BillingListComponent implements OnInit {
     if (!this.selectedAppointmentId()) return;
 
     this.isGenerating.set(true);
-    this.billingService.generateFromAppointment(this.selectedAppointmentId()).subscribe({
+    this.billingService.generateFromAppointment(this.selectedAppointmentId()!).subscribe({
       next: () => {
         this.isGenerating.set(false);
         this.showAutoGenerateModal.set(false);
         this.statusModalService.showSuccess(
           'Bill Generated',
-          'Invoice auto-calculated from consultation, lab tests, and medicines.',
+          'Invoice auto-calculated from consultation and medicines.',
         );
         this.loadBillings();
       },
@@ -315,7 +315,7 @@ export class BillingListComponent implements OnInit {
     });
   }
 
-  onUpdateStatus(id: string, status: PaymentStatus): void {
+  onUpdateStatus(id: number, status: PaymentStatus): void {
     this.billingService.updateStatus(id, status).subscribe({
       next: () => this.loadBillings(),
       error: () => {},
@@ -396,7 +396,7 @@ export class BillingListComponent implements OnInit {
     return map[status] || '';
   }
 
-  onDelete(id: string): void {
+  onDelete(id: number): void {
     if (!confirm('Delete this billing record?')) return;
     this.billingService.delete(id).subscribe({
       next: () => this.loadBillings(),

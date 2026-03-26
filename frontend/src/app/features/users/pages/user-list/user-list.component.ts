@@ -18,6 +18,7 @@ import { Subject, debounceTime, distinctUntilChanged } from 'rxjs';
   templateUrl: './user-list.component.html',
   styleUrl: './user-list.component.scss'
 })
+
 export class UserListComponent implements OnInit {
   users: User[] = [];
   filteredUsers: User[] = [];
@@ -77,7 +78,7 @@ export class UserListComponent implements OnInit {
 
     const confirmed = confirm(`Are you sure you want to delete user ${user.username}? This cannot be undone.`);
     if (confirmed) {
-      this.userService.delete(user.id.toString()).subscribe({
+      this.userService.delete(user.id!).subscribe({
         next: () => {
           this.loadUsers();
         },
@@ -94,7 +95,6 @@ export class UserListComponent implements OnInit {
       case Role.DOCTOR: return 'badge-doctor';
       case Role.NURSE: return 'badge-nurse';
       case Role.PHARMACIST: return 'badge-pharmacy';
-      case Role.LABORATORY_STAFF: return 'badge-lab';
       case Role.RECEPTIONIST: return 'badge-recep';
       default: return 'badge-default';
     }

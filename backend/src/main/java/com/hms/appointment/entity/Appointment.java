@@ -8,8 +8,6 @@ import com.hms.doctor.entity.Doctor;
 import com.hms.common.enums.AppointmentStatus;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
-import org.hibernate.annotations.SQLDelete;
-import org.hibernate.annotations.SQLRestriction;
 import lombok.*;
 import lombok.experimental.SuperBuilder;
 
@@ -19,15 +17,9 @@ import java.time.LocalDateTime;
 @Table(
     name = "appointments",
     uniqueConstraints = {
-        @UniqueConstraint(name = "uk_doctor_time", columnNames = {"doctor_id", "appointmentTime", "deleted"})
-    },
-    indexes = {
-        @Index(name = "idx_doctor_time", columnList = "doctor_id, appointmentTime"),
-        @Index(name = "idx_patient", columnList = "patient_id")
+        @UniqueConstraint(name = "uk_doctor_time", columnNames = {"doctor_id", "appointmentTime"})
     }
 )
-@SQLDelete(sql = "UPDATE appointments SET deleted = true WHERE id=?")
-@SQLRestriction("deleted = false")
 @Getter
 @Setter
 @NoArgsConstructor

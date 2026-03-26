@@ -5,18 +5,28 @@ import com.hms.pharmacy.dto.request.MedicineRequestDTO;
 import com.hms.pharmacy.dto.response.InventoryTransactionResponseDTO;
 import com.hms.pharmacy.dto.response.MedicineResponseDTO;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+
 import java.util.List;
-import java.util.UUID;
+
 
 public interface MedicineService {
 
     MedicineResponseDTO createMedicine(MedicineRequestDTO dto);
 
-    MedicineResponseDTO updateMedicine(UUID id, MedicineRequestDTO dto);
+    Page<MedicineResponseDTO> searchMedicines(
+            String query,
+            String category,
+            Boolean isActive,
+            Pageable pageable
+    );
 
-    void deleteMedicine(UUID id);
+    MedicineResponseDTO updateMedicine(Long id, MedicineRequestDTO dto);
 
-    MedicineResponseDTO getMedicineById(UUID id);
+    void deleteMedicine(Long id);
+
+    MedicineResponseDTO getMedicineById(Long id);
 
     List<MedicineResponseDTO> getAllMedicines();
 
@@ -28,7 +38,7 @@ public interface MedicineService {
 
     void dispenseMedicines(DispenseMedicineRequestDTO request);
 
-    void restockMedicine(UUID id, Integer quantity);
+    void restockMedicine(Long id, Integer quantity);
 
     List<InventoryTransactionResponseDTO> getAllTransactions();
 }

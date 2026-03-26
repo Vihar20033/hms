@@ -22,7 +22,7 @@ export class PrescriptionDetailComponent implements OnInit {
     private route: ActivatedRoute,
     private prescriptionService: PrescriptionService,
     private router: Router,
-  ) {}
+  ) { }
 
   ngOnInit(): void {
     const id = this.route.snapshot.params['id'];
@@ -31,7 +31,7 @@ export class PrescriptionDetailComponent implements OnInit {
     }
   }
 
-  loadPrescription(id: string): void {
+  loadPrescription(id: number): void {
     this.isLoading = true;
     this.prescriptionService.getById(id).subscribe({
       next: (res: ApiResponse<Prescription>) => {

@@ -31,7 +31,6 @@ public enum HmsErrorCode {
 
     // Doctor Errors
     DOCTOR_NOT_FOUND("DOC_001", "Doctor record not found"),
-    SCHEDULE_NOT_FOUND("DOC_002", "Doctor schedule not found"),
 
     // Request Errors
     BAD_REQUEST("REQ_001", "The request is invalid"),
@@ -42,11 +41,7 @@ public enum HmsErrorCode {
     // Pharmacy Errors
     MEDICINE_NOT_FOUND("PHR_001", "Medicine not found in inventory"),
     INSUFFICIENT_STOCK("PHR_002", "Insufficient medicine quantity in stock"),
-    
-    // Lab Errors
-    TEST_NOT_FOUND("LAB_001", "Lab test request not found"),
-    REPORT_ALREADY_GENERATED("LAB_002", "Report has already been finalized"),
-    REPORT_NOT_FOUND("LAB_003", "Lab report not found"),
+
 
     // Billing Errors
     BILLING_NOT_FOUND("BIL_001", "Billing record not found"),

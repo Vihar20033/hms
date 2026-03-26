@@ -35,7 +35,7 @@ export const routes: Routes = [
     .then(m => m.DashboardComponent),
     canActivate: [authGuard, roleGuard],
     data: {
-      roles: ['ADMIN', 'DOCTOR', 'NURSE', 'RECEPTIONIST', 'PHARMACIST', 'LABORATORY_STAFF'],
+      roles: ['ADMIN', 'DOCTOR', 'NURSE', 'RECEPTIONIST', 'PHARMACIST'],
     },
   },
   {
@@ -102,11 +102,6 @@ export const routes: Routes = [
         path: 'register',
         loadComponent: () => import('./features/staff/pages/doctor-registration/doctor-registration.component').then(m => m.DoctorRegistrationComponent),
         data: { roles: ['ADMIN'] },
-      },
-      {
-        path: 'schedule/:id',
-        loadComponent: () => import('./features/staff/pages/doctor-schedule/doctor-schedule.component').then(m => m.DoctorScheduleComponent),
-        data: { roles: ['ADMIN', 'RECEPTIONIST'] },
       },
     ],
   },
@@ -183,20 +178,6 @@ export const routes: Routes = [
         path: '',
         loadComponent: () => import('./features/billing/pages/billing-list/billing-list.component').then(m => m.BillingListComponent),
         data: { roles: ['ADMIN', 'RECEPTIONIST'] },
-      },
-    ],
-  },
-
-  // Lab Routes
-  {
-    path: 'lab',
-    canActivate: [authGuard],
-    canActivateChild: [authGuard, roleGuard],
-    children: [
-      {
-        path: '',
-        loadComponent: () => import('./features/lab/pages/lab-list/lab-list.component').then(m => m.LabListComponent),
-        data: { roles: ['ADMIN', 'DOCTOR', 'LABORATORY_STAFF'] },
       },
     ],
   },

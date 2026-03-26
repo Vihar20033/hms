@@ -45,11 +45,11 @@ export class PrescriptionListComponent implements OnInit {
     });
   }
 
-  onPrint(id: string): void {
+  onPrint(id: number): void {
     window.open(`/prescriptions/${id}`, '_blank');
   }
 
-  onDelete(id: string): void {
+  onDelete(id: number): void {
     if (confirm('Are you sure you want to delete this clinical record? This action cannot be undone.')) {
       this.prescriptionService.delete(id).subscribe({
         next: () => {

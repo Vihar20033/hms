@@ -15,14 +15,18 @@ import com.hms.pharmacy.repository.InventoryTransactionRepository;
 import com.hms.pharmacy.mapper.MedicineMapper;
 import com.hms.pharmacy.repository.MedicineRepository;
 import com.hms.pharmacy.service.MedicineService;
+import com.hms.pharmacy.specification.MedicineSpecification;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
-import java.util.UUID;
+
 
 @Service
 @RequiredArgsConstructor
@@ -59,8 +63,21 @@ public class MedicineServiceImpl implements MedicineService {
     }
 
     @Override
+    @Transactional(readOnly = true)
+    public Page<MedicineResponseDTO> searchMedicines(String query, String category, Boolean isActive, Pageable pageable) {
+        MedicineCategory cat = (category != null && !category.isBlank()) ? MedicineCategory.valueOf(category) : null;
+        
+        Specification<Medicine> spec = Specification.where(MedicineSpecification.fuzzySearch(query))
+                .and(MedicineSpecification.fuzzySearch(query))
+                .and(MedicineSpecification.hasCategory(cat))
+                .and(MedicineSpecification.isActive(isActive));
+
+        return medicineRepository.findAll(spec, pageable).map(medicineMapper::toDto);
+    }
+
+    @Override
     @Transactional
-    public MedicineResponseDTO updateMedicine(UUID id, MedicineRequestDTO dto) {
+    public MedicineResponseDTO updateMedicine(Long id, MedicineRequestDTO dto) {
         Medicine existingMedicine = medicineRepository.findById(id)
                 .orElseThrow(() -> new MedicineNotFoundException("Medicine not found with ID: " + id));
 
@@ -77,19 +94,17 @@ public class MedicineServiceImpl implements MedicineService {
 
     @Override
     @Transactional
-    public void deleteMedicine(UUID id) {
+    public void deleteMedicine(Long id) {
         Medicine medicine = medicineRepository.findById(id)
                 .orElseThrow(() -> new MedicineNotFoundException("Medicine not found with ID: " + id));
 
-        medicine.setIsActive(false);
-        medicine.setDeleted(true);
-        medicineRepository.save(medicine);
+        medicineRepository.delete(medicine);
         auditLogService.log(getCurrentUsername(), "MEDICINE_DELETE", "Medicine", id.toString(), "name=" + medicine.getName());
     }
 
     @Override
     @Transactional(readOnly = true)
-    public MedicineResponseDTO getMedicineById(UUID id) {
+    public MedicineResponseDTO getMedicineById(Long id) {
         Medicine medicine = medicineRepository.findById(id)
                 .orElseThrow(() -> new MedicineNotFoundException("Medicine not found with ID: " + id));
 
@@ -148,7 +163,7 @@ public class MedicineServiceImpl implements MedicineService {
 
     @Override
     @Transactional(rollbackFor = Exception.class)
-    public void restockMedicine(UUID id, Integer quantity) {
+    public void restockMedicine(Long id, Integer quantity) {
         Medicine medicine = medicineRepository.findById(id)
                 .orElseThrow(() -> new MedicineNotFoundException("Medicine not found with ID: " + id));
 

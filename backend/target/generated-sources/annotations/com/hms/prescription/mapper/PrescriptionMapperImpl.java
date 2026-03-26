@@ -11,16 +11,14 @@ import com.hms.prescription.entity.Prescription;
 import com.hms.prescription.entity.PrescriptionMedicine;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.UUID;
+import javax.annotation.processing.Generated;
 import org.springframework.stereotype.Component;
 
-/*
 @Generated(
     value = "org.mapstruct.ap.MappingProcessor",
-    date = "2026-03-25T14:56:27+0530",
-    comments = "version: 1.5.5.Final, compiler: Eclipse JDT (IDE) 3.45.0.v20260224-0835, environment: Java 21.0.10 (Eclipse Adoptium)"
+    date = "2026-03-26T11:56:55+0530",
+    comments = "version: 1.5.5.Final, compiler: javac, environment: Java 21.0.10 (Eclipse Adoptium)"
 )
-*/
 @Component
 public class PrescriptionMapperImpl implements PrescriptionMapper {
 
@@ -32,11 +30,11 @@ public class PrescriptionMapperImpl implements PrescriptionMapper {
 
         Prescription prescription = new Prescription();
 
-        prescription.setAdvice( dto.getAdvice() );
+        prescription.setSymptoms( dto.getSymptoms() );
         prescription.setDiagnosis( dto.getDiagnosis() );
         prescription.setMedicines( prescriptionMedicineRequestDTOListToPrescriptionMedicineList( dto.getMedicines() ) );
+        prescription.setAdvice( dto.getAdvice() );
         prescription.setNotes( dto.getNotes() );
-        prescription.setSymptoms( dto.getSymptoms() );
 
         return prescription;
     }
@@ -53,13 +51,13 @@ public class PrescriptionMapperImpl implements PrescriptionMapper {
         prescriptionResponseDTO.setPatientName( entityPatientName( entity ) );
         prescriptionResponseDTO.setDoctorId( entityDoctorId( entity ) );
         prescriptionResponseDTO.setAppointmentId( entityAppointmentId( entity ) );
-        prescriptionResponseDTO.setAdvice( entity.getAdvice() );
-        prescriptionResponseDTO.setCreatedAt( entity.getCreatedAt() );
-        prescriptionResponseDTO.setDiagnosis( entity.getDiagnosis() );
         prescriptionResponseDTO.setId( entity.getId() );
-        prescriptionResponseDTO.setMedicines( prescriptionMedicineListToPrescriptionMedicineResponseDTOList( entity.getMedicines() ) );
-        prescriptionResponseDTO.setNotes( entity.getNotes() );
         prescriptionResponseDTO.setSymptoms( entity.getSymptoms() );
+        prescriptionResponseDTO.setDiagnosis( entity.getDiagnosis() );
+        prescriptionResponseDTO.setMedicines( prescriptionMedicineListToPrescriptionMedicineResponseDTOList( entity.getMedicines() ) );
+        prescriptionResponseDTO.setAdvice( entity.getAdvice() );
+        prescriptionResponseDTO.setNotes( entity.getNotes() );
+        prescriptionResponseDTO.setCreatedAt( entity.getCreatedAt() );
 
         prescriptionResponseDTO.setDoctorName( entity.getDoctor() != null ? entity.getDoctor().getFirstName() + " " + entity.getDoctor().getLastName() : null );
 
@@ -88,12 +86,12 @@ public class PrescriptionMapperImpl implements PrescriptionMapper {
 
         PrescriptionMedicineResponseDTO prescriptionMedicineResponseDTO = new PrescriptionMedicineResponseDTO();
 
+        prescriptionMedicineResponseDTO.setId( entity.getId() );
+        prescriptionMedicineResponseDTO.setMedicineName( entity.getMedicineName() );
         prescriptionMedicineResponseDTO.setDosage( entity.getDosage() );
         prescriptionMedicineResponseDTO.setDuration( entity.getDuration() );
-        prescriptionMedicineResponseDTO.setId( entity.getId() );
-        prescriptionMedicineResponseDTO.setInstructions( entity.getInstructions() );
-        prescriptionMedicineResponseDTO.setMedicineName( entity.getMedicineName() );
         prescriptionMedicineResponseDTO.setQuantity( entity.getQuantity() );
+        prescriptionMedicineResponseDTO.setInstructions( entity.getInstructions() );
 
         return prescriptionMedicineResponseDTO;
     }
@@ -106,11 +104,11 @@ public class PrescriptionMapperImpl implements PrescriptionMapper {
 
         PrescriptionMedicine prescriptionMedicine = new PrescriptionMedicine();
 
+        prescriptionMedicine.setMedicineName( dto.getMedicineName() );
         prescriptionMedicine.setDosage( dto.getDosage() );
         prescriptionMedicine.setDuration( dto.getDuration() );
-        prescriptionMedicine.setInstructions( dto.getInstructions() );
-        prescriptionMedicine.setMedicineName( dto.getMedicineName() );
         prescriptionMedicine.setQuantity( dto.getQuantity() );
+        prescriptionMedicine.setInstructions( dto.getInstructions() );
 
         return prescriptionMedicine;
     }
@@ -128,7 +126,7 @@ public class PrescriptionMapperImpl implements PrescriptionMapper {
         return list1;
     }
 
-    private UUID entityPatientId(Prescription prescription) {
+    private Long entityPatientId(Prescription prescription) {
         if ( prescription == null ) {
             return null;
         }
@@ -136,7 +134,7 @@ public class PrescriptionMapperImpl implements PrescriptionMapper {
         if ( patient == null ) {
             return null;
         }
-        UUID id = patient.getId();
+        Long id = patient.getId();
         if ( id == null ) {
             return null;
         }
@@ -158,7 +156,7 @@ public class PrescriptionMapperImpl implements PrescriptionMapper {
         return name;
     }
 
-    private UUID entityDoctorId(Prescription prescription) {
+    private Long entityDoctorId(Prescription prescription) {
         if ( prescription == null ) {
             return null;
         }
@@ -166,14 +164,14 @@ public class PrescriptionMapperImpl implements PrescriptionMapper {
         if ( doctor == null ) {
             return null;
         }
-        UUID id = doctor.getId();
+        Long id = doctor.getId();
         if ( id == null ) {
             return null;
         }
         return id;
     }
 
-    private UUID entityAppointmentId(Prescription prescription) {
+    private Long entityAppointmentId(Prescription prescription) {
         if ( prescription == null ) {
             return null;
         }
@@ -181,7 +179,7 @@ public class PrescriptionMapperImpl implements PrescriptionMapper {
         if ( appointment == null ) {
             return null;
         }
-        UUID id = appointment.getId();
+        Long id = appointment.getId();
         if ( id == null ) {
             return null;
         }

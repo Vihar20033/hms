@@ -11,7 +11,7 @@ import org.springframework.data.domain.Pageable;
 
 import java.time.LocalDateTime;
 import java.util.List;
-import java.util.UUID;
+
 
 public interface AppointmentService {
 
@@ -21,16 +21,17 @@ public interface AppointmentService {
 
     Appointment createAppointment(Appointment appointment);
 
-    Appointment getAppointmentById(UUID id);
+    Appointment getAppointmentById(Long id);
 
-    Appointment updateAppointment(UUID id, AppointmentRequestDTO dto);
+    Appointment updateAppointment(Long id, AppointmentRequestDTO dto);
 
-    Appointment updateStatus(UUID id, AppointmentStatus status);
+    Appointment updateStatus(Long id, AppointmentStatus status);
 
     Page<Appointment> findAppointments(
+            String query,
             Pageable pageable,
-            UUID doctorId,
-            UUID patientId,
+            Long doctorId,
+            Long patientId,
             AppointmentStatus status,
             Department department,
             LocalDateTime start,
@@ -38,12 +39,12 @@ public interface AppointmentService {
             Boolean isEmergency);
 
 
-    List<Appointment> getAppointmentsByDoctor(UUID doctorId);
+    List<Appointment> getAppointmentsByDoctor(Long doctorId);
 
     List<Appointment> getAppointmentsByDepartment(Department department);
 
-    List<Appointment> getAppointmentsByPatient(UUID patientId);
+    List<Appointment> getAppointmentsByPatient(Long patientId);
 
-    void deleteAppointment(UUID id);
+    void deleteAppointment(Long id);
 }
 

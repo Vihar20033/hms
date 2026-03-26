@@ -8,6 +8,6 @@ import java.util.List;
 public interface UserService {
     UserResponseDTO getCurrentUser();
     List<UserResponseDTO> getAll();
-    void deleteUser(java.util.UUID id);
+    void deleteUser(Long id);
     void retireUserIdentity(User user);
 }

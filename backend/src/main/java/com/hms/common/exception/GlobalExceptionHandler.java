@@ -7,9 +7,6 @@ import com.hms.auth.exception.SelfRegistrationRoleNotAllowedException;
 import com.hms.billing.exception.BillingNotFoundException;
 import com.hms.clinical.exception.VitalsNotFoundException;
 import com.hms.doctor.exception.DoctorNotFoundException;
-import com.hms.doctor.exception.DoctorScheduleNotFoundException;
-import com.hms.laboratory.exception.LabReportNotFoundException;
-import com.hms.laboratory.exception.LabTestNotFoundException;
 import com.hms.prescription.exception.PrescriptionNotFoundException;
 import com.hms.user.exception.UserNotFoundException;
 
@@ -121,26 +118,6 @@ public class GlobalExceptionHandler {
         public ResponseEntity<ApiError> handleDoctorNotFound(DoctorNotFoundException ex, HttpServletRequest request) {
                 log.warn("Doctor not found: {}", ex.getMessage());
                 return buildResponse(HmsErrorCode.DOCTOR_NOT_FOUND, HttpStatus.NOT_FOUND, ex.getMessage(), request);
-        }
-
-        @ExceptionHandler(DoctorScheduleNotFoundException.class)
-        public ResponseEntity<ApiError> handleScheduleNotFound(DoctorScheduleNotFoundException ex, HttpServletRequest request) {
-                log.warn("Doctor schedule not found: {}", ex.getMessage());
-                return buildResponse(HmsErrorCode.SCHEDULE_NOT_FOUND, HttpStatus.NOT_FOUND, ex.getMessage(), request);
-        }
-
-        // ========== Laboratory Exceptions ==========
-
-        @ExceptionHandler(LabTestNotFoundException.class)
-        public ResponseEntity<ApiError> handleLabTestNotFound(LabTestNotFoundException ex, HttpServletRequest request) {
-                log.warn("Lab test not found: {}", ex.getMessage());
-                return buildResponse(HmsErrorCode.TEST_NOT_FOUND, HttpStatus.NOT_FOUND, ex.getMessage(), request);
-        }
-
-        @ExceptionHandler(LabReportNotFoundException.class)
-        public ResponseEntity<ApiError> handleLabReportNotFound(LabReportNotFoundException ex, HttpServletRequest request) {
-                log.warn("Lab report not found: {}", ex.getMessage());
-                return buildResponse(HmsErrorCode.REPORT_NOT_FOUND, HttpStatus.NOT_FOUND, ex.getMessage(), request);
         }
 
         // ========== Billing Exceptions ==========

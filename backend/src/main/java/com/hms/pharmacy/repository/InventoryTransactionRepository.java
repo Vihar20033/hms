@@ -5,13 +5,13 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
-import java.util.UUID;
+
 
 @Repository
-public interface InventoryTransactionRepository extends JpaRepository<InventoryTransaction, UUID> {
+public interface InventoryTransactionRepository extends JpaRepository<InventoryTransaction, Long> {
     // SELECT * FROM inventory_transactions WHERE medicine_id = :medicineId AND deleted = false
-    List<InventoryTransaction> findByMedicineId(UUID medicineId);
+    List<InventoryTransaction> findByMedicineId(Long medicineId);
 
     // SELECT * FROM inventory_transactions WHERE reference_id = :referenceId AND deleted = false
-    List<InventoryTransaction> findByReferenceId(UUID referenceId);
+    List<InventoryTransaction> findByReferenceId(Long referenceId);
 }

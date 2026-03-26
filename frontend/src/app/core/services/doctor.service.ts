@@ -21,13 +21,13 @@ export class DoctorService {
       .pipe(retry({ count: 3, delay: (error, retryCount) => timer(Math.pow(2, retryCount) * 1000) }), timeout(10000));
   }
 
-  getMe(userId: string): Observable<ApiResponse<Doctor>> {
+  getMe(userId: number): Observable<ApiResponse<Doctor>> {
     return this.http
       .get<ApiResponse<Doctor>>(`${this.apiUrl}/me?userId=${userId}`)
       .pipe(retry({ count: 3, delay: (error, retryCount) => timer(Math.pow(2, retryCount) * 1000) }), timeout(10000));
   }
 
-  getById(id: string): Observable<ApiResponse<Doctor>> {
+  getById(id: number): Observable<ApiResponse<Doctor>> {
     return this.http
       .get<ApiResponse<Doctor>>(`${this.apiUrl}/${id}`)
       .pipe(retry({ count: 3, delay: (error, retryCount) => timer(Math.pow(2, retryCount) * 1000) }), timeout(10000));
@@ -45,13 +45,13 @@ export class DoctorService {
       .pipe(retry({ count: 3, delay: (error, retryCount) => timer(Math.pow(2, retryCount) * 1000) }), timeout(10000));
   }
 
-  update(id: string, doctor: Partial<DoctorRegistrationRequest>): Observable<ApiResponse<Doctor>> {
+  update(id: number, doctor: Partial<DoctorRegistrationRequest>): Observable<ApiResponse<Doctor>> {
     return this.http
       .put<ApiResponse<Doctor>>(`${this.apiUrl}/${id}`, doctor)
       .pipe(retry({ count: 3, delay: (error, retryCount) => timer(Math.pow(2, retryCount) * 1000) }), timeout(10000));
   }
 
-  delete(id: string): Observable<ApiResponse<void>> {
+  delete(id: number): Observable<ApiResponse<void>> {
     return this.http
       .delete<ApiResponse<void>>(`${this.apiUrl}/${id}`)
       .pipe(retry({ count: 3, delay: (error, retryCount) => timer(Math.pow(2, retryCount) * 1000) }), timeout(10000));

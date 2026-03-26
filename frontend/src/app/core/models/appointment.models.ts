@@ -25,10 +25,10 @@ export enum Department {
 }
 
 export interface Appointment {
-  id: string;
-  patientId: string;
+  id: number;
+  patientId: number;
   patientName: string;
-  doctorId?: string;
+  doctorId?: number;
   doctorName?: string;
   department: Department;
   appointmentTime: string;
@@ -40,8 +40,8 @@ export interface Appointment {
 }
 
 export interface AppointmentRequest {
-  patientId: string;
-  doctorId?: string;
+  patientId: number;
+  doctorId?: number;
   department: Department;
   appointmentDate: string; // ISO date string
   appointmentTime: string; // HH:mm

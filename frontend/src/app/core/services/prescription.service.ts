@@ -22,15 +22,15 @@ export class PrescriptionService {
     return this.http.post<ApiResponse<Prescription>>(this.apiUrl, prescription);
   }
 
-  getById(id: string): Observable<ApiResponse<Prescription>> {
+  getById(id: number): Observable<ApiResponse<Prescription>> {
     return this.http.get<ApiResponse<Prescription>>(`${this.apiUrl}/${id}`);
   }
 
-  getByPatientId(patientId: string): Observable<ApiResponse<Prescription[]>> {
+  getByPatientId(patientId: number): Observable<ApiResponse<Prescription[]>> {
     return this.http.get<ApiResponse<Prescription[]>>(`${this.apiUrl}/patient/${patientId}`);
   }
 
-  delete(id: string): Observable<ApiResponse<void>> {
+  delete(id: number): Observable<ApiResponse<void>> {
     return this.http.delete<ApiResponse<void>>(`${this.apiUrl}/${id}`);
   }
 }

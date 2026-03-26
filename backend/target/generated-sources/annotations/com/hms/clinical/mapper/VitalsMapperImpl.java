@@ -4,16 +4,14 @@ import com.hms.appointment.entity.Appointment;
 import com.hms.clinical.dto.request.VitalsRequestDTO;
 import com.hms.clinical.dto.response.VitalsResponseDTO;
 import com.hms.clinical.entity.Vitals;
-import java.util.UUID;
+import javax.annotation.processing.Generated;
 import org.springframework.stereotype.Component;
 
-/*
 @Generated(
     value = "org.mapstruct.ap.MappingProcessor",
-    date = "2026-03-25T14:56:27+0530",
-    comments = "version: 1.5.5.Final, compiler: Eclipse JDT (IDE) 3.45.0.v20260224-0835, environment: Java 21.0.10 (Eclipse Adoptium)"
+    date = "2026-03-26T11:56:55+0530",
+    comments = "version: 1.5.5.Final, compiler: javac, environment: Java 21.0.10 (Eclipse Adoptium)"
 )
-*/
 @Component
 public class VitalsMapperImpl implements VitalsMapper {
 
@@ -25,15 +23,15 @@ public class VitalsMapperImpl implements VitalsMapper {
 
         Vitals vitals = new Vitals();
 
+        vitals.setTemperature( dto.getTemperature() );
+        vitals.setSystolicBP( dto.getSystolicBP() );
         vitals.setDiastolicBP( dto.getDiastolicBP() );
-        vitals.setHeight( dto.getHeight() );
-        vitals.setNotes( dto.getNotes() );
         vitals.setPulseRate( dto.getPulseRate() );
         vitals.setRespiratoryRate( dto.getRespiratoryRate() );
         vitals.setSpo2( dto.getSpo2() );
-        vitals.setSystolicBP( dto.getSystolicBP() );
-        vitals.setTemperature( dto.getTemperature() );
         vitals.setWeight( dto.getWeight() );
+        vitals.setHeight( dto.getHeight() );
+        vitals.setNotes( dto.getNotes() );
 
         return vitals;
     }
@@ -47,22 +45,22 @@ public class VitalsMapperImpl implements VitalsMapper {
         VitalsResponseDTO vitalsResponseDTO = new VitalsResponseDTO();
 
         vitalsResponseDTO.setAppointmentId( entityAppointmentId( entity ) );
-        vitalsResponseDTO.setCreatedAt( entity.getCreatedAt() );
-        vitalsResponseDTO.setDiastolicBP( entity.getDiastolicBP() );
-        vitalsResponseDTO.setHeight( entity.getHeight() );
         vitalsResponseDTO.setId( entity.getId() );
-        vitalsResponseDTO.setNotes( entity.getNotes() );
+        vitalsResponseDTO.setTemperature( entity.getTemperature() );
+        vitalsResponseDTO.setSystolicBP( entity.getSystolicBP() );
+        vitalsResponseDTO.setDiastolicBP( entity.getDiastolicBP() );
         vitalsResponseDTO.setPulseRate( entity.getPulseRate() );
         vitalsResponseDTO.setRespiratoryRate( entity.getRespiratoryRate() );
         vitalsResponseDTO.setSpo2( entity.getSpo2() );
-        vitalsResponseDTO.setSystolicBP( entity.getSystolicBP() );
-        vitalsResponseDTO.setTemperature( entity.getTemperature() );
         vitalsResponseDTO.setWeight( entity.getWeight() );
+        vitalsResponseDTO.setHeight( entity.getHeight() );
+        vitalsResponseDTO.setNotes( entity.getNotes() );
+        vitalsResponseDTO.setCreatedAt( entity.getCreatedAt() );
 
         return vitalsResponseDTO;
     }
 
-    private UUID entityAppointmentId(Vitals vitals) {
+    private Long entityAppointmentId(Vitals vitals) {
         if ( vitals == null ) {
             return null;
         }
@@ -70,7 +68,7 @@ public class VitalsMapperImpl implements VitalsMapper {
         if ( appointment == null ) {
             return null;
         }
-        UUID id = appointment.getId();
+        Long id = appointment.getId();
         if ( id == null ) {
             return null;
         }

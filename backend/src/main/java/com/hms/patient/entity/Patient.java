@@ -16,20 +16,11 @@ import java.math.BigDecimal;
 @Entity
 @Table(
         name = "patients",
-        indexes = {
-                @Index(name = "idx_patient_name", columnList = "name"),
-                @Index(name = "idx_patient_blood_group", columnList = "blood_group"),
-                @Index(name = "idx_patient_urgency", columnList = "urgency_level"),
-                @Index(name = "idx_patient_contact", columnList = "contactNumber", unique = true),
-                @Index(name = "idx_patient_email", columnList = "email")
-        },
         uniqueConstraints = {
                 @UniqueConstraint(name = "uk_patient_contact", columnNames = {"contactNumber"}),
                 @UniqueConstraint(name = "uk_patient_email", columnNames = {"email"})
         }
 )
-@SQLDelete(sql = "UPDATE patients SET deleted = true WHERE id=?")
-@SQLRestriction("deleted = false")
 @Getter
 @Setter
 @NoArgsConstructor

@@ -13,7 +13,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.UUID;
+
 
 @RestController
 @RequestMapping("/api/v1/billings")
@@ -43,7 +43,7 @@ public class BillingController {
     @PreAuthorize("hasAnyRole('ADMIN','RECEPTIONIST')")
     @GetMapping("/patient/{patientId}")
     public ResponseEntity<ApiResponse<List<BillingResponseDTO>>> getBillingsByPatientId(
-            @PathVariable("patientId") UUID patientId) {
+            @PathVariable("patientId") Long patientId) {
         return ResponseEntity.ok(ApiResponse.success(
                 billingService.getBillingsByPatientId(patientId)));
     }
@@ -51,7 +51,7 @@ public class BillingController {
     @PreAuthorize("hasAnyRole('ADMIN','RECEPTIONIST')")
     @GetMapping("/preview-appointment/{appointmentId}")
     public ResponseEntity<ApiResponse<BillingResponseDTO>> previewBillingJson(
-            @PathVariable("appointmentId") UUID appointmentId) {
+            @PathVariable("appointmentId") Long appointmentId) {
         return ResponseEntity.ok(ApiResponse.success(
                 billingService.calculatePreviewBilling(appointmentId)));
     }
@@ -59,7 +59,7 @@ public class BillingController {
     @PreAuthorize("hasAnyRole('ADMIN','RECEPTIONIST')")
     @GetMapping("/{id}")
     public ResponseEntity<ApiResponse<BillingResponseDTO>> getBillingById(
-            @PathVariable("id") UUID id) {
+            @PathVariable("id") Long id) {
         return ResponseEntity.ok(ApiResponse.success(
                 billingService.getBillingById(id)));
     }
@@ -67,7 +67,7 @@ public class BillingController {
     @PreAuthorize("hasAnyRole('ADMIN','RECEPTIONIST')")
     @PatchMapping("/{id}/status")
     public ResponseEntity<ApiResponse<BillingResponseDTO>> updatePaymentStatus(
-            @PathVariable("id") UUID id, @RequestParam("status") PaymentStatus status) {
+            @PathVariable("id") Long id, @RequestParam("status") PaymentStatus status) {
         return ResponseEntity.ok(ApiResponse.success(
                 billingService.updatePaymentStatus(id, status)));
     }
@@ -75,7 +75,7 @@ public class BillingController {
     @PreAuthorize("hasAnyRole('ADMIN','RECEPTIONIST')")
     @PostMapping("/generate/appointment/{appointmentId}")
     public ResponseEntity<ApiResponse<BillingResponseDTO>> generateBilling(
-            @PathVariable("appointmentId") UUID appointmentId) {
+            @PathVariable("appointmentId") Long appointmentId) {
         return ResponseEntity.status(HttpStatus.CREATED)
                 .body(ApiResponse.success(
                         billingService.generateBillingFromAppointment(appointmentId)));
@@ -84,7 +84,7 @@ public class BillingController {
     @PreAuthorize("hasRole('ADMIN')")
     @DeleteMapping("/{id}")
     public ResponseEntity<ApiResponse<Void>> deleteBilling(
-            @PathVariable("id") UUID id) {
+            @PathVariable("id") Long id) {
         billingService.deleteBilling(id);
         return ResponseEntity.ok(ApiResponse.success(null));
     }

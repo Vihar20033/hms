@@ -7,7 +7,7 @@ import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
 import java.util.List;
-import java.util.UUID;
+
 
 /**
  * Data Transfer Object representing the response details of a prescription.
@@ -17,12 +17,12 @@ import java.util.UUID;
 @NoArgsConstructor
 @AllArgsConstructor
 public class PrescriptionResponseDTO {
-    private UUID id;
-    private UUID patientId;
+    private Long id;
+    private Long patientId;
     private String patientName;
-    private UUID doctorId;
+    private Long doctorId;
     private String doctorName;
-    private UUID appointmentId;
+    private Long appointmentId;
     private String symptoms;
     private String diagnosis;
     private List<PrescriptionMedicineResponseDTO> medicines;

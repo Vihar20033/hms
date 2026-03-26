@@ -58,6 +58,14 @@ export class PharmacyListComponent implements OnInit, OnDestroy {
 
   categories = Object.values(MedicineCategory);
 
+  futureDateValidator(control: any) {
+    if (!control.value) return null;
+    const date = new Date(control.value);
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+    return date > today ? null : { notFuture: true };
+  }
+
   constructor(
     private pharmacyService: PharmacyService,
     private authService: AuthService,
@@ -91,7 +99,7 @@ export class PharmacyListComponent implements OnInit, OnDestroy {
       unitPrice: [null, [Validators.required, Validators.min(0.01)]],
       quantityInStock: [0, [Validators.required, Validators.min(0)]],
       reorderLevel: [10, [Validators.required, Validators.min(0)]],
-      expiryDate: [null],
+      expiryDate: [null, [this.futureDateValidator]],
     });
 
     this.restockForm = this.fb.group({
@@ -103,7 +111,7 @@ export class PharmacyListComponent implements OnInit, OnDestroy {
     this.isLoading = true;
     this.pharmacyService.getAll().subscribe({
       next: (res: ApiResponse<Medicine[]>) => {
-        this.medicines = res.data;
+        this.medicines = res.data || [];
         this.applyFilter();
         this.isLoading = false;
       },
@@ -254,7 +262,7 @@ export class PharmacyListComponent implements OnInit, OnDestroy {
     });
   }
 
-  onDelete(id: string): void {
+  onDelete(id: number): void {
     if (!confirm('Delete this medicine?')) return;
     this.pharmacyService.delete(id).subscribe({
       next: () => {

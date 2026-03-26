@@ -17,7 +17,7 @@ export enum UrgencyLevel {
 }
 
 export interface Patient {
-  id: string;
+  id: number;
   name: string;
   email?: string;
   age: number;

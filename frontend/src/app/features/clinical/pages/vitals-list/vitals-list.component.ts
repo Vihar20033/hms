@@ -41,8 +41,8 @@ export class VitalsListComponent implements OnInit {
   vitalsDialogVisible = false;
   vitalsForm: FormGroup;
   isSavingVitals = false;
-  editingVitalsId: string | null = null;
-  currentAppointmentId: string | null = null;
+  editingVitalsId: number | null = null;
+  currentAppointmentId: number | null = null;
   isReadOnly = false;
 
   constructor(
@@ -108,7 +108,7 @@ export class VitalsListComponent implements OnInit {
     return role === 'ADMIN' || role === 'NURSE';
   }
 
-  openCollectVitals(appointmentId: string): void {
+  openCollectVitals(appointmentId: number): void {
     this.currentAppointmentId = appointmentId;
     this.editingVitalsId = null;
     this.isReadOnly = false;
@@ -139,7 +139,7 @@ export class VitalsListComponent implements OnInit {
     const requestData = { ...data, appointmentId: this.currentAppointmentId };
 
     const request = this.editingVitalsId
-      ? this.vitalsService.updateVitals(this.editingVitalsId, requestData)
+      ? this.vitalsService.updateVitals(this.editingVitalsId!, requestData)
       : this.vitalsService.recordVitals(requestData);
 
     request.subscribe({
@@ -154,7 +154,7 @@ export class VitalsListComponent implements OnInit {
     });
   }
 
-  deleteVitals(id: string): void {
+  deleteVitals(id: number): void {
     if (!confirm('Are you sure you want to delete this vital record?')) return;
 
     this.vitalsService.delete(id).subscribe({

@@ -36,7 +36,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Collections;
 import java.util.List;
-import java.util.UUID;
+
 
 @Service
 @RequiredArgsConstructor
@@ -115,7 +115,7 @@ public class PrescriptionServiceImpl implements PrescriptionService {
 
     @Override
     @Transactional(readOnly = true)
-    public PrescriptionResponseDTO getPrescriptionById(UUID id) {
+    public PrescriptionResponseDTO getPrescriptionById(Long id) {
         Prescription prescription = prescriptionRepository.findById(id)
                 .orElseThrow(() -> new PrescriptionNotFoundException("Prescription not found: " + id, id.toString()));
         
@@ -142,7 +142,7 @@ public class PrescriptionServiceImpl implements PrescriptionService {
 
     @Override
     @Transactional(readOnly = true)
-    public List<PrescriptionResponseDTO> getPrescriptionsByPatientId(UUID patientId) {
+    public List<PrescriptionResponseDTO> getPrescriptionsByPatientId(Long patientId) {
         List<Prescription> prescriptions = prescriptionRepository.findByPatientId(patientId);
         if (!prescriptions.isEmpty()) {
             checkOwnership(prescriptions.get(0));
@@ -152,13 +152,13 @@ public class PrescriptionServiceImpl implements PrescriptionService {
 
     @Override
     @Transactional(readOnly = true)
-    public List<PrescriptionResponseDTO> getPrescriptionsByDoctorId(UUID doctorId) {
+    public List<PrescriptionResponseDTO> getPrescriptionsByDoctorId(Long doctorId) {
         return prescriptionMapper.toDtoList(prescriptionRepository.findByDoctorId(doctorId));
     }
 
     @Override
     @Transactional
-    public void deletePrescription(UUID id) {
+    public void deletePrescription(Long id) {
         Prescription prescription = prescriptionRepository.findById(id)
                 .orElseThrow(() -> new PrescriptionNotFoundException("Prescription not found: " + id, id.toString()));
         
@@ -180,8 +180,7 @@ public class PrescriptionServiceImpl implements PrescriptionService {
             }
         }
 
-        prescription.setDeleted(true);
-        prescriptionRepository.save(prescription);
+        prescriptionRepository.delete(prescription);
     }
 
     private void checkOwnership(Prescription prescription) {

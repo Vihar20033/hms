@@ -17,11 +17,11 @@ export class VitalsService {
     return this.http.post<ApiResponse<Vitals>>(this.apiUrl, vitals);
   }
 
-  updateVitals(id: string, vitals: VitalsRequest): Observable<ApiResponse<Vitals>> {
+  updateVitals(id: number, vitals: VitalsRequest): Observable<ApiResponse<Vitals>> {
     return this.http.put<ApiResponse<Vitals>>(`${this.apiUrl}/${id}`, vitals);
   }
 
-  getByAppointment(appointmentId: string): Observable<ApiResponse<Vitals>> {
+  getByAppointment(appointmentId: number): Observable<ApiResponse<Vitals>> {
     return this.http.get<ApiResponse<Vitals>>(`${this.apiUrl}/appointment/${appointmentId}`);
   }
 
@@ -29,11 +29,11 @@ export class VitalsService {
     return this.http.get<ApiResponse<Vitals[]>>(`${this.apiUrl}/today`);
   }
 
-  getByPatientId(patientId: string): Observable<ApiResponse<Vitals[]>> {
+  getByPatientId(patientId: number): Observable<ApiResponse<Vitals[]>> {
     return this.http.get<ApiResponse<Vitals[]>>(`${this.apiUrl}/patient/${patientId}`);
   }
 
-  delete(id: string): Observable<ApiResponse<void>> {
+  delete(id: number): Observable<ApiResponse<void>> {
     return this.http.delete<ApiResponse<void>>(`${this.apiUrl}/${id}`);
   }
 }

@@ -8,17 +8,17 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
-import java.util.UUID;
+
 
 @Data
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
 public class AppointmentResponseDTO {
-    private UUID id;
-    private UUID patientId;
+    private Long id;
+    private Long patientId;
     private String patientName;
-    private UUID doctorId;
+    private Long doctorId;
     private String doctorName;
     private Department department;
     private LocalDateTime appointmentTime;
