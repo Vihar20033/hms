@@ -17,7 +17,5 @@ public interface PrescriptionService {
 
     List<PrescriptionResponseDTO> getPrescriptionsByPatientId(Long patientId);
 
-    List<PrescriptionResponseDTO> getPrescriptionsByDoctorId(Long doctorId);
-
     void deletePrescription(Long id);
 }

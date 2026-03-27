@@ -12,7 +12,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
-
 import java.util.stream.Collectors;
 
 @Service
@@ -44,28 +43,7 @@ public class UserServiceImpl implements UserService {
     public void deleteUser(Long id) {
         User user = userRepository.findById(id)
                 .orElseThrow(() -> new UserNotFoundException("User not found", id.toString()));
-        
+
         userRepository.delete(user);
-    }
-
-    @Override
-    public void retireUserIdentity(User user) {
-        String uniqueSuffix = "__deleted__" + user.getId();
-
-        if (user.getUsername() != null && !user.getUsername().contains("__deleted__")) {
-            String retiredUsername = user.getUsername() + uniqueSuffix;
-            user.setUsername(truncate(retiredUsername));
-        }
-
-        if (user.getEmail() != null && !user.getEmail().contains("__deleted__")) {
-            user.setEmail(user.getId() + "__deleted__" + user.getEmail());
-        }
-    }
-
-    private String truncate(String value) {
-        if (value == null || value.length() <= 50) {
-            return value;
-        }
-        return value.substring(0, 50);
     }
 }

@@ -151,12 +151,6 @@ public class PrescriptionServiceImpl implements PrescriptionService {
     }
 
     @Override
-    @Transactional(readOnly = true)
-    public List<PrescriptionResponseDTO> getPrescriptionsByDoctorId(Long doctorId) {
-        return prescriptionMapper.toDtoList(prescriptionRepository.findByDoctorId(doctorId));
-    }
-
-    @Override
     @Transactional
     public void deletePrescription(Long id) {
         Prescription prescription = prescriptionRepository.findById(id)

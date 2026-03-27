@@ -1,10 +1,10 @@
 import { CommonModule } from '@angular/common';
 import { HttpErrorResponse } from '@angular/common/http';
 import { Component } from '@angular/core';
-import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
+import { FormBuilder, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { AuthService } from '../../../../core/services/auth.service';
-import { USERNAME_PATTERN } from '../../../../core/validators/app-validators';
+import { createLoginForm, markFormControlsTouched } from '../../auth-form.utils';
 
 @Component({
   selector: 'app-login',
@@ -24,13 +24,7 @@ export class LoginComponent {
     private authService: AuthService,
     private route: ActivatedRoute,
   ) {
-    this.loginForm = this.fb.group({
-      username: [
-        '',
-        [Validators.required, Validators.minLength(3), Validators.maxLength(50), Validators.pattern(USERNAME_PATTERN)],
-      ],
-      password: ['', [Validators.required, Validators.minLength(6), Validators.maxLength(128)]],
-    });
+    this.loginForm = createLoginForm(this.fb);
   }
 
   onSubmit(): void {
@@ -54,9 +48,7 @@ export class LoginComponent {
         },
       });
     } else {
-      Object.keys(this.loginForm.controls).forEach((key) => {
-        this.loginForm.controls[key].markAsTouched();
-      });
+      markFormControlsTouched(this.loginForm);
     }
   }
 }

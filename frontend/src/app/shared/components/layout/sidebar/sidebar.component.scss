@@ -10,15 +10,51 @@
   flex-direction: column;
   position: sticky;
   top: 0;
-  transition: all var(--transition-normal);
+  transition: all 0.35s cubic-bezier(0.4, 0, 0.2, 1);
   z-index: 100;
+
+  @media (max-width: 1024px) {
+    position: fixed;
+    left: 0;
+    top: 0;
+    bottom: 0;
+    transform: translateX(-100%);
+    box-shadow: 20px 0 50px rgba(0, 0, 0, 0.3);
+    z-index: 1000;
+
+    &.open {
+      transform: translateX(0);
+    }
+  }
 }
 
 .sidebar-header {
   padding: 1.7rem 1.5rem 1.2rem;
   border-bottom: 1px solid rgba(255, 255, 255, 0.08);
-  display: grid;
-  gap: 1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+
+  .header-tools {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+  }
+
+  .mobile-close {
+    display: none;
+    @media (max-width: 1024px) {
+      display: grid;
+      place-items: center;
+      width: 40px;
+      height: 40px;
+      border-radius: 12px;
+      background: rgba(255, 255, 255, 0.1);
+      color: white;
+      font-size: 1.4rem;
+    }
+  }
 
   .logo-block {
     display: flex;
@@ -154,45 +190,98 @@
 }
 
 .sidebar-footer {
-  padding: 1rem;
+  padding: 1.25rem 1rem;
   border-top: 1px solid rgba(255, 255, 255, 0.08);
 
   .support-card {
-    margin-bottom: 0.9rem;
     padding: 1rem;
-    border-radius: 18px;
-    background: rgba(255, 255, 255, 0.06);
+    border-radius: 20px;
+    background: rgba(255, 255, 255, 0.04);
+    border: 1px solid rgba(255, 255, 255, 0.06);
     display: flex;
     flex-direction: column;
-    gap: 0.2rem;
+    gap: 1rem;
 
-    .support-label {
-      color: rgba(255, 255, 255, 0.52);
-      font-size: 0.72rem;
-      text-transform: uppercase;
-      letter-spacing: 0.05em;
+    .user-id {
+      display: flex;
+      flex-direction: column;
+      gap: 0.15rem;
+
+      .support-label {
+        color: rgba(255, 255, 255, 0.45);
+        font-size: 0.68rem;
+        text-transform: uppercase;
+        letter-spacing: 0.06em;
+        font-weight: 700;
+        margin-bottom: 0.15rem;
+      }
+
+      strong {
+        color: white;
+        font-size: 0.95rem;
+        letter-spacing: -0.01em;
+      }
+
+      .role-badge {
+        display: inline-block;
+        width: fit-content;
+        margin-top: 0.25rem;
+        padding: 0.2rem 0.6rem;
+        border-radius: 8px;
+        background: rgba(143, 217, 255, 0.12);
+        color: #8fd9ff;
+        font-size: 0.7rem;
+        font-weight: 800;
+        text-transform: uppercase;
+        letter-spacing: 0.03em;
+
+        &.ADMIN { background: rgba(139, 92, 246, 0.2); color: #c4b5fd; border: 1px solid rgba(139, 92, 246, 0.3); }
+        &.DOCTOR { background: rgba(16, 185, 129, 0.15); color: #6ee7b7; border: 1px solid rgba(16, 185, 129, 0.2); }
+        &.RECEPTIONIST { background: rgba(245, 158, 11, 0.15); color: #fcd34d; border: 1px solid rgba(245, 158, 11, 0.2); }
+        &.NURSE { background: rgba(14, 165, 233, 0.15); color: #7dd3fc; border: 1px solid rgba(14, 165, 233, 0.2); }
+        &.PHARMACIST { background: rgba(236, 72, 153, 0.15); color: #f9a8d4; border: 1px solid rgba(236, 72, 153, 0.2); }
+      }
     }
 
-    strong {
-      color: white;
-    }
+    .logout-btn {
+      width: 100%;
+      padding: 0.7rem;
+      border-radius: 14px;
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      background: rgba(255, 255, 255, 0.03);
+      color: rgba(255, 255, 255, 0.85);
+      font-size: 0.88rem;
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.65rem;
+      cursor: pointer;
+      transition: all var(--transition-fast);
 
-    small {
-      color: #9fc8dd;
-    }
-  }
+      i {
+        font-size: 1.15rem;
+        color: rgba(255, 255, 255, 0.65);
+        transition: color 0.2s;
+      }
 
-  .logout {
-    color: #ffb0b0;
-    background: rgba(212, 71, 71, 0.08);
+      &:hover {
+        background: rgba(239, 68, 68, 0.16);
+        color: white;
+        border-color: rgba(239, 68, 68, 0.4);
+        transform: translateY(-1px);
+        box-shadow: 0 4px 12px rgba(239, 68, 68, 0.2);
 
-    i {
-      color: #ff9a9a;
-    }
+        i {
+          color: #ff9a9a;
+          transform: rotate(-12deg) scale(1.1);
+        }
+      }
 
-    &:hover {
-      background-color: rgba(212, 71, 71, 0.14);
-      color: #ffd0d0;
+      &:active {
+        transform: translateY(0);
+        box-shadow: none;
+      }
     }
   }
 }

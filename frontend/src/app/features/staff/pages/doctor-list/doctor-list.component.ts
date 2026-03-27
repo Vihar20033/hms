@@ -6,6 +6,7 @@ import { Doctor } from '../../../../core/models/doctor.models';
 import { DoctorService } from '../../../../core/services/doctor.service';
 import { HeaderComponent } from '../../../../shared/components/layout/header/header.component';
 import { SidebarComponent } from '../../../../shared/components/layout/sidebar/sidebar.component';
+import { getDoctorDeleteMessage } from '../../utils/doctor-list.utils';
 
 @Component({
   selector: 'app-doctor-list',
@@ -21,7 +22,7 @@ export class DoctorListComponent implements OnInit {
   constructor(
     private doctorService: DoctorService,
     private router: Router,
-  ) {}
+  ) { }
 
   ngOnInit(): void {
     this.loadDoctors();
@@ -45,7 +46,7 @@ export class DoctorListComponent implements OnInit {
   }
 
   onDelete(doctor: Doctor): void {
-    const confirmed = confirm(`Delete Dr. ${doctor.firstName} ${doctor.lastName}?`);
+    const confirmed = confirm(getDoctorDeleteMessage(doctor));
     if (!confirmed) {
       return;
     }

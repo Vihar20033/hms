@@ -1,8 +1,7 @@
 import { Injectable } from '@angular/core';
 
 import { HttpClient, HttpParams } from '@angular/common/http';
-import { Observable, timer } from 'rxjs';
-import { retry, timeout } from 'rxjs/operators';
+import { Observable } from 'rxjs';
 import { environment } from '../../../environments/environment';
 import { ApiResponse } from '../models/common.models';
 import { Patient, PatientRequest, PatientSlice } from '../models/patient.models';
@@ -16,11 +15,8 @@ export class PatientService {
   constructor(private http: HttpClient) {}
 
   getAll(): Observable<ApiResponse<Patient[]>> {
-    return this.http
-      .get<ApiResponse<Patient[]>>(`${this.apiUrl}/all`)
-      .pipe(retry({ count: 3, delay: (error, retryCount) => timer(Math.pow(2, retryCount) * 1000) }), timeout(10000));
+    return this.http.get<ApiResponse<Patient[]>>(`${this.apiUrl}/all`);
   }
-
 
   search(
     name?: string,
@@ -37,32 +33,22 @@ export class PatientService {
     if (bloodGroup) params = params.set('bloodGroup', bloodGroup);
     if (urgencyLevel) params = params.set('urgencyLevel', urgencyLevel);
 
-    return this.http
-      .get<ApiResponse<PatientSlice>>(this.apiUrl, { params })
-      .pipe(retry({ count: 3, delay: (error, retryCount) => timer(Math.pow(2, retryCount) * 1000) }), timeout(10000));
+    return this.http.get<ApiResponse<PatientSlice>>(this.apiUrl, { params });
   }
 
   getById(id: number): Observable<ApiResponse<Patient>> {
-    return this.http
-      .get<ApiResponse<Patient>>(`${this.apiUrl}/${id}`)
-      .pipe(retry({ count: 3, delay: (error, retryCount) => timer(Math.pow(2, retryCount) * 1000) }), timeout(10000));
+    return this.http.get<ApiResponse<Patient>>(`${this.apiUrl}/${id}`);
   }
 
   create(patient: PatientRequest): Observable<ApiResponse<Patient>> {
-    return this.http
-      .post<ApiResponse<Patient>>(this.apiUrl, patient)
-      .pipe(retry({ count: 3, delay: (error, retryCount) => timer(Math.pow(2, retryCount) * 1000) }), timeout(10000));
+    return this.http.post<ApiResponse<Patient>>(this.apiUrl, patient);
   }
 
   update(id: number, patient: PatientRequest): Observable<ApiResponse<Patient>> {
-    return this.http
-      .put<ApiResponse<Patient>>(`${this.apiUrl}/${id}`, patient)
-      .pipe(retry({ count: 3, delay: (error, retryCount) => timer(Math.pow(2, retryCount) * 1000) }), timeout(10000));
+    return this.http.put<ApiResponse<Patient>>(`${this.apiUrl}/${id}`, patient);
   }
 
   delete(id: number): Observable<ApiResponse<void>> {
-    return this.http
-      .delete<ApiResponse<void>>(`${this.apiUrl}/${id}`)
-      .pipe(retry({ count: 3, delay: (error, retryCount) => timer(Math.pow(2, retryCount) * 1000) }), timeout(10000));
+    return this.http.delete<ApiResponse<void>>(`${this.apiUrl}/${id}`);
   }
 }

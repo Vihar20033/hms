@@ -1,15 +1,22 @@
 import { CommonModule } from '@angular/common';
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnDestroy, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnInit } from '@angular/core';
 import { Router, RouterLink } from '@angular/router';
+import { PaginatorModule, PaginatorState } from 'primeng/paginator';
 import { TableModule } from 'primeng/table';
 import { Appointment, AppointmentStatus, AppointmentSummary } from '../../../../core/models/appointment.models';
 import { ApiResponse, PagedResponse } from '../../../../core/models/common.models';
 import { AppointmentService } from '../../../../core/services/appointment.service';
 import { AuthService } from '../../../../core/services/auth.service';
 import { BillingService } from '../../../../core/services/billing.service';
-import { PaginatorModule, PaginatorState } from 'primeng/paginator';
 import { HeaderComponent } from '../../../../shared/components/layout/header/header.component';
 import { SidebarComponent } from '../../../../shared/components/layout/sidebar/sidebar.component';
+import {
+  canDoctorStartAppointment,
+  canManageAppointmentForRole,
+  getAppointmentPageLead,
+  getAppointmentStatusClass,
+  getAppointmentWorkflowLabel,
+} from './appointment-list.utils';
 
 @Component({
   selector: 'app-appointment-list',
@@ -19,18 +26,16 @@ import { SidebarComponent } from '../../../../shared/components/layout/sidebar/s
   styleUrl: './appointment-list.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-
 export class AppointmentListComponent implements OnInit {
-  
   appointments: Appointment[] = [];
   summary: AppointmentSummary | null = null;
   isLoading = true;
-  
+
   selectedStatusFilter: 'ALL' | AppointmentStatus = 'ALL';
   page = 0;
   size = 10;
   totalElements = 0;
-  
+
   statusEnum = AppointmentStatus;
   userRole: string | null = null;
   pageLead = '';
@@ -45,24 +50,14 @@ export class AppointmentListComponent implements OnInit {
 
   ngOnInit(): void {
     this.userRole = this.authService.getUserRole();
-    
+
     if (this.userRole === 'RECEPTIONIST') {
       this.selectedStatusFilter = AppointmentStatus.SCHEDULED;
     }
-    
-    this.setPageLead();
+
+    this.pageLead = getAppointmentPageLead(this.userRole);
     this.loadSummary();
     this.loadAppointments();
-  }
-
-  setPageLead(): void {
-    if (this.userRole === 'DOCTOR') {
-      this.pageLead = 'Track only the patients assigned to you and start each consultation from here.';
-    } else if (this.userRole === 'RECEPTIONIST') {
-      this.pageLead = 'Manage arrivals, move patients into the doctor queue, and keep the OPD flowing.';
-    } else {
-      this.pageLead = 'View and manage all medical consultations.';
-    }
   }
 
   loadSummary(): void {
@@ -70,17 +65,17 @@ export class AppointmentListComponent implements OnInit {
       next: (res: ApiResponse<AppointmentSummary>) => {
         this.summary = res.data;
         this.cdr.markForCheck();
-      }
+      },
     });
   }
 
   loadAppointments(): void {
     this.isLoading = true;
-    
+
     const params = {
       page: this.page,
       size: this.size,
-      status: this.selectedStatusFilter === 'ALL' ? undefined : this.selectedStatusFilter as AppointmentStatus,
+      status: this.selectedStatusFilter === 'ALL' ? undefined : (this.selectedStatusFilter as AppointmentStatus),
     };
 
     this.appointmentService.search(params).subscribe({
@@ -152,39 +147,24 @@ export class AppointmentListComponent implements OnInit {
   }
 
   canManageAppointment(): boolean {
-    return this.userRole === 'ADMIN' || this.userRole === 'RECEPTIONIST';
+    return canManageAppointmentForRole(this.userRole);
   }
 
   setStatusFilter(filter: 'ALL' | AppointmentStatus): void {
     this.selectedStatusFilter = filter;
-    this.page = 0; 
+    this.page = 0;
     this.loadAppointments();
   }
 
   getStatusClass(status: string): string {
-    return `status-${status.toLowerCase()}`;
+    return getAppointmentStatusClass(status);
   }
 
   getWorkflowLabel(appointment: Appointment): string {
-    switch (appointment.status) {
-      case AppointmentStatus.SCHEDULED:
-        return this.userRole === 'DOCTOR' ? 'Waiting for reception check-in' : 'Scheduled and awaiting arrival';
-      case AppointmentStatus.CHECKED_IN:
-        return this.userRole === 'DOCTOR' ? 'Ready to start consultation' : 'Vitals and doctor handoff pending';
-      case AppointmentStatus.IN_CONSULTATION:
-        return 'Consultation in progress';
-      case AppointmentStatus.COMPLETED:
-        return 'Consultation complete';
-      case AppointmentStatus.CANCELLED:
-        return 'Visit cancelled';
-      default:
-        return 'Active appointment';
-    }
+    return getAppointmentWorkflowLabel(appointment, this.userRole);
   }
 
   canDoctorStart(appointment: Appointment): boolean {
-    return (
-      appointment.status === AppointmentStatus.CHECKED_IN && (this.userRole === 'DOCTOR' || this.userRole === 'ADMIN')
-    );
+    return canDoctorStartAppointment(appointment, this.userRole);
   }
 }

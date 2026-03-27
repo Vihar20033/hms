@@ -1,7 +1,7 @@
 import { CommonModule } from '@angular/common';
-import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
 import { HttpErrorResponse } from '@angular/common/http';
-import { FormArray, FormBuilder, FormGroup, ReactiveFormsModule, ValidationErrors, Validators } from '@angular/forms';
+import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
+import { FormArray, FormBuilder, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { AutoCompleteModule } from 'primeng/autocomplete';
 import { Appointment } from '../../../../core/models/appointment.models';
@@ -14,9 +14,15 @@ import { AuthService } from '../../../../core/services/auth.service';
 import { DoctorService } from '../../../../core/services/doctor.service';
 import { PharmacyService } from '../../../../core/services/pharmacy.service';
 import { PrescriptionService } from '../../../../core/services/prescription.service';
-import { trimRequired } from '../../../../core/validators/app-validators';
 import { HeaderComponent } from '../../../../shared/components/layout/header/header.component';
 import { SidebarComponent } from '../../../../shared/components/layout/sidebar/sidebar.component';
+import {
+  calculatePrescriptionQuantity,
+  createPrescriptionForm,
+  createPrescriptionMedicineGroup,
+  getPrescriptionMedicines,
+} from './prescription-create-form';
+import { filterPrescriptionMedicines, findDoctorIdByUserEmail } from '../../utils/prescription-create.utils';
 
 @Component({
   selector: 'app-prescription-create',
@@ -47,7 +53,7 @@ export class PrescriptionCreateComponent implements OnInit {
     private route: ActivatedRoute,
     private router: Router,
     private cdr: ChangeDetectorRef,
-  ) {}
+  ) { }
 
   ngOnInit(): void {
     const paramId = this.route.snapshot.params['appointmentId'];
@@ -68,10 +74,7 @@ export class PrescriptionCreateComponent implements OnInit {
   }
 
   filterMedicines(event: { query: string }): void {
-    const query = event.query.toLowerCase();
-    this.filteredMedicines = this.availableMedicines.filter(
-      (m) => m.name.toLowerCase().includes(query) || m.medicineCode?.toLowerCase().includes(query),
-    );
+    this.filteredMedicines = filterPrescriptionMedicines(this.availableMedicines, event.query);
   }
 
   onMedicineSelect(event: { value: Medicine }, index: number): void {
@@ -91,81 +94,23 @@ export class PrescriptionCreateComponent implements OnInit {
   }
 
   private initForm(): void {
-    this.prescriptionForm = this.fb.group({
-      symptoms: ['', Validators.maxLength(1000)],
-      diagnosis: ['', [...trimRequired(2, 1000)]],
-      medicines: this.fb.array([this.createMedicineGroup()]),
-      advice: ['', Validators.maxLength(1000)],
-      notes: ['', Validators.maxLength(2000)],
-    });
+    this.prescriptionForm = createPrescriptionForm(this.fb);
   }
 
   get medicines(): FormArray {
-    return this.prescriptionForm.get('medicines') as FormArray;
+    return getPrescriptionMedicines(this.prescriptionForm);
   }
 
   createMedicineGroup(): FormGroup {
-    const group = this.fb.group(
-      {
-        medicineId: [''],
-        availableStock: [0],
-        medicineName: ['', [...trimRequired(2, 200)]],
-        dosage: ['', [...trimRequired(1, 200)]],
-        duration: ['', [...trimRequired(1, 100)]],
-        quantity: [1, [Validators.required, Validators.min(1)]],
-        instructions: ['', Validators.maxLength(500)],
-      },
-      { validators: this.stockValidator },
-    );
-
-    // Auto-calculate quantity when dosage or duration changes
+    const group = createPrescriptionMedicineGroup(this.fb);
     group.get('dosage')?.valueChanges.subscribe(() => this.calculateQuantity(group));
     group.get('duration')?.valueChanges.subscribe(() => this.calculateQuantity(group));
 
     return group;
   }
 
-  private stockValidator(group: FormGroup): ValidationErrors | null {
-    const qty = group.get('quantity')?.value;
-    const stock = group.get('availableStock')?.value;
-    const medName = group.get('medicineName')?.value;
-
-    if (medName && qty > stock && stock !== null) {
-      return { insufficientStock: { actual: stock, requested: qty } };
-    }
-    return null;
-  }
-
   private calculateQuantity(group: FormGroup): void {
-    const dosage = group.get('dosage')?.value || '';
-    const duration = group.get('duration')?.value || '';
-
-    if (!dosage || !duration) return;
-
-    // 1. Calculate doses per day
-    // Pattern: 1-1-1 or 1-0-1 or 1,1,1
-    const dosesArray = dosage.match(/\d+/g);
-    const dosesPerDay = dosesArray ? dosesArray.reduce((acc: number, val: string) => acc + parseInt(val), 0) : 0;
-
-    // 2. Calculate duration in days
-    // Pattern: 5 days or 5 or 1 week
-    const durationMatch = duration.match(/\d+/);
-    let durationInDays = durationMatch ? parseInt(durationMatch[0]) : 0;
-
-    if (duration.toLowerCase().includes('week')) {
-      durationInDays *= 7;
-    } else if (duration.toLowerCase().includes('month')) {
-      durationInDays *= 30;
-    }
-
-    if (dosesPerDay > 0 && durationInDays > 0) {
-      group.patchValue(
-        {
-          quantity: dosesPerDay * durationInDays,
-        },
-        { emitEvent: false },
-      );
-    }
+    calculatePrescriptionQuantity(group);
   }
 
   addMedicine(): void {
@@ -179,7 +124,7 @@ export class PrescriptionCreateComponent implements OnInit {
   }
 
   private loadAppointmentDetails(): void {
-        this.appointmentService.getById(this.appointmentId!).subscribe((res: ApiResponse<Appointment>) => {
+    this.appointmentService.getById(this.appointmentId!).subscribe((res: ApiResponse<Appointment>) => {
       const appt = res.data;
       if (appt) {
         this.appointment = appt;
@@ -193,10 +138,7 @@ export class PrescriptionCreateComponent implements OnInit {
           const user = this.authService.currentUser;
           if (user?.role === 'DOCTOR') {
             this.doctorService.getAll().subscribe((doctorsRes: ApiResponse<Doctor[]>) => {
-              const currentDoctor = doctorsRes.data.find((d) => d.email === user.email);
-              if (currentDoctor) {
-                this.doctorId = currentDoctor.id;
-              }
+              this.doctorId = findDoctorIdByUserEmail(doctorsRes.data, user.email);
               this.cdr.markForCheck();
             });
           }

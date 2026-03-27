@@ -81,6 +81,10 @@
   grid-template-columns: repeat(auto-fit, minmax(225px, 1fr));
   gap: 1.15rem;
   margin-bottom: 1.75rem;
+
+  @media (max-width: 640px) {
+    grid-template-columns: 1fr;
+  }
 }
 
 .stat-card {
@@ -92,6 +96,16 @@
   background: var(--bg-card);
   border: 1px solid rgba(255, 255, 255, 0.7);
   box-shadow: var(--shadow-md);
+
+  &.danger {
+    border-color: #ef4444;
+    background: rgba(239, 68, 68, 0.04);
+    
+    .stat-icon {
+      background: rgba(239, 68, 68, 0.12);
+      color: #ef4444;
+    }
+  }
 }
 
 .stat-icon {
@@ -246,17 +260,154 @@
 @media (max-width: 1024px) {
   .hero-panel {
     grid-template-columns: 1fr;
+    padding: 1.5rem;
+    gap: 1.25rem;
   }
 
   .dashboard-grid {
     grid-template-columns: 1fr;
+    gap: 1rem;
+  }
+  
+  .grid-card.full-width {
+    grid-column: auto;
   }
 }
 
 @media (max-width: 768px) {
+  .hero-panel {
+    h2 { font-size: 1.7rem; }
+    p { font-size: 0.95rem; }
+  }
+
+  .stats-grid {
+    grid-template-columns: 1fr;
+  }
+
   .chart-stage {
-    height: 260px;
-    min-height: 260px;
-    max-height: 260px;
+    height: 280px;
+    min-height: 280px;
   }
 }
+
+@media (max-width: 640px) {
+  .hero-metrics {
+     grid-template-columns: 1fr;
+  }
+
+  .hero-panel {
+    border-radius: var(--radius-xl);
+    padding: 1.25rem;
+  }
+  
+  .card-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.75rem;
+
+    .header-actions {
+      width: 100%;
+      button, a { width: 100%; justify-content: center; }
+    }
+  }
+}
+
+// Queue Specific Styles for Dashboard
+.token-badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 42px;
+  height: 34px;
+  border-radius: 12px;
+  background: rgba(15, 108, 189, 0.08);
+  color: var(--brand-primary);
+  font-family: var(--font-heading);
+  font-weight: 700;
+
+  &.emergency {
+    background: rgba(225, 29, 72, 0.12);
+    color: #e11d48;
+    border: 1px solid rgba(225, 29, 72, 0.2);
+  }
+}
+
+.patient-cell {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.avatar-mini {
+  width: 32px;
+  height: 32px;
+  border-radius: 10px;
+  background: rgba(15, 108, 189, 0.1);
+  color: var(--brand-primary);
+  display: grid;
+  place-items: center;
+  font-size: 0.85rem;
+  font-weight: 800;
+}
+
+.dept-box {
+  display: flex;
+  flex-direction: column;
+  gap: 0.15rem;
+
+  .dept-text {
+    font-weight: 800;
+    font-size: 0.9rem;
+  }
+
+  .doctor-text {
+    color: var(--text-muted);
+    font-size: 0.8rem;
+  }
+}
+
+.action-buttons {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.btn-icon {
+  width: 34px;
+  height: 34px;
+  border-radius: 10px;
+  display: grid;
+  place-items: center;
+  border: 1px solid var(--border-color);
+  background: white;
+  color: var(--text-muted);
+  cursor: pointer;
+  transition: all 0.2s;
+
+  &:hover {
+    transform: translateY(-1px);
+    border-color: var(--brand-primary);
+    color: var(--brand-primary);
+  }
+
+  &.btn-checkin:hover { color: #b45309; border-color: #f59e0b; background: rgba(245, 158, 11, 0.05); }
+  &.btn-start:hover { color: #059669; border-color: #10b981; background: rgba(16, 185, 129, 0.05); }
+  &.btn-complete:hover { color: #059669; border-color: #10b981; background: rgba(16, 185, 129, 0.05); }
+}
+
+.table-loading, .empty-list {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 3rem;
+  color: var(--text-muted);
+  
+  i { font-size: 2.5rem; margin-bottom: 1rem; }
+}
+
+.dashboard-table {
+  &.p-datatable ::v-deep .p-datatable-tbody > tr > td {
+    padding: 1rem 0.75rem;
+  }
+}
+

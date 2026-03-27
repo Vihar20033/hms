@@ -60,13 +60,24 @@
 
         <div class="stats-grid">
           <div class="stat-card">
-            <div class="stat-icon appointment">
-              <i class="ri-group-line"></i>
+            <div class="stat-icon patient">
+              <i class="ri-user-heart-line"></i>
             </div>
             <div class="stat-info">
-              <span class="label">In Queue Today</span>
-              <span class="value">{{ data.patientsInQueue }}</span>
-              <span class="trend"><i class="ri-time-line"></i> Active Now</span>
+              <span class="label">Total Patients</span>
+              <span class="value">{{ data.totalPatients }}</span>
+              <span class="trend">Hospital Archive</span>
+            </div>
+          </div>
+
+          <div class="stat-card">
+            <div class="stat-icon appointment">
+              <i class="ri-calendar-check-line"></i>
+            </div>
+            <div class="stat-info">
+              <span class="label">Today's Visits</span>
+              <span class="value">{{ data.todayAppointments }}</span>
+              <span class="trend up"><i class="ri-arrow-up-line"></i> {{ data.patientsInQueue }} waiting</span>
             </div>
           </div>
 
@@ -77,44 +88,133 @@
             <div class="stat-info">
               <span class="label">Completed Today</span>
               <span class="value">{{ data.completedConsultations }}</span>
-              <span class="trend up"><i class="ri-arrow-up-line"></i> Today</span>
+              <span class="trend up"><i class="ri-heart-pulse-line"></i> Outpatient</span>
             </div>
           </div>
 
-          @if (role === 'ADMIN') {
-            <div class="stat-card" [class.health-down]="healthStatus?.status === 'DOWN'">
-              <div class="stat-icon" [ngClass]="healthStatus?.status === 'UP' ? 'ok' : 'cancelled'">
-                <i [class]="healthStatus?.status === 'UP' ? 'ri-server-line' : 'ri-error-warning-line'"></i>
+          <div class="stat-card" [class.danger]="data.lowStockMedicines > 0">
+            <div class="stat-icon earnings">
+              <i class="ri-capsule-line"></i>
+            </div>
+            <div class="stat-info">
+              <span class="label">Low Stock items</span>
+              <span class="value">{{ data.lowStockMedicines }}</span>
+              <span class="trend" [class.down]="data.lowStockMedicines > 0">
+                <i [class]="data.lowStockMedicines > 0 ? 'ri-error-warning-line' : 'ri-checkbox-circle-line'"></i>
+                {{ data.lowStockMedicines > 0 ? 'Restock Soon' : 'Inventory Healthy' }}
+              </span>
+            </div>
+          </div>
+        </div>
+
+        <div class="dashboard-grid">
+          <!-- Today's Queue (Receptionist Feel) -->
+          <div class="grid-card full-width">
+            <div class="card-header">
+              <div>
+                <h3>Today's Patient Queue</h3>
+                <span class="subtitle">Live waiting list and active consultations</span>
               </div>
-              <div class="stat-info">
-                <span class="label">System Health</span>
-                <span class="value">{{ healthStatus?.status || '...' }}</span>
-                <span class="trend" [class.up]="healthStatus?.status === 'UP'" [class.down]="healthStatus?.status === 'DOWN'">
-                  <i [class]="healthStatus?.status === 'UP' ? 'ri-shield-check-line' : 'ri-shield-cross-line'"></i>
-                  {{ healthStatus?.status === 'UP' ? 'Operations Normal' : 'Check Actuator' }}
-                </span>
+              <div class="header-actions">
+                 <button class="btn-small" (click)="loadTodayAppointments()"><i class="ri-refresh-line"></i> Refresh</button>
               </div>
             </div>
-          }
+            <div class="card-body">
+              @if (isAppointmentsLoading) {
+                <div class="table-loading">
+                  <i class="ri-loader-4-line ri-spin"></i>
+                </div>
+              } @else if (todayAppointments.length > 0) {
+                <div class="table-responsive">
+                  <p-table [value]="todayAppointments" responsiveLayout="scroll" styleClass="data-table dashboard-table">
+                    <ng-template pTemplate="header">
+                      <tr>
+                        <th>Token</th>
+                        <th>Patient</th>
+                        <th>Dept / Doctor</th>
+                        <th>Time</th>
+                        <th>Status</th>
+                        <th>Actions</th>
+                      </tr>
+                    </ng-template>
+                    <ng-template pTemplate="body" let-apt>
+                      <tr>
+                        <td>
+                          <span class="token-badge" [class.emergency]="apt.isEmergency">
+                            {{ apt.tokenNumber || '--' }}
+                          </span>
+                        </td>
+                        <td>
+                          <div class="patient-cell">
+                            <div class="avatar-mini">{{ apt.patientName[0] }}</div>
+                            <strong>{{ apt.patientName }}</strong>
+                          </div>
+                        </td>
+                        <td>
+                          <div class="dept-box">
+                            <span class="dept-text">{{ apt.department.replace('_', ' ') | titlecase }}</span>
+                            <small class="doctor-text">Dr. {{ apt.doctorName || 'Unassigned' }}</small>
+                          </div>
+                        </td>
+                        <td>
+                           <span class="time-text">{{ apt.appointmentTime | date: 'shortTime' }}</span>
+                        </td>
+                        <td>
+                          <span class="status-badge" [ngClass]="getStatusClass(apt.status)">
+                            {{ apt.status }}
+                          </span>
+                        </td>
+                        <td>
+                          <div class="action-buttons">
+                            @if (apt.status === statusEnum.SCHEDULED && (role === 'RECEPTIONIST' || role === 'ADMIN')) {
+                               <button class="btn-icon btn-checkin" title="Check In" (click)="onCheckIn(apt.id)">
+                                 <i class="ri-user-received-line"></i>
+                               </button>
+                            }
+                            @if (apt.status === statusEnum.CHECKED_IN && role === 'DOCTOR') {
+                               <button class="btn-icon btn-start" title="Start Consultation" (click)="onStart(apt.id)">
+                                 <i class="ri-play-line"></i>
+                               </button>
+                            }
+                            @if (apt.status === statusEnum.IN_CONSULTATION && role === 'DOCTOR') {
+                               <button class="btn-icon btn-complete" title="Complete Visit" (click)="onComplete(apt.id)">
+                                 <i class="ri-checkbox-circle-line"></i>
+                               </button>
+                            }
+                            @if (apt.status === statusEnum.COMPLETED || apt.status === statusEnum.CANCELLED) {
+                               <span class="text-muted small">Consultation ended</span>
+                            }
+                          </div>
+                        </td>
+                      </tr>
+                    </ng-template>
+                  </p-table>
+                </div>
+              } @else {
+                <div class="empty-list">
+                  <i class="ri-calendar-line"></i>
+                  <p>No appointments scheduled for today yet.</p>
+                </div>
+              }
+            </div>
+          </div>
+
+          <!-- Weekly Stats Chart -->
+          <div class="grid-card full-width">
+            <div class="card-header">
+              <div>
+                <h3>Hospital Activity Analysis</h3>
+                <span class="subtitle">Weekly patient and appointment trends</span>
+              </div>
+            </div>
+            <div class="card-body">
+              <div class="chart-stage">
+                <canvas #patientChart></canvas>
+              </div>
+            </div>
+          </div>
         </div>
       }
-
-      <div class="dashboard-grid" [class.hidden]="!summary">
-        <div class="grid-card chart-container full-width">
-          <div class="card-header">
-            <div>
-              <h3>Patient Flow Analysis</h3>
-              <span class="subtitle">Weekly appointments vs new patients</span>
-            </div>
-            <span class="card-badge">7 Day Trend</span>
-          </div>
-          <div class="card-body">
-            <div class="chart-stage">
-              <canvas #patientChart></canvas>
-            </div>
-          </div>
-        </div>
-      </div>
     </main>
   </div>
 </div>

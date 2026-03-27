@@ -22,6 +22,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import com.hms.appointment.dto.request.AppointmentRequestDTO;
+import com.hms.appointment.dto.request.AppointmentSearchCriteria;
 import com.hms.appointment.dto.response.AppointmentSummaryDTO;
 import com.hms.appointment.specification.AppointmentSpecification;
 import com.hms.common.audit.AuditLogService;
@@ -34,7 +35,6 @@ import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.Arrays;
 import java.util.List;
-import com.hms.appointment.dto.request.AppointmentSearchCriteria;
 
 @Service
 @RequiredArgsConstructor
@@ -132,35 +132,6 @@ public class AppointmentServiceImpl implements AppointmentService {
         Appointment saved = appointmentRepository.save(appointment);
         auditLogService.log(getCurrentUsername(), "APPOINTMENT_CREATE", "Appointment", saved.getId().toString(),
                 "patient=" + saved.getPatient().getName());
-        return saved;
-    }
-
-    @Transactional
-    @Override
-    public Appointment createAppointment(Appointment appointment) {
-        if (appointment.getStatus() == null) {
-            appointment.setStatus(AppointmentStatus.SCHEDULED);
-        }
-
-        if (appointment.getDoctor() != null && appointment.getPatient() != null
-                && appointment.getAppointmentTime() != null) {
-            lockAndCheckAvailability(appointment.getDoctor().getId(), appointment.getPatient().getId(),
-                    appointment.getAppointmentTime(), appointment.getId(), appointment.isEmergency());
-
-            if (appointment.getTokenNumber() == null) {
-                LocalDateTime requestedTime = appointment.getAppointmentTime();
-                LocalDateTime startOfDay = requestedTime.with(LocalTime.MIN);
-                LocalDateTime endOfDay = requestedTime.with(LocalTime.MAX);
-                long todayCount = appointmentRepository.countByDoctorIdAndAppointmentTimeBetween(
-                        appointment.getDoctor().getId(), startOfDay, endOfDay);
-                String prefix = appointment.isEmergency() ? "EM" : "P";
-                appointment.setTokenNumber(String.format("%s-%03d", prefix, todayCount + 1));
-            }
-        }
-
-        Appointment saved = appointmentRepository.save(appointment);
-        auditLogService.log(getCurrentUsername(), "APPOINTMENT_CREATE_RAW", "Appointment", saved.getId().toString(),
-                "status=" + saved.getStatus());
         return saved;
     }
 
@@ -299,24 +270,6 @@ public class AppointmentServiceImpl implements AppointmentService {
             spec = spec.and(AppointmentSpecification.isEmergency(criteria.getIsEmergency()));
 
         return appointmentRepository.findAll(spec, pageable);
-    }
-
-    @Transactional(readOnly = true)
-    @Override
-    public List<Appointment> getAppointmentsByDoctor(Long doctorId) {
-        return appointmentRepository.findByDoctorId(doctorId);
-    }
-
-    @Transactional(readOnly = true)
-    @Override
-    public List<Appointment> getAppointmentsByDepartment(Department department) {
-        return appointmentRepository.findByDepartment(department);
-    }
-
-    @Transactional(readOnly = true)
-    @Override
-    public List<Appointment> getAppointmentsByPatient(Long patientId) {
-        return appointmentRepository.findByPatientId(patientId);
     }
 
     @Override

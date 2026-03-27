@@ -11,39 +11,37 @@ import {
 } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import { Chart, registerables } from 'chart.js';
+import { TableModule } from 'primeng/table';
+import { Appointment, AppointmentStatus } from '../../../core/models/appointment.models';
 import { User } from '../../../core/models/auth.models';
-import { ApiResponse, DashboardSummary, WeeklyStatistics } from '../../../core/models/common.models';
+import { ApiResponse, DashboardSummary, PagedResponse } from '../../../core/models/common.models';
+import { AdminService, HealthResponse } from '../../../core/services/admin.service';
+import { AppointmentService } from '../../../core/services/appointment.service';
 import { AuthService } from '../../../core/services/auth.service';
 import { DashboardService } from '../../../core/services/dashboard.service';
-import { AdminService, HealthResponse } from '../../../core/services/admin.service';
+import { StatusModalService } from '../../../core/services/status-modal.service';
+import { DateUtils } from '../../../core/utils/date.utils';
 import { HeaderComponent } from '../../../shared/components/layout/header/header.component';
 import { SidebarComponent } from '../../../shared/components/layout/sidebar/sidebar.component';
+import {
+  QuickAction,
+  buildDashboardQuickActions,
+  createDashboardChart,
+  getDashboardStatusClass,
+  getDashboardWorkflowLabel,
+} from '../utils/dashboard.utils';
 
 Chart.register(...registerables);
-
-interface QuickAction {
-  label: string;
-  link: string;
-  icon: string;
-}
 
 @Component({
   selector: 'app-dashboard',
   standalone: true,
-  imports: [
-    CommonModule,
-    SidebarComponent,
-    HeaderComponent,
-    RouterLink,
-    CurrencyPipe,
-    DecimalPipe,
-  ],
+  imports: [CommonModule, SidebarComponent, HeaderComponent, RouterLink, CurrencyPipe, DecimalPipe, TableModule],
   templateUrl: './dashboard.component.html',
   styleUrls: ['./dashboard.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class DashboardComponent implements OnInit, AfterViewInit, OnDestroy {
-  
   @ViewChild('patientChart') patientChartCanvas!: ElementRef<HTMLCanvasElement>;
 
   summary: DashboardSummary | null = null;
@@ -57,26 +55,33 @@ export class DashboardComponent implements OnInit, AfterViewInit, OnDestroy {
   chart: Chart | null = null;
   quickActions: QuickAction[] = [];
 
+  todayAppointments: Appointment[] = [];
+  isAppointmentsLoading = false;
+  statusEnum = AppointmentStatus;
+
   constructor(
     private dashboardService: DashboardService,
+    private appointmentService: AppointmentService,
     private authService: AuthService,
     private adminService: AdminService,
+    private statusModalService: StatusModalService,
     private cdr: ChangeDetectorRef,
   ) {}
 
   ngOnInit(): void {
-    this.authService.currentUser$.subscribe(user => {
+    this.authService.currentUser$.subscribe((user) => {
       this.currentUser = user;
       this.role = user?.role || '';
-      this.isAdminOrStaff = ['ADMIN', 'RECEPTIONIST'].includes(this.role);
-      this.quickActions = this.buildQuickActions();
-      
+      this.isAdminOrStaff = true; // Show same dashboard experience to all
+      this.quickActions = buildDashboardQuickActions(this.role);
+
       if (this.role === 'ADMIN') {
         this.loadHealth();
       }
     });
 
     this.loadSummary();
+    this.loadTodayAppointments();
   }
 
   loadSummary(): void {
@@ -85,7 +90,7 @@ export class DashboardComponent implements OnInit, AfterViewInit, OnDestroy {
         this.summary = res.data;
         this.isLoading = false;
         this.cdr.markForCheck();
-        
+
         // Short delay to ensure canvas is in DOM
         setTimeout(() => {
           if (this.summary) {
@@ -109,7 +114,7 @@ export class DashboardComponent implements OnInit, AfterViewInit, OnDestroy {
       error: () => {
         this.healthStatus = { status: 'DOWN' };
         this.cdr.markForCheck();
-      }
+      },
     });
   }
 
@@ -136,64 +141,71 @@ export class DashboardComponent implements OnInit, AfterViewInit, OnDestroy {
       this.chart.destroy();
     }
 
-    const stats: WeeklyStatistics[] = data.weeklyStats || [];
-    const labels = stats.map((s) => s.day);
-    const appointmentData = stats.map((s) => s.appointments || 0);
-    const patientData = stats.map((s) => s.patients || 0);
+    this.chart = createDashboardChart(ctx, data);
+  }
 
-    this.chart = new Chart(ctx, {
-      data: {
-        labels,
-        datasets: [
-          {
-            type: 'bar',
-            label: 'Appointments',
-            data: appointmentData,
-            backgroundColor: '#6366f188',
-            borderColor: '#6366f1',
-            borderWidth: 1,
-            borderRadius: 4,
-            barThickness: 32,
-          },
-          {
-            type: 'line',
-            label: 'New Patients',
-            data: patientData,
-            borderColor: '#10b981',
-            backgroundColor: '#10b981',
-            borderWidth: 3,
-            pointRadius: 6,
-            pointBackgroundColor: '#fff',
-            tension: 0.4,
-            fill: false,
-          },
-        ],
-      },
-      options: {
-        responsive: true,
-        maintainAspectRatio: false,
-        plugins: {
-          legend: { position: 'top' },
-          tooltip: { mode: 'index', intersect: false },
+  loadTodayAppointments(): void {
+    this.isAppointmentsLoading = true;
+    const today = DateUtils.formatDate(new Date());
+
+    this.appointmentService
+      .search({
+        start: today + 'T00:00:00',
+        end: today + 'T23:59:59',
+        size: 50, // Show all for today
+      })
+      .subscribe({
+        next: (res: ApiResponse<PagedResponse<Appointment>>) => {
+          this.todayAppointments = res.data.content;
+          this.isAppointmentsLoading = false;
+          this.cdr.markForCheck();
         },
-        scales: {
-          y: { beginAtZero: true, grid: { color: '#f3f4f6' } },
-          x: { grid: { display: false } },
-        }
+        error: () => {
+          this.isAppointmentsLoading = false;
+          this.cdr.markForCheck();
+        },
+      });
+  }
+
+  onCheckIn(id: number): void {
+    this.appointmentService.checkIn(id).subscribe({
+      next: () => {
+        this.statusModalService.showSuccess('Patient Checked In', "The patient is now in the doctor's queue.");
+        this.loadTodayAppointments();
+        this.loadSummary();
       },
+      error: (err) =>
+        this.statusModalService.showError('Check-in Failed', err.error?.message || 'Could not process check-in.'),
     });
   }
 
-  private buildQuickActions(): QuickAction[] {
-    if (this.role === 'DOCTOR') {
-      return [
-        { label: 'Open Queue', link: '/appointments', icon: 'ri-stethoscope-line' },
-        { label: 'Prescriptions', link: '/prescriptions', icon: 'ri-file-list-3-line' },
-      ];
-    }
-    return [
-      { label: 'Register Patient', link: '/patients/register', icon: 'ri-user-add-line' },
-    ];
+  onStart(id: number): void {
+    this.appointmentService.startConsultation(id).subscribe({
+      next: () => {
+        this.statusModalService.showSuccess('Consultation Started', 'The visit session is now active.');
+        this.loadTodayAppointments();
+        this.loadSummary();
+      },
+      error: (err) => this.statusModalService.showError('Error', err.error?.message || 'Could not start session.'),
+    });
+  }
+
+  onComplete(id: number): void {
+    this.appointmentService.completeConsultation(id).subscribe({
+      next: () => {
+        this.statusModalService.showSuccess('Visit Completed', 'Consultation ended successfully.');
+        this.loadTodayAppointments();
+        this.loadSummary();
+      },
+      error: (err) => this.statusModalService.showError('Error', err.error?.message || 'Could not complete visit.'),
+    });
+  }
+
+  getStatusClass(status: AppointmentStatus): string {
+    return getDashboardStatusClass(status);
+  }
+
+  getWorkflowLabel(apt: Appointment): string {
+    return getDashboardWorkflowLabel(apt);
   }
 }
-

@@ -1,4 +1,4 @@
-<aside class="sidebar">
+<aside class="sidebar" [class.open]="isOpen">
   <div class="sidebar-header">
     <div class="logo-block">
       <div class="logo-mark">
@@ -9,14 +9,23 @@
         <small>Unified care operations</small>
       </div>
     </div>
-    <div class="facility-chip">24/7 Care Hub</div>
+    <div class="header-tools">
+      <div class="facility-chip">24/7 Care Hub</div>
+      <button class="mobile-close" (click)="closeSidebar()"><i class="ri-close-line"></i></button>
+    </div>
   </div>
 
   <nav class="sidebar-nav" *ngIf="currentUser as user">
     <div class="nav-section">
       <span class="section-title">Navigation</span>
       <ng-container *ngFor="let item of menuItems">
-        <a *ngIf="canView(item, user)" [routerLink]="item.link" routerLinkActive="active" class="nav-item">
+        <a 
+          *ngIf="canView(item, user)" 
+          [routerLink]="item.title === 'Logout' ? null : item.link" 
+          routerLinkActive="active" 
+          class="nav-item" 
+          (click)="item.title === 'Logout' ? logout() : closeSidebar()"
+        >
           <i [class]="item.icon"></i>
           <span class="nav-copy">
             <strong>{{ item.title }}</strong>
@@ -28,10 +37,17 @@
   </nav>
 
   <div class="sidebar-footer">
+    <div class="close-overlay" (click)="closeSidebar()"></div>
     <div class="support-card" *ngIf="currentUser as user">
-      <span class="support-label">Signed in as</span>
-      <strong>{{ user.username }}</strong>
-      <small>{{ user.role }}</small>
+      <div class="user-id">
+        <span class="support-label">Signed in as</span>
+        <strong>{{ user.username }}</strong>
+        <small class="role-badge" [ngClass]="user.role">{{ user.role }}</small>
+      </div>
+      <button class="logout-btn" (click)="logout()" title="Secure Logout">
+        <i class="ri-logout-circle-line"></i>
+        <span>Sign Out</span>
+      </button>
     </div>
   </div>
 </aside>

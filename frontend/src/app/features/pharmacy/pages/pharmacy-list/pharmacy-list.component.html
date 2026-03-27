@@ -26,11 +26,7 @@
       </div>
       <div class="error-alert" *ngIf="errorMessage"><i class="ri-error-warning-line"></i> {{ errorMessage }}</div>
 
-      <div class="search-bar-row">
-        <button class="btn-excel" (click)="exportToExcel()" *ngIf="medicines.length > 0">
-          <i class="ri-file-excel-2-line"></i> Download Excel
-        </button>
-      </div>
+
 
       <div class="form-card form-card-elevated" *ngIf="showAddForm || showEditForm">
         <div class="form-card-header">

@@ -9,12 +9,8 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 import java.util.Optional;
 
-
 @Repository
 public interface DoctorRepository extends JpaRepository<Doctor, Long>, JpaSpecificationExecutor<Doctor> {
-
-    Optional<Doctor> findByRegistrationNumber(String registrationNumber);
-
     List<Doctor> findByDepartment(Department department);
 
     Optional<Doctor> findByUserId(Long userId);

@@ -1,10 +1,10 @@
 import { CommonModule } from '@angular/common';
 import { HttpErrorResponse } from '@angular/common/http';
 import { Component } from '@angular/core';
-import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
+import { FormBuilder, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
 import { AuthService } from '../../../../core/services/auth.service';
-import { differentFieldsValidator, matchFieldsValidator } from '../../../../core/validators/app-validators';
+import { createChangePasswordForm } from '../../auth-form.utils';
 
 @Component({
   selector: 'app-change-password',
@@ -24,19 +24,7 @@ export class ChangePasswordComponent {
     private authService: AuthService,
     private router: Router,
   ) {
-    this.passwordForm = this.fb.group(
-      {
-        currentPassword: ['', [Validators.required, Validators.minLength(6), Validators.maxLength(128)]],
-        newPassword: ['', [Validators.required, Validators.minLength(6), Validators.maxLength(128)]],
-        confirmPassword: ['', [Validators.required, Validators.minLength(6), Validators.maxLength(128)]],
-      },
-      {
-        validators: [
-          matchFieldsValidator('newPassword', 'confirmPassword'),
-          differentFieldsValidator('currentPassword', 'newPassword', 'sameAsCurrent'),
-        ],
-      },
-    );
+    this.passwordForm = createChangePasswordForm(this.fb);
   }
 
   onSubmit(): void {

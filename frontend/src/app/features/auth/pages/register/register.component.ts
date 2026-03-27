@@ -1,12 +1,12 @@
 import { CommonModule } from '@angular/common';
 import { HttpErrorResponse } from '@angular/common/http';
 import { Component } from '@angular/core';
-import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
+import { FormBuilder, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { Router, RouterLink } from '@angular/router';
 import { DropdownModule } from 'primeng/dropdown';
 import { Role } from '../../../../core/models/auth.models';
 import { AuthService } from '../../../../core/services/auth.service';
-import { USERNAME_PATTERN } from '../../../../core/validators/app-validators';
+import { buildRoleOptions, createRegisterForm, markFormControlsTouched } from '../../auth-form.utils';
 
 @Component({
   selector: 'app-register',
@@ -26,22 +26,11 @@ export class RegisterComponent {
     private router: Router,
     private authService: AuthService,
   ) {
-    this.registerForm = this.fb.group({
-      username: [
-        '',
-        [Validators.required, Validators.minLength(3), Validators.maxLength(50), Validators.pattern(USERNAME_PATTERN)],
-      ],
-      email: ['', [Validators.required, Validators.email, Validators.maxLength(100)]],
-      role: [Role.RECEPTIONIST, [Validators.required]],
-      password: ['', [Validators.required, Validators.minLength(6), Validators.maxLength(128)]],
-    });
+    this.registerForm = createRegisterForm(this.fb);
   }
 
   roleOptions(): Array<{ label: string; value: Role }> {
-    return this.roles.map((role) => ({
-      label: role.replace(/_/g, ' '),
-      value: role,
-    }));
+    return buildRoleOptions(this.roles);
   }
 
   onSubmit(): void {
@@ -61,9 +50,7 @@ export class RegisterComponent {
       });
     } else {
       this.errorMessage = 'Please fill all required fields before registering.';
-      Object.keys(this.registerForm.controls).forEach((key) => {
-        this.registerForm.controls[key].markAsTouched();
-      });
+      markFormControlsTouched(this.registerForm);
     }
   }
 }

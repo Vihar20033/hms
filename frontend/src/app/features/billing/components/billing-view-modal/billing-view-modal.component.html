@@ -1,0 +1,102 @@
+@if (billing; as data) {
+  <div
+    class="modal-overlay"
+    (click)="onClose()"
+    tabindex="0"
+    (keyup.enter)="onClose()"
+  >
+    <div class="receipt-container" (click)="$event.stopPropagation()" tabindex="0">
+      <div class="receipt-header">
+        <div class="hospital-branding">
+          <div class="logo-circle"><i class="ri-hospital-line"></i></div>
+          <div class="brand-copy">
+            <h2>Artem Health System</h2>
+            <p>Medical Center Excellence</p>
+          </div>
+        </div>
+        <div class="invoice-meta">
+          <span class="invoice-label">INVOICE</span>
+          <h3 class="invoice-number">#{{ data.invoiceNumber }}</h3>
+          <p class="invoice-date">Date: {{ data.billingDate | date: 'dd MMM yyyy' }}</p>
+        </div>
+      </div>
+
+      <div class="receipt-body">
+        <div class="patient-section">
+          <div class="info-group">
+            <small>Patient Name</small>
+            <strong>{{ data.patientName }}</strong>
+          </div>
+          <div class="info-group text-right">
+            <small>Payment Status</small>
+            <span class="receipt-status" [ngClass]="getStatusClass(data.paymentStatus)">
+              {{ data.paymentStatus }}
+            </span>
+          </div>
+        </div>
+
+        <div class="bill-items-table">
+          <div class="table-header">
+            <span class="col-desc">Description</span>
+            <span class="col-qty">Qty</span>
+            <span class="col-price">Unit Price</span>
+            <span class="col-total">Total</span>
+          </div>
+          <div class="table-body">
+            @for (item of data.items; track item.itemName) {
+              <div class="table-row">
+                <span class="col-desc">{{ item.itemName }}</span>
+                <span class="col-qty">{{ item.quantity }}</span>
+                <span class="col-price">₹{{ item.unitPrice | number: '1.2-2' }}</span>
+                <span class="col-total">₹{{ item.totalValue | number: '1.2-2' }}</span>
+              </div>
+            }
+          </div>
+        </div>
+
+        <div class="receipt-summary">
+          <div class="summary-row">
+            <span>Subtotal</span>
+            <span>₹{{ data.totalAmount | number: '1.2-2' }}</span>
+          </div>
+          @if (data.taxAmount) {
+            <div class="summary-row">
+              <span>Taxes (GST 5%)</span>
+              <span>₹{{ data.taxAmount | number: '1.2-2' }}</span>
+            </div>
+          }
+          @if (data.discountAmount) {
+            <div class="summary-row">
+              <span>Discount Applied</span>
+              <span class="discount-val">-₹{{ data.discountAmount | number: '1.2-2' }}</span>
+            </div>
+          }
+          <div class="summary-row net-total">
+            <span>Total Payable</span>
+            <span>₹{{ data.netAmount | number: '1.2-2' }}</span>
+          </div>
+        </div>
+
+        @if (data.paymentMethod) {
+          <div class="payment-info">
+            <p>
+              Payment Method: <strong>{{ data.paymentMethod }}</strong>
+            </p>
+          </div>
+        }
+
+        <div class="receipt-footer">
+          <p>Thank you for choosing Artemis Health System.</p>
+          <small>This is a computer-generated invoice and doesn't require a physical signature.</small>
+        </div>
+      </div>
+
+      <div class="receipt-actions">
+        <button class="btn-outline" (click)="onClose()">Close</button>
+        <button class="btn-primary" (click)="onExportPdf()">
+          <i class="ri-printer-line"></i> Download PDF
+        </button>
+      </div>
+    </div>
+  </div>
+}

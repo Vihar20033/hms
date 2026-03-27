@@ -1,76 +1,15 @@
-2026-03-26 10:06:22.560 | admin | USER_LOGIN | User | 6562bc81-3d8e-47f0-bb77-3a136d528d87 | role=ADMIN
-2026-03-26 10:07:34.895 | admin | DOCTOR_CREATE | Doctor | 244c014f-6c93-49a5-acf4-0a55a975f18d | name=xyz zu
-2026-03-26 10:07:37.798 | admin | DOCTOR_CREATE | Doctor | 4e0a6495-ba2f-47ca-b03f-587045db6fc8 | name=xyz zu
-2026-03-26 10:07:42.686 | admin | DOCTOR_CREATE | Doctor | 3de361cb-ffba-4ee0-9668-6a773ec7c1d7 | name=xyz zu
-2026-03-26 10:08:01.458 | admin | DOCTOR_CREATE | Doctor | 7fac3944-e533-4524-aed0-44f3df6576db | name=xyz zu
-2026-03-26 11:03:19.011 | admin | DOCTOR_DELETE | Doctor | 7fac3944-e533-4524-aed0-44f3df6576db | name=xyz zu
-2026-03-26 11:03:22.232 | admin | DOCTOR_DELETE | Doctor | 8dbcbf4b-4cec-4f0f-aeb1-58f974e2667a | name=abc xyz
-2026-03-26 12:03:45.727 | admin | USER_LOGIN | User | 1 | role=ADMIN
-2026-03-26 12:10:14.788 | admin | PATIENT_CREATE | Patient | 1 | name=Krishna
-2026-03-26 12:14:09.802 | admin | DOCTOR_CREATE | Doctor | 1 | name=Chintan Patel
-2026-03-26 12:30:37.066 | admin | USER_LOGOUT | User | 1 | 
-2026-03-26 12:31:19.727 | recep | USER_LOGIN | User | 3 | role=RECEPTIONIST
-2026-03-26 12:32:05.605 | recep | APPOINTMENT_CREATE | Appointment | 1 | patient=Krishna
-2026-03-26 12:38:29.421 | recep | APPOINTMENT_STATUS_UPDATE | Appointment | 1 | status=CHECKED_IN
-2026-03-26 12:42:13.190 | recep | USER_LOGOUT | User | 3 | 
-2026-03-26 12:42:34.373 | Chintan | USER_LOGIN | User | 2 | role=DOCTOR
-2026-03-26 12:42:56.346 | Chintan | PASSWORD_CHANGE | User | 2 | 
-2026-03-26 12:43:01.572 | Chintan | USER_LOGIN | User | 2 | role=DOCTOR
-2026-03-26 12:43:28.596 | Chintan | APPOINTMENT_STATUS_UPDATE | Appointment | 1 | status=IN_CONSULTATION
-2026-03-26 12:44:17.604 | Chintan | USER_LOGOUT | User | 2 | 
-2026-03-26 12:44:48.809 | farm | USER_LOGIN | User | 4 | role=PHARMACIST
-2026-03-26 12:45:58.972 | farm | MEDICINE_CREATE | Medicine | 1 | name=PCM
-2026-03-26 12:46:07.117 | farm | USER_LOGOUT | User | 4 | 
-2026-03-26 12:46:12.430 | Chintan | USER_LOGIN | User | 2 | role=DOCTOR
-2026-03-26 12:48:21.086 | Chintan | APPOINTMENT_STATUS_UPDATE | Appointment | 1 | status=COMPLETED
-2026-03-26 12:48:43.688 | Chintan | USER_LOGOUT | User | 2 | 
-2026-03-26 12:48:49.261 | farm | USER_LOGIN | User | 4 | role=PHARMACIST
-2026-03-26 12:48:56.639 | farm | USER_LOGOUT | User | 4 | 
-2026-03-26 12:49:02.671 | recep | USER_LOGIN | User | 3 | role=RECEPTIONIST
-2026-03-26 12:53:18.229 | recep | USER_LOGOUT | User | 3 | 
-2026-03-26 12:53:25.820 | farm | USER_LOGIN | User | 4 | role=PHARMACIST
-2026-03-26 13:00:25.345 | farm | USER_LOGOUT | User | 4 | 
-2026-03-26 13:00:29.075 | recep | USER_LOGIN | User | 3 | role=RECEPTIONIST
-2026-03-26 13:19:57.535 | recep | BILLING_CREATE | Billing | 7 | invoice=INV-F6096230
-2026-03-26 13:20:11.108 | recep | BILLING_PAYMENT_UPDATE | Billing | 7 | status=PAID
-2026-03-26 13:49:43.085 | recep | USER_LOGOUT | User | 3 | 
-2026-03-26 14:26:36.051 | admin | USER_LOGIN | User | 1 | role=ADMIN
-2026-03-26 14:55:23.284 | admin | USER_LOGOUT | User | 1 | 
-2026-03-26 14:55:53.050 | doctor | USER_LOGIN | User | 5 | role=DOCTOR
-2026-03-26 14:56:01.592 | doctor | USER_LOGOUT | User | 5 | 
-2026-03-26 14:56:06.151 | admin | USER_LOGIN | User | 1 | role=ADMIN
-2026-03-26 16:14:39.919 | admin | USER_LOGIN | User | 1 | role=ADMIN
-2026-03-26 17:28:50.652 | admin | USER_LOGIN | User | 1 | role=ADMIN
-2026-03-26 18:13:59.450 | admin | USER_LOGOUT | User | 1 | 
-2026-03-26 18:18:34.870 | admin | USER_LOGIN | User | 1 | role=ADMIN
-2026-03-26 18:29:42.344 | admin | USER_LOGOUT | User | 1 | 
-2026-03-26 18:29:48.185 | recep | USER_LOGIN | User | 3 | role=RECEPTIONIST
-2026-03-26 18:31:12.953 | recep | PATIENT_CREATE | Patient | 2 | name=Heet
-2026-03-26 18:40:25.505 | recep | APPOINTMENT_CREATE | Appointment | 2 | patient=Heet
-2026-03-26 21:27:42.737 | recep | USER_LOGIN | User | 3 | role=RECEPTIONIST
-2026-03-26 21:27:55.162 | recep | USER_LOGOUT | User | 3 | 
-2026-03-26 21:28:02.104 | admin | USER_LOGIN | User | 1 | role=ADMIN
-2026-03-26 22:31:34.267 | admin | USER_LOGIN | User | 1 | role=ADMIN
-2026-03-26 22:55:01.199 | admin | USER_LOGOUT | User | 1 | 
-2026-03-26 22:55:10.676 | admin | USER_LOGIN | User | 1 | role=ADMIN
-2026-03-26 22:55:14.772 | admin | USER_LOGOUT | User | 1 | 
-2026-03-26 22:55:30.061 | recep | USER_LOGIN | User | 3 | role=RECEPTIONIST
-2026-03-26 22:55:56.517 | recep | USER_LOGOUT | User | 3 | 
-2026-03-26 22:56:29.728 | Chintan | USER_LOGIN | User | 2 | role=DOCTOR
-2026-03-26 22:57:31.072 | Chintan | USER_LOGOUT | User | 2 | 
-2026-03-26 22:58:23.018 | farm | USER_LOGIN | User | 4 | role=PHARMACIST
-2026-03-26 23:03:03.104 | farm | USER_LOGOUT | User | 4 | 
-2026-03-26 23:08:37.462 | admin | USER_LOGIN | User | 1 | role=ADMIN
-2026-03-26 23:13:02.338 | admin | USER_LOGOUT | User | 1 | 
-2026-03-26 23:18:06.010 | admin | USER_LOGIN | User | 1 | role=ADMIN
-2026-03-26 23:18:50.167 | admin | USER_LOGIN | User | 1 | role=ADMIN
-2026-03-26 23:19:24.858 | admin | USER_LOGIN | User | 1 | role=ADMIN
-2026-03-26 23:19:36.944 | admin | USER_LOGIN | User | 1 | role=ADMIN
-2026-03-26 23:19:38.862 | admin | USER_LOGIN | User | 1 | role=ADMIN
-2026-03-26 23:19:40.610 | admin | USER_LOGIN | User | 1 | role=ADMIN
-2026-03-26 23:19:42.658 | admin | USER_LOGIN | User | 1 | role=ADMIN
-2026-03-26 23:19:44.294 | admin | USER_LOGIN | User | 1 | role=ADMIN
-2026-03-26 23:19:46.112 | admin | USER_LOGIN | User | 1 | role=ADMIN
-2026-03-26 23:19:48.072 | admin | USER_LOGIN | User | 1 | role=ADMIN
-2026-03-26 23:30:22.780 | admin | PATIENT_CREATE | Patient | 3 | name=Om
-2026-03-26 23:32:17.548 | admin | APPOINTMENT_CREATE | Appointment | 3 | patient=Om
+2026-03-27 10:25:58.636 | recep | USER_LOGIN | User | 3 | role=RECEPTIONIST
+2026-03-27 10:28:07.228 | recep | USER_LOGOUT | User | 3 | 
+2026-03-27 10:28:20.061 | recep | USER_LOGIN | User | 3 | role=RECEPTIONIST
+2026-03-27 10:29:22.650 | recep | USER_LOGOUT | User | 3 | 
+2026-03-27 10:29:27.468 | recep | USER_LOGIN | User | 3 | role=RECEPTIONIST
+2026-03-27 10:29:30.313 | recep | USER_LOGOUT | User | 3 | 
+2026-03-27 10:30:13.890 | farm | USER_LOGIN | User | 4 | role=PHARMACIST
+2026-03-27 11:21:47.127 | farm | APPOINTMENT_STATUS_UPDATE | Appointment | 3 | status=CHECKED_IN
+2026-03-27 11:25:25.411 | farm | USER_LOGOUT | User | 4 | 
+2026-03-27 11:25:35.733 | recep | USER_LOGIN | User | 3 | role=RECEPTIONIST
+2026-03-27 11:25:44.434 | recep | USER_LOGOUT | User | 3 | 
+2026-03-27 11:25:56.984 | Chintan | USER_LOGIN | User | 2 | role=DOCTOR
+2026-03-27 11:26:10.403 | Chintan | APPOINTMENT_STATUS_UPDATE | Appointment | 3 | status=IN_CONSULTATION
+2026-03-27 11:27:36.061 | Chintan | APPOINTMENT_STATUS_UPDATE | Appointment | 3 | status=COMPLETED
+2026-03-27 11:34:06.570 | Chintan | USER_LOGOUT | User | 2 | 

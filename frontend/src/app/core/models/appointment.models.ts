@@ -40,8 +40,8 @@ export interface AppointmentRequest {
   patientId: number;
   doctorId?: number;
   department: Department;
-  appointmentDate: string; // ISO date string
-  appointmentTime: string; // HH:mm
+  appointmentDate: string; 
+  appointmentTime: string; 
   reason: string;
   notes?: string;
   isEmergency: boolean;

@@ -1,48 +1,35 @@
 import { CommonModule } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
-import { Router } from '@angular/router';
-import { User, Role } from '../../../../core/models/auth.models';
-import { UserService } from '../../../../core/services/user.service';
+import { FormsModule } from '@angular/forms';
+import { InputTextModule } from 'primeng/inputtext';
+import { TableModule } from 'primeng/table';
+import { Role, User } from '../../../../core/models/auth.models';
 import { ApiResponse } from '../../../../core/models/common.models';
+import { UserService } from '../../../../core/services/user.service';
 import { HeaderComponent } from '../../../../shared/components/layout/header/header.component';
 import { SidebarComponent } from '../../../../shared/components/layout/sidebar/sidebar.component';
-import { TableModule } from 'primeng/table';
-import { InputTextModule } from 'primeng/inputtext';
-import { FormsModule } from '@angular/forms';
-import { Subject, debounceTime, distinctUntilChanged } from 'rxjs';
+import { filterUsersByTerm, getRoleBadgeClass } from '../utils/user-list.utils';
 
 @Component({
   selector: 'app-user-list',
   standalone: true,
   imports: [CommonModule, SidebarComponent, HeaderComponent, TableModule, InputTextModule, FormsModule],
   templateUrl: './user-list.component.html',
-  styleUrl: './user-list.component.scss'
+  styleUrl: './user-list.component.scss',
 })
-
 export class UserListComponent implements OnInit {
-
   users: User[] = [];
   filteredUsers: User[] = [];
   isLoading = true;
   Role = Role;
   searchTerm = '';
 
-  // Event Emitter for search input 
-  private searchSubject = new Subject<string>();
+  // Event Emitter for search input
 
-  constructor(
-    private userService: UserService,
-    private router: Router
-  ) {}
+  constructor(private userService: UserService) {}
 
   ngOnInit(): void {
     this.loadUsers();
-    this.searchSubject.pipe(
-      debounceTime(300),         // Wait for 300ms of inactivity before emitting
-      distinctUntilChanged()    // Only emit when the value changes
-    ).subscribe(term => {
-      this.filterUsers(term);
-    });
   }
 
   loadUsers(): void {
@@ -50,30 +37,21 @@ export class UserListComponent implements OnInit {
     this.userService.getAll().subscribe({
       next: (res: ApiResponse<User[]>) => {
         this.users = res.data;
-        this.filterUsers('');
+        this.filterUsers(this.searchTerm);
         this.isLoading = false;
       },
       error: () => {
         this.isLoading = false;
-      }
+      },
     });
   }
 
   onSearchChange(): void {
-    this.searchSubject.next(this.searchTerm);
+    this.filterUsers(this.searchTerm);
   }
 
   filterUsers(term: string): void {
-    if (!term) {
-      this.filteredUsers = [...this.users];
-      return;
-    }
-    const lowerTerm = term.toLowerCase();
-    this.filteredUsers = this.users.filter(u => 
-      u.username.toLowerCase().includes(lowerTerm) || 
-      u.email.toLowerCase().includes(lowerTerm) ||
-      u.role.toLowerCase().includes(lowerTerm)
-    );
+    this.filteredUsers = filterUsersByTerm(this.users, term);
   }
 
   onDelete(user: User): void {
@@ -87,19 +65,12 @@ export class UserListComponent implements OnInit {
         },
         error: (err) => {
           console.error('Error deleting user', err);
-        }
+        },
       });
     }
   }
 
   getRoleBadgeClass(role: Role): string {
-    switch (role) {
-      case Role.ADMIN: return 'badge-admin';
-      case Role.DOCTOR: return 'badge-doctor';
-      case Role.NURSE: return 'badge-nurse';
-      case Role.PHARMACIST: return 'badge-pharmacy';
-      case Role.RECEPTIONIST: return 'badge-recep';
-      default: return 'badge-default';
-    }
+    return getRoleBadgeClass(role);
   }
 }

@@ -5,10 +5,10 @@ import { TableModule } from 'primeng/table';
 import { ApiResponse } from '../../../../core/models/common.models';
 import { Prescription } from '../../../../core/models/prescription.models';
 import { AuthService } from '../../../../core/services/auth.service';
-import { ExcelExportService } from '../../../../core/services/excel-export.service';
 import { PrescriptionService } from '../../../../core/services/prescription.service';
 import { HeaderComponent } from '../../../../shared/components/layout/header/header.component';
 import { SidebarComponent } from '../../../../shared/components/layout/sidebar/sidebar.component';
+import { canManagePrescriptions } from '../../utils/prescription-list.utils';
 
 @Component({
   selector: 'app-prescription-list',
@@ -24,8 +24,7 @@ export class PrescriptionListComponent implements OnInit {
   constructor(
     private prescriptionService: PrescriptionService,
     private authService: AuthService,
-    private excelExportService: ExcelExportService,
-  ) {}
+  ) { }
 
   ngOnInit(): void {
     this.loadPrescriptions();
@@ -63,20 +62,6 @@ export class PrescriptionListComponent implements OnInit {
   }
 
   get canManage(): boolean {
-    const role = this.authService.getUserRole();
-    return role === 'ADMIN' || role === 'DOCTOR';
-  }
-
-  exportToExcel(): void {
-    const dataToExport = this.prescriptions.map((p) => ({
-      'Patient Name': p.patientName,
-      'Doctor Name': p.doctorName,
-      Diagnosis: p.diagnosis,
-      Symptoms: p.symptoms || 'N/A',
-      'Medicines Count': p.medicines?.length || 0,
-      'Treatment Date': new Date(p.createdAt || '').toLocaleDateString(),
-    }));
-
-    this.excelExportService.exportAsExcelFile(dataToExport, 'Prescriptions_Export');
+    return canManagePrescriptions(this.authService.getUserRole());
   }
 }

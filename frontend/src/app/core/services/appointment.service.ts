@@ -1,7 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { Observable, timer } from 'rxjs';
-import { retry, timeout } from 'rxjs/operators';
+import { Observable } from 'rxjs';
 import { environment } from '../../../environments/environment';
 import { Appointment, AppointmentRequest, AppointmentStatus, AppointmentSummary } from '../models/appointment.models';
 import { ApiResponse, PagedResponse } from '../models/common.models';
@@ -16,9 +15,7 @@ export class AppointmentService {
   constructor(private http: HttpClient) {}
 
   getSummary(): Observable<ApiResponse<AppointmentSummary>> {
-    return this.http
-      .get<ApiResponse<AppointmentSummary>>(`${this.apiUrl}/summary`)
-      .pipe(retry({ count: 2, delay: 1000 }), timeout(8000));
+    return this.http.get<ApiResponse<AppointmentSummary>>(`${this.apiUrl}/summary`);
   }
 
   search(params: {
@@ -40,15 +37,11 @@ export class AppointmentService {
       }
     });
 
-    return this.http
-      .get<ApiResponse<PagedResponse<Appointment>>>(this.apiUrl, { params: httpParams })
-      .pipe(retry({ count: 2, delay: 1000 }), timeout(12000));
+    return this.http.get<ApiResponse<PagedResponse<Appointment>>>(this.apiUrl, { params: httpParams });
   }
 
   getById(id: number): Observable<ApiResponse<Appointment>> {
-    return this.http
-      .get<ApiResponse<Appointment>>(`${this.apiUrl}/${id}`)
-      .pipe(retry({ count: 2, delay: 1000 }), timeout(10000));
+    return this.http.get<ApiResponse<Appointment>>(`${this.apiUrl}/${id}`);
   }
 
   getByPatientId(patientId: number): Observable<ApiResponse<PagedResponse<Appointment>>> {
@@ -56,46 +49,36 @@ export class AppointmentService {
   }
 
   create(appointment: AppointmentRequest): Observable<ApiResponse<Appointment>> {
-    return this.http
-      .post<ApiResponse<Appointment>>(this.apiUrl, appointment)
-      .pipe(retry({ count: 3, delay: (error, retryCount) => timer(Math.pow(2, retryCount) * 1000) }), timeout(10000));
+    return this.http.post<ApiResponse<Appointment>>(this.apiUrl, appointment);
   }
 
   update(id: number, appointment: AppointmentRequest): Observable<ApiResponse<Appointment>> {
-    return this.http
-      .put<ApiResponse<Appointment>>(`${this.apiUrl}/${id}`, appointment)
-      .pipe(retry({ count: 3, delay: (error, retryCount) => timer(Math.pow(2, retryCount) * 1000) }), timeout(10000));
+    return this.http.put<ApiResponse<Appointment>>(`${this.apiUrl}/${id}`, appointment);
   }
 
   updateStatus(id: number, status: AppointmentStatus): Observable<ApiResponse<Appointment>> {
-    return this.http
-      .patch<ApiResponse<Appointment>>(`${this.apiUrl}/${id}/status`, null, {
-        params: { status },
-      })
-      .pipe(retry({ count: 3, delay: (error, retryCount) => timer(Math.pow(2, retryCount) * 1000) }), timeout(10000));
+    return this.http.patch<ApiResponse<Appointment>>(`${this.apiUrl}/${id}/status`, null, {
+      params: { status },
+    });
   }
 
   checkIn(id: number): Observable<ApiResponse<Appointment>> {
-    return this.http
-      .patch<ApiResponse<Appointment>>(`${this.apiUrl}/${id}/check-in`, null)
-      .pipe(retry({ count: 3, delay: (error, retryCount) => timer(Math.pow(2, retryCount) * 1000) }), timeout(10000));
+    return this.http.patch<ApiResponse<Appointment>>(`${this.apiUrl}/${id}/check-in`, null);
   }
 
   startConsultation(id: number): Observable<ApiResponse<Appointment>> {
-    return this.http
-      .patch<ApiResponse<Appointment>>(`${this.apiUrl}/${id}/start`, null)
-      .pipe(retry({ count: 3, delay: (error, retryCount) => timer(Math.pow(2, retryCount) * 1000) }), timeout(10000));
+    return this.http.patch<ApiResponse<Appointment>>(`${this.apiUrl}/${id}/start`, null);
   }
 
   completeConsultation(id: number): Observable<ApiResponse<Appointment>> {
-    return this.http
-      .patch<ApiResponse<Appointment>>(`${this.apiUrl}/${id}/complete`, null)
-      .pipe(retry({ count: 3, delay: (error, retryCount) => timer(Math.pow(2, retryCount) * 1000) }), timeout(10000));
+    return this.http.patch<ApiResponse<Appointment>>(`${this.apiUrl}/${id}/complete`, null);
   }
 
   delete(id: number): Observable<ApiResponse<void>> {
-    return this.http
-      .delete<ApiResponse<void>>(`${this.apiUrl}/${id}`)
-      .pipe(retry({ count: 3, delay: (error, retryCount) => timer(Math.pow(2, retryCount) * 1000) }), timeout(10000));
+    return this.http.delete<ApiResponse<void>>(`${this.apiUrl}/${id}`);
+  }
+
+  getTodayAppointments(): Observable<ApiResponse<Appointment[]>> {
+    return this.http.get<ApiResponse<Appointment[]>>(`${this.apiUrl}/today`);
   }
 }

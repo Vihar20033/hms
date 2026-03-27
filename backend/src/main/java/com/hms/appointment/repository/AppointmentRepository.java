@@ -2,7 +2,6 @@ package com.hms.appointment.repository;
 
 import com.hms.appointment.entity.Appointment;
 import com.hms.common.enums.AppointmentStatus;
-import com.hms.common.enums.Department;
 import io.micrometer.common.lang.NonNull;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -11,12 +10,9 @@ import org.springframework.data.jpa.repository.EntityGraph;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.stereotype.Repository;
-
-
 import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
-
 import java.time.LocalDateTime;
 
 @Repository
@@ -38,21 +34,7 @@ public interface AppointmentRepository extends JpaRepository<Appointment, Long>,
         @NonNull
         Optional<Appointment> findById(@NonNull Long id);
 
-
-        @EntityGraph(attributePaths = {"patient", "doctor"})
-        List<Appointment> findByPatientId(Long patientId);
-
-
-        @EntityGraph(attributePaths = {"patient", "doctor"})
-        List<Appointment> findByDoctorId(Long doctorId);
-
-
-        @EntityGraph(attributePaths = {"patient", "doctor"})
-        List<Appointment> findByDepartment(Department department);
-
         long countByAppointmentTimeBetween(LocalDateTime start, LocalDateTime end);
-
-        long countByStatusAndAppointmentTimeBetween(AppointmentStatus status, LocalDateTime start, LocalDateTime end);
 
         long countByStatusAndUpdatedAtBetween(AppointmentStatus status, LocalDateTime start, LocalDateTime end);
 
@@ -65,7 +47,5 @@ public interface AppointmentRepository extends JpaRepository<Appointment, Long>,
         long countByDoctorId(Long doctorId);
 
         long countByDoctorIdAndStatus(Long doctorId, AppointmentStatus status);
-
-        long countByCreatedAtBetween(LocalDateTime start, LocalDateTime end);
 }
 

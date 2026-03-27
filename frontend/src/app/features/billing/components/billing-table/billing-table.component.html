@@ -1,0 +1,94 @@
+<div class="card p-0 table-card">
+  <p-table
+    [value]="billings"
+    [loading]="isLoading"
+    [paginator]="true"
+    [rows]="10"
+    styleClass="data-table clinical-table"
+    responsiveLayout="stack"
+  >
+    <ng-template pTemplate="header">
+      <tr>
+        <th style="width: 15%">Invoice #</th>
+        <th style="width: 20%">Patient Name</th>
+        <th style="width: 15%">Billing Date</th>
+        <th style="width: 15%">Amount</th>
+        <th style="width: 15%">Status</th>
+        <th style="width: 20%" class="text-center">Actions</th>
+      </tr>
+    </ng-template>
+
+    <ng-template pTemplate="body" let-bill>
+      <tr class="table-row-hover" (click)="onView(bill)" tabindex="0" (keyup.enter)="onView(bill)">
+        <td>
+          <span class="invoice-badge">#{{ bill.invoiceNumber }}</span>
+        </td>
+        <td>
+          <div class="patient-cell">
+            <div class="avatar-sm">{{ bill.patientName.charAt(0) }}</div>
+            <span class="patient-name">{{ bill.patientName }}</span>
+          </div>
+        </td>
+        <td>
+          <span class="date-cell">{{ bill.billingDate | date: 'dd MMM, yyyy' }}</span>
+        </td>
+        <td>
+          <span class="amount-cell">₹{{ bill.netAmount | number: '1.2-2' }}</span>
+        </td>
+        <td>
+          <span class="status-badge" [ngClass]="getStatusClass(bill.paymentStatus)">
+            <i class="ri-checkbox-blank-circle-fill"></i>
+            {{ bill.paymentStatus }}
+          </span>
+        </td>
+        <td class="action-cell">
+          <div class="action-buttons" (click)="$event.stopPropagation()" role="group">
+            <button
+              class="btn-icon view"
+              title="View Invoice"
+              (click)="onView(bill)"
+            >
+              <i class="ri-eye-line"></i>
+            </button>
+            <button
+              class="btn-icon prescribe"
+              title="{{ exportingId === bill.id ? 'Generating...' : 'Download PDF' }}"
+              (click)="onExportPdf(bill)"
+              [disabled]="exportingId === bill.id"
+            >
+              @if (exportingId !== bill.id) {
+                <i class="ri-file-pdf-line"></i>
+              } @else {
+                <i class="ri-loader-4-line spin"></i>
+              }
+            </button>
+            @if (bill.paymentStatus !== PaymentStatus.PAID && (userRole === 'ADMIN' || userRole === 'RECEPTIONIST')) {
+              <button
+                class="btn-icon complete"
+                title="Mark as Paid"
+                (click)="onUpdateStatus(bill.id, PaymentStatus.PAID)"
+              >
+                <i class="ri-checkbox-circle-line"></i>
+              </button>
+            }
+            @if (userRole === 'ADMIN') {
+              <button
+                class="btn-icon checkin"
+                title="Delete"
+                (click)="onDelete(bill.id)"
+              >
+                <i class="ri-delete-bin-line"></i>
+              </button>
+            }
+          </div>
+        </td>
+      </tr>
+    </ng-template>
+
+    <ng-template pTemplate="emptymessage">
+      <tr>
+        <td colspan="7" class="empty-msg">No invoices found.</td>
+      </tr>
+    </ng-template>
+  </p-table>
+</div>

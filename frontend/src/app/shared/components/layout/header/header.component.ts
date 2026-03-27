@@ -1,7 +1,8 @@
 import { CommonModule, DatePipe } from '@angular/common';
-import { ChangeDetectionStrategy, Component } from '@angular/core';
+import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
 import { Router } from '@angular/router';
 import { AuthService } from '../../../../core/services/auth.service';
+import { LayoutService } from '../../../../core/services/layout.service';
 
 @Component({
   selector: 'app-header',
@@ -12,7 +13,10 @@ import { AuthService } from '../../../../core/services/auth.service';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class HeaderComponent {
-  
+  private layoutService = inject(LayoutService);
+  private authService = inject(AuthService);
+  private router = inject(Router);
+
   get user() { return this.authService.currentUser; }
   today = new Date();
 
@@ -21,10 +25,9 @@ export class HeaderComponent {
     return role ? role.replaceAll('_', ' ') : 'Staff';
   }
 
-  constructor(
-    private authService: AuthService,
-    private router: Router,
-  ) {}
+  toggleSidebar(): void {
+    this.layoutService.toggleSidebar();
+  }
 
   onLogout(): void {
     this.authService.logout();

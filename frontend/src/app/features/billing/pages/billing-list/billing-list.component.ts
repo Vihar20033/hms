@@ -1,15 +1,8 @@
-import { CommonModule, DatePipe, DecimalPipe } from '@angular/common';
+import { CommonModule } from '@angular/common';
 import { HttpErrorResponse } from '@angular/common/http';
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnInit } from '@angular/core';
-import { FormArray, FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
-import { jsPDF } from 'jspdf';
-import autoTable from 'jspdf-autotable';
-import { CalendarModule } from 'primeng/calendar';
-import { DropdownModule } from 'primeng/dropdown';
-import { InputNumberModule } from 'primeng/inputnumber';
-import { InputTextModule } from 'primeng/inputtext';
-import { InputTextareaModule } from 'primeng/inputtextarea';
-import { TableModule } from 'primeng/table';
+import { FormArray, FormBuilder, FormGroup } from '@angular/forms';
+import { RouterLink } from '@angular/router';
 import { Appointment } from '../../../../core/models/appointment.models';
 import { Billing, PaymentMethod, PaymentStatus } from '../../../../core/models/billing.models';
 import { ApiResponse, PagedResponse } from '../../../../core/models/common.models';
@@ -18,28 +11,32 @@ import { AppointmentService } from '../../../../core/services/appointment.servic
 import { AuthService } from '../../../../core/services/auth.service';
 import { BillingService } from '../../../../core/services/billing.service';
 import { PatientService } from '../../../../core/services/patient.service';
+import { PdfExportService } from '../../../../core/services/pdf-export.service';
 import { StatusModalService } from '../../../../core/services/status-modal.service';
-import { futureOrTodayDateValidator, trimRequired } from '../../../../core/validators/app-validators';
 import { HeaderComponent } from '../../../../shared/components/layout/header/header.component';
 import { SidebarComponent } from '../../../../shared/components/layout/sidebar/sidebar.component';
+import { BillingFormComponent } from '../../components/billing-form/billing-form.component';
+import { BillingTableComponent } from '../../components/billing-table/billing-table.component';
+import { BillingViewModalComponent } from '../../components/billing-view-modal/billing-view-modal.component';
+import { createBillingForm, createBillingItemGroup, getBillingItems } from '../../utils/billing-form.utils';
+import {
+  buildBillingPayload,
+  buildPreviewItemGroups,
+  mapAppointmentOptions,
+} from '../../utils/billing-data.utils';
+import { getBillingItemTotal, getBillingNetTotal, getBillingSubtotal, getBillingStatusClass, buildPatientOptions, buildPaymentMethodOptions } from '../../utils/billing-data.utils';
 
 @Component({
   selector: 'app-billing-list',
   standalone: true,
   imports: [
     CommonModule,
-    ReactiveFormsModule,
-    FormsModule,
-    SidebarComponent,
+    RouterLink,
     HeaderComponent,
-    DropdownModule,
-    CalendarModule,
-    InputNumberModule,
-    InputTextModule,
-    InputTextareaModule,
-    TableModule,
-    DatePipe,
-    DecimalPipe
+    SidebarComponent,
+    BillingFormComponent,
+    BillingTableComponent,
+    BillingViewModalComponent,
   ],
   templateUrl: './billing-list.component.html',
   styleUrl: './billing-list.component.scss',
@@ -54,11 +51,12 @@ export class BillingListComponent implements OnInit {
   exportingId: number | null = null;
   selectedBilling: Billing | null = null;
   showViewModal = false;
-  
+
   billingForm!: FormGroup;
   today: Date = new Date();
 
-  paymentMethods = Object.values(PaymentMethod);
+  PaymentMethod = PaymentMethod;
+  paymentMethods = Object.values(PaymentMethod) as PaymentMethod[];
   PaymentStatus = PaymentStatus;
 
   showAutoGenerateModal = false;
@@ -79,6 +77,7 @@ export class BillingListComponent implements OnInit {
     private authService: AuthService,
     private fb: FormBuilder,
     private statusModalService: StatusModalService,
+    private pdfExportService: PdfExportService,
     private cdr: ChangeDetectorRef,
   ) {}
 
@@ -93,22 +92,9 @@ export class BillingListComponent implements OnInit {
   }
 
   initForm(): void {
-    this.billingForm = this.fb.group({
-      patientId: ['', Validators.required],
-      appointment: [null],
-      paymentMethod: ['CASH'],
-      taxAmount: [0, Validators.min(0)],
-      discountAmount: [0, Validators.min(0)],
-      notes: ['', Validators.maxLength(1000)],
-      dueDate: [null, [futureOrTodayDateValidator()]],
-      insuranceProvider: [''],
-      insuranceClaimNumber: [''],
-      insuranceAmount: [0, Validators.min(0)],
-      insuranceStatus: ['PENDING'],
-      items: this.fb.array([this.createItemGroup()]),
-    });
+    this.billingForm = createBillingForm(this.fb);
 
-    this.billingForm.get('patientId')?.valueChanges.subscribe((id) => this.onPatientSelectedForManual(id));
+    this.billingForm.get('patientId')?.valueChanges.subscribe((id: number) => this.onPatientSelectedForManual(id));
 
     this.billingForm.get('items')?.valueChanges.subscribe(() => {
       const subtotal = this.getSubtotal();
@@ -118,15 +104,11 @@ export class BillingListComponent implements OnInit {
   }
 
   createItemGroup(): FormGroup {
-    return this.fb.group({
-      itemName: ['', [...trimRequired(2, 200)]],
-      quantity: [1, [Validators.required, Validators.min(1)]],
-      unitPrice: [null, [Validators.required, Validators.min(0.01)]],
-    });
+    return createBillingItemGroup(this.fb);
   }
 
   get items(): FormArray {
-    return this.billingForm.get('items') as FormArray;
+    return getBillingItems(this.billingForm);
   }
 
   addItem(): void {
@@ -138,19 +120,17 @@ export class BillingListComponent implements OnInit {
   }
 
   getItemTotal(i: number): number {
-    const item = this.items.at(i).value;
-    return (item.quantity || 0) * (item.unitPrice || 0);
+    return getBillingItemTotal(this.items, i);
   }
 
   getSubtotal(): number {
-    return this.items.controls.reduce((sum, _, i) => sum + this.getItemTotal(i), 0);
+    return getBillingSubtotal(this.items);
   }
 
   getNetTotal(): number {
-    const sub = this.getSubtotal();
     const tax = this.billingForm.get('taxAmount')?.value || 0;
     const discount = this.billingForm.get('discountAmount')?.value || 0;
-    return sub + tax - discount;
+    return getBillingNetTotal(this.items, tax, discount);
   }
 
   loadBillings(): void {
@@ -204,9 +184,7 @@ export class BillingListComponent implements OnInit {
     if (patientId) {
       this.appointmentService.getByPatientId(patientId).subscribe({
         next: (res: ApiResponse<PagedResponse<Appointment>>) => {
-          this.patientAppointments = (res.data.content || [])
-            .filter((a: Appointment) => a.status === 'COMPLETED' || a.status === 'CHECKED_IN')
-            .map((a: Appointment) => ({ ...a, label: `${new Date(a.appointmentTime).toLocaleDateString()} - ${a.department}` }));
+          this.patientAppointments = mapAppointmentOptions(res.data.content || []);
           this.cdr.markForCheck();
         },
       });
@@ -220,9 +198,7 @@ export class BillingListComponent implements OnInit {
     if (patientId) {
       this.appointmentService.getByPatientId(patientId).subscribe({
         next: (res: ApiResponse<PagedResponse<Appointment>>) => {
-          this.manualPatientAppointments = (res.data.content || [])
-            .filter((a: Appointment) => a.status === 'COMPLETED' || a.status === 'CHECKED_IN')
-            .map((a: Appointment) => ({ ...a, label: `${new Date(a.appointmentTime).toLocaleDateString()} - ${a.department}` }));
+          this.manualPatientAppointments = mapAppointmentOptions(res.data.content || []);
           this.cdr.markForCheck();
         },
       });
@@ -242,14 +218,8 @@ export class BillingListComponent implements OnInit {
           while (this.items.length) {
             this.items.removeAt(0);
           }
-          suggested.items.forEach((item) => {
-            this.items.push(
-              this.fb.group({
-                itemName: [item.itemName, [...trimRequired(2, 200)]],
-                quantity: [item.quantity, [Validators.required, Validators.min(1)]],
-                unitPrice: [item.unitPrice, [Validators.required, Validators.min(0.01)]],
-              }),
-            );
+          buildPreviewItemGroups(suggested, (item) => createBillingItemGroup(this.fb, item)).forEach((group) => {
+            this.items.push(group);
           });
         }
         this.cdr.markForCheck();
@@ -290,33 +260,22 @@ export class BillingListComponent implements OnInit {
       this.billingForm.markAllAsTouched();
       return;
     }
-    
+
     this.isSubmitting = true;
     const formValues = this.billingForm.value;
-    const payload = {
-      ...formValues,
-      appointmentId: formValues.appointment?.id || null,
-      totalAmount: this.getSubtotal(),
-      taxAmount: this.billingForm.get('taxAmount')?.value || 0,
-      netAmount: this.getNetTotal(),
-      paymentStatus: 'UNPAID',
-      billingDate: this.formatLocalDateTime(new Date()),
-      dueDate: this.formatDate(this.billingForm.get('dueDate')?.value),
-      items: this.items.controls.map((control) => {
-        const value = control.value;
-        return {
-          ...value,
-          totalValue: (value.quantity || 0) * (value.unitPrice || 0),
-        };
-      }),
-    };
+    const taxAmount = this.billingForm.get('taxAmount')?.value || 0;
+    const discountAmount = this.billingForm.get('discountAmount')?.value || 0;
+    const payload = buildBillingPayload(formValues, this.items, taxAmount, discountAmount);
 
     this.billingService.create(payload).subscribe({
       next: (response: ApiResponse<Billing>) => {
         this.isSubmitting = false;
         this.closeForm();
         this.loadBillings();
-        this.statusModalService.showSuccess('Invoice Created', `Invoice ${response.data.invoiceNumber} has been generated.`);
+        this.statusModalService.showSuccess(
+          'Invoice Created',
+          `Invoice ${response.data.invoiceNumber} has been generated.`,
+        );
       },
       error: (error: HttpErrorResponse) => {
         this.isSubmitting = false;
@@ -335,30 +294,17 @@ export class BillingListComponent implements OnInit {
   onExportPdf(billing: Billing): void {
     this.exportingId = billing.id;
     try {
-      const doc = new jsPDF();
-      doc.text('Artemis Hospital Invoice', 20, 20);
-      doc.text(`Invoce #: ${billing.invoiceNumber}`, 20, 30);
-      doc.text(`Patient: ${billing.patientName}`, 20, 40);
-      doc.text(`Total: INR ${billing.netAmount}`, 20, 50);
-      doc.save(`invoice-${billing.invoiceNumber}.pdf`);
+      this.pdfExportService.exportInvoice(billing);
       this.exportingId = null;
     } catch (error) {
       console.error('PDF Generation Error:', error);
+      this.statusModalService.showError('Export Failed', 'Could not generate PDF invoice.');
       this.exportingId = null;
     }
   }
 
   getStatusClass(status: PaymentStatus): string {
-    const map: Record<string, string> = {
-      PAID: 'status-completed',
-      UNPAID: 'status-scheduled',
-      PENDING: 'status-scheduled',
-      PARTIAL: 'status-checked-in',
-      OVERDUE: 'status-cancelled',
-      CANCELLED: 'status-cancelled',
-      REFUNDED: 'status-checked-in',
-    };
-    return map[status] || 'status-scheduled';
+    return getBillingStatusClass(status);
   }
 
   onDelete(id: number): void {
@@ -369,28 +315,10 @@ export class BillingListComponent implements OnInit {
   }
 
   getPatientOptions() {
-    return this.patients.map(p => ({ label: p.name, value: p.id }));
+    return buildPatientOptions(this.patients);
   }
 
   getPaymentMethodOptions() {
-    return this.paymentMethods.map(m => ({ label: m, value: m }));
-  }
-
-  private formatDate(value: Date | null): string | null {
-    if (!value) return null;
-    const year = value.getFullYear();
-    const month = String(value.getMonth() + 1).padStart(2, '0');
-    const day = String(value.getDate()).padStart(2, '0');
-    return `${year}-${month}-${day}`;
-  }
-
-  private formatLocalDateTime(value: Date): string {
-    const year = value.getFullYear();
-    const month = String(value.getMonth() + 1).padStart(2, '0');
-    const day = String(value.getDate()).padStart(2, '0');
-    const hours = String(value.getHours()).padStart(2, '0');
-    const mins = String(value.getMinutes()).padStart(2, '0');
-    const secs = String(value.getSeconds()).padStart(2, '0');
-    return `${year}-${month}-${day}T${hours}:${mins}:${secs}`;
+    return buildPaymentMethodOptions(this.paymentMethods);
   }
 }

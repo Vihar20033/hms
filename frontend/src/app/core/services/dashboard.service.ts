@@ -14,8 +14,6 @@ export class DashboardService {
   constructor(private http: HttpClient) {}
 
   getSummary(): Observable<ApiResponse<DashboardSummary>> {
-    return this.http
-      .get<ApiResponse<DashboardSummary>>(`${this.apiUrl}/summary`)
-      .pipe(retry({ count: 3, delay: (error, retryCount) => timer(Math.pow(2, retryCount) * 1000) }), timeout(10000));
+    return this.http.get<ApiResponse<DashboardSummary>>(`${this.apiUrl}/summary`);
   }
 }

@@ -1,8 +1,9 @@
 import { CommonModule } from '@angular/common';
-import { ChangeDetectionStrategy, Component } from '@angular/core';
-import { RouterLink } from '@angular/router';
+import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
+import { RouterLink, RouterLinkActive } from '@angular/router';
 import { User } from '../../../../core/models/auth.models';
 import { AuthService } from '../../../../core/services/auth.service';
+import { LayoutService } from '../../../../core/services/layout.service';
 
 interface SidebarMenuItem {
   title: string;
@@ -15,12 +16,16 @@ interface SidebarMenuItem {
 @Component({
   selector: 'app-sidebar',
   standalone: true,
-  imports: [CommonModule, RouterLink],
+  imports: [CommonModule, RouterLink, RouterLinkActive],
   templateUrl: './sidebar.component.html',
   styleUrl: './sidebar.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class SidebarComponent {
+  private layoutService = inject(LayoutService);
+  private authService = inject(AuthService);
+
+  get isOpen() { return this.layoutService.isSidebarOpen(); }
   get currentUser() { return this.authService.currentUser; }
 
   menuItems: SidebarMenuItem[] = [
@@ -87,13 +92,26 @@ export class SidebarComponent {
       roles: ['ADMIN', 'RECEPTIONIST'],
       summary: 'Invoices and payments',
     },
+    {
+      title: 'Logout',
+      icon: 'ri-logout-circle-line',
+      link: '/login',
+      summary: 'Securely exit system',
+    },
   ];
-
-  constructor(private authService: AuthService) {}
 
   canView(item: SidebarMenuItem, user: User | null): boolean {
     if (!item.roles) return true;
     if (!user) return false;
     return item.roles.includes(user.role);
+  }
+
+  closeSidebar(): void {
+    this.layoutService.closeSidebar();
+  }
+
+  logout(): void {
+    this.authService.logout();
+    window.location.reload();
   }
 }

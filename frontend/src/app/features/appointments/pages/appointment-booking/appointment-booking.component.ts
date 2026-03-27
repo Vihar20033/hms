@@ -1,7 +1,7 @@
 import { CommonModule } from '@angular/common';
 import { HttpErrorResponse } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
+import { FormBuilder, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { CalendarModule } from 'primeng/calendar';
 import { DropdownModule } from 'primeng/dropdown';
@@ -17,13 +17,19 @@ import { AppointmentService } from '../../../../core/services/appointment.servic
 import { AuthService } from '../../../../core/services/auth.service';
 import { DoctorService } from '../../../../core/services/doctor.service';
 import { PatientService } from '../../../../core/services/patient.service';
-import {
-  clinicHoursValidator,
-  futureOrTodayDateValidator,
-  trimRequired,
-} from '../../../../core/validators/app-validators';
 import { HeaderComponent } from '../../../../shared/components/layout/header/header.component';
 import { SidebarComponent } from '../../../../shared/components/layout/sidebar/sidebar.component';
+import { createAppointmentBookingForm, updateAppointmentTimeValidators } from './appointment-booking-form';
+import {
+  buildDepartmentOptions,
+  buildDoctorOptions,
+  buildPatientOptions,
+  filterAvailableDoctors,
+  formatDateOnly,
+  formatTimeOnly,
+  toDateOnly,
+  toTimeOnly,
+} from './appointment-booking.utils';
 
 @Component({
   selector: 'app-appointment-booking',
@@ -43,9 +49,7 @@ import { SidebarComponent } from '../../../../shared/components/layout/sidebar/s
   templateUrl: './appointment-booking.component.html',
   styleUrl: './appointment-booking.component.scss',
 })
-
 export class AppointmentBookingComponent implements OnInit {
-
   bookingForm: FormGroup;
   patients: Patient[] = [];
   doctors: Doctor[] = [];
@@ -58,7 +62,7 @@ export class AppointmentBookingComponent implements OnInit {
   departments = BOOKABLE_DEPARTMENTS;
   selectedDepartment: string = '';
   filteredDoctors: Doctor[] = [];
-  formSubmitted = false;          // Prevents past dates from being selected
+  formSubmitted = false; // Prevents past dates from being selected
   readonly minDate = new Date();
 
   constructor(
@@ -70,32 +74,12 @@ export class AppointmentBookingComponent implements OnInit {
     private route: ActivatedRoute,
     public authService: AuthService,
   ) {
-
-    // Initialize form with validators
-    this.bookingForm = this.fb.group({
-      patientId: ['', Validators.required],
-      department: ['', Validators.required],
-      doctorId: ['', Validators.required],
-      appointmentDate: [null, [Validators.required, futureOrTodayDateValidator()]],
-      appointmentTime: [null, [Validators.required, clinicHoursValidator(8, 20)]],
-      reason: ['', [...trimRequired(3, 500)]],
-      notes: ['', Validators.maxLength(2000)],
-      isEmergency: [false],
-    });
-
-    // Listen for emergency toggle to override clinic hours
+    this.bookingForm = createAppointmentBookingForm(this.fb);
     this.bookingForm.get('isEmergency')?.valueChanges.subscribe((isEmergency) => {
-      const timeControl = this.bookingForm.get('appointmentTime');
-      if (isEmergency) {
-        timeControl?.setValidators([Validators.required]);
-      } else {
-        timeControl?.setValidators([Validators.required, clinicHoursValidator(8, 20)]);
-      }
-      timeControl?.updateValueAndValidity();
+      updateAppointmentTimeValidators(this.bookingForm, isEmergency);
     });
   }
 
-  // Initialize component and load data
   ngOnInit(): void {
     this.loadData();
     this.route.queryParams.subscribe((params) => {
@@ -129,8 +113,8 @@ export class AppointmentBookingComponent implements OnInit {
           patientId: appointment.patientId,
           department: appointment.department,
           doctorId: appointment.doctorId ?? '',
-          appointmentDate: this.toDateOnly(appointment.appointmentTime),
-          appointmentTime: this.toTimeOnly(appointment.appointmentTime),
+          appointmentDate: toDateOnly(appointment.appointmentTime),
+          appointmentTime: toTimeOnly(appointment.appointmentTime),
           reason: appointment.reason,
           notes: appointment.notes ?? '',
           isEmergency: appointment.isEmergency ?? false,
@@ -145,15 +129,7 @@ export class AppointmentBookingComponent implements OnInit {
   }
 
   filterDoctors(): void {
-    if (!this.selectedDepartment) {
-      this.filteredDoctors = [];
-    } else {
-      this.filteredDoctors = this.doctors
-        .filter((d) => d.department === this.selectedDepartment && d.isAvailable)
-        .sort((left, right) =>
-          `${left.firstName} ${left.lastName}`.localeCompare(`${right.firstName} ${right.lastName}`),
-        );
-    }
+    this.filteredDoctors = filterAvailableDoctors(this.doctors, this.selectedDepartment);
 
     if (this.filteredDoctors.length === 1) {
       this.bookingForm.patchValue({ doctorId: this.filteredDoctors[0].id });
@@ -195,8 +171,8 @@ export class AppointmentBookingComponent implements OnInit {
 
     const payload = {
       ...this.bookingForm.value,
-      appointmentDate: this.formatDate(this.bookingForm.get('appointmentDate')?.value),
-      appointmentTime: this.formatTime(this.bookingForm.get('appointmentTime')?.value),
+      appointmentDate: formatDateOnly(this.bookingForm.get('appointmentDate')?.value),
+      appointmentTime: formatTimeOnly(this.bookingForm.get('appointmentTime')?.value),
     };
 
     const request$ =
@@ -216,68 +192,14 @@ export class AppointmentBookingComponent implements OnInit {
   }
 
   patientOptions(): Array<{ label: string; value: number }> {
-    return this.patients.map((patient) => ({
-      label: `${patient.name} (ID: ${patient.id})`,
-      value: patient.id,
-    }));
+    return buildPatientOptions(this.patients);
   }
 
   departmentOptions(): Array<{ label: string; value: string }> {
-    return this.departments.map((department) => ({
-      label: this.getDepartmentLabel(department),
-      value: department,
-    }));
+    return buildDepartmentOptions(this.departments);
   }
 
   doctorOptions(): Array<{ label: string; value: number }> {
-    return this.filteredDoctors.map((doctor) => ({
-      label: `Dr. ${doctor.firstName} ${doctor.lastName} - ${doctor.specialization}`,
-      value: doctor.id,
-    }));
-  }
-
-  private formatDate(value: Date | null): string | null {
-    if (!value) {
-      return null;
-    }
-
-    const year = value.getFullYear();
-    const month = String(value.getMonth() + 1).padStart(2, '0');
-    const day = String(value.getDate()).padStart(2, '0');
-    return `${year}-${month}-${day}`;
-  }
-
-  private formatTime(value: Date | null): string | null {
-    if (!value) {
-      return null;
-    }
-
-    const hours = String(value.getHours()).padStart(2, '0');
-    const minutes = String(value.getMinutes()).padStart(2, '0');
-    return `${hours}:${minutes}`;
-  }
-
-  private toDateOnly(value: string | null | undefined): Date | null {
-    if (!value) {
-      return null;
-    }
-
-    const parsed = new Date(value);
-    return Number.isNaN(parsed.getTime()) ? null : parsed;
-  }
-
-  private toTimeOnly(value: string | null | undefined): Date | null {
-    if (!value) {
-      return null;
-    }
-
-    const parsed = new Date(value);
-    if (Number.isNaN(parsed.getTime())) {
-      return null;
-    }
-
-    const time = new Date();
-    time.setHours(parsed.getHours(), parsed.getMinutes(), 0, 0);
-    return time;
+    return buildDoctorOptions(this.filteredDoctors);
   }
 }

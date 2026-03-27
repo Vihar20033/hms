@@ -192,12 +192,6 @@ public class BillingServiceImpl implements BillingService {
         return billingMapper.toDto(billing);
     }
 
-    @Override
-    @Transactional(readOnly = true)
-    public Billing getBillingEntityForPreview(Long appointmentId) {
-        return prepareBillingFromAppointment(appointmentId);
-    }
-
     private Billing prepareBillingFromAppointment(Long appointmentId) {
         Appointment appointment = appointmentRepository.findById(appointmentId)
                 .orElseThrow(() -> new AppointmentNotFoundException("Appointment not found: " + appointmentId));

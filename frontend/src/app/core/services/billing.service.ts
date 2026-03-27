@@ -1,7 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { Observable, timer } from 'rxjs';
-import { retry, timeout } from 'rxjs/operators';
+import { Observable } from 'rxjs';
 import { environment } from '../../../environments/environment';
 import { Billing, BillingRequest, PaymentStatus } from '../models/billing.models';
 import { ApiResponse } from '../models/common.models';
@@ -13,42 +12,29 @@ export class BillingService {
   constructor(private http: HttpClient) {}
 
   getAll(): Observable<ApiResponse<Billing[]>> {
-    return this.http
-      .get<ApiResponse<Billing[]>>(this.apiUrl)
-      .pipe(retry({ count: 3, delay: (error, retryCount) => timer(Math.pow(2, retryCount) * 1000) }), timeout(10000));
+    return this.http.get<ApiResponse<Billing[]>>(this.apiUrl);
   }
 
-
   getById(id: number): Observable<ApiResponse<Billing>> {
-    return this.http
-      .get<ApiResponse<Billing>>(`${this.apiUrl}/${id}`)
-      .pipe(retry({ count: 3, delay: (error, retryCount) => timer(Math.pow(2, retryCount) * 1000) }), timeout(10000));
+    return this.http.get<ApiResponse<Billing>>(`${this.apiUrl}/${id}`);
   }
 
   getByPatient(patientId: number): Observable<ApiResponse<Billing[]>> {
-    return this.http
-      .get<ApiResponse<Billing[]>>(`${this.apiUrl}/patient/${patientId}`)
-      .pipe(retry({ count: 3, delay: (error, retryCount) => timer(Math.pow(2, retryCount) * 1000) }), timeout(10000));
+    return this.http.get<ApiResponse<Billing[]>>(`${this.apiUrl}/patient/${patientId}`);
   }
 
   create(billing: BillingRequest): Observable<ApiResponse<Billing>> {
-    return this.http
-      .post<ApiResponse<Billing>>(this.apiUrl, billing)
-      .pipe(retry({ count: 3, delay: (error, retryCount) => timer(Math.pow(2, retryCount) * 1000) }), timeout(10000));
+    return this.http.post<ApiResponse<Billing>>(this.apiUrl, billing);
   }
 
   updateStatus(id: number, status: PaymentStatus): Observable<ApiResponse<Billing>> {
-    return this.http
-      .patch<ApiResponse<Billing>>(`${this.apiUrl}/${id}/status`, null, {
-        params: { status },
-      })
-      .pipe(retry({ count: 3, delay: (error, retryCount) => timer(Math.pow(2, retryCount) * 1000) }), timeout(10000));
+    return this.http.patch<ApiResponse<Billing>>(`${this.apiUrl}/${id}/status`, null, {
+      params: { status },
+    });
   }
 
   delete(id: number): Observable<ApiResponse<void>> {
-    return this.http
-      .delete<ApiResponse<void>>(`${this.apiUrl}/${id}`)
-      .pipe(retry({ count: 3, delay: (error, retryCount) => timer(Math.pow(2, retryCount) * 1000) }), timeout(10000));
+    return this.http.delete<ApiResponse<void>>(`${this.apiUrl}/${id}`);
   }
 
   generateFromAppointment(appointmentId: number): Observable<ApiResponse<Billing>> {

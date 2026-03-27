@@ -1,7 +1,7 @@
 import { CommonModule } from '@angular/common';
 import { HttpErrorResponse } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
+import { FormBuilder, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { DropdownModule } from 'primeng/dropdown';
 import { InputNumberModule } from 'primeng/inputnumber';
@@ -12,9 +12,15 @@ import { Observable } from 'rxjs';
 import { ApiResponse } from '../../../../core/models/common.models';
 import { BloodGroup, Patient, UrgencyLevel } from '../../../../core/models/patient.models';
 import { PatientService } from '../../../../core/services/patient.service';
-import { FULL_NAME_PATTERN, PHONE_PATTERN, trimRequired } from '../../../../core/validators/app-validators';
 import { HeaderComponent } from '../../../../shared/components/layout/header/header.component';
 import { SidebarComponent } from '../../../../shared/components/layout/sidebar/sidebar.component';
+import {
+  buildBloodGroupOptions,
+  buildPatientRegistrationSuccessRoute,
+  buildUrgencyOptions,
+  createPatientRegistrationForm,
+  getUrgencyClass,
+} from '../../patient-form.utils';
 
 @Component({
   selector: 'app-patient-registration',
@@ -51,17 +57,7 @@ export class PatientRegistrationComponent implements OnInit {
     private router: Router,
     private route: ActivatedRoute,
   ) {
-    this.registrationForm = this.fb.group({
-      name: ['', [...trimRequired(2, 200), Validators.pattern(FULL_NAME_PATTERN)]],
-      email: ['', [Validators.required, Validators.email, Validators.maxLength(100)]],
-      age: [null, [Validators.required, Validators.min(0), Validators.max(120)]],
-      bloodGroup: [BloodGroup.O_POSITIVE, [Validators.required]],
-      contactNumber: ['', [Validators.required, Validators.pattern(PHONE_PATTERN)]],
-      urgencyLevel: [UrgencyLevel.LOW, [Validators.required]],
-      prescription: ['', [...trimRequired(2, 2000)]],
-      dose: ['', [...trimRequired(1, 500)]],
-      fees: [null, [Validators.required, Validators.min(0.01)]],
-    });
+    this.registrationForm = createPatientRegistrationForm(this.fb);
   }
 
   ngOnInit(): void {
@@ -114,15 +110,10 @@ export class PatientRegistrationComponent implements OnInit {
           this.successMessage = this.isEditMode
             ? 'Patient record updated successfully.'
             : 'Patient registered successfully.';
-          
+
           setTimeout(() => {
-            if (!this.isEditMode && res.data.id) {
-              this.router.navigate(['/appointments/book'], {
-                queryParams: { patientId: res.data.id },
-              });
-            } else {
-              this.router.navigate(['/patients'], { queryParams: { registered: 'true' } });
-            }
+            const nextRoute = buildPatientRegistrationSuccessRoute(this.isEditMode, res.data);
+            this.router.navigate(nextRoute.path, { queryParams: nextRoute.queryParams });
           }, 3000);
         },
         error: (err: HttpErrorResponse) => {
@@ -140,20 +131,14 @@ export class PatientRegistrationComponent implements OnInit {
   }
 
   bloodGroupOptions(): Array<{ label: string; value: string }> {
-    return this.bloodGroups.map((group) => ({
-      label: group.replace('_POSITIVE', '+').replace('_NEGATIVE', '-'),
-      value: group,
-    }));
+    return buildBloodGroupOptions(this.bloodGroups);
   }
 
   urgencyOptions(): Array<{ label: string; value: string }> {
-    return this.urgencyLevels.map((level) => ({
-      label: level,
-      value: level,
-    }));
+    return buildUrgencyOptions(this.urgencyLevels);
   }
 
   getUrgencyClass(level: string): string {
-    return `urgency-${level.toLowerCase()}`;
+    return getUrgencyClass(level);
   }
 }

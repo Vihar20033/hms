@@ -1,4 +1,4 @@
-import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { tap } from 'rxjs/operators';
@@ -6,16 +6,22 @@ import { environment } from '../../../environments/environment';
 import { AuthResponse, ChangePasswordRequest, LoginRequest, RegisterRequest, User } from '../models/auth.models';
 import { ApiResponse } from '../models/common.models';
 import { AccessFeedbackService } from './access-feedback.service';
+import {
+  buildLogoutHeaders,
+  buildSessionUser,
+  clearStoredSession,
+  persistSession,
+  readStoredUser,
+} from './auth-session.utils';
 
 @Injectable({
   providedIn: 'root',
 })
 export class AuthService {
-
   private readonly tokenStorageKey = 'hms_token';
   private readonly userStorageKey = 'hms_user';
-  
-  private currentUserSubject = new BehaviorSubject<User | null>(this.getUserFromStorage());
+
+  private currentUserSubject = new BehaviorSubject<User | null>(readStoredUser(this.userStorageKey));
   public currentUser$ = this.currentUserSubject.asObservable();
 
   public get currentUser(): User | null {
@@ -39,15 +45,9 @@ export class AuthService {
     return this.http.post<ApiResponse<AuthResponse>>(`${environment.apiUrl}/auth/login`, request).pipe(
       tap((res) => {
         if (res.success && res.data) {
-          sessionStorage.setItem(this.tokenStorageKey, res.data.token);
-          const user: User = {
-            username: res.data.username,
-            email: res.data.email,
-            role: res.data.role,
-            passwordChangeRequired: res.data.passwordChangeRequired,
-          };
+          const user = buildSessionUser(res.data);
           this.currentUserSubject.next(user);
-          sessionStorage.setItem(this.userStorageKey, JSON.stringify(user));
+          persistSession(this.tokenStorageKey, this.userStorageKey, res.data.token, user);
         }
       }),
     );
@@ -61,13 +61,17 @@ export class AuthService {
     const token = this.getToken();
     if (token) {
       this.http
-        .post(`${environment.apiUrl}/auth/logout`, {}, { 
-          headers: new HttpHeaders({ Authorization: `Bearer ${token}` }), 
-          responseType: 'text' 
-        })
+        .post(
+          `${environment.apiUrl}/auth/logout`,
+          {},
+          {
+            headers: buildLogoutHeaders(token),
+            responseType: 'text',
+          },
+        )
         .subscribe({
           next: () => this.clearSession(),
-          error: () => this.clearSession()
+          error: () => this.clearSession(),
         });
     } else {
       this.clearSession();
@@ -103,22 +107,9 @@ export class AuthService {
     }
   }
 
-  private getUserFromStorage(): User | null {
-    const user = sessionStorage.getItem(this.userStorageKey);
-    if (!user) return null;
-    try {
-      return JSON.parse(user);
-    } catch {
-      return null;
-    }
-  }
-
   private clearSession(): void {
-    sessionStorage.removeItem(this.tokenStorageKey);
-    sessionStorage.removeItem(this.userStorageKey);
+    clearStoredSession(this.tokenStorageKey, this.userStorageKey);
     this.currentUserSubject.next(null);
     this.accessFeedbackService.close();
   }
 }
-
-

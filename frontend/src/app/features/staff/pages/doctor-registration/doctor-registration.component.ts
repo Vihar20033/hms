@@ -1,7 +1,7 @@
 import { CommonModule } from '@angular/common';
 import { HttpErrorResponse } from '@angular/common/http';
 import { Component, ElementRef, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
+import { FormBuilder, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { DropdownModule } from 'primeng/dropdown';
 import { InputNumberModule } from 'primeng/inputnumber';
@@ -12,16 +12,10 @@ import { BOOKABLE_DEPARTMENTS, formatDepartmentLabel } from '../../../../core/co
 import { ApiResponse } from '../../../../core/models/common.models';
 import { Doctor, DoctorOnboardingResponse, DoctorRegistrationRequest } from '../../../../core/models/doctor.models';
 import { DoctorService } from '../../../../core/services/doctor.service';
-import {
-  LICENSE_NUMBER_PATTERN,
-  PERSON_NAME_PATTERN,
-  PHONE_PATTERN,
-  STRONG_PASSWORD_PATTERN,
-  USERNAME_PATTERN,
-  trimRequired,
-} from '../../../../core/validators/app-validators';
 import { HeaderComponent } from '../../../../shared/components/layout/header/header.component';
 import { SidebarComponent } from '../../../../shared/components/layout/sidebar/sidebar.component';
+import { createDoctorRegistrationForm } from './doctor-registration-form';
+import { buildDoctorDepartmentOptions, buildDoctorFormPatch } from './doctor-registration.utils';
 
 @Component({
   selector: 'app-doctor-registration',
@@ -59,33 +53,7 @@ export class DoctorRegistrationComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    this.doctorForm = this.fb.group({
-      username: [
-        '',
-        [Validators.required, Validators.minLength(3), Validators.maxLength(50), Validators.pattern(USERNAME_PATTERN)],
-      ],
-      temporaryPassword: [
-        'Welcome@123',
-        [
-          Validators.required,
-          Validators.minLength(8),
-          Validators.maxLength(128),
-          Validators.pattern(STRONG_PASSWORD_PATTERN),
-        ],
-      ],
-      firstName: ['', [...trimRequired(1, 50), Validators.pattern(PERSON_NAME_PATTERN)]],
-      lastName: ['', [...trimRequired(1, 50), Validators.pattern(PERSON_NAME_PATTERN)]],
-      specialization: ['', [...trimRequired(2, 100)]],
-      department: ['', Validators.required],
-      email: ['', [Validators.required, Validators.email, Validators.maxLength(100)]],
-      phoneNumber: ['', [Validators.required, Validators.pattern(PHONE_PATTERN)]],
-      consultationFee: [null, [Validators.required, Validators.min(0.01)]],
-      licenseNumber: ['', [Validators.required, Validators.maxLength(50), Validators.pattern(LICENSE_NUMBER_PATTERN)]],
-      qualification: ['', [Validators.maxLength(200)]],
-      experienceYears: [0, [Validators.min(0), Validators.max(100)]],
-      designation: ['', [Validators.maxLength(100)]],
-      bio: ['', [Validators.maxLength(1000)]],
-    });
+    this.doctorForm = createDoctorRegistrationForm(this.fb);
 
     this.route.queryParams.subscribe((params) => {
       this.doctorId = params['doctorId'] ? Number(params['doctorId']) : null;
@@ -105,10 +73,7 @@ export class DoctorRegistrationComponent implements OnInit {
   }
 
   departmentOptions(): Array<{ label: string; value: string }> {
-    return this.departments.map((department) => ({
-      label: this.getDepartmentLabel(department),
-      value: department,
-    }));
+    return buildDoctorDepartmentOptions(this.departments);
   }
 
   onSubmit(): void {
@@ -172,22 +137,7 @@ export class DoctorRegistrationComponent implements OnInit {
     this.doctorService.getById(id).subscribe({
       next: (res: ApiResponse<Doctor>) => {
         const doctor = res.data;
-        this.doctorForm.patchValue({
-          firstName: doctor.firstName,
-          lastName: doctor.lastName,
-          specialization: doctor.specialization,
-          department: doctor.department,
-          email: doctor.email,
-          phoneNumber: doctor.phoneNumber || doctor.contactNumber || '',
-          consultationFee: doctor.consultationFee,
-          licenseNumber: doctor.licenseNumber || doctor.registrationNumber,
-          qualification: doctor.qualification || '',
-          experienceYears: doctor.experienceYears ?? 0,
-          designation: doctor.designation || '',
-          bio: doctor.bio || '',
-          username: '',
-          temporaryPassword: '********',
-        });
+        this.doctorForm.patchValue(buildDoctorFormPatch(doctor));
 
         if (this.isViewMode) {
           this.doctorForm.disable();

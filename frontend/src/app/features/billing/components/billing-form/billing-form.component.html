@@ -1,0 +1,210 @@
+<div class="form-card form-card-elevated">
+  <div class="form-card-header">
+    <h3><i class="ri-bill-line"></i> New Invoice</h3>
+    <button class="icon-btn" (click)="onClose()"><i class="ri-close-line"></i></button>
+  </div>
+  <form [formGroup]="form" (ngSubmit)="onSubmit()">
+    <div class="form-shell">
+      <div class="form-section section-wide">
+        <div class="section-title">
+          <div class="section-icon"><i class="ri-file-list-3-line"></i></div>
+          <div class="section-copy">
+            <h3>Invoice Details</h3>
+            <p>Configure patient billing metadata before adding line items.</p>
+          </div>
+        </div>
+        <div class="form-grid two-column">
+          <div class="form-group">
+            <label class="form-label">Patient *</label>
+            <p-dropdown
+              formControlName="patientId"
+              [options]="getPatientOptions()"
+              optionLabel="label"
+              optionValue="value"
+              [filter]="true"
+              filterBy="label"
+              placeholder="Select patient..."
+              styleClass="w-full"
+            ></p-dropdown>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Payment Method</label>
+            <p-dropdown
+              formControlName="paymentMethod"
+              [options]="getPaymentMethodOptions()"
+              optionLabel="label"
+              optionValue="value"
+              [filter]="true"
+              filterBy="label"
+              styleClass="w-full"
+            ></p-dropdown>
+          </div>
+          @if (manualPatientAppointments.length > 0) {
+            <div class="form-group">
+              <label class="form-label">Sync Appointment (Optional)</label>
+              <p-dropdown
+                formControlName="appointment"
+                [options]="manualPatientAppointments"
+                optionLabel="label"
+                [filter]="true"
+                filterBy="label"
+                placeholder="Pull data from encounter..."
+                styleClass="w-full sync-dropdown"
+                (onChange)="onAppointmentSelected($event.value)"
+                [loading]="isSyncingItems"
+              >
+                <ng-template let-selectedItem pTemplate="selectedItem">
+                  @if (selectedItem) {
+                    <div class="sync-option">
+                      <i class="ri-history-line"></i>
+                      <span>{{ selectedItem.appointmentTime | date: 'dd MMM, HH:mm' }} - {{ selectedItem.department }}</span>
+                    </div>
+                  }
+                </ng-template>
+                <ng-template let-item pTemplate="item">
+                  <div class="sync-option">
+                    <i class="ri-history-line"></i>
+                    <span>{{ item.appointmentTime | date: 'dd MMM, HH:mm' }} - {{ item.department }}</span>
+                  </div>
+                </ng-template>
+              </p-dropdown>
+              <small class="hint-text">Selecting an appointment will auto-fill line items.</small>
+            </div>
+          }
+          <div class="form-group">
+            <label class="form-label">Tax Amount (INR)</label>
+            <p-inputNumber
+              formControlName="taxAmount"
+              mode="currency"
+              currency="INR"
+              styleClass="w-full"
+            ></p-inputNumber>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Discount Amount (INR)</label>
+            <p-inputNumber
+              formControlName="discountAmount"
+              mode="currency"
+              currency="INR"
+              styleClass="w-full"
+            ></p-inputNumber>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Due Date</label>
+            <p-calendar
+              formControlName="dueDate"
+              [showIcon]="true"
+              styleClass="w-full"
+              dateFormat="dd/mm/yy"
+              [minDate]="today"
+            ></p-calendar>
+          </div>
+        </div>
+        <div class="form-group full-width">
+          <label class="form-label">Invoice Notes</label>
+          <textarea
+            pInputTextarea
+            formControlName="notes"
+            rows="3"
+            class="w-full"
+            placeholder="Additional instructions or notes..."
+          ></textarea>
+        </div>
+      </div>
+
+      <div class="form-section billing-items-section">
+        <div class="section-title">
+          <div class="section-icon"><i class="ri-shopping-cart-2-line"></i></div>
+          <div class="section-copy">
+            <h3>Billing Line Items</h3>
+            <p>Define services, procedures, or medicines for this invoice.</p>
+          </div>
+          <button type="button" class="btn-sm-outline" (click)="onAddItem()">
+            <i class="ri-add-line"></i> Add Item
+          </button>
+        </div>
+
+        <div formArrayName="items" class="items-array">
+          @for (item of items.controls; track i; let i = $index) {
+            <div [formGroupName]="i" class="item-row">
+              <div class="item-fields">
+                <div class="form-group flex-3">
+                  <label class="compact-label" *ngIf="i === 0">Description</label>
+                  <input
+                    type="text"
+                    pInputText
+                    formControlName="itemName"
+                    placeholder="E.g. Consultation Fee"
+                    class="w-full"
+                  />
+                </div>
+                <div class="form-group flex-1">
+                  <label class="compact-label" *ngIf="i === 0">Qty</label>
+                  <p-inputNumber
+                    formControlName="quantity"
+                    [showButtons]="true"
+                    buttonLayout="horizontal"
+                    spinnerMode="horizontal"
+                    decrementButtonClass="p-button-secondary"
+                    incrementButtonClass="p-button-secondary"
+                    incrementButtonIcon="ri-add-line"
+                    decrementButtonIcon="ri-subtract-line"
+                    styleClass="compact-input"
+                  ></p-inputNumber>
+                </div>
+                <div class="form-group flex-2">
+                  <label class="compact-label" *ngIf="i === 0">Rate</label>
+                  <p-inputNumber
+                    formControlName="unitPrice"
+                    mode="currency"
+                    currency="INR"
+                    styleClass="compact-input w-full"
+                  ></p-inputNumber>
+                </div>
+                <div class="item-total-display">
+                  <span class="curr">₹</span>
+                  <span class="val">{{ getItemTotal(i) | number: '1.2-2' }}</span>
+                </div>
+              </div>
+              <button
+                type="button"
+                class="btn-icon-danger"
+                (click)="onRemoveItem(i)"
+                *ngIf="items.length > 1"
+              >
+                <i class="ri-delete-bin-7-line"></i>
+              </button>
+            </div>
+          }
+        </div>
+
+        <div class="billing-summary-footer">
+          <div class="summary-details">
+            <div class="summary-line">
+              <span>Subtotal</span>
+              <strong>₹{{ getSubtotal() | number: '1.2-2' }}</strong>
+            </div>
+            <div class="summary-line net-line">
+              <span>Final Invoice Total</span>
+              <strong>₹{{ getNetTotal() | number: '1.2-2' }}</strong>
+            </div>
+          </div>
+          <div class="form-actions">
+            <button type="button" class="btn-outline" (click)="onClose()">Cancel</button>
+            <button
+              type="submit"
+              class="btn-primary"
+              [disabled]="form.invalid || isSubmitting"
+            >
+              @if (isSubmitting) {
+                <i class="ri-loader-4-line spin"></i> Processing...
+              } @else {
+                <i class="ri-check-line"></i> Finalize Invoice
+              }
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </form>
+</div>

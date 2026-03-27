@@ -3,9 +3,7 @@ package com.hms.billing.service;
 import com.hms.billing.dto.request.BillingRequestDTO;
 import com.hms.billing.dto.response.BillingResponseDTO;
 import com.hms.common.enums.PaymentStatus;
-import com.hms.billing.entity.Billing;
 import java.util.List;
-
 
 public interface BillingService {
     BillingResponseDTO createBilling(BillingRequestDTO dto);
@@ -25,6 +23,5 @@ public interface BillingService {
 
     BillingResponseDTO generateBillingFromAppointment(Long appointmentId);
     BillingResponseDTO calculatePreviewBilling(Long appointmentId);
-    Billing getBillingEntityForPreview(Long appointmentId);
 }
 
