@@ -7,54 +7,69 @@ import { AuthResponse, ChangePasswordRequest, LoginRequest, RegisterRequest, Use
 import { ApiResponse } from '../models/common.models';
 import { AccessFeedbackService } from './access-feedback.service';
 import {
-  buildLogoutHeaders,
-  buildSessionUser,
-  clearStoredSession,
-  persistSession,
-  readStoredUser,
+  buildLogoutHeaders,   // Build logout headers
+  buildSessionUser,     // Build user from auth response
+  clearStoredSession, // Clear user from session storage
+  persistSession,   // Save user to session storage
+  readStoredUser, // Get user from session storage
 } from './auth-session.utils';
 
 @Injectable({
   providedIn: 'root',
 })
 export class AuthService {
-  private readonly tokenStorageKey = 'hms_token';
-  private readonly userStorageKey = 'hms_user';
+  private readonly tokenKey = 'hms_token';
+  private readonly refreshKey = 'hms_refresh_token';
+  private readonly userKey = 'hms_user';
 
-  private currentUserSubject = new BehaviorSubject<User | null>(readStoredUser(this.userStorageKey));
+  private currentUserSubject = new BehaviorSubject<User | null>(readStoredUser(this.userKey));
   public currentUser$ = this.currentUserSubject.asObservable();
-
-  public get currentUser(): User | null {
-    return this.currentUserSubject.value;
-  }
 
   constructor(
     private http: HttpClient,
     private accessFeedbackService: AccessFeedbackService,
   ) {
-    if (!this.currentUserSubject.value || !this.getToken()) {
+    if (!this.currentUserValue || !this.getToken()) {
       this.clearSession();
     }
   }
 
-  public get currentUserValue(): User | null {
+  get currentUserValue(): User | null {
     return this.currentUserSubject.value;
+  }
+
+  get currentUser(): User | null {
+    return this.currentUserValue;
   }
 
   login(request: LoginRequest): Observable<ApiResponse<AuthResponse>> {
     return this.http.post<ApiResponse<AuthResponse>>(`${environment.apiUrl}/auth/login`, request).pipe(
       tap((res) => {
         if (res.success && res.data) {
-          const user = buildSessionUser(res.data);
-          this.currentUserSubject.next(user);
-          persistSession(this.tokenStorageKey, this.userStorageKey, res.data.token, user);
+          this.handleAuthSuccess(res.data);
         }
       }),
     );
   }
 
+  refreshToken(): Observable<ApiResponse<AuthResponse>> {
+    const refreshToken = this.getRefreshToken();
+    return this.http
+      .post<ApiResponse<AuthResponse>>(`${environment.apiUrl}/auth/refresh`, {
+        refreshToken,
+      })
+      .pipe(
+        tap((res) => {
+          if (res.success && res.data) {
+            this.handleAuthSuccess(res.data);
+          }
+        }),
+      );
+  }
+
   register(request: RegisterRequest): Observable<ApiResponse<string>> {
-    return this.http.post<ApiResponse<string>>(`${environment.apiUrl}/auth/register`, request);
+    return this.http.post<ApiResponse<string>>
+    (`${environment.apiUrl}/auth/register`, request);
   }
 
   logout(): void {
@@ -83,32 +98,42 @@ export class AuthService {
   }
 
   getToken(): string | null {
-    return sessionStorage.getItem(this.tokenStorageKey);
+    return sessionStorage.getItem(this.tokenKey);
+  }
+
+  getRefreshToken(): string | null {
+    return sessionStorage.getItem(this.refreshKey);
   }
 
   getUserRole(): string | null {
-    return this.currentUserSubject.value?.role || null;
+    return this.currentUserValue?.role || null;
   }
 
   isAuthenticated(): boolean {
-    return !!this.getToken() && !!this.currentUserSubject.value;
+    return !!this.getToken() && !!this.currentUserValue;
   }
 
   isPasswordChangeRequired(): boolean {
-    return !!this.currentUserSubject.value?.passwordChangeRequired;
+    return !!this.currentUserValue?.passwordChangeRequired;
   }
 
   markPasswordChanged(): void {
-    const user = this.currentUserSubject.value;
+    const user = this.currentUserValue;
     if (user) {
       user.passwordChangeRequired = false;
-      this.currentUserSubject.next(user);
-      sessionStorage.setItem(this.userStorageKey, JSON.stringify(user));
+      this.currentUserSubject.next({ ...user });
+      sessionStorage.setItem(this.userKey, JSON.stringify(user));
     }
   }
 
+  private handleAuthSuccess(data: AuthResponse): void {
+    const user = buildSessionUser(data);
+    this.currentUserSubject.next(user);
+    persistSession(this.tokenKey, this.refreshKey, this.userKey, data.token, data.refreshToken, user);
+  }
+
   private clearSession(): void {
-    clearStoredSession(this.tokenStorageKey, this.userStorageKey);
+    clearStoredSession(this.tokenKey, this.refreshKey, this.userKey);
     this.currentUserSubject.next(null);
     this.accessFeedbackService.close();
   }

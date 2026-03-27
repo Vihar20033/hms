@@ -23,13 +23,22 @@ export function readStoredUser(storageKey: string): User | null {
   }
 }
 
-export function persistSession(tokenKey: string, userKey: string, token: string, user: User): void {
+export function persistSession(
+  tokenKey: string,
+  refreshKey: string,
+  userKey: string,
+  token: string,
+  refreshToken: string,
+  user: User,
+): void { 
   sessionStorage.setItem(tokenKey, token);
+  sessionStorage.setItem(refreshKey, refreshToken);
   sessionStorage.setItem(userKey, JSON.stringify(user));
 }
 
-export function clearStoredSession(tokenKey: string, userKey: string): void {
+export function clearStoredSession(tokenKey: string, refreshKey: string, userKey: string): void {
   sessionStorage.removeItem(tokenKey);
+  sessionStorage.removeItem(refreshKey);
   sessionStorage.removeItem(userKey);
 }
 

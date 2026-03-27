@@ -12,6 +12,7 @@ public class SecurityUtils {
             return "system";
         }
 
+        // Principal represent who logged in -> Can be full user object or anonymousUser
         Object principal = authentication.getPrincipal();
         if (principal instanceof UserDetails) {
             return ((UserDetails) principal).getUsername();

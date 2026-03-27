@@ -59,8 +59,10 @@ public class DashboardServiceImpl implements DashboardService {
                 long totalConsultations = appointmentRepository.countByStatus(AppointmentStatus.COMPLETED);
 
                 List<WeeklyStatisticsDTO> weeklyStats = new ArrayList<>();
-                for (int i = 6; i >= 0; i--) {
-                        LocalDate date = LocalDate.now().minusDays(i);
+                // Generate a 7-day window centered on today (-3 to +3 days)
+                // This shows recent trends and upcoming bookings (total 7 days)
+                for (int i = -3; i <= 3; i++) {
+                        LocalDate date = LocalDate.now().plusDays(i);
                         LocalDateTime start = LocalDateTime.of(date, LocalTime.MIN);
                         LocalDateTime end = LocalDateTime.of(date, LocalTime.MAX);
 

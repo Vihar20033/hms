@@ -53,17 +53,14 @@ export class AppointmentBookingComponent implements OnInit {
   bookingForm: FormGroup;
   patients: Patient[] = [];
   doctors: Doctor[] = [];
+  filteredDoctors: Doctor[] = [];
   isLoading = false;
   errorMessage = '';
   isEditMode = false;
   appointmentId: number | null = null;
-  currentUser$ = this.authService.currentUser$;
-
-  departments = BOOKABLE_DEPARTMENTS;
-  selectedDepartment: string = '';
-  filteredDoctors: Doctor[] = [];
-  formSubmitted = false; // Prevents past dates from being selected
+  formSubmitted = false;
   readonly minDate = new Date();
+  readonly departments = BOOKABLE_DEPARTMENTS;
 
   constructor(
     private fb: FormBuilder,
@@ -75,13 +72,35 @@ export class AppointmentBookingComponent implements OnInit {
     public authService: AuthService,
   ) {
     this.bookingForm = createAppointmentBookingForm(this.fb);
-    this.bookingForm.get('isEmergency')?.valueChanges.subscribe((isEmergency) => {
-      updateAppointmentTimeValidators(this.bookingForm, isEmergency);
-    });
   }
 
   ngOnInit(): void {
-    this.loadData();
+    this.initializeFormListeners();
+    this.loadInitialData();
+    this.processQueryParams();
+  }
+
+  private initializeFormListeners(): void {
+    // React to Emergency toggle
+    this.bookingForm.get('isEmergency')?.valueChanges.subscribe((isEmergency) => {
+      updateAppointmentTimeValidators(this.bookingForm, isEmergency);
+    });
+
+    // React to Department changes
+    this.bookingForm.get('department')?.valueChanges.subscribe((dept) => {
+      this.filterDoctors(dept);
+    });
+  }
+
+  private loadInitialData(): void {
+    this.patientService.getAll().subscribe((res) => (this.patients = res.data));
+    this.doctorService.getAll().subscribe((res) => {
+      this.doctors = res.data;
+      this.filterDoctors(this.bookingForm.get('department')?.value);
+    });
+  }
+
+  private processQueryParams(): void {
     this.route.queryParams.subscribe((params) => {
       if (params['patientId']) {
         this.bookingForm.patchValue({ patientId: Number(params['patientId']) });
@@ -89,35 +108,25 @@ export class AppointmentBookingComponent implements OnInit {
       if (params['appointmentId']) {
         this.isEditMode = true;
         this.appointmentId = Number(params['appointmentId']);
-        this.loadAppointmentForEdit(Number(params['appointmentId']));
+        this.loadAppointmentForEdit(this.appointmentId);
       }
     });
   }
 
-  loadData(): void {
-    this.patientService.getAll().subscribe((res: ApiResponse<Patient[]>) => (this.patients = res.data));
-    this.doctorService.getAll().subscribe((res: ApiResponse<Doctor[]>) => {
-      this.doctors = res.data;
-      this.filterDoctors();
-    });
-  }
-
-  loadAppointmentForEdit(id: number): void {
+  private loadAppointmentForEdit(id: number): void {
     this.isLoading = true;
     this.appointmentService.getById(id).subscribe({
       next: (res: ApiResponse<Appointment>) => {
-        const appointment = res.data;
-        this.selectedDepartment = appointment.department;
-        this.filterDoctors();
+        const appt = res.data;
         this.bookingForm.patchValue({
-          patientId: appointment.patientId,
-          department: appointment.department,
-          doctorId: appointment.doctorId ?? '',
-          appointmentDate: toDateOnly(appointment.appointmentTime),
-          appointmentTime: toTimeOnly(appointment.appointmentTime),
-          reason: appointment.reason,
-          notes: appointment.notes ?? '',
-          isEmergency: appointment.isEmergency ?? false,
+          patientId: appt.patientId,
+          department: appt.department,
+          doctorId: appt.doctorId ?? '',
+          appointmentDate: toDateOnly(appt.appointmentTime),
+          appointmentTime: toTimeOnly(appt.appointmentTime),
+          reason: appt.reason,
+          notes: appt.notes ?? '',
+          isEmergency: appt.isEmergency ?? false,
         });
         this.isLoading = false;
       },
@@ -128,47 +137,32 @@ export class AppointmentBookingComponent implements OnInit {
     });
   }
 
-  filterDoctors(): void {
-    this.filteredDoctors = filterAvailableDoctors(this.doctors, this.selectedDepartment);
-
-    if (this.filteredDoctors.length === 1) {
-      this.bookingForm.patchValue({ doctorId: this.filteredDoctors[0].id });
-    }
-  }
-
-  onDepartmentChange(dept: string | null): void {
-    const selectedDept = dept ?? '';
-    this.selectedDepartment = selectedDept;
+  filterDoctors(department: string): void {
+    this.filteredDoctors = filterAvailableDoctors(this.doctors, department);
     this.errorMessage = '';
-    this.bookingForm.patchValue({ department: selectedDept });
-    this.bookingForm.patchValue({ doctorId: '' });
-    this.filterDoctors();
 
-    if (selectedDept && this.filteredDoctors.length === 0) {
-      this.errorMessage = `No active doctors are available for ${this.getDepartmentLabel(selectedDept)}. Add a doctor in Staff or choose another department.`;
+    // Auto-select if only one doctor
+    if (this.filteredDoctors.length === 1) {
+      this.bookingForm.get('doctorId')?.setValue(this.filteredDoctors[0].id);
+    } else if (!this.isEditMode) {
+      this.bookingForm.get('doctorId')?.setValue('');
     }
-  }
 
-  getDepartmentLabel(department: string): string {
-    return formatDepartmentLabel(department);
+    // Show warning if no doctors available
+    if (department && this.filteredDoctors.length === 0) {
+      this.errorMessage = `No doctors available for ${formatDepartmentLabel(department)}.`;
+    }
   }
 
   onSubmit(): void {
     this.formSubmitted = true;
-    this.errorMessage = '';
-
     if (this.bookingForm.invalid) {
       this.bookingForm.markAllAsTouched();
-      if (this.bookingForm.get('doctorId')?.invalid && this.selectedDepartment && this.filteredDoctors.length === 0) {
-        this.errorMessage = 'Please add a doctor for this department before booking the appointment.';
-      } else {
-        this.errorMessage = 'Please fill all required appointment details before confirming.';
-      }
+      this.errorMessage = 'Please complete all required fields.';
       return;
     }
 
     this.isLoading = true;
-
     const payload = {
       ...this.bookingForm.value,
       appointmentDate: formatDateOnly(this.bookingForm.get('appointmentDate')?.value),
@@ -177,13 +171,11 @@ export class AppointmentBookingComponent implements OnInit {
 
     const request$ =
       this.isEditMode && this.appointmentId
-        ? this.appointmentService.update(this.appointmentId!, payload)
+        ? this.appointmentService.update(this.appointmentId, payload)
         : this.appointmentService.create(payload);
 
     request$.subscribe({
-      next: () => {
-        this.router.navigate(['/appointments']);
-      },
+      next: () => this.router.navigate(['/appointments']),
       error: (err: HttpErrorResponse) => {
         this.errorMessage = err.error?.message || 'Booking failed. Please try again.';
         this.isLoading = false;
@@ -191,15 +183,9 @@ export class AppointmentBookingComponent implements OnInit {
     });
   }
 
-  patientOptions(): Array<{ label: string; value: number }> {
-    return buildPatientOptions(this.patients);
-  }
-
-  departmentOptions(): Array<{ label: string; value: string }> {
-    return buildDepartmentOptions(this.departments);
-  }
-
-  doctorOptions(): Array<{ label: string; value: number }> {
-    return buildDoctorOptions(this.filteredDoctors);
-  }
+  // Helpers for template
+  get patientOptions() { return buildPatientOptions(this.patients); }
+  get departmentOptions() { return buildDepartmentOptions(this.departments); }
+  get doctorOptions() { return buildDoctorOptions(this.filteredDoctors); }
+  getDepartmentLabel = (dept: string) => formatDepartmentLabel(dept);
 }

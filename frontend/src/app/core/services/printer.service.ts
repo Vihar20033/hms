@@ -12,12 +12,8 @@ export class PrinterService {
   printDocument(title: string): void {
     const originalTitle = document.title;
     document.title = title;
-    
-    // Small timeout to ensure title is applied in some browsers
-    setTimeout(() => {
-      window.print();
-      document.title = originalTitle;
-    }, 10);
+    window.print();
+    document.title = originalTitle;
   }
   
   generateMedicalRecordTitle(recordType: string, id: string, patientName: string): string {

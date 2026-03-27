@@ -37,7 +37,7 @@
                   <p-dropdown
                     inputId="patientId"
                     formControlName="patientId"
-                    [options]="patientOptions()"
+                    [options]="patientOptions"
                     optionLabel="label"
                     optionValue="value"
                     placeholder="Choose a patient..."
@@ -59,14 +59,13 @@
                   <p-dropdown
                     inputId="department"
                     formControlName="department"
-                    [options]="departmentOptions()"
+                    [options]="departmentOptions"
                     optionLabel="label"
                     optionValue="value"
                     placeholder="Choose a department..."
                     [filter]="true"
                     filterBy="label"
                     styleClass="w-full"
-                    (onChange)="onDepartmentChange($event.value)"
                   ></p-dropdown>
                   <div
                     class="error-msg"
@@ -82,14 +81,14 @@
                   <p-dropdown
                     inputId="doctorId"
                     formControlName="doctorId"
-                    [options]="doctorOptions()"
+                    [options]="doctorOptions"
                     optionLabel="label"
                     optionValue="value"
-                    [disabled]="!selectedDepartment || filteredDoctors.length === 0"
+                    [disabled]="!bookingForm.get('department')?.value || filteredDoctors.length === 0"
                     [filter]="true"
                     filterBy="label"
                     [placeholder]="
-                      !selectedDepartment
+                      !bookingForm.get('department')?.value
                         ? 'Select a department first'
                         : filteredDoctors.length === 0
                           ? 'No doctors available'
@@ -97,12 +96,12 @@
                     "
                     styleClass="w-full"
                   ></p-dropdown>
-                  <small class="helper-text" *ngIf="selectedDepartment && filteredDoctors.length > 0">
+                  <small class="helper-text" *ngIf="bookingForm.get('department')?.value && filteredDoctors.length > 0">
                     {{ filteredDoctors.length }} doctor{{ filteredDoctors.length > 1 ? 's are' : ' is' }} available in
                     this department
                   </small>
-                  <small class="helper-text warning" *ngIf="selectedDepartment && filteredDoctors.length === 0">
-                    No doctors found for {{ getDepartmentLabel(selectedDepartment) }}.
+                  <small class="helper-text warning" *ngIf="bookingForm.get('department')?.value && filteredDoctors.length === 0">
+                    No doctors found for {{ getDepartmentLabel(bookingForm.get('department')?.value) }}.
                   </small>
                   <div
                     class="error-msg"

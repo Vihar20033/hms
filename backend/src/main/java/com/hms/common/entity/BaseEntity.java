@@ -3,6 +3,7 @@ package com.hms.common.entity;
 import jakarta.persistence.*;
 import lombok.*;
 import lombok.experimental.SuperBuilder;
+import org.hibernate.annotations.SoftDelete;
 
 @MappedSuperclass
 @Getter
@@ -10,6 +11,7 @@ import lombok.experimental.SuperBuilder;
 @SuperBuilder
 @NoArgsConstructor
 @AllArgsConstructor
+@SoftDelete
 public abstract class BaseEntity {
 
     @Id

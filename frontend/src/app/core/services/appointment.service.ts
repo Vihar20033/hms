@@ -30,7 +30,7 @@ export class AppointmentService {
     end?: string;
     isEmergency?: boolean;
   }): Observable<ApiResponse<PagedResponse<Appointment>>> {
-    const httpParams: any = {};
+    const httpParams: any  = {};
     Object.keys(params).forEach(key => {
       if ((params as any)[key] !== undefined && (params as any)[key] !== null) {
         httpParams[key] = (params as any)[key].toString();

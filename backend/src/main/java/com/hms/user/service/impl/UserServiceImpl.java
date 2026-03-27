@@ -43,7 +43,6 @@ public class UserServiceImpl implements UserService {
     public void deleteUser(Long id) {
         User user = userRepository.findById(id)
                 .orElseThrow(() -> new UserNotFoundException("User not found", id.toString()));
-
         userRepository.delete(user);
     }
 }
