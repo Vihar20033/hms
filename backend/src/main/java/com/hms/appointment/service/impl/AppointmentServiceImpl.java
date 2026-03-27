@@ -36,7 +36,6 @@ import java.util.Arrays;
 import java.util.List;
 import com.hms.appointment.dto.request.AppointmentSearchCriteria;
 
-
 @Service
 @RequiredArgsConstructor
 @Slf4j
@@ -45,15 +44,13 @@ public class AppointmentServiceImpl implements AppointmentService {
     private static final List<AppointmentStatus> ACTIVE_STATUSES = Arrays.asList(
             AppointmentStatus.SCHEDULED,
             AppointmentStatus.CHECKED_IN,
-            AppointmentStatus.IN_CONSULTATION
-    );
+            AppointmentStatus.IN_CONSULTATION);
 
     private final AppointmentRepository appointmentRepository;
     private final PatientRepository patientRepository;
     private final DoctorRepository doctorRepository;
     private final AppointmentMapper appointmentMapper;
     private final AuditLogService auditLogService;
-
 
     @Override
     @Transactional(readOnly = true)
@@ -68,18 +65,19 @@ public class AppointmentServiceImpl implements AppointmentService {
             Long doctorId = doctor.getId();
 
             builder.total(appointmentRepository.countByDoctorId(doctorId))
-                   .scheduled(appointmentRepository.countByDoctorIdAndStatus(doctorId, AppointmentStatus.SCHEDULED))
-                   .checkedIn(appointmentRepository.countByDoctorIdAndStatus(doctorId, AppointmentStatus.CHECKED_IN))
-                   .inConsultation(appointmentRepository.countByDoctorIdAndStatus(doctorId, AppointmentStatus.IN_CONSULTATION))
-                   .completed(appointmentRepository.countByDoctorIdAndStatus(doctorId, AppointmentStatus.COMPLETED))
-                   .cancelled(appointmentRepository.countByDoctorIdAndStatus(doctorId, AppointmentStatus.CANCELLED));
+                    .scheduled(appointmentRepository.countByDoctorIdAndStatus(doctorId, AppointmentStatus.SCHEDULED))
+                    .checkedIn(appointmentRepository.countByDoctorIdAndStatus(doctorId, AppointmentStatus.CHECKED_IN))
+                    .inConsultation(
+                            appointmentRepository.countByDoctorIdAndStatus(doctorId, AppointmentStatus.IN_CONSULTATION))
+                    .completed(appointmentRepository.countByDoctorIdAndStatus(doctorId, AppointmentStatus.COMPLETED))
+                    .cancelled(appointmentRepository.countByDoctorIdAndStatus(doctorId, AppointmentStatus.CANCELLED));
         } else {
             builder.total(appointmentRepository.count())
-                   .scheduled(appointmentRepository.countByStatus(AppointmentStatus.SCHEDULED))
-                   .checkedIn(appointmentRepository.countByStatus(AppointmentStatus.CHECKED_IN))
-                   .inConsultation(appointmentRepository.countByStatus(AppointmentStatus.IN_CONSULTATION))
-                   .completed(appointmentRepository.countByStatus(AppointmentStatus.COMPLETED))
-                   .cancelled(appointmentRepository.countByStatus(AppointmentStatus.CANCELLED));
+                    .scheduled(appointmentRepository.countByStatus(AppointmentStatus.SCHEDULED))
+                    .checkedIn(appointmentRepository.countByStatus(AppointmentStatus.CHECKED_IN))
+                    .inConsultation(appointmentRepository.countByStatus(AppointmentStatus.IN_CONSULTATION))
+                    .completed(appointmentRepository.countByStatus(AppointmentStatus.COMPLETED))
+                    .cancelled(appointmentRepository.countByStatus(AppointmentStatus.CANCELLED));
         }
 
         return builder.build();
@@ -91,30 +89,34 @@ public class AppointmentServiceImpl implements AppointmentService {
 
         Appointment appointment = appointmentMapper.toEntity(dto);
         appointment.setPatient(patientRepository.findById(dto.getPatientId())
-                .orElseThrow(() -> new AppointmentNotFoundException("Patient not found with ID: " + dto.getPatientId())));
-        
+                .orElseThrow(
+                        () -> new AppointmentNotFoundException("Patient not found with ID: " + dto.getPatientId())));
+
         Doctor doctor;
         if (dto.getDoctorId() != null) {
             doctor = doctorRepository.findById(dto.getDoctorId())
-                    .orElseThrow(() -> new AppointmentNotFoundException("Doctor not found with ID: " + dto.getDoctorId()));
+                    .orElseThrow(
+                            () -> new AppointmentNotFoundException("Doctor not found with ID: " + dto.getDoctorId()));
         } else {
             List<Doctor> doctors = doctorRepository.findByDepartment(dto.getDepartment());
             if (!doctors.isEmpty()) {
                 doctor = doctors.get(0);
             } else {
-                throw new AppointmentNotFoundException("No doctors available in the " + dto.getDepartment() + " department.");
+                throw new AppointmentNotFoundException(
+                        "No doctors available in the " + dto.getDepartment() + " department.");
             }
         }
-        
+
         // Integrity Check: Ensure doctor belongs to the department
         if (doctor.getDepartment() != dto.getDepartment()) {
-            throw new BadRequestException("Doctor " + doctor.getFirstName() + " does not belong to the " + dto.getDepartment() + " department.");
+            throw new BadRequestException("Doctor " + doctor.getFirstName() + " does not belong to the "
+                    + dto.getDepartment() + " department.");
         }
-        
+
         appointment.setDoctor(doctor);
         appointment.setEmergency(dto.isEmergency());
 
-        lockAndCheckAvailability(appointment.getDoctor().getId(), appointment.getPatient().getId(), 
+        lockAndCheckAvailability(appointment.getDoctor().getId(), appointment.getPatient().getId(),
                 appointment.getAppointmentTime(), appointment.getId(), appointment.isEmergency());
 
         LocalDateTime requestedTime = appointment.getAppointmentTime();
@@ -122,13 +124,14 @@ public class AppointmentServiceImpl implements AppointmentService {
         LocalDateTime endOfDay = requestedTime.with(LocalTime.MAX);
         long todayCount = appointmentRepository.countByDoctorIdAndAppointmentTimeBetween(
                 appointment.getDoctor().getId(), startOfDay, endOfDay);
-        
+
         String prefix = appointment.isEmergency() ? "EM" : "P";
         appointment.setTokenNumber(String.format("%s-%03d", prefix, todayCount + 1));
         appointment.setStatus(AppointmentStatus.SCHEDULED);
-        
+
         Appointment saved = appointmentRepository.save(appointment);
-        auditLogService.log(getCurrentUsername(), "APPOINTMENT_CREATE", "Appointment", saved.getId().toString(), "patient=" + saved.getPatient().getName());
+        auditLogService.log(getCurrentUsername(), "APPOINTMENT_CREATE", "Appointment", saved.getId().toString(),
+                "patient=" + saved.getPatient().getName());
         return saved;
     }
 
@@ -139,8 +142,9 @@ public class AppointmentServiceImpl implements AppointmentService {
             appointment.setStatus(AppointmentStatus.SCHEDULED);
         }
 
-        if (appointment.getDoctor() != null && appointment.getPatient() != null && appointment.getAppointmentTime() != null) {
-            lockAndCheckAvailability(appointment.getDoctor().getId(), appointment.getPatient().getId(), 
+        if (appointment.getDoctor() != null && appointment.getPatient() != null
+                && appointment.getAppointmentTime() != null) {
+            lockAndCheckAvailability(appointment.getDoctor().getId(), appointment.getPatient().getId(),
                     appointment.getAppointmentTime(), appointment.getId(), appointment.isEmergency());
 
             if (appointment.getTokenNumber() == null) {
@@ -148,13 +152,15 @@ public class AppointmentServiceImpl implements AppointmentService {
                 LocalDateTime startOfDay = requestedTime.with(LocalTime.MIN);
                 LocalDateTime endOfDay = requestedTime.with(LocalTime.MAX);
                 long todayCount = appointmentRepository.countByDoctorIdAndAppointmentTimeBetween(
-                                appointment.getDoctor().getId(), startOfDay, endOfDay);
-                appointment.setTokenNumber(String.format("P-%03d", todayCount + 1));
+                        appointment.getDoctor().getId(), startOfDay, endOfDay);
+                String prefix = appointment.isEmergency() ? "EM" : "P";
+                appointment.setTokenNumber(String.format("%s-%03d", prefix, todayCount + 1));
             }
         }
 
         Appointment saved = appointmentRepository.save(appointment);
-        auditLogService.log(getCurrentUsername(), "APPOINTMENT_CREATE_RAW", "Appointment", saved.getId().toString(), "status=" + saved.getStatus());
+        auditLogService.log(getCurrentUsername(), "APPOINTMENT_CREATE_RAW", "Appointment", saved.getId().toString(),
+                "status=" + saved.getStatus());
         return saved;
     }
 
@@ -176,13 +182,15 @@ public class AppointmentServiceImpl implements AppointmentService {
                 .orElseThrow(() -> new AppointmentNotFoundException("Appointment not found with ID: " + id));
 
         Patient patient = patientRepository.findById(dto.getPatientId())
-                .orElseThrow(() -> new AppointmentNotFoundException("Patient not found with ID: " + dto.getPatientId()));
+                .orElseThrow(
+                        () -> new AppointmentNotFoundException("Patient not found with ID: " + dto.getPatientId()));
 
         Doctor doctor = doctorRepository.findById(dto.getDoctorId())
                 .orElseThrow(() -> new AppointmentNotFoundException("Doctor not found with ID: " + dto.getDoctorId()));
 
         if (doctor.getDepartment() != dto.getDepartment()) {
-            throw new BadRequestException("Doctor " + doctor.getFirstName() + " does not belong to the " + dto.getDepartment() + " department.");
+            throw new BadRequestException("Doctor " + doctor.getFirstName() + " does not belong to the "
+                    + dto.getDepartment() + " department.");
         }
 
         LocalDateTime requestedTime = LocalDateTime.of(dto.getAppointmentDate(), dto.getAppointmentTime());
@@ -197,20 +205,25 @@ public class AppointmentServiceImpl implements AppointmentService {
         appointment.setEmergency(dto.isEmergency());
 
         Appointment saved = appointmentRepository.save(appointment);
-        auditLogService.log(getCurrentUsername(), "APPOINTMENT_UPDATE", "Appointment", id.toString(), "patient=" + saved.getPatient().getName());
+        auditLogService.log(getCurrentUsername(), "APPOINTMENT_UPDATE", "Appointment", id.toString(),
+                "patient=" + saved.getPatient().getName());
         return saved;
     }
 
-    private void lockAndCheckAvailability(Long doctorId, Long patientId, LocalDateTime time, Long currentAppointmentId, boolean isEmergency) {
+    private void lockAndCheckAvailability(Long doctorId, Long patientId, LocalDateTime time, Long currentAppointmentId,
+            boolean isEmergency) {
 
-        if (isEmergency) return;
-        
-        List<Appointment> doctorConflicts = appointmentRepository.findAndLockConflictingAppointments(doctorId, time, ACTIVE_STATUSES);
+        if (isEmergency)
+            return;
+
+        List<Appointment> doctorConflicts = appointmentRepository.findAndLockConflictingAppointments(doctorId, time,
+                ACTIVE_STATUSES);
         if (doctorConflicts.stream().anyMatch(a -> !a.getId().equals(currentAppointmentId))) {
             throw new SlotAlreadyBookedException("Doctor is already booked for " + time);
         }
 
-        List<Appointment> patientConflicts = appointmentRepository.findAndLockPatientConflictingAppointments(patientId, time, ACTIVE_STATUSES);
+        List<Appointment> patientConflicts = appointmentRepository.findAndLockPatientConflictingAppointments(patientId,
+                time, ACTIVE_STATUSES);
         if (patientConflicts.stream().anyMatch(a -> !a.getId().equals(currentAppointmentId))) {
             throw new SlotAlreadyBookedException("Patient already has an appointment for " + time);
         }
@@ -222,15 +235,17 @@ public class AppointmentServiceImpl implements AppointmentService {
 
         Appointment appointment = appointmentRepository.findById(id)
                 .orElseThrow(() -> new AppointmentNotFoundException("Appointment not found with ID: " + id));
-        
-        //  Security Check: Only assigned doctor can update status to consultation/completed
+
+        // Security Check: Only assigned doctor can update status to
+        // consultation/completed
         if (status == AppointmentStatus.IN_CONSULTATION || status == AppointmentStatus.COMPLETED) {
             checkOwnership(appointment);
         }
 
         appointment.setStatus(status);
         Appointment saved = appointmentRepository.save(appointment);
-        auditLogService.log(getCurrentUsername(), "APPOINTMENT_STATUS_UPDATE", "Appointment", id.toString(), "status=" + status);
+        auditLogService.log(getCurrentUsername(), "APPOINTMENT_STATUS_UPDATE", "Appointment", id.toString(),
+                "status=" + status);
         return saved;
     }
 
@@ -239,9 +254,9 @@ public class AppointmentServiceImpl implements AppointmentService {
         Role role = user.getRole();
 
         // 1. Staff with Global Access (Management & Triage)
-        if (role == Role.ADMIN || 
-            role == Role.RECEPTIONIST || 
-            role == Role.NURSE) {
+        if (role == Role.ADMIN ||
+                role == Role.RECEPTIONIST ||
+                role == Role.NURSE) {
             return;
         }
 
@@ -252,7 +267,7 @@ public class AppointmentServiceImpl implements AppointmentService {
             }
         }
 
-        log.warn("Security Alert: User {} with role {} attempted unauthorized access/update for appointment {}.", 
+        log.warn("Security Alert: User {} with role {} attempted unauthorized access/update for appointment {}.",
                 user.getUsername(), role, appointment.getId());
         throw new AccessDeniedException("You do not have permission to access this appointment.");
     }
@@ -260,21 +275,28 @@ public class AppointmentServiceImpl implements AppointmentService {
     @Override
     @Transactional(readOnly = true)
     public Page<Appointment> findAppointments(AppointmentSearchCriteria criteria, Pageable pageable) {
-        
+
         Specification<Appointment> spec = Specification.where(null);
-        
+
         User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         if (user.getRole() == Role.DOCTOR) {
             spec = spec.and(AppointmentSpecification.hasDoctorUserId(user.getId()));
-        } 
+        }
 
-        if (criteria.getQuery() != null && !criteria.getQuery().isEmpty()) spec = spec.and(AppointmentSpecification.fuzzySearch(criteria.getQuery()));
-        if (criteria.getDoctorId() != null) spec = spec.and(AppointmentSpecification.hasDoctorId(criteria.getDoctorId()));
-        if (criteria.getPatientId() != null) spec = spec.and(AppointmentSpecification.hasPatientId(criteria.getPatientId()));
-        if (criteria.getStatus() != null) spec = spec.and(AppointmentSpecification.hasStatus(criteria.getStatus()));
-        if (criteria.getDepartment() != null) spec = spec.and(AppointmentSpecification.hasDepartment(criteria.getDepartment()));
-        if (criteria.getStart() != null || criteria.getEnd() != null) spec = spec.and(AppointmentSpecification.hasTimeBetween(criteria.getStart(), criteria.getEnd()));
-        if (criteria.getIsEmergency() != null) spec = spec.and(AppointmentSpecification.isEmergency(criteria.getIsEmergency()));
+        if (criteria.getQuery() != null && !criteria.getQuery().isEmpty())
+            spec = spec.and(AppointmentSpecification.fuzzySearch(criteria.getQuery()));
+        if (criteria.getDoctorId() != null)
+            spec = spec.and(AppointmentSpecification.hasDoctorId(criteria.getDoctorId()));
+        if (criteria.getPatientId() != null)
+            spec = spec.and(AppointmentSpecification.hasPatientId(criteria.getPatientId()));
+        if (criteria.getStatus() != null)
+            spec = spec.and(AppointmentSpecification.hasStatus(criteria.getStatus()));
+        if (criteria.getDepartment() != null)
+            spec = spec.and(AppointmentSpecification.hasDepartment(criteria.getDepartment()));
+        if (criteria.getStart() != null || criteria.getEnd() != null)
+            spec = spec.and(AppointmentSpecification.hasTimeBetween(criteria.getStart(), criteria.getEnd()));
+        if (criteria.getIsEmergency() != null)
+            spec = spec.and(AppointmentSpecification.isEmergency(criteria.getIsEmergency()));
 
         return appointmentRepository.findAll(spec, pageable);
     }

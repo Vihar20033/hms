@@ -66,7 +66,7 @@ public class DashboardServiceImpl implements DashboardService {
 
                         weeklyStats.add(WeeklyStatisticsDTO.builder()
                                         .day(date.getDayOfWeek().getDisplayName(TextStyle.SHORT, Locale.ENGLISH))
-                                        .appointments(appointmentRepository.countByCreatedAtBetween(start, end))
+                                        .appointments(appointmentRepository.countByAppointmentTimeBetween(start, end))
                                         .patients(patientRepository.countByCreatedAtBetween(start, end))
                                         .build());
                 }

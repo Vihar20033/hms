@@ -27,15 +27,6 @@
       <div class="error-alert" *ngIf="errorMessage"><i class="ri-error-warning-line"></i> {{ errorMessage }}</div>
 
       <div class="search-bar-row">
-        <div class="search-bar">
-          <i class="ri-search-line"></i>
-          <input
-            pInputText
-            type="text"
-            placeholder="Search medicines by name, code or category..."
-            (input)="onSearch($event)"
-          />
-        </div>
         <button class="btn-excel" (click)="exportToExcel()" *ngIf="medicines.length > 0">
           <i class="ri-file-excel-2-line"></i> Download Excel
         </button>

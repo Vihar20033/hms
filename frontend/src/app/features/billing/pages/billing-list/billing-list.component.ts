@@ -58,7 +58,6 @@ export class BillingListComponent implements OnInit {
   billingForm!: FormGroup;
   today: Date = new Date();
 
-  paymentStatuses = Object.values(PaymentStatus);
   paymentMethods = Object.values(PaymentMethod);
   PaymentStatus = PaymentStatus;
 

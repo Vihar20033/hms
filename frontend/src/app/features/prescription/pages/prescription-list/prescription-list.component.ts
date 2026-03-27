@@ -56,7 +56,7 @@ export class PrescriptionListComponent implements OnInit {
           this.loadPrescriptions();
         },
         error: () => {
-          // Error handling
+          alert('Error deleting prescription');
         },
       });
     }

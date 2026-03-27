@@ -39,3 +39,38 @@
 2026-03-26 14:55:53.050 | doctor | USER_LOGIN | User | 5 | role=DOCTOR
 2026-03-26 14:56:01.592 | doctor | USER_LOGOUT | User | 5 | 
 2026-03-26 14:56:06.151 | admin | USER_LOGIN | User | 1 | role=ADMIN
+2026-03-26 16:14:39.919 | admin | USER_LOGIN | User | 1 | role=ADMIN
+2026-03-26 17:28:50.652 | admin | USER_LOGIN | User | 1 | role=ADMIN
+2026-03-26 18:13:59.450 | admin | USER_LOGOUT | User | 1 | 
+2026-03-26 18:18:34.870 | admin | USER_LOGIN | User | 1 | role=ADMIN
+2026-03-26 18:29:42.344 | admin | USER_LOGOUT | User | 1 | 
+2026-03-26 18:29:48.185 | recep | USER_LOGIN | User | 3 | role=RECEPTIONIST
+2026-03-26 18:31:12.953 | recep | PATIENT_CREATE | Patient | 2 | name=Heet
+2026-03-26 18:40:25.505 | recep | APPOINTMENT_CREATE | Appointment | 2 | patient=Heet
+2026-03-26 21:27:42.737 | recep | USER_LOGIN | User | 3 | role=RECEPTIONIST
+2026-03-26 21:27:55.162 | recep | USER_LOGOUT | User | 3 | 
+2026-03-26 21:28:02.104 | admin | USER_LOGIN | User | 1 | role=ADMIN
+2026-03-26 22:31:34.267 | admin | USER_LOGIN | User | 1 | role=ADMIN
+2026-03-26 22:55:01.199 | admin | USER_LOGOUT | User | 1 | 
+2026-03-26 22:55:10.676 | admin | USER_LOGIN | User | 1 | role=ADMIN
+2026-03-26 22:55:14.772 | admin | USER_LOGOUT | User | 1 | 
+2026-03-26 22:55:30.061 | recep | USER_LOGIN | User | 3 | role=RECEPTIONIST
+2026-03-26 22:55:56.517 | recep | USER_LOGOUT | User | 3 | 
+2026-03-26 22:56:29.728 | Chintan | USER_LOGIN | User | 2 | role=DOCTOR
+2026-03-26 22:57:31.072 | Chintan | USER_LOGOUT | User | 2 | 
+2026-03-26 22:58:23.018 | farm | USER_LOGIN | User | 4 | role=PHARMACIST
+2026-03-26 23:03:03.104 | farm | USER_LOGOUT | User | 4 | 
+2026-03-26 23:08:37.462 | admin | USER_LOGIN | User | 1 | role=ADMIN
+2026-03-26 23:13:02.338 | admin | USER_LOGOUT | User | 1 | 
+2026-03-26 23:18:06.010 | admin | USER_LOGIN | User | 1 | role=ADMIN
+2026-03-26 23:18:50.167 | admin | USER_LOGIN | User | 1 | role=ADMIN
+2026-03-26 23:19:24.858 | admin | USER_LOGIN | User | 1 | role=ADMIN
+2026-03-26 23:19:36.944 | admin | USER_LOGIN | User | 1 | role=ADMIN
+2026-03-26 23:19:38.862 | admin | USER_LOGIN | User | 1 | role=ADMIN
+2026-03-26 23:19:40.610 | admin | USER_LOGIN | User | 1 | role=ADMIN
+2026-03-26 23:19:42.658 | admin | USER_LOGIN | User | 1 | role=ADMIN
+2026-03-26 23:19:44.294 | admin | USER_LOGIN | User | 1 | role=ADMIN
+2026-03-26 23:19:46.112 | admin | USER_LOGIN | User | 1 | role=ADMIN
+2026-03-26 23:19:48.072 | admin | USER_LOGIN | User | 1 | role=ADMIN
+2026-03-26 23:30:22.780 | admin | PATIENT_CREATE | Patient | 3 | name=Om
+2026-03-26 23:32:17.548 | admin | APPOINTMENT_CREATE | Appointment | 3 | patient=Om

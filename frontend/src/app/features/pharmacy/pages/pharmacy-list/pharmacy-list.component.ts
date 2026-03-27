@@ -1,6 +1,6 @@
 import { CommonModule } from '@angular/common';
 import { HttpErrorResponse } from '@angular/common/http';
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { CalendarModule } from 'primeng/calendar';
 import { DropdownModule } from 'primeng/dropdown';
@@ -8,7 +8,6 @@ import { InputNumberModule } from 'primeng/inputnumber';
 import { InputTextModule } from 'primeng/inputtext';
 import { InputTextareaModule } from 'primeng/inputtextarea';
 import { TableModule } from 'primeng/table';
-import { Subject, debounceTime, distinctUntilChanged, takeUntil } from 'rxjs';
 import { ApiResponse } from '../../../../core/models/common.models';
 import { Medicine, MedicineCategory } from '../../../../core/models/pharmacy.models';
 import { AuthService } from '../../../../core/services/auth.service';
@@ -36,14 +35,11 @@ import { SidebarComponent } from '../../../../shared/components/layout/sidebar/s
   templateUrl: './pharmacy-list.component.html',
   styleUrl: './pharmacy-list.component.scss',
 })
-export class PharmacyListComponent implements OnInit, OnDestroy {
+export class PharmacyListComponent implements OnInit {
   medicines: Medicine[] = [];
   filteredMedicines: Medicine[] = [];
   isLoading = true;
   userRole: string | null = null;
-  searchQuery = '';
-  private searchSubject = new Subject<string>();
-  private destroy$ = new Subject<void>();
   showAddForm = false;
   showEditForm = false;
   showRestockForm = false;
@@ -77,16 +73,6 @@ export class PharmacyListComponent implements OnInit, OnDestroy {
     this.userRole = this.authService.getUserRole();
     this.initForm();
     this.loadMedicines();
-
-    this.searchSubject.pipe(debounceTime(400), distinctUntilChanged(), takeUntil(this.destroy$)).subscribe((query) => {
-      this.searchQuery = query;
-      this.applyFilter();
-    });
-  }
-
-  ngOnDestroy(): void {
-    this.destroy$.next();
-    this.destroy$.complete();
   }
 
   initForm(): void {
@@ -126,21 +112,7 @@ export class PharmacyListComponent implements OnInit, OnDestroy {
     if (this.showLowStockOnly) {
       list = list.filter((m) => m.quantityInStock <= m.reorderLevel);
     }
-    if (this.searchQuery.trim()) {
-      const q = this.searchQuery.toLowerCase();
-      list = list.filter(
-        (m) =>
-          m.name.toLowerCase().includes(q) ||
-          m.medicineCode.toLowerCase().includes(q) ||
-          m.category.toLowerCase().includes(q),
-      );
-    }
     this.filteredMedicines = list;
-  }
-
-  onSearch(event: Event): void {
-    const query = (event.target as HTMLInputElement).value;
-    this.searchSubject.next(query);
   }
 
   toggleLowStock(): void {

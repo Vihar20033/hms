@@ -67,14 +67,14 @@ export class PrescriptionCreateComponent implements OnInit {
     });
   }
 
-  filterMedicines(event: any): void {
+  filterMedicines(event: { query: string }): void {
     const query = event.query.toLowerCase();
     this.filteredMedicines = this.availableMedicines.filter(
       (m) => m.name.toLowerCase().includes(query) || m.medicineCode?.toLowerCase().includes(query),
     );
   }
 
-  onMedicineSelect(event: any, index: number): void {
+  onMedicineSelect(event: { value: Medicine }, index: number): void {
     const medicine = event.value as Medicine;
     const medicineFormGroup = this.medicines.at(index) as FormGroup;
 

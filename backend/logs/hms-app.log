@@ -16028,3 +16028,1232 @@ Caused by: java.lang.ClassNotFoundException: com.hms.common.audit.AuditLog$Audit
 2026-03-26 15:39:38.811 [http-nio-8080-exec-3] INFO  com.hms.security.jwt.JwtAuthenticationFilter - Request authorized for user: admin with authorities: [ROLE_ADMIN]
 2026-03-26 15:39:42.775 [http-nio-8080-exec-6] INFO  com.hms.security.jwt.JwtAuthenticationFilter - Request authorized for user: admin with authorities: [ROLE_ADMIN]
 2026-03-26 15:39:42.775 [http-nio-8080-exec-7] INFO  com.hms.security.jwt.JwtAuthenticationFilter - Request authorized for user: admin with authorities: [ROLE_ADMIN]
+2026-03-26 15:40:29.174 [http-nio-8080-exec-9] INFO  com.hms.security.jwt.JwtAuthenticationFilter - Request authorized for user: admin with authorities: [ROLE_ADMIN]
+2026-03-26 15:51:05.555 [http-nio-8080-exec-4] INFO  com.hms.security.jwt.JwtAuthenticationFilter - Request authorized for user: admin with authorities: [ROLE_ADMIN]
+2026-03-26 16:14:36.927 [http-nio-8080-exec-6] ERROR com.hms.security.jwt.JwtUtil - JWT token is expired: JWT expired at 2026-03-26T10:26:06Z. Current time: 2026-03-26T10:44:36Z, a difference of 1110922 milliseconds.  Allowed clock skew: 0 milliseconds.
+2026-03-26 16:14:36.927 [http-nio-8080-exec-7] ERROR com.hms.security.jwt.JwtUtil - JWT token is expired: JWT expired at 2026-03-26T10:26:06Z. Current time: 2026-03-26T10:44:36Z, a difference of 1110922 milliseconds.  Allowed clock skew: 0 milliseconds.
+2026-03-26 16:14:36.927 [http-nio-8080-exec-6] WARN  com.hms.security.jwt.JwtAuthenticationFilter - Invalid JWT provided from IP: 0:0:0:0:0:0:0:1, URL: /api/v1/appointments
+2026-03-26 16:14:36.927 [http-nio-8080-exec-7] WARN  com.hms.security.jwt.JwtAuthenticationFilter - Invalid JWT provided from IP: 0:0:0:0:0:0:0:1, URL: /api/v1/appointments/summary
+2026-03-26 16:14:36.945 [http-nio-8080-exec-6] WARN  com.hms.security.config.SecurityConfig - Access unauthorized to /api/v1/appointments - Full authentication is required to access this resource
+2026-03-26 16:14:36.945 [http-nio-8080-exec-7] WARN  com.hms.security.config.SecurityConfig - Access unauthorized to /api/v1/appointments/summary - Full authentication is required to access this resource
+2026-03-26 16:14:36.950 [http-nio-8080-exec-6] WARN  com.hms.common.exception.GlobalExceptionHandler - Authentication failed: Full authentication is required to access this resource
+2026-03-26 16:14:36.950 [http-nio-8080-exec-7] WARN  com.hms.common.exception.GlobalExceptionHandler - Authentication failed: Full authentication is required to access this resource
+2026-03-26 16:14:36.996 [http-nio-8080-exec-9] ERROR com.hms.security.jwt.JwtUtil - JWT token is expired: JWT expired at 2026-03-26T10:26:06Z. Current time: 2026-03-26T10:44:36Z, a difference of 1110994 milliseconds.  Allowed clock skew: 0 milliseconds.
+2026-03-26 16:14:37.002 [http-nio-8080-exec-9] WARN  com.hms.security.jwt.JwtAuthenticationFilter - Invalid JWT provided from IP: 0:0:0:0:0:0:0:1, URL: /api/v1/auth/logout
+2026-03-26 16:14:37.006 [http-nio-8080-exec-9] WARN  com.hms.security.config.SecurityConfig - Access unauthorized to /api/v1/auth/logout - Full authentication is required to access this resource
+2026-03-26 16:14:37.009 [http-nio-8080-exec-9] WARN  com.hms.common.exception.GlobalExceptionHandler - Authentication failed: Full authentication is required to access this resource
+2026-03-26 16:14:37.986 [http-nio-8080-exec-10] WARN  com.hms.security.config.SecurityConfig - Access unauthorized to /api/v1/appointments/summary - Full authentication is required to access this resource
+2026-03-26 16:14:37.987 [http-nio-8080-exec-10] WARN  com.hms.common.exception.GlobalExceptionHandler - Authentication failed: Full authentication is required to access this resource
+2026-03-26 16:14:37.990 [http-nio-8080-exec-1] WARN  com.hms.security.config.SecurityConfig - Access unauthorized to /api/v1/appointments - Full authentication is required to access this resource
+2026-03-26 16:14:37.991 [http-nio-8080-exec-1] WARN  com.hms.common.exception.GlobalExceptionHandler - Authentication failed: Full authentication is required to access this resource
+2026-03-26 16:14:38.999 [http-nio-8080-exec-5] WARN  com.hms.security.config.SecurityConfig - Access unauthorized to /api/v1/appointments/summary - Full authentication is required to access this resource
+2026-03-26 16:14:38.999 [http-nio-8080-exec-5] WARN  com.hms.common.exception.GlobalExceptionHandler - Authentication failed: Full authentication is required to access this resource
+2026-03-26 16:14:39.005 [http-nio-8080-exec-3] WARN  com.hms.security.config.SecurityConfig - Access unauthorized to /api/v1/appointments - Full authentication is required to access this resource
+2026-03-26 16:14:39.005 [http-nio-8080-exec-3] WARN  com.hms.common.exception.GlobalExceptionHandler - Authentication failed: Full authentication is required to access this resource
+2026-03-26 16:14:39.916 [http-nio-8080-exec-9] INFO  com.hms.security.jwt.JwtAuthenticationFilter - Request authorized for user: admin with authorities: [ROLE_ADMIN]
+2026-03-26 16:14:39.916 [http-nio-8080-exec-8] INFO  com.hms.security.jwt.JwtAuthenticationFilter - Request authorized for user: admin with authorities: [ROLE_ADMIN]
+2026-03-26 16:14:41.753 [http-nio-8080-exec-10] INFO  com.hms.security.jwt.JwtAuthenticationFilter - Request authorized for user: admin with authorities: [ROLE_ADMIN]
+2026-03-26 16:14:41.754 [http-nio-8080-exec-1] INFO  com.hms.security.jwt.JwtAuthenticationFilter - Request authorized for user: admin with authorities: [ROLE_ADMIN]
+2026-03-26 16:15:13.005 [http-nio-8080-exec-4] INFO  com.hms.security.jwt.JwtAuthenticationFilter - Request authorized for user: admin with authorities: [ROLE_ADMIN]
+2026-03-26 16:15:13.005 [http-nio-8080-exec-5] INFO  com.hms.security.jwt.JwtAuthenticationFilter - Request authorized for user: admin with authorities: [ROLE_ADMIN]
+2026-03-26 16:15:18.735 [http-nio-8080-exec-3] INFO  com.hms.security.jwt.JwtAuthenticationFilter - Request authorized for user: admin with authorities: [ROLE_ADMIN]
+2026-03-26 16:15:18.736 [http-nio-8080-exec-2] INFO  com.hms.security.jwt.JwtAuthenticationFilter - Request authorized for user: admin with authorities: [ROLE_ADMIN]
+2026-03-26 16:15:28.739 [http-nio-8080-exec-7] INFO  com.hms.security.jwt.JwtAuthenticationFilter - Request authorized for user: admin with authorities: [ROLE_ADMIN]
+2026-03-26 16:15:28.739 [http-nio-8080-exec-6] INFO  com.hms.security.jwt.JwtAuthenticationFilter - Request authorized for user: admin with authorities: [ROLE_ADMIN]
+2026-03-26 16:15:29.698 [http-nio-8080-exec-9] INFO  com.hms.security.jwt.JwtAuthenticationFilter - Request authorized for user: admin with authorities: [ROLE_ADMIN]
+2026-03-26 16:15:29.699 [http-nio-8080-exec-8] INFO  com.hms.security.jwt.JwtAuthenticationFilter - Request authorized for user: admin with authorities: [ROLE_ADMIN]
+2026-03-26 16:15:31.748 [http-nio-8080-exec-10] INFO  com.hms.security.jwt.JwtAuthenticationFilter - Request authorized for user: admin with authorities: [ROLE_ADMIN]
+2026-03-26 16:15:31.749 [http-nio-8080-exec-1] INFO  com.hms.security.jwt.JwtAuthenticationFilter - Request authorized for user: admin with authorities: [ROLE_ADMIN]
+2026-03-26 16:18:38.823 [http-nio-8080-exec-3] INFO  com.hms.security.jwt.JwtAuthenticationFilter - Request authorized for user: admin with authorities: [ROLE_ADMIN]
+2026-03-26 16:18:38.824 [http-nio-8080-exec-6] INFO  com.hms.security.jwt.JwtAuthenticationFilter - Request authorized for user: admin with authorities: [ROLE_ADMIN]
+2026-03-26 16:18:43.748 [http-nio-8080-exec-8] INFO  com.hms.security.jwt.JwtAuthenticationFilter - Request authorized for user: admin with authorities: [ROLE_ADMIN]
+2026-03-26 16:18:43.748 [http-nio-8080-exec-7] INFO  com.hms.security.jwt.JwtAuthenticationFilter - Request authorized for user: admin with authorities: [ROLE_ADMIN]
+2026-03-26 16:18:52.769 [http-nio-8080-exec-1] INFO  com.hms.security.jwt.JwtAuthenticationFilter - Request authorized for user: admin with authorities: [ROLE_ADMIN]
+2026-03-26 16:18:52.769 [http-nio-8080-exec-9] INFO  com.hms.security.jwt.JwtAuthenticationFilter - Request authorized for user: admin with authorities: [ROLE_ADMIN]
+2026-03-26 16:19:04.743 [http-nio-8080-exec-10] INFO  com.hms.security.jwt.JwtAuthenticationFilter - Request authorized for user: admin with authorities: [ROLE_ADMIN]
+2026-03-26 16:19:04.743 [http-nio-8080-exec-5] INFO  com.hms.security.jwt.JwtAuthenticationFilter - Request authorized for user: admin with authorities: [ROLE_ADMIN]
+2026-03-26 16:20:15.254 [http-nio-8080-exec-3] INFO  com.hms.security.jwt.JwtAuthenticationFilter - Request authorized for user: admin with authorities: [ROLE_ADMIN]
+2026-03-26 16:20:15.254 [http-nio-8080-exec-6] INFO  com.hms.security.jwt.JwtAuthenticationFilter - Request authorized for user: admin with authorities: [ROLE_ADMIN]
+2026-03-26 16:24:12.656 [http-nio-8080-exec-5] INFO  com.hms.security.jwt.JwtAuthenticationFilter - Request authorized for user: admin with authorities: [ROLE_ADMIN]
+2026-03-26 16:24:12.656 [http-nio-8080-exec-10] INFO  com.hms.security.jwt.JwtAuthenticationFilter - Request authorized for user: admin with authorities: [ROLE_ADMIN]
+2026-03-26 16:24:13.596 [http-nio-8080-exec-2] INFO  com.hms.security.jwt.JwtAuthenticationFilter - Request authorized for user: admin with authorities: [ROLE_ADMIN]
+2026-03-26 16:24:13.596 [http-nio-8080-exec-4] INFO  com.hms.security.jwt.JwtAuthenticationFilter - Request authorized for user: admin with authorities: [ROLE_ADMIN]
+2026-03-26 16:30:13.126 [http-nio-8080-exec-7] INFO  com.hms.security.jwt.JwtAuthenticationFilter - Request authorized for user: admin with authorities: [ROLE_ADMIN]
+2026-03-26 16:30:13.126 [http-nio-8080-exec-8] INFO  com.hms.security.jwt.JwtAuthenticationFilter - Request authorized for user: admin with authorities: [ROLE_ADMIN]
+2026-03-26 16:34:14.825 [http-nio-8080-exec-10] INFO  com.hms.security.jwt.JwtAuthenticationFilter - Request authorized for user: admin with authorities: [ROLE_ADMIN]
+2026-03-26 16:34:14.826 [http-nio-8080-exec-5] INFO  com.hms.security.jwt.JwtAuthenticationFilter - Request authorized for user: admin with authorities: [ROLE_ADMIN]
+2026-03-26 16:34:19.760 [http-nio-8080-exec-4] INFO  com.hms.security.jwt.JwtAuthenticationFilter - Request authorized for user: admin with authorities: [ROLE_ADMIN]
+2026-03-26 16:34:19.760 [http-nio-8080-exec-2] INFO  com.hms.security.jwt.JwtAuthenticationFilter - Request authorized for user: admin with authorities: [ROLE_ADMIN]
+2026-03-26 16:34:21.756 [http-nio-8080-exec-3] INFO  com.hms.security.jwt.JwtAuthenticationFilter - Request authorized for user: admin with authorities: [ROLE_ADMIN]
+2026-03-26 16:34:21.762 [http-nio-8080-exec-6] INFO  com.hms.security.jwt.JwtAuthenticationFilter - Request authorized for user: admin with authorities: [ROLE_ADMIN]
+2026-03-26 16:34:22.723 [http-nio-8080-exec-7] INFO  com.hms.security.jwt.JwtAuthenticationFilter - Request authorized for user: admin with authorities: [ROLE_ADMIN]
+2026-03-26 16:34:22.724 [http-nio-8080-exec-8] INFO  com.hms.security.jwt.JwtAuthenticationFilter - Request authorized for user: admin with authorities: [ROLE_ADMIN]
+2026-03-26 16:35:55.749 [http-nio-8080-exec-10] INFO  com.hms.security.jwt.JwtAuthenticationFilter - Request authorized for user: admin with authorities: [ROLE_ADMIN]
+2026-03-26 16:35:55.751 [http-nio-8080-exec-5] INFO  com.hms.security.jwt.JwtAuthenticationFilter - Request authorized for user: admin with authorities: [ROLE_ADMIN]
+2026-03-26 16:51:36.860 [http-nio-8080-exec-3] INFO  com.hms.security.jwt.JwtAuthenticationFilter - Request authorized for user: admin with authorities: [ROLE_ADMIN]
+2026-03-26 16:51:36.861 [http-nio-8080-exec-6] INFO  com.hms.security.jwt.JwtAuthenticationFilter - Request authorized for user: admin with authorities: [ROLE_ADMIN]
+2026-03-26 16:51:57.802 [http-nio-8080-exec-7] INFO  com.hms.security.jwt.JwtAuthenticationFilter - Request authorized for user: admin with authorities: [ROLE_ADMIN]
+2026-03-26 16:51:57.802 [http-nio-8080-exec-8] INFO  com.hms.security.jwt.JwtAuthenticationFilter - Request authorized for user: admin with authorities: [ROLE_ADMIN]
+2026-03-26 16:58:46.925 [http-nio-8080-exec-5] INFO  com.hms.security.jwt.JwtAuthenticationFilter - Request authorized for user: admin with authorities: [ROLE_ADMIN]
+2026-03-26 16:58:46.927 [http-nio-8080-exec-10] INFO  com.hms.security.jwt.JwtAuthenticationFilter - Request authorized for user: admin with authorities: [ROLE_ADMIN]
+2026-03-26 16:59:46.821 [http-nio-8080-exec-2] INFO  com.hms.security.jwt.JwtAuthenticationFilter - Request authorized for user: admin with authorities: [ROLE_ADMIN]
+2026-03-26 16:59:46.824 [http-nio-8080-exec-4] INFO  com.hms.security.jwt.JwtAuthenticationFilter - Request authorized for user: admin with authorities: [ROLE_ADMIN]
+2026-03-26 17:03:02.798 [http-nio-8080-exec-7] INFO  com.hms.security.jwt.JwtAuthenticationFilter - Request authorized for user: admin with authorities: [ROLE_ADMIN]
+2026-03-26 17:03:02.801 [http-nio-8080-exec-8] INFO  com.hms.security.jwt.JwtAuthenticationFilter - Request authorized for user: admin with authorities: [ROLE_ADMIN]
+2026-03-26 17:04:07.088 [http-nio-8080-exec-10] INFO  com.hms.security.jwt.JwtAuthenticationFilter - Request authorized for user: admin with authorities: [ROLE_ADMIN]
+2026-03-26 17:04:07.092 [http-nio-8080-exec-5] INFO  com.hms.security.jwt.JwtAuthenticationFilter - Request authorized for user: admin with authorities: [ROLE_ADMIN]
+2026-03-26 17:04:10.750 [http-nio-8080-exec-2] INFO  com.hms.security.jwt.JwtAuthenticationFilter - Request authorized for user: admin with authorities: [ROLE_ADMIN]
+2026-03-26 17:04:10.750 [http-nio-8080-exec-4] INFO  com.hms.security.jwt.JwtAuthenticationFilter - Request authorized for user: admin with authorities: [ROLE_ADMIN]
+2026-03-26 17:04:12.827 [http-nio-8080-exec-6] INFO  com.hms.security.jwt.JwtAuthenticationFilter - Request authorized for user: admin with authorities: [ROLE_ADMIN]
+2026-03-26 17:04:12.831 [http-nio-8080-exec-3] INFO  com.hms.security.jwt.JwtAuthenticationFilter - Request authorized for user: admin with authorities: [ROLE_ADMIN]
+2026-03-26 17:28:47.912 [http-nio-8080-exec-9] ERROR com.hms.security.jwt.JwtUtil - JWT token is expired: JWT expired at 2026-03-26T11:44:39Z. Current time: 2026-03-26T11:58:47Z, a difference of 848912 milliseconds.  Allowed clock skew: 0 milliseconds.
+2026-03-26 17:28:47.913 [http-nio-8080-exec-9] WARN  com.hms.security.jwt.JwtAuthenticationFilter - Invalid JWT provided from IP: 0:0:0:0:0:0:0:1, URL: /api/v1/doctors
+2026-03-26 17:28:47.915 [http-nio-8080-exec-9] WARN  com.hms.security.config.SecurityConfig - Access unauthorized to /api/v1/doctors - Full authentication is required to access this resource
+2026-03-26 17:28:47.916 [http-nio-8080-exec-9] WARN  com.hms.common.exception.GlobalExceptionHandler - Authentication failed: Full authentication is required to access this resource
+2026-03-26 17:28:47.947 [http-nio-8080-exec-10] ERROR com.hms.security.jwt.JwtUtil - JWT token is expired: JWT expired at 2026-03-26T11:44:39Z. Current time: 2026-03-26T11:58:47Z, a difference of 848947 milliseconds.  Allowed clock skew: 0 milliseconds.
+2026-03-26 17:28:47.947 [http-nio-8080-exec-10] WARN  com.hms.security.jwt.JwtAuthenticationFilter - Invalid JWT provided from IP: 0:0:0:0:0:0:0:1, URL: /api/v1/auth/refresh-token
+2026-03-26 17:28:47.947 [http-nio-8080-exec-10] WARN  com.hms.security.config.SecurityConfig - Access unauthorized to /api/v1/auth/refresh-token - Full authentication is required to access this resource
+2026-03-26 17:28:47.947 [http-nio-8080-exec-10] WARN  com.hms.common.exception.GlobalExceptionHandler - Authentication failed: Full authentication is required to access this resource
+2026-03-26 17:28:47.957 [http-nio-8080-exec-2] ERROR com.hms.security.jwt.JwtUtil - JWT token is expired: JWT expired at 2026-03-26T11:44:39Z. Current time: 2026-03-26T11:58:47Z, a difference of 848957 milliseconds.  Allowed clock skew: 0 milliseconds.
+2026-03-26 17:28:47.960 [http-nio-8080-exec-2] WARN  com.hms.security.jwt.JwtAuthenticationFilter - Invalid JWT provided from IP: 0:0:0:0:0:0:0:1, URL: /api/v1/auth/logout
+2026-03-26 17:28:47.961 [http-nio-8080-exec-2] WARN  com.hms.security.config.SecurityConfig - Access unauthorized to /api/v1/auth/logout - Full authentication is required to access this resource
+2026-03-26 17:28:47.964 [http-nio-8080-exec-2] WARN  com.hms.common.exception.GlobalExceptionHandler - Authentication failed: Full authentication is required to access this resource
+2026-03-26 17:28:49.976 [http-nio-8080-exec-6] WARN  com.hms.security.config.SecurityConfig - Access unauthorized to /api/v1/doctors - Full authentication is required to access this resource
+2026-03-26 17:28:49.978 [http-nio-8080-exec-6] WARN  com.hms.common.exception.GlobalExceptionHandler - Authentication failed: Full authentication is required to access this resource
+2026-03-26 17:28:50.683 [http-nio-8080-exec-9] INFO  com.hms.security.jwt.JwtAuthenticationFilter - Request authorized for user: admin with authorities: [ROLE_ADMIN]
+2026-03-26 17:28:50.685 [http-nio-8080-exec-5] INFO  com.hms.security.jwt.JwtAuthenticationFilter - Request authorized for user: admin with authorities: [ROLE_ADMIN]
+2026-03-26 17:28:52.054 [http-nio-8080-exec-10] INFO  com.hms.security.jwt.JwtAuthenticationFilter - Request authorized for user: admin with authorities: [ROLE_ADMIN]
+2026-03-26 17:28:53.996 [http-nio-8080-exec-4] INFO  com.hms.security.jwt.JwtAuthenticationFilter - Request authorized for user: admin with authorities: [ROLE_ADMIN]
+2026-03-26 17:46:24.661 [http-nio-8080-exec-1] INFO  com.hms.security.jwt.JwtAuthenticationFilter - Request authorized for user: admin with authorities: [ROLE_ADMIN]
+2026-03-26 17:46:24.661 [http-nio-8080-exec-7] INFO  com.hms.security.jwt.JwtAuthenticationFilter - Request authorized for user: admin with authorities: [ROLE_ADMIN]
+2026-03-26 17:46:59.085 [http-nio-8080-exec-10] INFO  com.hms.security.jwt.JwtAuthenticationFilter - Request authorized for user: admin with authorities: [ROLE_ADMIN]
+2026-03-26 17:46:59.088 [http-nio-8080-exec-4] INFO  com.hms.security.jwt.JwtAuthenticationFilter - Request authorized for user: admin with authorities: [ROLE_ADMIN]
+2026-03-26 17:53:27.002 [http-nio-8080-exec-3] INFO  com.hms.security.jwt.JwtAuthenticationFilter - Request authorized for user: admin with authorities: [ROLE_ADMIN]
+2026-03-26 17:53:27.007 [http-nio-8080-exec-8] INFO  com.hms.security.jwt.JwtAuthenticationFilter - Request authorized for user: admin with authorities: [ROLE_ADMIN]
+2026-03-26 17:53:32.796 [http-nio-8080-exec-7] INFO  com.hms.security.jwt.JwtAuthenticationFilter - Request authorized for user: admin with authorities: [ROLE_ADMIN]
+2026-03-26 17:53:34.343 [http-nio-8080-exec-5] INFO  com.hms.security.jwt.JwtAuthenticationFilter - Request authorized for user: admin with authorities: [ROLE_ADMIN]
+2026-03-26 17:53:36.048 [http-nio-8080-exec-4] INFO  com.hms.security.jwt.JwtAuthenticationFilter - Request authorized for user: admin with authorities: [ROLE_ADMIN]
+2026-03-26 17:53:37.490 [http-nio-8080-exec-2] INFO  com.hms.security.jwt.JwtAuthenticationFilter - Request authorized for user: admin with authorities: [ROLE_ADMIN]
+2026-03-26 17:53:38.440 [http-nio-8080-exec-6] INFO  com.hms.security.jwt.JwtAuthenticationFilter - Request authorized for user: admin with authorities: [ROLE_ADMIN]
+2026-03-26 17:53:40.435 [http-nio-8080-exec-7] INFO  com.hms.security.jwt.JwtAuthenticationFilter - Request authorized for user: admin with authorities: [ROLE_ADMIN]
+2026-03-26 17:53:40.437 [http-nio-8080-exec-1] INFO  com.hms.security.jwt.JwtAuthenticationFilter - Request authorized for user: admin with authorities: [ROLE_ADMIN]
+2026-03-26 17:53:53.666 [http-nio-8080-exec-5] INFO  com.hms.security.jwt.JwtAuthenticationFilter - Request authorized for user: admin with authorities: [ROLE_ADMIN]
+2026-03-26 17:53:54.973 [http-nio-8080-exec-10] INFO  com.hms.security.jwt.JwtAuthenticationFilter - Request authorized for user: admin with authorities: [ROLE_ADMIN]
+2026-03-26 17:53:57.863 [http-nio-8080-exec-2] INFO  com.hms.security.jwt.JwtAuthenticationFilter - Request authorized for user: admin with authorities: [ROLE_ADMIN]
+2026-03-26 17:54:01.396 [http-nio-8080-exec-6] INFO  com.hms.security.jwt.JwtAuthenticationFilter - Request authorized for user: admin with authorities: [ROLE_ADMIN]
+2026-03-26 17:54:01.397 [http-nio-8080-exec-8] INFO  com.hms.security.jwt.JwtAuthenticationFilter - Request authorized for user: admin with authorities: [ROLE_ADMIN]
+2026-03-26 17:55:55.231 [http-nio-8080-exec-7] INFO  com.hms.security.jwt.JwtAuthenticationFilter - Request authorized for user: admin with authorities: [ROLE_ADMIN]
+2026-03-26 17:55:55.233 [http-nio-8080-exec-9] INFO  com.hms.security.jwt.JwtAuthenticationFilter - Request authorized for user: admin with authorities: [ROLE_ADMIN]
+2026-03-26 17:56:46.896 [http-nio-8080-exec-5] INFO  com.hms.security.jwt.JwtAuthenticationFilter - Request authorized for user: admin with authorities: [ROLE_ADMIN]
+2026-03-26 17:56:46.922 [http-nio-8080-exec-4] INFO  com.hms.security.jwt.JwtAuthenticationFilter - Request authorized for user: admin with authorities: [ROLE_ADMIN]
+2026-03-26 17:59:38.352 [http-nio-8080-exec-8] INFO  com.hms.security.jwt.JwtAuthenticationFilter - Request authorized for user: admin with authorities: [ROLE_ADMIN]
+2026-03-26 17:59:38.360 [http-nio-8080-exec-6] INFO  com.hms.security.jwt.JwtAuthenticationFilter - Request authorized for user: admin with authorities: [ROLE_ADMIN]
+2026-03-26 18:01:33.348 [http-nio-8080-exec-9] INFO  com.hms.security.jwt.JwtAuthenticationFilter - Request authorized for user: admin with authorities: [ROLE_ADMIN]
+2026-03-26 18:04:10.551 [http-nio-8080-exec-5] INFO  com.hms.security.jwt.JwtAuthenticationFilter - Request authorized for user: admin with authorities: [ROLE_ADMIN]
+2026-03-26 18:06:51.526 [http-nio-8080-exec-10] INFO  com.hms.security.jwt.JwtAuthenticationFilter - Request authorized for user: admin with authorities: [ROLE_ADMIN]
+2026-03-26 18:06:51.558 [http-nio-8080-exec-2] INFO  com.hms.security.jwt.JwtAuthenticationFilter - Request authorized for user: admin with authorities: [ROLE_ADMIN]
+2026-03-26 18:08:17.034 [http-nio-8080-exec-3] INFO  com.hms.security.jwt.JwtAuthenticationFilter - Request authorized for user: admin with authorities: [ROLE_ADMIN]
+2026-03-26 18:08:17.066 [http-nio-8080-exec-1] INFO  com.hms.security.jwt.JwtAuthenticationFilter - Request authorized for user: admin with authorities: [ROLE_ADMIN]
+2026-03-26 18:08:22.210 [http-nio-8080-exec-9] INFO  com.hms.security.jwt.JwtAuthenticationFilter - Request authorized for user: admin with authorities: [ROLE_ADMIN]
+2026-03-26 18:13:47.731 [http-nio-8080-exec-4] INFO  com.hms.security.jwt.JwtAuthenticationFilter - Request authorized for user: admin with authorities: [ROLE_ADMIN]
+2026-03-26 18:13:47.732 [http-nio-8080-exec-10] INFO  com.hms.security.jwt.JwtAuthenticationFilter - Request authorized for user: admin with authorities: [ROLE_ADMIN]
+2026-03-26 18:13:59.419 [http-nio-8080-exec-2] INFO  com.hms.security.jwt.JwtAuthenticationFilter - Request authorized for user: admin with authorities: [ROLE_ADMIN]
+2026-03-26 18:13:59.495 [http-nio-8080-exec-8] INFO  com.hms.security.jwt.JwtAuthenticationFilter - Request authorized for user: admin with authorities: [ROLE_ADMIN]
+2026-03-26 18:13:59.497 [http-nio-8080-exec-6] INFO  com.hms.security.jwt.JwtAuthenticationFilter - Request authorized for user: admin with authorities: [ROLE_ADMIN]
+2026-03-26 18:18:34.893 [http-nio-8080-exec-5] INFO  com.hms.security.jwt.JwtAuthenticationFilter - Request authorized for user: admin with authorities: [ROLE_ADMIN]
+2026-03-26 18:18:34.941 [http-nio-8080-exec-10] INFO  com.hms.security.jwt.JwtAuthenticationFilter - Request authorized for user: admin with authorities: [ROLE_ADMIN]
+2026-03-26 18:18:36.938 [http-nio-8080-exec-4] INFO  com.hms.security.jwt.JwtAuthenticationFilter - Request authorized for user: admin with authorities: [ROLE_ADMIN]
+2026-03-26 18:18:36.942 [http-nio-8080-exec-8] INFO  com.hms.security.jwt.JwtAuthenticationFilter - Request authorized for user: admin with authorities: [ROLE_ADMIN]
+2026-03-26 18:18:40.383 [http-nio-8080-exec-6] INFO  com.hms.security.jwt.JwtAuthenticationFilter - Request authorized for user: admin with authorities: [ROLE_ADMIN]
+2026-03-26 18:18:40.383 [http-nio-8080-exec-2] INFO  com.hms.security.jwt.JwtAuthenticationFilter - Request authorized for user: admin with authorities: [ROLE_ADMIN]
+2026-03-26 18:20:05.386 [http-nio-8080-exec-3] INFO  com.hms.security.jwt.JwtAuthenticationFilter - Request authorized for user: admin with authorities: [ROLE_ADMIN]
+2026-03-26 18:20:05.386 [http-nio-8080-exec-7] INFO  com.hms.security.jwt.JwtAuthenticationFilter - Request authorized for user: admin with authorities: [ROLE_ADMIN]
+2026-03-26 18:20:21.578 [http-nio-8080-exec-5] INFO  com.hms.security.jwt.JwtAuthenticationFilter - Request authorized for user: admin with authorities: [ROLE_ADMIN]
+2026-03-26 18:20:21.584 [http-nio-8080-exec-10] INFO  com.hms.security.jwt.JwtAuthenticationFilter - Request authorized for user: admin with authorities: [ROLE_ADMIN]
+2026-03-26 18:20:39.609 [http-nio-8080-exec-4] INFO  com.hms.security.jwt.JwtAuthenticationFilter - Request authorized for user: admin with authorities: [ROLE_ADMIN]
+2026-03-26 18:20:39.614 [http-nio-8080-exec-8] INFO  com.hms.security.jwt.JwtAuthenticationFilter - Request authorized for user: admin with authorities: [ROLE_ADMIN]
+2026-03-26 18:20:45.314 [http-nio-8080-exec-6] INFO  com.hms.security.jwt.JwtAuthenticationFilter - Request authorized for user: admin with authorities: [ROLE_ADMIN]
+2026-03-26 18:20:45.321 [http-nio-8080-exec-2] INFO  com.hms.security.jwt.JwtAuthenticationFilter - Request authorized for user: admin with authorities: [ROLE_ADMIN]
+2026-03-26 18:25:24.599 [http-nio-8080-exec-7] INFO  com.hms.security.jwt.JwtAuthenticationFilter - Request authorized for user: admin with authorities: [ROLE_ADMIN]
+2026-03-26 18:25:24.605 [http-nio-8080-exec-3] INFO  com.hms.security.jwt.JwtAuthenticationFilter - Request authorized for user: admin with authorities: [ROLE_ADMIN]
+2026-03-26 18:27:04.524 [http-nio-8080-exec-4] INFO  com.hms.security.jwt.JwtAuthenticationFilter - Request authorized for user: admin with authorities: [ROLE_ADMIN]
+2026-03-26 18:27:04.524 [http-nio-8080-exec-8] INFO  com.hms.security.jwt.JwtAuthenticationFilter - Request authorized for user: admin with authorities: [ROLE_ADMIN]
+2026-03-26 18:27:11.201 [http-nio-8080-exec-6] INFO  com.hms.security.jwt.JwtAuthenticationFilter - Request authorized for user: admin with authorities: [ROLE_ADMIN]
+2026-03-26 18:27:11.211 [http-nio-8080-exec-2] INFO  com.hms.security.jwt.JwtAuthenticationFilter - Request authorized for user: admin with authorities: [ROLE_ADMIN]
+2026-03-26 18:27:15.389 [http-nio-8080-exec-1] INFO  com.hms.security.jwt.JwtAuthenticationFilter - Request authorized for user: admin with authorities: [ROLE_ADMIN]
+2026-03-26 18:27:15.413 [http-nio-8080-exec-9] INFO  com.hms.security.jwt.JwtAuthenticationFilter - Request authorized for user: admin with authorities: [ROLE_ADMIN]
+2026-03-26 18:27:17.229 [http-nio-8080-exec-7] INFO  com.hms.security.jwt.JwtAuthenticationFilter - Request authorized for user: admin with authorities: [ROLE_ADMIN]
+2026-03-26 18:27:17.233 [http-nio-8080-exec-3] INFO  com.hms.security.jwt.JwtAuthenticationFilter - Request authorized for user: admin with authorities: [ROLE_ADMIN]
+2026-03-26 18:27:18.160 [http-nio-8080-exec-5] INFO  com.hms.security.jwt.JwtAuthenticationFilter - Request authorized for user: admin with authorities: [ROLE_ADMIN]
+2026-03-26 18:27:18.181 [http-nio-8080-exec-10] INFO  com.hms.security.jwt.JwtAuthenticationFilter - Request authorized for user: admin with authorities: [ROLE_ADMIN]
+2026-03-26 18:27:21.054 [http-nio-8080-exec-4] INFO  com.hms.security.jwt.JwtAuthenticationFilter - Request authorized for user: admin with authorities: [ROLE_ADMIN]
+2026-03-26 18:27:21.062 [http-nio-8080-exec-8] INFO  com.hms.security.jwt.JwtAuthenticationFilter - Request authorized for user: admin with authorities: [ROLE_ADMIN]
+2026-03-26 18:27:29.108 [http-nio-8080-exec-6] INFO  com.hms.security.jwt.JwtAuthenticationFilter - Request authorized for user: admin with authorities: [ROLE_ADMIN]
+2026-03-26 18:27:29.124 [http-nio-8080-exec-2] INFO  com.hms.security.jwt.JwtAuthenticationFilter - Request authorized for user: admin with authorities: [ROLE_ADMIN]
+2026-03-26 18:27:35.007 [http-nio-8080-exec-1] INFO  com.hms.security.jwt.JwtAuthenticationFilter - Request authorized for user: admin with authorities: [ROLE_ADMIN]
+2026-03-26 18:27:35.013 [http-nio-8080-exec-9] INFO  com.hms.security.jwt.JwtAuthenticationFilter - Request authorized for user: admin with authorities: [ROLE_ADMIN]
+2026-03-26 18:27:38.052 [http-nio-8080-exec-7] INFO  com.hms.security.jwt.JwtAuthenticationFilter - Request authorized for user: admin with authorities: [ROLE_ADMIN]
+2026-03-26 18:27:38.056 [http-nio-8080-exec-3] INFO  com.hms.security.jwt.JwtAuthenticationFilter - Request authorized for user: admin with authorities: [ROLE_ADMIN]
+2026-03-26 18:29:42.332 [http-nio-8080-exec-8] INFO  com.hms.security.jwt.JwtAuthenticationFilter - Request authorized for user: admin with authorities: [ROLE_ADMIN]
+2026-03-26 18:29:48.212 [http-nio-8080-exec-9] INFO  com.hms.security.jwt.JwtAuthenticationFilter - Request authorized for user: recep with authorities: [ROLE_RECEPTIONIST]
+2026-03-26 18:30:54.726 [http-nio-8080-exec-5] INFO  com.hms.security.jwt.JwtAuthenticationFilter - Request authorized for user: recep with authorities: [ROLE_RECEPTIONIST]
+2026-03-26 18:30:54.812 [http-nio-8080-exec-5] INFO  com.hms.patient.service.impl.PatientServiceImpl - Creating patient with contact number: 7341791762
+2026-03-26 18:30:54.834 [http-nio-8080-exec-5] WARN  com.hms.common.exception.GlobalExceptionHandler - Duplicate patient: Patient already exists
+2026-03-26 18:30:56.860 [http-nio-8080-exec-10] INFO  com.hms.security.jwt.JwtAuthenticationFilter - Request authorized for user: recep with authorities: [ROLE_RECEPTIONIST]
+2026-03-26 18:30:56.865 [http-nio-8080-exec-10] INFO  com.hms.patient.service.impl.PatientServiceImpl - Creating patient with contact number: 7341791762
+2026-03-26 18:30:56.865 [http-nio-8080-exec-10] WARN  com.hms.common.exception.GlobalExceptionHandler - Duplicate patient: Patient already exists
+2026-03-26 18:31:01.550 [http-nio-8080-exec-4] INFO  com.hms.security.jwt.JwtAuthenticationFilter - Request authorized for user: recep with authorities: [ROLE_RECEPTIONIST]
+2026-03-26 18:31:01.553 [http-nio-8080-exec-4] INFO  com.hms.patient.service.impl.PatientServiceImpl - Creating patient with contact number: 7341791762
+2026-03-26 18:31:01.557 [http-nio-8080-exec-4] WARN  com.hms.common.exception.GlobalExceptionHandler - Duplicate patient: Patient already exists
+2026-03-26 18:31:12.860 [http-nio-8080-exec-8] INFO  com.hms.security.jwt.JwtAuthenticationFilter - Request authorized for user: recep with authorities: [ROLE_RECEPTIONIST]
+2026-03-26 18:31:12.864 [http-nio-8080-exec-8] INFO  com.hms.patient.service.impl.PatientServiceImpl - Creating patient with contact number: 7341791760
+2026-03-26 18:31:12.946 [http-nio-8080-exec-8] INFO  com.hms.patient.service.impl.PatientServiceImpl - Patient created successfully with ID: 2
+2026-03-26 18:31:16.098 [http-nio-8080-exec-6] INFO  com.hms.security.jwt.JwtAuthenticationFilter - Request authorized for user: recep with authorities: [ROLE_RECEPTIONIST]
+2026-03-26 18:31:16.117 [http-nio-8080-exec-1] INFO  com.hms.security.jwt.JwtAuthenticationFilter - Request authorized for user: recep with authorities: [ROLE_RECEPTIONIST]
+2026-03-26 18:35:53.358 [http-nio-8080-exec-3] INFO  com.hms.security.jwt.JwtAuthenticationFilter - Request authorized for user: recep with authorities: [ROLE_RECEPTIONIST]
+2026-03-26 18:35:53.367 [http-nio-8080-exec-5] INFO  com.hms.security.jwt.JwtAuthenticationFilter - Request authorized for user: recep with authorities: [ROLE_RECEPTIONIST]
+2026-03-26 18:36:19.758 [SpringApplicationShutdownHook] INFO  o.s.orm.jpa.LocalContainerEntityManagerFactoryBean - Closing JPA EntityManagerFactory for persistence unit 'default'
+2026-03-26 18:36:19.761 [SpringApplicationShutdownHook] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Shutdown initiated...
+2026-03-26 18:36:19.768 [SpringApplicationShutdownHook] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Shutdown completed.
+2026-03-26 18:36:32.104 [main] INFO  com.hms.HospitalManagementSystemApplication - Starting HospitalManagementSystemApplication using Java 21.0.10 with PID 13664 (C:\Users\Piyush\Desktop\Project\backend\target\classes started by Piyush in C:\Users\Piyush\Desktop\Project\backend)
+2026-03-26 18:36:32.106 [main] DEBUG com.hms.HospitalManagementSystemApplication - Running with Spring Boot v3.3.4, Spring v6.1.13
+2026-03-26 18:36:32.113 [main] INFO  com.hms.HospitalManagementSystemApplication - No active profile set, falling back to 1 default profile: "mysql"
+2026-03-26 18:36:33.371 [main] INFO  o.s.d.r.config.RepositoryConfigurationDelegate - Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2026-03-26 18:36:33.589 [main] INFO  o.s.d.r.config.RepositoryConfigurationDelegate - Finished Spring Data repository scanning in 208 ms. Found 9 JPA repository interfaces.
+2026-03-26 18:36:35.179 [main] INFO  o.s.boot.web.embedded.tomcat.TomcatWebServer - Tomcat initialized with port 8080 (http)
+2026-03-26 18:36:35.201 [main] INFO  org.apache.catalina.core.StandardService - Starting service [Tomcat]
+2026-03-26 18:36:35.202 [main] INFO  org.apache.catalina.core.StandardEngine - Starting Servlet engine: [Apache Tomcat/10.1.30]
+2026-03-26 18:36:35.305 [main] INFO  o.a.c.core.ContainerBase.[Tomcat].[localhost].[/] - Initializing Spring embedded WebApplicationContext
+2026-03-26 18:36:35.307 [main] INFO  o.s.b.w.s.c.ServletWebServerApplicationContext - Root WebApplicationContext: initialization completed in 3060 ms
+2026-03-26 18:36:35.753 [main] INFO  org.hibernate.jpa.internal.util.LogHelper - HHH000204: Processing PersistenceUnitInfo [name: default]
+2026-03-26 18:36:35.861 [main] INFO  org.hibernate.Version - HHH000412: Hibernate ORM core version 6.5.3.Final
+2026-03-26 18:36:35.921 [main] INFO  o.hibernate.cache.internal.RegionFactoryInitiator - HHH000026: Second-level cache disabled
+2026-03-26 18:36:36.377 [main] INFO  o.s.o.j.persistenceunit.SpringPersistenceUnitInfo - No LoadTimeWeaver setup: ignoring JPA class transformer
+2026-03-26 18:36:36.426 [main] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Starting...
+2026-03-26 18:36:36.630 [main] INFO  com.zaxxer.hikari.pool.HikariPool - HikariPool-1 - Added connection com.mysql.cj.jdbc.ConnectionImpl@5d6d424d
+2026-03-26 18:36:36.633 [main] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Start completed.
+2026-03-26 18:36:38.558 [main] INFO  o.h.e.t.jta.platform.internal.JtaPlatformInitiator - HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
+2026-03-26 18:36:39.096 [main] INFO  o.s.orm.jpa.LocalContainerEntityManagerFactoryBean - Initialized JPA EntityManagerFactory for persistence unit 'default'
+2026-03-26 18:36:39.799 [main] DEBUG com.hms.security.jwt.JwtAuthenticationFilter - Filter 'jwtAuthenticationFilter' configured for use
+2026-03-26 18:36:39.801 [main] DEBUG com.hms.security.filter.RateLimitFilter - Filter 'rateLimitFilter' configured for use
+2026-03-26 18:36:39.972 [main] INFO  o.s.data.jpa.repository.query.QueryEnhancerFactory - Hibernate is in classpath; If applicable, HQL parser will be used.
+2026-03-26 18:36:41.205 [main] INFO  o.s.s.c.a.a.c.InitializeUserDetailsBeanManagerConfigurer$InitializeUserDetailsManagerConfigurer - Global AuthenticationManager configured with UserDetailsService bean with name customUserDetailsService
+2026-03-26 18:36:42.320 [main] INFO  o.s.b.actuate.endpoint.web.EndpointLinksResolver - Exposing 3 endpoints beneath base path '/actuator'
+2026-03-26 18:36:42.416 [main] INFO  com.hms.security.config.SecurityConfig - Production Security configuration successfully initialized.
+2026-03-26 18:36:43.318 [main] INFO  o.s.boot.web.embedded.tomcat.TomcatWebServer - Tomcat started on port 8080 (http) with context path '/'
+2026-03-26 18:36:43.335 [main] INFO  com.hms.HospitalManagementSystemApplication - Started HospitalManagementSystemApplication in 12.512 seconds (process running for 13.435)
+2026-03-26 18:36:43.452 [main] INFO  com.hms.common.config.DataInitializer - Starting database column initialization...
+2026-03-26 18:36:43.509 [main] INFO  com.hms.common.config.DataInitializer - Repaired 2 Doctor profile fields for system compatibility
+2026-03-26 18:36:43.509 [main] INFO  com.hms.common.config.DataInitializer - Database column initialization completed.
+2026-03-26 18:36:50.138 [http-nio-8080-exec-2] INFO  o.a.c.core.ContainerBase.[Tomcat].[localhost].[/] - Initializing Spring DispatcherServlet 'dispatcherServlet'
+2026-03-26 18:36:50.154 [http-nio-8080-exec-2] INFO  org.springframework.web.servlet.DispatcherServlet - Initializing Servlet 'dispatcherServlet'
+2026-03-26 18:36:50.319 [http-nio-8080-exec-2] INFO  org.springframework.web.servlet.DispatcherServlet - Completed initialization in 15 ms
+2026-03-26 18:36:50.904 [http-nio-8080-exec-1] INFO  com.hms.security.jwt.JwtAuthenticationFilter - Request authorized for user: recep with authorities: [ROLE_RECEPTIONIST]
+2026-03-26 18:36:50.904 [http-nio-8080-exec-2] INFO  com.hms.security.jwt.JwtAuthenticationFilter - Request authorized for user: recep with authorities: [ROLE_RECEPTIONIST]
+2026-03-26 18:37:40.581 [http-nio-8080-exec-4] INFO  com.hms.security.jwt.JwtAuthenticationFilter - Request authorized for user: recep with authorities: [ROLE_RECEPTIONIST]
+2026-03-26 18:37:40.692 [http-nio-8080-exec-4] ERROR com.hms.common.exception.GlobalExceptionHandler - Unexpected error occurred at /api/v1/appointments
+jakarta.servlet.ServletException: Handler dispatch failed: java.lang.Error: Unresolved compilation problem: 
+	LocalDateTime cannot be resolved
+
+	at org.springframework.web.servlet.DispatcherServlet.doDispatch(DispatcherServlet.java:1104)
+	at org.springframework.web.servlet.DispatcherServlet.doService(DispatcherServlet.java:979)
+	at org.springframework.web.servlet.FrameworkServlet.processRequest(FrameworkServlet.java:1014)
+	at org.springframework.web.servlet.FrameworkServlet.doPost(FrameworkServlet.java:914)
+	at jakarta.servlet.http.HttpServlet.service(HttpServlet.java:590)
+	at org.springframework.web.servlet.FrameworkServlet.service(FrameworkServlet.java:885)
+	at jakarta.servlet.http.HttpServlet.service(HttpServlet.java:658)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:195)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:140)
+	at org.apache.tomcat.websocket.server.WsFilter.doFilter(WsFilter.java:51)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:164)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:140)
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:110)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:164)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:140)
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:110)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:164)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:140)
+	at org.springframework.web.filter.CompositeFilter$VirtualFilterChain.doFilter(CompositeFilter.java:108)
+	at org.springframework.security.web.FilterChainProxy.lambda$doFilterInternal$3(FilterChainProxy.java:231)
+	at org.springframework.security.web.ObservationFilterChainDecorator$FilterObservation$SimpleFilterObservation.lambda$wrap$1(ObservationFilterChainDecorator.java:479)
+	at org.springframework.security.web.ObservationFilterChainDecorator$AroundFilterObservation$SimpleAroundFilterObservation.lambda$wrap$1(ObservationFilterChainDecorator.java:340)
+	at org.springframework.security.web.ObservationFilterChainDecorator.lambda$wrapSecured$0(ObservationFilterChainDecorator.java:82)
+	at org.springframework.security.web.ObservationFilterChainDecorator$VirtualFilterChain.doFilter(ObservationFilterChainDecorator.java:128)
+	at org.springframework.security.web.access.intercept.AuthorizationFilter.doFilter(AuthorizationFilter.java:100)
+	at org.springframework.security.web.ObservationFilterChainDecorator$ObservationFilter.wrapFilter(ObservationFilterChainDecorator.java:240)
+	at org.springframework.security.web.ObservationFilterChainDecorator$ObservationFilter.doFilter(ObservationFilterChainDecorator.java:227)
+	at org.springframework.security.web.ObservationFilterChainDecorator$VirtualFilterChain.doFilter(ObservationFilterChainDecorator.java:137)
+	at org.springframework.security.web.access.ExceptionTranslationFilter.doFilter(ExceptionTranslationFilter.java:126)
+	at org.springframework.security.web.access.ExceptionTranslationFilter.doFilter(ExceptionTranslationFilter.java:120)
+	at org.springframework.security.web.ObservationFilterChainDecorator$ObservationFilter.wrapFilter(ObservationFilterChainDecorator.java:240)
+	at org.springframework.security.web.ObservationFilterChainDecorator$ObservationFilter.doFilter(ObservationFilterChainDecorator.java:227)
+	at org.springframework.security.web.ObservationFilterChainDecorator$VirtualFilterChain.doFilter(ObservationFilterChainDecorator.java:137)
+	at org.springframework.security.web.session.SessionManagementFilter.doFilter(SessionManagementFilter.java:131)
+	at org.springframework.security.web.session.SessionManagementFilter.doFilter(SessionManagementFilter.java:85)
+	at org.springframework.security.web.ObservationFilterChainDecorator$ObservationFilter.wrapFilter(ObservationFilterChainDecorator.java:240)
+	at org.springframework.security.web.ObservationFilterChainDecorator$ObservationFilter.doFilter(ObservationFilterChainDecorator.java:227)
+	at org.springframework.security.web.ObservationFilterChainDecorator$VirtualFilterChain.doFilter(ObservationFilterChainDecorator.java:137)
+	at org.springframework.security.web.authentication.AnonymousAuthenticationFilter.doFilter(AnonymousAuthenticationFilter.java:100)
+	at org.springframework.security.web.ObservationFilterChainDecorator$ObservationFilter.wrapFilter(ObservationFilterChainDecorator.java:240)
+	at org.springframework.security.web.ObservationFilterChainDecorator$ObservationFilter.doFilter(ObservationFilterChainDecorator.java:227)
+	at org.springframework.security.web.ObservationFilterChainDecorator$VirtualFilterChain.doFilter(ObservationFilterChainDecorator.java:137)
+	at org.springframework.security.web.servletapi.SecurityContextHolderAwareRequestFilter.doFilter(SecurityContextHolderAwareRequestFilter.java:179)
+	at org.springframework.security.web.ObservationFilterChainDecorator$ObservationFilter.wrapFilter(ObservationFilterChainDecorator.java:240)
+	at org.springframework.security.web.ObservationFilterChainDecorator$ObservationFilter.doFilter(ObservationFilterChainDecorator.java:227)
+	at org.springframework.security.web.ObservationFilterChainDecorator$VirtualFilterChain.doFilter(ObservationFilterChainDecorator.java:137)
+	at org.springframework.security.web.savedrequest.RequestCacheAwareFilter.doFilter(RequestCacheAwareFilter.java:63)
+	at org.springframework.security.web.ObservationFilterChainDecorator$ObservationFilter.wrapFilter(ObservationFilterChainDecorator.java:240)
+	at org.springframework.security.web.ObservationFilterChainDecorator$ObservationFilter.doFilter(ObservationFilterChainDecorator.java:227)
+	at org.springframework.security.web.ObservationFilterChainDecorator$VirtualFilterChain.doFilter(ObservationFilterChainDecorator.java:137)
+	at com.hms.security.jwt.JwtAuthenticationFilter.doFilterInternal(JwtAuthenticationFilter.java:100)
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116)
+	at org.springframework.security.web.ObservationFilterChainDecorator$ObservationFilter.wrapFilter(ObservationFilterChainDecorator.java:240)
+	at org.springframework.security.web.ObservationFilterChainDecorator$ObservationFilter.doFilter(ObservationFilterChainDecorator.java:227)
+	at org.springframework.security.web.ObservationFilterChainDecorator$VirtualFilterChain.doFilter(ObservationFilterChainDecorator.java:137)
+	at com.hms.security.filter.RateLimitFilter.doFilterInternal(RateLimitFilter.java:47)
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116)
+	at org.springframework.security.web.ObservationFilterChainDecorator$ObservationFilter.wrapFilter(ObservationFilterChainDecorator.java:240)
+	at org.springframework.security.web.ObservationFilterChainDecorator$ObservationFilter.doFilter(ObservationFilterChainDecorator.java:227)
+	at org.springframework.security.web.ObservationFilterChainDecorator$VirtualFilterChain.doFilter(ObservationFilterChainDecorator.java:137)
+	at org.springframework.security.web.authentication.logout.LogoutFilter.doFilter(LogoutFilter.java:107)
+	at org.springframework.security.web.authentication.logout.LogoutFilter.doFilter(LogoutFilter.java:93)
+	at org.springframework.security.web.ObservationFilterChainDecorator$ObservationFilter.wrapFilter(ObservationFilterChainDecorator.java:240)
+	at org.springframework.security.web.ObservationFilterChainDecorator$ObservationFilter.doFilter(ObservationFilterChainDecorator.java:227)
+	at org.springframework.security.web.ObservationFilterChainDecorator$VirtualFilterChain.doFilter(ObservationFilterChainDecorator.java:137)
+	at org.springframework.web.filter.CorsFilter.doFilterInternal(CorsFilter.java:91)
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116)
+	at org.springframework.security.web.ObservationFilterChainDecorator$ObservationFilter.wrapFilter(ObservationFilterChainDecorator.java:240)
+	at org.springframework.security.web.ObservationFilterChainDecorator$ObservationFilter.doFilter(ObservationFilterChainDecorator.java:227)
+	at org.springframework.security.web.ObservationFilterChainDecorator$VirtualFilterChain.doFilter(ObservationFilterChainDecorator.java:137)
+	at org.springframework.security.web.header.HeaderWriterFilter.doHeadersAfter(HeaderWriterFilter.java:90)
+	at org.springframework.security.web.header.HeaderWriterFilter.doFilterInternal(HeaderWriterFilter.java:75)
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116)
+	at org.springframework.security.web.ObservationFilterChainDecorator$ObservationFilter.wrapFilter(ObservationFilterChainDecorator.java:240)
+	at org.springframework.security.web.ObservationFilterChainDecorator$ObservationFilter.doFilter(ObservationFilterChainDecorator.java:227)
+	at org.springframework.security.web.ObservationFilterChainDecorator$VirtualFilterChain.doFilter(ObservationFilterChainDecorator.java:137)
+	at org.springframework.security.web.context.SecurityContextHolderFilter.doFilter(SecurityContextHolderFilter.java:82)
+	at org.springframework.security.web.context.SecurityContextHolderFilter.doFilter(SecurityContextHolderFilter.java:69)
+	at org.springframework.security.web.ObservationFilterChainDecorator$ObservationFilter.wrapFilter(ObservationFilterChainDecorator.java:240)
+	at org.springframework.security.web.ObservationFilterChainDecorator$ObservationFilter.doFilter(ObservationFilterChainDecorator.java:227)
+	at org.springframework.security.web.ObservationFilterChainDecorator$VirtualFilterChain.doFilter(ObservationFilterChainDecorator.java:137)
+	at org.springframework.security.web.context.request.async.WebAsyncManagerIntegrationFilter.doFilterInternal(WebAsyncManagerIntegrationFilter.java:62)
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116)
+	at org.springframework.security.web.ObservationFilterChainDecorator$ObservationFilter.wrapFilter(ObservationFilterChainDecorator.java:240)
+	at org.springframework.security.web.ObservationFilterChainDecorator$ObservationFilter.doFilter(ObservationFilterChainDecorator.java:227)
+	at org.springframework.security.web.ObservationFilterChainDecorator$VirtualFilterChain.doFilter(ObservationFilterChainDecorator.java:137)
+	at org.springframework.security.web.session.DisableEncodeUrlFilter.doFilterInternal(DisableEncodeUrlFilter.java:42)
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116)
+	at org.springframework.security.web.ObservationFilterChainDecorator$ObservationFilter.wrapFilter(ObservationFilterChainDecorator.java:240)
+	at org.springframework.security.web.ObservationFilterChainDecorator$AroundFilterObservation$SimpleAroundFilterObservation.lambda$wrap$0(ObservationFilterChainDecorator.java:323)
+	at org.springframework.security.web.ObservationFilterChainDecorator$ObservationFilter.doFilter(ObservationFilterChainDecorator.java:224)
+	at org.springframework.security.web.ObservationFilterChainDecorator$VirtualFilterChain.doFilter(ObservationFilterChainDecorator.java:137)
+	at org.springframework.security.web.FilterChainProxy.doFilterInternal(FilterChainProxy.java:233)
+	at org.springframework.security.web.FilterChainProxy.doFilter(FilterChainProxy.java:191)
+	at org.springframework.web.filter.CompositeFilter$VirtualFilterChain.doFilter(CompositeFilter.java:113)
+	at org.springframework.web.servlet.handler.HandlerMappingIntrospector.lambda$createCacheFilter$3(HandlerMappingIntrospector.java:195)
+	at org.springframework.web.filter.CompositeFilter$VirtualFilterChain.doFilter(CompositeFilter.java:113)
+	at org.springframework.web.filter.CompositeFilter.doFilter(CompositeFilter.java:74)
+	at org.springframework.security.config.annotation.web.configuration.WebMvcSecurityConfiguration$CompositeFilterChainProxy.doFilter(WebMvcSecurityConfiguration.java:230)
+	at org.springframework.web.filter.DelegatingFilterProxy.invokeDelegate(DelegatingFilterProxy.java:352)
+	at org.springframework.web.filter.DelegatingFilterProxy.doFilter(DelegatingFilterProxy.java:268)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:164)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:140)
+	at org.springframework.web.filter.RequestContextFilter.doFilterInternal(RequestContextFilter.java:100)
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:164)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:140)
+	at org.springframework.web.filter.FormContentFilter.doFilterInternal(FormContentFilter.java:93)
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:164)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:140)
+	at org.springframework.web.filter.ServerHttpObservationFilter.doFilterInternal(ServerHttpObservationFilter.java:113)
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:164)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:140)
+	at org.springframework.web.filter.CharacterEncodingFilter.doFilterInternal(CharacterEncodingFilter.java:201)
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:164)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:140)
+	at org.apache.catalina.core.StandardWrapperValve.invoke(StandardWrapperValve.java:167)
+	at org.apache.catalina.core.StandardContextValve.invoke(StandardContextValve.java:90)
+	at org.apache.catalina.authenticator.AuthenticatorBase.invoke(AuthenticatorBase.java:483)
+	at org.apache.catalina.core.StandardHostValve.invoke(StandardHostValve.java:115)
+	at org.apache.catalina.valves.ErrorReportValve.invoke(ErrorReportValve.java:93)
+	at org.apache.catalina.core.StandardEngineValve.invoke(StandardEngineValve.java:74)
+	at org.apache.catalina.connector.CoyoteAdapter.service(CoyoteAdapter.java:344)
+	at org.apache.coyote.http11.Http11Processor.service(Http11Processor.java:384)
+	at org.apache.coyote.AbstractProcessorLight.process(AbstractProcessorLight.java:63)
+	at org.apache.coyote.AbstractProtocol$ConnectionHandler.process(AbstractProtocol.java:905)
+	at org.apache.tomcat.util.net.NioEndpoint$SocketProcessor.doRun(NioEndpoint.java:1741)
+	at org.apache.tomcat.util.net.SocketProcessorBase.run(SocketProcessorBase.java:52)
+	at org.apache.tomcat.util.threads.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1190)
+	at org.apache.tomcat.util.threads.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:659)
+	at org.apache.tomcat.util.threads.TaskThread$WrappingRunnable.run(TaskThread.java:63)
+	at java.base/java.lang.Thread.run(Thread.java:1583)
+Caused by: java.lang.Error: Unresolved compilation problem: 
+	LocalDateTime cannot be resolved
+
+	at com.hms.appointment.mapper.AppointmentMapperImpl.toEntity(AppointmentMapperImpl.java:58)
+	at com.hms.appointment.service.impl.AppointmentServiceImpl.createAppointment(AppointmentServiceImpl.java:92)
+	at java.base/jdk.internal.reflect.DirectMethodHandleAccessor.invoke(DirectMethodHandleAccessor.java:103)
+	at java.base/java.lang.reflect.Method.invoke(Method.java:580)
+	at org.springframework.aop.support.AopUtils.invokeJoinpointUsingReflection(AopUtils.java:355)
+	at org.springframework.aop.framework.ReflectiveMethodInvocation.invokeJoinpoint(ReflectiveMethodInvocation.java:196)
+	at org.springframework.aop.framework.ReflectiveMethodInvocation.proceed(ReflectiveMethodInvocation.java:163)
+	at org.springframework.aop.framework.CglibAopProxy$CglibMethodInvocation.proceed(CglibAopProxy.java:768)
+	at org.springframework.transaction.interceptor.TransactionAspectSupport.invokeWithinTransaction(TransactionAspectSupport.java:379)
+	at org.springframework.transaction.interceptor.TransactionInterceptor.invoke(TransactionInterceptor.java:119)
+	at org.springframework.aop.framework.ReflectiveMethodInvocation.proceed(ReflectiveMethodInvocation.java:184)
+	at org.springframework.aop.framework.CglibAopProxy$CglibMethodInvocation.proceed(CglibAopProxy.java:768)
+	at org.springframework.aop.framework.CglibAopProxy$DynamicAdvisedInterceptor.intercept(CglibAopProxy.java:720)
+	at com.hms.appointment.service.impl.AppointmentServiceImpl$$SpringCGLIB$$0.createAppointment(<generated>)
+	at com.hms.appointment.controller.AppointmentController.create(AppointmentController.java:46)
+	at java.base/jdk.internal.reflect.DirectMethodHandleAccessor.invoke(DirectMethodHandleAccessor.java:103)
+	at java.base/java.lang.reflect.Method.invoke(Method.java:580)
+	at org.springframework.aop.support.AopUtils.invokeJoinpointUsingReflection(AopUtils.java:355)
+	at org.springframework.aop.framework.CglibAopProxy$DynamicAdvisedInterceptor.intercept(CglibAopProxy.java:716)
+	at com.hms.appointment.controller.AppointmentController$$SpringCGLIB$$0.create(<generated>)
+	at java.base/jdk.internal.reflect.DirectMethodHandleAccessor.invoke(DirectMethodHandleAccessor.java:103)
+	at java.base/java.lang.reflect.Method.invoke(Method.java:580)
+	at org.springframework.web.method.support.InvocableHandlerMethod.doInvoke(InvocableHandlerMethod.java:255)
+	at org.springframework.web.method.support.InvocableHandlerMethod.invokeForRequest(InvocableHandlerMethod.java:188)
+	at org.springframework.web.servlet.mvc.method.annotation.ServletInvocableHandlerMethod.invokeAndHandle(ServletInvocableHandlerMethod.java:118)
+	at org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerAdapter.invokeHandlerMethod(RequestMappingHandlerAdapter.java:926)
+	at org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerAdapter.handleInternal(RequestMappingHandlerAdapter.java:831)
+	at org.springframework.web.servlet.mvc.method.AbstractHandlerMethodAdapter.handle(AbstractHandlerMethodAdapter.java:87)
+	at org.springframework.web.servlet.DispatcherServlet.doDispatch(DispatcherServlet.java:1089)
+	... 134 common frames omitted
+2026-03-26 18:37:42.738 [http-nio-8080-exec-5] INFO  com.hms.security.jwt.JwtAuthenticationFilter - Request authorized for user: recep with authorities: [ROLE_RECEPTIONIST]
+2026-03-26 18:37:42.743 [http-nio-8080-exec-5] ERROR com.hms.common.exception.GlobalExceptionHandler - Unexpected error occurred at /api/v1/appointments
+jakarta.servlet.ServletException: Handler dispatch failed: java.lang.Error: Unresolved compilation problem: 
+	LocalDateTime cannot be resolved
+
+	at org.springframework.web.servlet.DispatcherServlet.doDispatch(DispatcherServlet.java:1104)
+	at org.springframework.web.servlet.DispatcherServlet.doService(DispatcherServlet.java:979)
+	at org.springframework.web.servlet.FrameworkServlet.processRequest(FrameworkServlet.java:1014)
+	at org.springframework.web.servlet.FrameworkServlet.doPost(FrameworkServlet.java:914)
+	at jakarta.servlet.http.HttpServlet.service(HttpServlet.java:590)
+	at org.springframework.web.servlet.FrameworkServlet.service(FrameworkServlet.java:885)
+	at jakarta.servlet.http.HttpServlet.service(HttpServlet.java:658)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:195)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:140)
+	at org.apache.tomcat.websocket.server.WsFilter.doFilter(WsFilter.java:51)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:164)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:140)
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:110)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:164)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:140)
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:110)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:164)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:140)
+	at org.springframework.web.filter.CompositeFilter$VirtualFilterChain.doFilter(CompositeFilter.java:108)
+	at org.springframework.security.web.FilterChainProxy.lambda$doFilterInternal$3(FilterChainProxy.java:231)
+	at org.springframework.security.web.ObservationFilterChainDecorator$FilterObservation$SimpleFilterObservation.lambda$wrap$1(ObservationFilterChainDecorator.java:479)
+	at org.springframework.security.web.ObservationFilterChainDecorator$AroundFilterObservation$SimpleAroundFilterObservation.lambda$wrap$1(ObservationFilterChainDecorator.java:340)
+	at org.springframework.security.web.ObservationFilterChainDecorator.lambda$wrapSecured$0(ObservationFilterChainDecorator.java:82)
+	at org.springframework.security.web.ObservationFilterChainDecorator$VirtualFilterChain.doFilter(ObservationFilterChainDecorator.java:128)
+	at org.springframework.security.web.access.intercept.AuthorizationFilter.doFilter(AuthorizationFilter.java:100)
+	at org.springframework.security.web.ObservationFilterChainDecorator$ObservationFilter.wrapFilter(ObservationFilterChainDecorator.java:240)
+	at org.springframework.security.web.ObservationFilterChainDecorator$ObservationFilter.doFilter(ObservationFilterChainDecorator.java:227)
+	at org.springframework.security.web.ObservationFilterChainDecorator$VirtualFilterChain.doFilter(ObservationFilterChainDecorator.java:137)
+	at org.springframework.security.web.access.ExceptionTranslationFilter.doFilter(ExceptionTranslationFilter.java:126)
+	at org.springframework.security.web.access.ExceptionTranslationFilter.doFilter(ExceptionTranslationFilter.java:120)
+	at org.springframework.security.web.ObservationFilterChainDecorator$ObservationFilter.wrapFilter(ObservationFilterChainDecorator.java:240)
+	at org.springframework.security.web.ObservationFilterChainDecorator$ObservationFilter.doFilter(ObservationFilterChainDecorator.java:227)
+	at org.springframework.security.web.ObservationFilterChainDecorator$VirtualFilterChain.doFilter(ObservationFilterChainDecorator.java:137)
+	at org.springframework.security.web.session.SessionManagementFilter.doFilter(SessionManagementFilter.java:131)
+	at org.springframework.security.web.session.SessionManagementFilter.doFilter(SessionManagementFilter.java:85)
+	at org.springframework.security.web.ObservationFilterChainDecorator$ObservationFilter.wrapFilter(ObservationFilterChainDecorator.java:240)
+	at org.springframework.security.web.ObservationFilterChainDecorator$ObservationFilter.doFilter(ObservationFilterChainDecorator.java:227)
+	at org.springframework.security.web.ObservationFilterChainDecorator$VirtualFilterChain.doFilter(ObservationFilterChainDecorator.java:137)
+	at org.springframework.security.web.authentication.AnonymousAuthenticationFilter.doFilter(AnonymousAuthenticationFilter.java:100)
+	at org.springframework.security.web.ObservationFilterChainDecorator$ObservationFilter.wrapFilter(ObservationFilterChainDecorator.java:240)
+	at org.springframework.security.web.ObservationFilterChainDecorator$ObservationFilter.doFilter(ObservationFilterChainDecorator.java:227)
+	at org.springframework.security.web.ObservationFilterChainDecorator$VirtualFilterChain.doFilter(ObservationFilterChainDecorator.java:137)
+	at org.springframework.security.web.servletapi.SecurityContextHolderAwareRequestFilter.doFilter(SecurityContextHolderAwareRequestFilter.java:179)
+	at org.springframework.security.web.ObservationFilterChainDecorator$ObservationFilter.wrapFilter(ObservationFilterChainDecorator.java:240)
+	at org.springframework.security.web.ObservationFilterChainDecorator$ObservationFilter.doFilter(ObservationFilterChainDecorator.java:227)
+	at org.springframework.security.web.ObservationFilterChainDecorator$VirtualFilterChain.doFilter(ObservationFilterChainDecorator.java:137)
+	at org.springframework.security.web.savedrequest.RequestCacheAwareFilter.doFilter(RequestCacheAwareFilter.java:63)
+	at org.springframework.security.web.ObservationFilterChainDecorator$ObservationFilter.wrapFilter(ObservationFilterChainDecorator.java:240)
+	at org.springframework.security.web.ObservationFilterChainDecorator$ObservationFilter.doFilter(ObservationFilterChainDecorator.java:227)
+	at org.springframework.security.web.ObservationFilterChainDecorator$VirtualFilterChain.doFilter(ObservationFilterChainDecorator.java:137)
+	at com.hms.security.jwt.JwtAuthenticationFilter.doFilterInternal(JwtAuthenticationFilter.java:100)
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116)
+	at org.springframework.security.web.ObservationFilterChainDecorator$ObservationFilter.wrapFilter(ObservationFilterChainDecorator.java:240)
+	at org.springframework.security.web.ObservationFilterChainDecorator$ObservationFilter.doFilter(ObservationFilterChainDecorator.java:227)
+	at org.springframework.security.web.ObservationFilterChainDecorator$VirtualFilterChain.doFilter(ObservationFilterChainDecorator.java:137)
+	at com.hms.security.filter.RateLimitFilter.doFilterInternal(RateLimitFilter.java:47)
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116)
+	at org.springframework.security.web.ObservationFilterChainDecorator$ObservationFilter.wrapFilter(ObservationFilterChainDecorator.java:240)
+	at org.springframework.security.web.ObservationFilterChainDecorator$ObservationFilter.doFilter(ObservationFilterChainDecorator.java:227)
+	at org.springframework.security.web.ObservationFilterChainDecorator$VirtualFilterChain.doFilter(ObservationFilterChainDecorator.java:137)
+	at org.springframework.security.web.authentication.logout.LogoutFilter.doFilter(LogoutFilter.java:107)
+	at org.springframework.security.web.authentication.logout.LogoutFilter.doFilter(LogoutFilter.java:93)
+	at org.springframework.security.web.ObservationFilterChainDecorator$ObservationFilter.wrapFilter(ObservationFilterChainDecorator.java:240)
+	at org.springframework.security.web.ObservationFilterChainDecorator$ObservationFilter.doFilter(ObservationFilterChainDecorator.java:227)
+	at org.springframework.security.web.ObservationFilterChainDecorator$VirtualFilterChain.doFilter(ObservationFilterChainDecorator.java:137)
+	at org.springframework.web.filter.CorsFilter.doFilterInternal(CorsFilter.java:91)
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116)
+	at org.springframework.security.web.ObservationFilterChainDecorator$ObservationFilter.wrapFilter(ObservationFilterChainDecorator.java:240)
+	at org.springframework.security.web.ObservationFilterChainDecorator$ObservationFilter.doFilter(ObservationFilterChainDecorator.java:227)
+	at org.springframework.security.web.ObservationFilterChainDecorator$VirtualFilterChain.doFilter(ObservationFilterChainDecorator.java:137)
+	at org.springframework.security.web.header.HeaderWriterFilter.doHeadersAfter(HeaderWriterFilter.java:90)
+	at org.springframework.security.web.header.HeaderWriterFilter.doFilterInternal(HeaderWriterFilter.java:75)
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116)
+	at org.springframework.security.web.ObservationFilterChainDecorator$ObservationFilter.wrapFilter(ObservationFilterChainDecorator.java:240)
+	at org.springframework.security.web.ObservationFilterChainDecorator$ObservationFilter.doFilter(ObservationFilterChainDecorator.java:227)
+	at org.springframework.security.web.ObservationFilterChainDecorator$VirtualFilterChain.doFilter(ObservationFilterChainDecorator.java:137)
+	at org.springframework.security.web.context.SecurityContextHolderFilter.doFilter(SecurityContextHolderFilter.java:82)
+	at org.springframework.security.web.context.SecurityContextHolderFilter.doFilter(SecurityContextHolderFilter.java:69)
+	at org.springframework.security.web.ObservationFilterChainDecorator$ObservationFilter.wrapFilter(ObservationFilterChainDecorator.java:240)
+	at org.springframework.security.web.ObservationFilterChainDecorator$ObservationFilter.doFilter(ObservationFilterChainDecorator.java:227)
+	at org.springframework.security.web.ObservationFilterChainDecorator$VirtualFilterChain.doFilter(ObservationFilterChainDecorator.java:137)
+	at org.springframework.security.web.context.request.async.WebAsyncManagerIntegrationFilter.doFilterInternal(WebAsyncManagerIntegrationFilter.java:62)
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116)
+	at org.springframework.security.web.ObservationFilterChainDecorator$ObservationFilter.wrapFilter(ObservationFilterChainDecorator.java:240)
+	at org.springframework.security.web.ObservationFilterChainDecorator$ObservationFilter.doFilter(ObservationFilterChainDecorator.java:227)
+	at org.springframework.security.web.ObservationFilterChainDecorator$VirtualFilterChain.doFilter(ObservationFilterChainDecorator.java:137)
+	at org.springframework.security.web.session.DisableEncodeUrlFilter.doFilterInternal(DisableEncodeUrlFilter.java:42)
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116)
+	at org.springframework.security.web.ObservationFilterChainDecorator$ObservationFilter.wrapFilter(ObservationFilterChainDecorator.java:240)
+	at org.springframework.security.web.ObservationFilterChainDecorator$AroundFilterObservation$SimpleAroundFilterObservation.lambda$wrap$0(ObservationFilterChainDecorator.java:323)
+	at org.springframework.security.web.ObservationFilterChainDecorator$ObservationFilter.doFilter(ObservationFilterChainDecorator.java:224)
+	at org.springframework.security.web.ObservationFilterChainDecorator$VirtualFilterChain.doFilter(ObservationFilterChainDecorator.java:137)
+	at org.springframework.security.web.FilterChainProxy.doFilterInternal(FilterChainProxy.java:233)
+	at org.springframework.security.web.FilterChainProxy.doFilter(FilterChainProxy.java:191)
+	at org.springframework.web.filter.CompositeFilter$VirtualFilterChain.doFilter(CompositeFilter.java:113)
+	at org.springframework.web.servlet.handler.HandlerMappingIntrospector.lambda$createCacheFilter$3(HandlerMappingIntrospector.java:195)
+	at org.springframework.web.filter.CompositeFilter$VirtualFilterChain.doFilter(CompositeFilter.java:113)
+	at org.springframework.web.filter.CompositeFilter.doFilter(CompositeFilter.java:74)
+	at org.springframework.security.config.annotation.web.configuration.WebMvcSecurityConfiguration$CompositeFilterChainProxy.doFilter(WebMvcSecurityConfiguration.java:230)
+	at org.springframework.web.filter.DelegatingFilterProxy.invokeDelegate(DelegatingFilterProxy.java:352)
+	at org.springframework.web.filter.DelegatingFilterProxy.doFilter(DelegatingFilterProxy.java:268)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:164)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:140)
+	at org.springframework.web.filter.RequestContextFilter.doFilterInternal(RequestContextFilter.java:100)
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:164)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:140)
+	at org.springframework.web.filter.FormContentFilter.doFilterInternal(FormContentFilter.java:93)
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:164)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:140)
+	at org.springframework.web.filter.ServerHttpObservationFilter.doFilterInternal(ServerHttpObservationFilter.java:113)
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:164)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:140)
+	at org.springframework.web.filter.CharacterEncodingFilter.doFilterInternal(CharacterEncodingFilter.java:201)
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:164)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:140)
+	at org.apache.catalina.core.StandardWrapperValve.invoke(StandardWrapperValve.java:167)
+	at org.apache.catalina.core.StandardContextValve.invoke(StandardContextValve.java:90)
+	at org.apache.catalina.authenticator.AuthenticatorBase.invoke(AuthenticatorBase.java:483)
+	at org.apache.catalina.core.StandardHostValve.invoke(StandardHostValve.java:115)
+	at org.apache.catalina.valves.ErrorReportValve.invoke(ErrorReportValve.java:93)
+	at org.apache.catalina.core.StandardEngineValve.invoke(StandardEngineValve.java:74)
+	at org.apache.catalina.connector.CoyoteAdapter.service(CoyoteAdapter.java:344)
+	at org.apache.coyote.http11.Http11Processor.service(Http11Processor.java:384)
+	at org.apache.coyote.AbstractProcessorLight.process(AbstractProcessorLight.java:63)
+	at org.apache.coyote.AbstractProtocol$ConnectionHandler.process(AbstractProtocol.java:905)
+	at org.apache.tomcat.util.net.NioEndpoint$SocketProcessor.doRun(NioEndpoint.java:1741)
+	at org.apache.tomcat.util.net.SocketProcessorBase.run(SocketProcessorBase.java:52)
+	at org.apache.tomcat.util.threads.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1190)
+	at org.apache.tomcat.util.threads.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:659)
+	at org.apache.tomcat.util.threads.TaskThread$WrappingRunnable.run(TaskThread.java:63)
+	at java.base/java.lang.Thread.run(Thread.java:1583)
+Caused by: java.lang.Error: Unresolved compilation problem: 
+	LocalDateTime cannot be resolved
+
+	at com.hms.appointment.mapper.AppointmentMapperImpl.toEntity(AppointmentMapperImpl.java:58)
+	at com.hms.appointment.service.impl.AppointmentServiceImpl.createAppointment(AppointmentServiceImpl.java:92)
+	at java.base/jdk.internal.reflect.DirectMethodHandleAccessor.invoke(DirectMethodHandleAccessor.java:103)
+	at java.base/java.lang.reflect.Method.invoke(Method.java:580)
+	at org.springframework.aop.support.AopUtils.invokeJoinpointUsingReflection(AopUtils.java:355)
+	at org.springframework.aop.framework.ReflectiveMethodInvocation.invokeJoinpoint(ReflectiveMethodInvocation.java:196)
+	at org.springframework.aop.framework.ReflectiveMethodInvocation.proceed(ReflectiveMethodInvocation.java:163)
+	at org.springframework.aop.framework.CglibAopProxy$CglibMethodInvocation.proceed(CglibAopProxy.java:768)
+	at org.springframework.transaction.interceptor.TransactionAspectSupport.invokeWithinTransaction(TransactionAspectSupport.java:379)
+	at org.springframework.transaction.interceptor.TransactionInterceptor.invoke(TransactionInterceptor.java:119)
+	at org.springframework.aop.framework.ReflectiveMethodInvocation.proceed(ReflectiveMethodInvocation.java:184)
+	at org.springframework.aop.framework.CglibAopProxy$CglibMethodInvocation.proceed(CglibAopProxy.java:768)
+	at org.springframework.aop.framework.CglibAopProxy$DynamicAdvisedInterceptor.intercept(CglibAopProxy.java:720)
+	at com.hms.appointment.service.impl.AppointmentServiceImpl$$SpringCGLIB$$0.createAppointment(<generated>)
+	at com.hms.appointment.controller.AppointmentController.create(AppointmentController.java:46)
+	at java.base/jdk.internal.reflect.DirectMethodHandleAccessor.invoke(DirectMethodHandleAccessor.java:103)
+	at java.base/java.lang.reflect.Method.invoke(Method.java:580)
+	at org.springframework.aop.support.AopUtils.invokeJoinpointUsingReflection(AopUtils.java:355)
+	at org.springframework.aop.framework.CglibAopProxy$DynamicAdvisedInterceptor.intercept(CglibAopProxy.java:716)
+	at com.hms.appointment.controller.AppointmentController$$SpringCGLIB$$0.create(<generated>)
+	at java.base/jdk.internal.reflect.DirectMethodHandleAccessor.invoke(DirectMethodHandleAccessor.java:103)
+	at java.base/java.lang.reflect.Method.invoke(Method.java:580)
+	at org.springframework.web.method.support.InvocableHandlerMethod.doInvoke(InvocableHandlerMethod.java:255)
+	at org.springframework.web.method.support.InvocableHandlerMethod.invokeForRequest(InvocableHandlerMethod.java:188)
+	at org.springframework.web.servlet.mvc.method.annotation.ServletInvocableHandlerMethod.invokeAndHandle(ServletInvocableHandlerMethod.java:118)
+	at org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerAdapter.invokeHandlerMethod(RequestMappingHandlerAdapter.java:926)
+	at org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerAdapter.handleInternal(RequestMappingHandlerAdapter.java:831)
+	at org.springframework.web.servlet.mvc.method.AbstractHandlerMethodAdapter.handle(AbstractHandlerMethodAdapter.java:87)
+	at org.springframework.web.servlet.DispatcherServlet.doDispatch(DispatcherServlet.java:1089)
+	... 134 common frames omitted
+2026-03-26 18:37:47.554 [http-nio-8080-exec-6] INFO  com.hms.security.jwt.JwtAuthenticationFilter - Request authorized for user: recep with authorities: [ROLE_RECEPTIONIST]
+2026-03-26 18:37:47.557 [http-nio-8080-exec-6] ERROR com.hms.common.exception.GlobalExceptionHandler - Unexpected error occurred at /api/v1/appointments
+jakarta.servlet.ServletException: Handler dispatch failed: java.lang.Error: Unresolved compilation problem: 
+	LocalDateTime cannot be resolved
+
+	at org.springframework.web.servlet.DispatcherServlet.doDispatch(DispatcherServlet.java:1104)
+	at org.springframework.web.servlet.DispatcherServlet.doService(DispatcherServlet.java:979)
+	at org.springframework.web.servlet.FrameworkServlet.processRequest(FrameworkServlet.java:1014)
+	at org.springframework.web.servlet.FrameworkServlet.doPost(FrameworkServlet.java:914)
+	at jakarta.servlet.http.HttpServlet.service(HttpServlet.java:590)
+	at org.springframework.web.servlet.FrameworkServlet.service(FrameworkServlet.java:885)
+	at jakarta.servlet.http.HttpServlet.service(HttpServlet.java:658)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:195)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:140)
+	at org.apache.tomcat.websocket.server.WsFilter.doFilter(WsFilter.java:51)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:164)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:140)
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:110)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:164)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:140)
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:110)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:164)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:140)
+	at org.springframework.web.filter.CompositeFilter$VirtualFilterChain.doFilter(CompositeFilter.java:108)
+	at org.springframework.security.web.FilterChainProxy.lambda$doFilterInternal$3(FilterChainProxy.java:231)
+	at org.springframework.security.web.ObservationFilterChainDecorator$FilterObservation$SimpleFilterObservation.lambda$wrap$1(ObservationFilterChainDecorator.java:479)
+	at org.springframework.security.web.ObservationFilterChainDecorator$AroundFilterObservation$SimpleAroundFilterObservation.lambda$wrap$1(ObservationFilterChainDecorator.java:340)
+	at org.springframework.security.web.ObservationFilterChainDecorator.lambda$wrapSecured$0(ObservationFilterChainDecorator.java:82)
+	at org.springframework.security.web.ObservationFilterChainDecorator$VirtualFilterChain.doFilter(ObservationFilterChainDecorator.java:128)
+	at org.springframework.security.web.access.intercept.AuthorizationFilter.doFilter(AuthorizationFilter.java:100)
+	at org.springframework.security.web.ObservationFilterChainDecorator$ObservationFilter.wrapFilter(ObservationFilterChainDecorator.java:240)
+	at org.springframework.security.web.ObservationFilterChainDecorator$ObservationFilter.doFilter(ObservationFilterChainDecorator.java:227)
+	at org.springframework.security.web.ObservationFilterChainDecorator$VirtualFilterChain.doFilter(ObservationFilterChainDecorator.java:137)
+	at org.springframework.security.web.access.ExceptionTranslationFilter.doFilter(ExceptionTranslationFilter.java:126)
+	at org.springframework.security.web.access.ExceptionTranslationFilter.doFilter(ExceptionTranslationFilter.java:120)
+	at org.springframework.security.web.ObservationFilterChainDecorator$ObservationFilter.wrapFilter(ObservationFilterChainDecorator.java:240)
+	at org.springframework.security.web.ObservationFilterChainDecorator$ObservationFilter.doFilter(ObservationFilterChainDecorator.java:227)
+	at org.springframework.security.web.ObservationFilterChainDecorator$VirtualFilterChain.doFilter(ObservationFilterChainDecorator.java:137)
+	at org.springframework.security.web.session.SessionManagementFilter.doFilter(SessionManagementFilter.java:131)
+	at org.springframework.security.web.session.SessionManagementFilter.doFilter(SessionManagementFilter.java:85)
+	at org.springframework.security.web.ObservationFilterChainDecorator$ObservationFilter.wrapFilter(ObservationFilterChainDecorator.java:240)
+	at org.springframework.security.web.ObservationFilterChainDecorator$ObservationFilter.doFilter(ObservationFilterChainDecorator.java:227)
+	at org.springframework.security.web.ObservationFilterChainDecorator$VirtualFilterChain.doFilter(ObservationFilterChainDecorator.java:137)
+	at org.springframework.security.web.authentication.AnonymousAuthenticationFilter.doFilter(AnonymousAuthenticationFilter.java:100)
+	at org.springframework.security.web.ObservationFilterChainDecorator$ObservationFilter.wrapFilter(ObservationFilterChainDecorator.java:240)
+	at org.springframework.security.web.ObservationFilterChainDecorator$ObservationFilter.doFilter(ObservationFilterChainDecorator.java:227)
+	at org.springframework.security.web.ObservationFilterChainDecorator$VirtualFilterChain.doFilter(ObservationFilterChainDecorator.java:137)
+	at org.springframework.security.web.servletapi.SecurityContextHolderAwareRequestFilter.doFilter(SecurityContextHolderAwareRequestFilter.java:179)
+	at org.springframework.security.web.ObservationFilterChainDecorator$ObservationFilter.wrapFilter(ObservationFilterChainDecorator.java:240)
+	at org.springframework.security.web.ObservationFilterChainDecorator$ObservationFilter.doFilter(ObservationFilterChainDecorator.java:227)
+	at org.springframework.security.web.ObservationFilterChainDecorator$VirtualFilterChain.doFilter(ObservationFilterChainDecorator.java:137)
+	at org.springframework.security.web.savedrequest.RequestCacheAwareFilter.doFilter(RequestCacheAwareFilter.java:63)
+	at org.springframework.security.web.ObservationFilterChainDecorator$ObservationFilter.wrapFilter(ObservationFilterChainDecorator.java:240)
+	at org.springframework.security.web.ObservationFilterChainDecorator$ObservationFilter.doFilter(ObservationFilterChainDecorator.java:227)
+	at org.springframework.security.web.ObservationFilterChainDecorator$VirtualFilterChain.doFilter(ObservationFilterChainDecorator.java:137)
+	at com.hms.security.jwt.JwtAuthenticationFilter.doFilterInternal(JwtAuthenticationFilter.java:100)
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116)
+	at org.springframework.security.web.ObservationFilterChainDecorator$ObservationFilter.wrapFilter(ObservationFilterChainDecorator.java:240)
+	at org.springframework.security.web.ObservationFilterChainDecorator$ObservationFilter.doFilter(ObservationFilterChainDecorator.java:227)
+	at org.springframework.security.web.ObservationFilterChainDecorator$VirtualFilterChain.doFilter(ObservationFilterChainDecorator.java:137)
+	at com.hms.security.filter.RateLimitFilter.doFilterInternal(RateLimitFilter.java:47)
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116)
+	at org.springframework.security.web.ObservationFilterChainDecorator$ObservationFilter.wrapFilter(ObservationFilterChainDecorator.java:240)
+	at org.springframework.security.web.ObservationFilterChainDecorator$ObservationFilter.doFilter(ObservationFilterChainDecorator.java:227)
+	at org.springframework.security.web.ObservationFilterChainDecorator$VirtualFilterChain.doFilter(ObservationFilterChainDecorator.java:137)
+	at org.springframework.security.web.authentication.logout.LogoutFilter.doFilter(LogoutFilter.java:107)
+	at org.springframework.security.web.authentication.logout.LogoutFilter.doFilter(LogoutFilter.java:93)
+	at org.springframework.security.web.ObservationFilterChainDecorator$ObservationFilter.wrapFilter(ObservationFilterChainDecorator.java:240)
+	at org.springframework.security.web.ObservationFilterChainDecorator$ObservationFilter.doFilter(ObservationFilterChainDecorator.java:227)
+	at org.springframework.security.web.ObservationFilterChainDecorator$VirtualFilterChain.doFilter(ObservationFilterChainDecorator.java:137)
+	at org.springframework.web.filter.CorsFilter.doFilterInternal(CorsFilter.java:91)
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116)
+	at org.springframework.security.web.ObservationFilterChainDecorator$ObservationFilter.wrapFilter(ObservationFilterChainDecorator.java:240)
+	at org.springframework.security.web.ObservationFilterChainDecorator$ObservationFilter.doFilter(ObservationFilterChainDecorator.java:227)
+	at org.springframework.security.web.ObservationFilterChainDecorator$VirtualFilterChain.doFilter(ObservationFilterChainDecorator.java:137)
+	at org.springframework.security.web.header.HeaderWriterFilter.doHeadersAfter(HeaderWriterFilter.java:90)
+	at org.springframework.security.web.header.HeaderWriterFilter.doFilterInternal(HeaderWriterFilter.java:75)
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116)
+	at org.springframework.security.web.ObservationFilterChainDecorator$ObservationFilter.wrapFilter(ObservationFilterChainDecorator.java:240)
+	at org.springframework.security.web.ObservationFilterChainDecorator$ObservationFilter.doFilter(ObservationFilterChainDecorator.java:227)
+	at org.springframework.security.web.ObservationFilterChainDecorator$VirtualFilterChain.doFilter(ObservationFilterChainDecorator.java:137)
+	at org.springframework.security.web.context.SecurityContextHolderFilter.doFilter(SecurityContextHolderFilter.java:82)
+	at org.springframework.security.web.context.SecurityContextHolderFilter.doFilter(SecurityContextHolderFilter.java:69)
+	at org.springframework.security.web.ObservationFilterChainDecorator$ObservationFilter.wrapFilter(ObservationFilterChainDecorator.java:240)
+	at org.springframework.security.web.ObservationFilterChainDecorator$ObservationFilter.doFilter(ObservationFilterChainDecorator.java:227)
+	at org.springframework.security.web.ObservationFilterChainDecorator$VirtualFilterChain.doFilter(ObservationFilterChainDecorator.java:137)
+	at org.springframework.security.web.context.request.async.WebAsyncManagerIntegrationFilter.doFilterInternal(WebAsyncManagerIntegrationFilter.java:62)
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116)
+	at org.springframework.security.web.ObservationFilterChainDecorator$ObservationFilter.wrapFilter(ObservationFilterChainDecorator.java:240)
+	at org.springframework.security.web.ObservationFilterChainDecorator$ObservationFilter.doFilter(ObservationFilterChainDecorator.java:227)
+	at org.springframework.security.web.ObservationFilterChainDecorator$VirtualFilterChain.doFilter(ObservationFilterChainDecorator.java:137)
+	at org.springframework.security.web.session.DisableEncodeUrlFilter.doFilterInternal(DisableEncodeUrlFilter.java:42)
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116)
+	at org.springframework.security.web.ObservationFilterChainDecorator$ObservationFilter.wrapFilter(ObservationFilterChainDecorator.java:240)
+	at org.springframework.security.web.ObservationFilterChainDecorator$AroundFilterObservation$SimpleAroundFilterObservation.lambda$wrap$0(ObservationFilterChainDecorator.java:323)
+	at org.springframework.security.web.ObservationFilterChainDecorator$ObservationFilter.doFilter(ObservationFilterChainDecorator.java:224)
+	at org.springframework.security.web.ObservationFilterChainDecorator$VirtualFilterChain.doFilter(ObservationFilterChainDecorator.java:137)
+	at org.springframework.security.web.FilterChainProxy.doFilterInternal(FilterChainProxy.java:233)
+	at org.springframework.security.web.FilterChainProxy.doFilter(FilterChainProxy.java:191)
+	at org.springframework.web.filter.CompositeFilter$VirtualFilterChain.doFilter(CompositeFilter.java:113)
+	at org.springframework.web.servlet.handler.HandlerMappingIntrospector.lambda$createCacheFilter$3(HandlerMappingIntrospector.java:195)
+	at org.springframework.web.filter.CompositeFilter$VirtualFilterChain.doFilter(CompositeFilter.java:113)
+	at org.springframework.web.filter.CompositeFilter.doFilter(CompositeFilter.java:74)
+	at org.springframework.security.config.annotation.web.configuration.WebMvcSecurityConfiguration$CompositeFilterChainProxy.doFilter(WebMvcSecurityConfiguration.java:230)
+	at org.springframework.web.filter.DelegatingFilterProxy.invokeDelegate(DelegatingFilterProxy.java:352)
+	at org.springframework.web.filter.DelegatingFilterProxy.doFilter(DelegatingFilterProxy.java:268)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:164)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:140)
+	at org.springframework.web.filter.RequestContextFilter.doFilterInternal(RequestContextFilter.java:100)
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:164)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:140)
+	at org.springframework.web.filter.FormContentFilter.doFilterInternal(FormContentFilter.java:93)
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:164)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:140)
+	at org.springframework.web.filter.ServerHttpObservationFilter.doFilterInternal(ServerHttpObservationFilter.java:113)
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:164)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:140)
+	at org.springframework.web.filter.CharacterEncodingFilter.doFilterInternal(CharacterEncodingFilter.java:201)
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:164)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:140)
+	at org.apache.catalina.core.StandardWrapperValve.invoke(StandardWrapperValve.java:167)
+	at org.apache.catalina.core.StandardContextValve.invoke(StandardContextValve.java:90)
+	at org.apache.catalina.authenticator.AuthenticatorBase.invoke(AuthenticatorBase.java:483)
+	at org.apache.catalina.core.StandardHostValve.invoke(StandardHostValve.java:115)
+	at org.apache.catalina.valves.ErrorReportValve.invoke(ErrorReportValve.java:93)
+	at org.apache.catalina.core.StandardEngineValve.invoke(StandardEngineValve.java:74)
+	at org.apache.catalina.connector.CoyoteAdapter.service(CoyoteAdapter.java:344)
+	at org.apache.coyote.http11.Http11Processor.service(Http11Processor.java:384)
+	at org.apache.coyote.AbstractProcessorLight.process(AbstractProcessorLight.java:63)
+	at org.apache.coyote.AbstractProtocol$ConnectionHandler.process(AbstractProtocol.java:905)
+	at org.apache.tomcat.util.net.NioEndpoint$SocketProcessor.doRun(NioEndpoint.java:1741)
+	at org.apache.tomcat.util.net.SocketProcessorBase.run(SocketProcessorBase.java:52)
+	at org.apache.tomcat.util.threads.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1190)
+	at org.apache.tomcat.util.threads.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:659)
+	at org.apache.tomcat.util.threads.TaskThread$WrappingRunnable.run(TaskThread.java:63)
+	at java.base/java.lang.Thread.run(Thread.java:1583)
+Caused by: java.lang.Error: Unresolved compilation problem: 
+	LocalDateTime cannot be resolved
+
+	at com.hms.appointment.mapper.AppointmentMapperImpl.toEntity(AppointmentMapperImpl.java:58)
+	at com.hms.appointment.service.impl.AppointmentServiceImpl.createAppointment(AppointmentServiceImpl.java:92)
+	at java.base/jdk.internal.reflect.DirectMethodHandleAccessor.invoke(DirectMethodHandleAccessor.java:103)
+	at java.base/java.lang.reflect.Method.invoke(Method.java:580)
+	at org.springframework.aop.support.AopUtils.invokeJoinpointUsingReflection(AopUtils.java:355)
+	at org.springframework.aop.framework.ReflectiveMethodInvocation.invokeJoinpoint(ReflectiveMethodInvocation.java:196)
+	at org.springframework.aop.framework.ReflectiveMethodInvocation.proceed(ReflectiveMethodInvocation.java:163)
+	at org.springframework.aop.framework.CglibAopProxy$CglibMethodInvocation.proceed(CglibAopProxy.java:768)
+	at org.springframework.transaction.interceptor.TransactionAspectSupport.invokeWithinTransaction(TransactionAspectSupport.java:379)
+	at org.springframework.transaction.interceptor.TransactionInterceptor.invoke(TransactionInterceptor.java:119)
+	at org.springframework.aop.framework.ReflectiveMethodInvocation.proceed(ReflectiveMethodInvocation.java:184)
+	at org.springframework.aop.framework.CglibAopProxy$CglibMethodInvocation.proceed(CglibAopProxy.java:768)
+	at org.springframework.aop.framework.CglibAopProxy$DynamicAdvisedInterceptor.intercept(CglibAopProxy.java:720)
+	at com.hms.appointment.service.impl.AppointmentServiceImpl$$SpringCGLIB$$0.createAppointment(<generated>)
+	at com.hms.appointment.controller.AppointmentController.create(AppointmentController.java:46)
+	at java.base/jdk.internal.reflect.DirectMethodHandleAccessor.invoke(DirectMethodHandleAccessor.java:103)
+	at java.base/java.lang.reflect.Method.invoke(Method.java:580)
+	at org.springframework.aop.support.AopUtils.invokeJoinpointUsingReflection(AopUtils.java:355)
+	at org.springframework.aop.framework.CglibAopProxy$DynamicAdvisedInterceptor.intercept(CglibAopProxy.java:716)
+	at com.hms.appointment.controller.AppointmentController$$SpringCGLIB$$0.create(<generated>)
+	at java.base/jdk.internal.reflect.DirectMethodHandleAccessor.invoke(DirectMethodHandleAccessor.java:103)
+	at java.base/java.lang.reflect.Method.invoke(Method.java:580)
+	at org.springframework.web.method.support.InvocableHandlerMethod.doInvoke(InvocableHandlerMethod.java:255)
+	at org.springframework.web.method.support.InvocableHandlerMethod.invokeForRequest(InvocableHandlerMethod.java:188)
+	at org.springframework.web.servlet.mvc.method.annotation.ServletInvocableHandlerMethod.invokeAndHandle(ServletInvocableHandlerMethod.java:118)
+	at org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerAdapter.invokeHandlerMethod(RequestMappingHandlerAdapter.java:926)
+	at org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerAdapter.handleInternal(RequestMappingHandlerAdapter.java:831)
+	at org.springframework.web.servlet.mvc.method.AbstractHandlerMethodAdapter.handle(AbstractHandlerMethodAdapter.java:87)
+	at org.springframework.web.servlet.DispatcherServlet.doDispatch(DispatcherServlet.java:1089)
+	... 134 common frames omitted
+2026-03-26 18:39:11.758 [SpringApplicationShutdownHook] INFO  o.s.orm.jpa.LocalContainerEntityManagerFactoryBean - Closing JPA EntityManagerFactory for persistence unit 'default'
+2026-03-26 18:39:11.760 [SpringApplicationShutdownHook] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Shutdown initiated...
+2026-03-26 18:39:11.770 [SpringApplicationShutdownHook] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Shutdown completed.
+2026-03-26 18:39:23.026 [main] INFO  com.hms.HospitalManagementSystemApplication - Starting HospitalManagementSystemApplication using Java 21.0.10 with PID 28572 (C:\Users\Piyush\Desktop\Project\backend\target\classes started by Piyush in C:\Users\Piyush\Desktop\Project\backend)
+2026-03-26 18:39:23.028 [main] DEBUG com.hms.HospitalManagementSystemApplication - Running with Spring Boot v3.3.4, Spring v6.1.13
+2026-03-26 18:39:23.029 [main] INFO  com.hms.HospitalManagementSystemApplication - No active profile set, falling back to 1 default profile: "mysql"
+2026-03-26 18:39:24.179 [main] INFO  o.s.d.r.config.RepositoryConfigurationDelegate - Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2026-03-26 18:39:24.407 [main] INFO  o.s.d.r.config.RepositoryConfigurationDelegate - Finished Spring Data repository scanning in 218 ms. Found 9 JPA repository interfaces.
+2026-03-26 18:39:25.982 [main] INFO  o.s.boot.web.embedded.tomcat.TomcatWebServer - Tomcat initialized with port 8080 (http)
+2026-03-26 18:39:26.001 [main] INFO  org.apache.catalina.core.StandardService - Starting service [Tomcat]
+2026-03-26 18:39:26.001 [main] INFO  org.apache.catalina.core.StandardEngine - Starting Servlet engine: [Apache Tomcat/10.1.30]
+2026-03-26 18:39:26.082 [main] INFO  o.a.c.core.ContainerBase.[Tomcat].[localhost].[/] - Initializing Spring embedded WebApplicationContext
+2026-03-26 18:39:26.083 [main] INFO  o.s.b.w.s.c.ServletWebServerApplicationContext - Root WebApplicationContext: initialization completed in 2947 ms
+2026-03-26 18:39:26.522 [main] INFO  org.hibernate.jpa.internal.util.LogHelper - HHH000204: Processing PersistenceUnitInfo [name: default]
+2026-03-26 18:39:26.596 [main] INFO  org.hibernate.Version - HHH000412: Hibernate ORM core version 6.5.3.Final
+2026-03-26 18:39:26.642 [main] INFO  o.hibernate.cache.internal.RegionFactoryInitiator - HHH000026: Second-level cache disabled
+2026-03-26 18:39:27.011 [main] INFO  o.s.o.j.persistenceunit.SpringPersistenceUnitInfo - No LoadTimeWeaver setup: ignoring JPA class transformer
+2026-03-26 18:39:27.063 [main] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Starting...
+2026-03-26 18:39:27.254 [main] INFO  com.zaxxer.hikari.pool.HikariPool - HikariPool-1 - Added connection com.mysql.cj.jdbc.ConnectionImpl@434d001d
+2026-03-26 18:39:27.257 [main] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Start completed.
+2026-03-26 18:39:29.037 [main] INFO  o.h.e.t.jta.platform.internal.JtaPlatformInitiator - HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
+2026-03-26 18:39:29.531 [main] INFO  o.s.orm.jpa.LocalContainerEntityManagerFactoryBean - Initialized JPA EntityManagerFactory for persistence unit 'default'
+2026-03-26 18:39:30.298 [main] DEBUG com.hms.security.jwt.JwtAuthenticationFilter - Filter 'jwtAuthenticationFilter' configured for use
+2026-03-26 18:39:30.301 [main] DEBUG com.hms.security.filter.RateLimitFilter - Filter 'rateLimitFilter' configured for use
+2026-03-26 18:39:30.454 [main] INFO  o.s.data.jpa.repository.query.QueryEnhancerFactory - Hibernate is in classpath; If applicable, HQL parser will be used.
+2026-03-26 18:39:31.098 [main] INFO  o.s.s.c.a.a.c.InitializeUserDetailsBeanManagerConfigurer$InitializeUserDetailsManagerConfigurer - Global AuthenticationManager configured with UserDetailsService bean with name customUserDetailsService
+2026-03-26 18:39:31.884 [main] INFO  o.s.b.actuate.endpoint.web.EndpointLinksResolver - Exposing 3 endpoints beneath base path '/actuator'
+2026-03-26 18:39:31.927 [main] INFO  com.hms.security.config.SecurityConfig - Production Security configuration successfully initialized.
+2026-03-26 18:39:32.485 [main] INFO  o.s.boot.web.embedded.tomcat.TomcatWebServer - Tomcat started on port 8080 (http) with context path '/'
+2026-03-26 18:39:32.501 [main] INFO  com.hms.HospitalManagementSystemApplication - Started HospitalManagementSystemApplication in 10.292 seconds (process running for 10.887)
+2026-03-26 18:39:32.601 [main] INFO  com.hms.common.config.DataInitializer - Starting database column initialization...
+2026-03-26 18:39:32.653 [main] INFO  com.hms.common.config.DataInitializer - Database column initialization completed.
+2026-03-26 18:40:24.598 [http-nio-8080-exec-1] INFO  o.a.c.core.ContainerBase.[Tomcat].[localhost].[/] - Initializing Spring DispatcherServlet 'dispatcherServlet'
+2026-03-26 18:40:24.599 [http-nio-8080-exec-1] INFO  org.springframework.web.servlet.DispatcherServlet - Initializing Servlet 'dispatcherServlet'
+2026-03-26 18:40:24.601 [http-nio-8080-exec-1] INFO  org.springframework.web.servlet.DispatcherServlet - Completed initialization in 2 ms
+2026-03-26 18:40:25.057 [http-nio-8080-exec-1] INFO  com.hms.security.jwt.JwtAuthenticationFilter - Request authorized for user: recep with authorities: [ROLE_RECEPTIONIST]
+2026-03-26 18:40:25.693 [http-nio-8080-exec-2] INFO  com.hms.security.jwt.JwtAuthenticationFilter - Request authorized for user: recep with authorities: [ROLE_RECEPTIONIST]
+2026-03-26 18:40:25.721 [http-nio-8080-exec-3] INFO  com.hms.security.jwt.JwtAuthenticationFilter - Request authorized for user: recep with authorities: [ROLE_RECEPTIONIST]
+2026-03-26 18:40:30.229 [http-nio-8080-exec-5] INFO  com.hms.security.jwt.JwtAuthenticationFilter - Request authorized for user: recep with authorities: [ROLE_RECEPTIONIST]
+2026-03-26 18:41:44.216 [http-nio-8080-exec-8] INFO  com.hms.security.jwt.JwtAuthenticationFilter - Request authorized for user: recep with authorities: [ROLE_RECEPTIONIST]
+2026-03-26 18:42:24.016 [http-nio-8080-exec-9] INFO  com.hms.security.jwt.JwtAuthenticationFilter - Request authorized for user: recep with authorities: [ROLE_RECEPTIONIST]
+2026-03-26 18:42:55.415 [http-nio-8080-exec-7] INFO  com.hms.security.jwt.JwtAuthenticationFilter - Request authorized for user: recep with authorities: [ROLE_RECEPTIONIST]
+2026-03-26 18:43:33.172 [http-nio-8080-exec-1] INFO  com.hms.security.jwt.JwtAuthenticationFilter - Request authorized for user: recep with authorities: [ROLE_RECEPTIONIST]
+2026-03-26 18:43:56.736 [http-nio-8080-exec-4] INFO  com.hms.security.jwt.JwtAuthenticationFilter - Request authorized for user: recep with authorities: [ROLE_RECEPTIONIST]
+2026-03-26 18:43:56.744 [http-nio-8080-exec-2] INFO  com.hms.security.jwt.JwtAuthenticationFilter - Request authorized for user: recep with authorities: [ROLE_RECEPTIONIST]
+2026-03-26 18:43:57.619 [http-nio-8080-exec-3] INFO  com.hms.security.jwt.JwtAuthenticationFilter - Request authorized for user: recep with authorities: [ROLE_RECEPTIONIST]
+2026-03-26 18:43:57.729 [http-nio-8080-exec-5] INFO  com.hms.security.jwt.JwtAuthenticationFilter - Request authorized for user: recep with authorities: [ROLE_RECEPTIONIST]
+2026-03-26 21:22:45.114 [main] INFO  com.hms.HospitalManagementSystemApplication - Starting HospitalManagementSystemApplication using Java 21.0.10 with PID 28308 (C:\Users\Piyush\Desktop\Project\backend\target\classes started by Piyush in C:\Users\Piyush\Desktop\Project\backend)
+2026-03-26 21:22:45.114 [main] DEBUG com.hms.HospitalManagementSystemApplication - Running with Spring Boot v3.3.4, Spring v6.1.13
+2026-03-26 21:22:45.114 [main] INFO  com.hms.HospitalManagementSystemApplication - No active profile set, falling back to 1 default profile: "mysql"
+2026-03-26 21:22:46.948 [main] INFO  o.s.d.r.config.RepositoryConfigurationDelegate - Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2026-03-26 21:22:47.309 [main] INFO  o.s.d.r.config.RepositoryConfigurationDelegate - Finished Spring Data repository scanning in 346 ms. Found 9 JPA repository interfaces.
+2026-03-26 21:22:50.048 [main] INFO  o.s.boot.web.embedded.tomcat.TomcatWebServer - Tomcat initialized with port 8080 (http)
+2026-03-26 21:22:50.077 [main] INFO  org.apache.catalina.core.StandardService - Starting service [Tomcat]
+2026-03-26 21:22:50.077 [main] INFO  org.apache.catalina.core.StandardEngine - Starting Servlet engine: [Apache Tomcat/10.1.30]
+2026-03-26 21:22:50.236 [main] INFO  o.a.c.core.ContainerBase.[Tomcat].[localhost].[/] - Initializing Spring embedded WebApplicationContext
+2026-03-26 21:22:50.236 [main] INFO  o.s.b.w.s.c.ServletWebServerApplicationContext - Root WebApplicationContext: initialization completed in 4857 ms
+2026-03-26 21:22:50.809 [main] INFO  org.hibernate.jpa.internal.util.LogHelper - HHH000204: Processing PersistenceUnitInfo [name: default]
+2026-03-26 21:22:50.953 [main] INFO  org.hibernate.Version - HHH000412: Hibernate ORM core version 6.5.3.Final
+2026-03-26 21:22:51.034 [main] INFO  o.hibernate.cache.internal.RegionFactoryInitiator - HHH000026: Second-level cache disabled
+2026-03-26 21:22:51.725 [main] INFO  o.s.o.j.persistenceunit.SpringPersistenceUnitInfo - No LoadTimeWeaver setup: ignoring JPA class transformer
+2026-03-26 21:22:51.855 [main] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Starting...
+2026-03-26 21:22:52.151 [main] INFO  com.zaxxer.hikari.pool.HikariPool - HikariPool-1 - Added connection com.mysql.cj.jdbc.ConnectionImpl@72288480
+2026-03-26 21:22:52.155 [main] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Start completed.
+2026-03-26 21:22:54.801 [main] INFO  o.h.e.t.jta.platform.internal.JtaPlatformInitiator - HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
+2026-03-26 21:22:55.399 [main] INFO  o.s.orm.jpa.LocalContainerEntityManagerFactoryBean - Initialized JPA EntityManagerFactory for persistence unit 'default'
+2026-03-26 21:22:56.613 [main] DEBUG com.hms.security.jwt.JwtAuthenticationFilter - Filter 'jwtAuthenticationFilter' configured for use
+2026-03-26 21:22:56.613 [main] DEBUG com.hms.security.filter.RateLimitFilter - Filter 'rateLimitFilter' configured for use
+2026-03-26 21:22:56.823 [main] INFO  o.s.data.jpa.repository.query.QueryEnhancerFactory - Hibernate is in classpath; If applicable, HQL parser will be used.
+2026-03-26 21:22:57.853 [main] INFO  o.s.s.c.a.a.c.InitializeUserDetailsBeanManagerConfigurer$InitializeUserDetailsManagerConfigurer - Global AuthenticationManager configured with UserDetailsService bean with name customUserDetailsService
+2026-03-26 21:22:59.157 [main] INFO  o.s.b.actuate.endpoint.web.EndpointLinksResolver - Exposing 3 endpoints beneath base path '/actuator'
+2026-03-26 21:22:59.253 [main] INFO  com.hms.security.config.SecurityConfig - Production Security configuration successfully initialized.
+2026-03-26 21:23:00.218 [main] INFO  o.s.boot.web.embedded.tomcat.TomcatWebServer - Tomcat started on port 8080 (http) with context path '/'
+2026-03-26 21:23:00.266 [main] INFO  com.hms.HospitalManagementSystemApplication - Started HospitalManagementSystemApplication in 16.338 seconds (process running for 17.061)
+2026-03-26 21:23:00.472 [main] INFO  com.hms.common.config.DataInitializer - Starting database column initialization...
+2026-03-26 21:23:00.551 [main] INFO  com.hms.common.config.DataInitializer - Database column initialization completed.
+2026-03-26 21:27:40.428 [http-nio-8080-exec-1] INFO  o.a.c.core.ContainerBase.[Tomcat].[localhost].[/] - Initializing Spring DispatcherServlet 'dispatcherServlet'
+2026-03-26 21:27:40.430 [http-nio-8080-exec-1] INFO  org.springframework.web.servlet.DispatcherServlet - Initializing Servlet 'dispatcherServlet'
+2026-03-26 21:27:40.432 [http-nio-8080-exec-1] INFO  org.springframework.web.servlet.DispatcherServlet - Completed initialization in 2 ms
+2026-03-26 21:27:43.117 [http-nio-8080-exec-4] INFO  com.hms.security.jwt.JwtAuthenticationFilter - Request authorized for user: recep with authorities: [ROLE_RECEPTIONIST]
+2026-03-26 21:27:55.138 [http-nio-8080-exec-6] INFO  com.hms.security.jwt.JwtAuthenticationFilter - Request authorized for user: recep with authorities: [ROLE_RECEPTIONIST]
+2026-03-26 21:28:02.148 [http-nio-8080-exec-10] INFO  com.hms.security.jwt.JwtAuthenticationFilter - Request authorized for user: admin with authorities: [ROLE_ADMIN]
+2026-03-26 21:28:02.150 [http-nio-8080-exec-1] INFO  com.hms.security.jwt.JwtAuthenticationFilter - Request authorized for user: admin with authorities: [ROLE_ADMIN]
+2026-03-26 21:28:02.246 [http-nio-8080-exec-2] INFO  com.hms.security.jwt.JwtAuthenticationFilter - Request authorized for user: admin with authorities: [ROLE_ADMIN]
+2026-03-26 21:28:10.187 [http-nio-8080-exec-4] INFO  com.hms.security.jwt.JwtAuthenticationFilter - Request authorized for user: admin with authorities: [ROLE_ADMIN]
+2026-03-26 21:28:12.531 [http-nio-8080-exec-7] INFO  com.hms.security.jwt.JwtAuthenticationFilter - Request authorized for user: admin with authorities: [ROLE_ADMIN]
+2026-03-26 21:28:12.631 [http-nio-8080-exec-8] INFO  com.hms.security.jwt.JwtAuthenticationFilter - Request authorized for user: admin with authorities: [ROLE_ADMIN]
+2026-03-26 21:28:14.728 [http-nio-8080-exec-2] INFO  com.hms.security.jwt.JwtAuthenticationFilter - Request authorized for user: admin with authorities: [ROLE_ADMIN]
+2026-03-26 21:28:14.728 [http-nio-8080-exec-10] INFO  com.hms.security.jwt.JwtAuthenticationFilter - Request authorized for user: admin with authorities: [ROLE_ADMIN]
+2026-03-26 21:28:23.834 [http-nio-8080-exec-3] INFO  com.hms.security.jwt.JwtAuthenticationFilter - Request authorized for user: admin with authorities: [ROLE_ADMIN]
+2026-03-26 21:28:23.834 [http-nio-8080-exec-4] INFO  com.hms.security.jwt.JwtAuthenticationFilter - Request authorized for user: admin with authorities: [ROLE_ADMIN]
+2026-03-26 21:28:34.395 [http-nio-8080-exec-6] INFO  com.hms.security.jwt.JwtAuthenticationFilter - Request authorized for user: admin with authorities: [ROLE_ADMIN]
+2026-03-26 21:28:34.394 [http-nio-8080-exec-5] INFO  com.hms.security.jwt.JwtAuthenticationFilter - Request authorized for user: admin with authorities: [ROLE_ADMIN]
+2026-03-26 21:28:40.131 [http-nio-8080-exec-8] INFO  com.hms.security.jwt.JwtAuthenticationFilter - Request authorized for user: admin with authorities: [ROLE_ADMIN]
+2026-03-26 21:28:40.133 [http-nio-8080-exec-7] INFO  com.hms.security.jwt.JwtAuthenticationFilter - Request authorized for user: admin with authorities: [ROLE_ADMIN]
+2026-03-26 21:28:42.131 [http-nio-8080-exec-1] INFO  com.hms.security.jwt.JwtAuthenticationFilter - Request authorized for user: admin with authorities: [ROLE_ADMIN]
+2026-03-26 21:39:57.860 [http-nio-8080-exec-4] INFO  com.hms.security.jwt.JwtAuthenticationFilter - Request authorized for user: admin with authorities: [ROLE_ADMIN]
+2026-03-26 21:40:41.088 [http-nio-8080-exec-6] INFO  com.hms.security.jwt.JwtAuthenticationFilter - Request authorized for user: admin with authorities: [ROLE_ADMIN]
+2026-03-26 21:40:57.326 [http-nio-8080-exec-5] INFO  com.hms.security.jwt.JwtAuthenticationFilter - Request authorized for user: admin with authorities: [ROLE_ADMIN]
+2026-03-26 21:41:16.455 [http-nio-8080-exec-8] INFO  com.hms.security.jwt.JwtAuthenticationFilter - Request authorized for user: admin with authorities: [ROLE_ADMIN]
+2026-03-26 21:41:44.039 [http-nio-8080-exec-9] INFO  com.hms.security.jwt.JwtAuthenticationFilter - Request authorized for user: admin with authorities: [ROLE_ADMIN]
+2026-03-26 21:48:18.945 [http-nio-8080-exec-10] INFO  com.hms.security.jwt.JwtAuthenticationFilter - Request authorized for user: admin with authorities: [ROLE_ADMIN]
+2026-03-26 21:48:58.954 [http-nio-8080-exec-6] INFO  com.hms.security.jwt.JwtAuthenticationFilter - Request authorized for user: admin with authorities: [ROLE_ADMIN]
+2026-03-26 21:48:58.957 [http-nio-8080-exec-4] INFO  com.hms.security.jwt.JwtAuthenticationFilter - Request authorized for user: admin with authorities: [ROLE_ADMIN]
+2026-03-26 21:54:36.457 [http-nio-8080-exec-9] INFO  com.hms.security.jwt.JwtAuthenticationFilter - Request authorized for user: admin with authorities: [ROLE_ADMIN]
+2026-03-26 21:54:36.470 [http-nio-8080-exec-8] INFO  com.hms.security.jwt.JwtAuthenticationFilter - Request authorized for user: admin with authorities: [ROLE_ADMIN]
+2026-03-26 21:55:09.150 [http-nio-8080-exec-1] INFO  com.hms.security.jwt.JwtAuthenticationFilter - Request authorized for user: admin with authorities: [ROLE_ADMIN]
+2026-03-26 21:55:09.150 [http-nio-8080-exec-10] INFO  com.hms.security.jwt.JwtAuthenticationFilter - Request authorized for user: admin with authorities: [ROLE_ADMIN]
+2026-03-26 21:58:00.428 [http-nio-8080-exec-6] INFO  com.hms.security.jwt.JwtAuthenticationFilter - Request authorized for user: admin with authorities: [ROLE_ADMIN]
+2026-03-26 21:58:00.428 [http-nio-8080-exec-4] INFO  com.hms.security.jwt.JwtAuthenticationFilter - Request authorized for user: admin with authorities: [ROLE_ADMIN]
+2026-03-26 21:59:03.810 [http-nio-8080-exec-8] INFO  com.hms.security.jwt.JwtAuthenticationFilter - Request authorized for user: admin with authorities: [ROLE_ADMIN]
+2026-03-26 21:59:03.810 [http-nio-8080-exec-9] INFO  com.hms.security.jwt.JwtAuthenticationFilter - Request authorized for user: admin with authorities: [ROLE_ADMIN]
+2026-03-26 21:59:04.354 [http-nio-8080-exec-10] INFO  com.hms.security.jwt.JwtAuthenticationFilter - Request authorized for user: admin with authorities: [ROLE_ADMIN]
+2026-03-26 21:59:05.447 [http-nio-8080-exec-1] INFO  com.hms.security.jwt.JwtAuthenticationFilter - Request authorized for user: admin with authorities: [ROLE_ADMIN]
+2026-03-26 21:59:05.494 [http-nio-8080-exec-3] INFO  com.hms.security.jwt.JwtAuthenticationFilter - Request authorized for user: admin with authorities: [ROLE_ADMIN]
+2026-03-26 22:00:11.941 [http-nio-8080-exec-6] INFO  com.hms.security.jwt.JwtAuthenticationFilter - Request authorized for user: admin with authorities: [ROLE_ADMIN]
+2026-03-26 22:00:11.987 [http-nio-8080-exec-5] INFO  com.hms.security.jwt.JwtAuthenticationFilter - Request authorized for user: admin with authorities: [ROLE_ADMIN]
+2026-03-26 22:04:14.379 [http-nio-8080-exec-8] INFO  com.hms.security.jwt.JwtAuthenticationFilter - Request authorized for user: admin with authorities: [ROLE_ADMIN]
+2026-03-26 22:04:14.417 [http-nio-8080-exec-10] INFO  com.hms.security.jwt.JwtAuthenticationFilter - Request authorized for user: admin with authorities: [ROLE_ADMIN]
+2026-03-26 22:04:21.108 [http-nio-8080-exec-1] INFO  com.hms.security.jwt.JwtAuthenticationFilter - Request authorized for user: admin with authorities: [ROLE_ADMIN]
+2026-03-26 22:04:21.181 [http-nio-8080-exec-3] INFO  com.hms.security.jwt.JwtAuthenticationFilter - Request authorized for user: admin with authorities: [ROLE_ADMIN]
+2026-03-26 22:04:29.099 [http-nio-8080-exec-4] INFO  com.hms.security.jwt.JwtAuthenticationFilter - Request authorized for user: admin with authorities: [ROLE_ADMIN]
+2026-03-26 22:04:29.137 [http-nio-8080-exec-2] INFO  com.hms.security.jwt.JwtAuthenticationFilter - Request authorized for user: admin with authorities: [ROLE_ADMIN]
+2026-03-26 22:04:38.140 [http-nio-8080-exec-6] INFO  com.hms.security.jwt.JwtAuthenticationFilter - Request authorized for user: admin with authorities: [ROLE_ADMIN]
+2026-03-26 22:04:38.190 [http-nio-8080-exec-5] INFO  com.hms.security.jwt.JwtAuthenticationFilter - Request authorized for user: admin with authorities: [ROLE_ADMIN]
+2026-03-26 22:04:44.159 [http-nio-8080-exec-9] INFO  com.hms.security.jwt.JwtAuthenticationFilter - Request authorized for user: admin with authorities: [ROLE_ADMIN]
+2026-03-26 22:04:44.206 [http-nio-8080-exec-7] INFO  com.hms.security.jwt.JwtAuthenticationFilter - Request authorized for user: admin with authorities: [ROLE_ADMIN]
+2026-03-26 22:05:14.888 [http-nio-8080-exec-8] INFO  com.hms.security.jwt.JwtAuthenticationFilter - Request authorized for user: admin with authorities: [ROLE_ADMIN]
+2026-03-26 22:05:18.786 [http-nio-8080-exec-10] INFO  com.hms.security.jwt.JwtAuthenticationFilter - Request authorized for user: admin with authorities: [ROLE_ADMIN]
+2026-03-26 22:06:14.486 [http-nio-8080-exec-3] INFO  com.hms.security.jwt.JwtAuthenticationFilter - Request authorized for user: admin with authorities: [ROLE_ADMIN]
+2026-03-26 22:06:15.951 [http-nio-8080-exec-4] INFO  com.hms.security.jwt.JwtAuthenticationFilter - Request authorized for user: admin with authorities: [ROLE_ADMIN]
+2026-03-26 22:06:22.944 [http-nio-8080-exec-2] INFO  com.hms.security.jwt.JwtAuthenticationFilter - Request authorized for user: admin with authorities: [ROLE_ADMIN]
+2026-03-26 22:06:28.043 [http-nio-8080-exec-6] INFO  com.hms.security.jwt.JwtAuthenticationFilter - Request authorized for user: admin with authorities: [ROLE_ADMIN]
+2026-03-26 22:06:32.117 [http-nio-8080-exec-5] INFO  com.hms.security.jwt.JwtAuthenticationFilter - Request authorized for user: admin with authorities: [ROLE_ADMIN]
+2026-03-26 22:07:28.765 [http-nio-8080-exec-9] INFO  com.hms.security.jwt.JwtAuthenticationFilter - Request authorized for user: admin with authorities: [ROLE_ADMIN]
+2026-03-26 22:09:28.107 [http-nio-8080-exec-8] INFO  com.hms.security.jwt.JwtAuthenticationFilter - Request authorized for user: admin with authorities: [ROLE_ADMIN]
+2026-03-26 22:09:40.129 [http-nio-8080-exec-10] INFO  com.hms.security.jwt.JwtAuthenticationFilter - Request authorized for user: admin with authorities: [ROLE_ADMIN]
+2026-03-26 22:09:52.119 [http-nio-8080-exec-1] INFO  com.hms.security.jwt.JwtAuthenticationFilter - Request authorized for user: admin with authorities: [ROLE_ADMIN]
+2026-03-26 22:14:10.230 [http-nio-8080-exec-4] INFO  com.hms.security.jwt.JwtAuthenticationFilter - Request authorized for user: admin with authorities: [ROLE_ADMIN]
+2026-03-26 22:31:32.016 [http-nio-8080-exec-6] ERROR com.hms.security.jwt.JwtUtil - JWT token is expired: JWT expired at 2026-03-26T16:58:02Z. Current time: 2026-03-26T17:01:32Z, a difference of 210010 milliseconds.  Allowed clock skew: 0 milliseconds.
+2026-03-26 22:31:32.019 [http-nio-8080-exec-6] WARN  com.hms.security.jwt.JwtAuthenticationFilter - Invalid JWT provided from IP: 0:0:0:0:0:0:0:1, URL: /api/v1/medicines
+2026-03-26 22:31:32.041 [http-nio-8080-exec-6] WARN  com.hms.security.config.SecurityConfig - Access unauthorized to /api/v1/medicines - Full authentication is required to access this resource
+2026-03-26 22:31:32.054 [http-nio-8080-exec-6] WARN  com.hms.common.exception.GlobalExceptionHandler - Authentication failed: Full authentication is required to access this resource
+2026-03-26 22:31:32.114 [http-nio-8080-exec-9] ERROR com.hms.security.jwt.JwtUtil - JWT token is expired: JWT expired at 2026-03-26T16:58:02Z. Current time: 2026-03-26T17:01:32Z, a difference of 210114 milliseconds.  Allowed clock skew: 0 milliseconds.
+2026-03-26 22:31:32.114 [http-nio-8080-exec-9] WARN  com.hms.security.jwt.JwtAuthenticationFilter - Invalid JWT provided from IP: 0:0:0:0:0:0:0:1, URL: /api/v1/auth/logout
+2026-03-26 22:31:32.116 [http-nio-8080-exec-9] WARN  com.hms.security.config.SecurityConfig - Access unauthorized to /api/v1/auth/logout - Full authentication is required to access this resource
+2026-03-26 22:31:32.120 [http-nio-8080-exec-9] WARN  com.hms.common.exception.GlobalExceptionHandler - Authentication failed: Full authentication is required to access this resource
+2026-03-26 22:31:32.154 [http-nio-8080-exec-7] ERROR com.hms.security.jwt.JwtUtil - JWT token is expired: JWT expired at 2026-03-26T16:58:02Z. Current time: 2026-03-26T17:01:32Z, a difference of 210153 milliseconds.  Allowed clock skew: 0 milliseconds.
+2026-03-26 22:31:32.154 [http-nio-8080-exec-7] WARN  com.hms.security.jwt.JwtAuthenticationFilter - Invalid JWT provided from IP: 0:0:0:0:0:0:0:1, URL: /api/v1/auth/logout
+2026-03-26 22:31:32.154 [http-nio-8080-exec-7] WARN  com.hms.security.config.SecurityConfig - Access unauthorized to /api/v1/auth/logout - Full authentication is required to access this resource
+2026-03-26 22:31:32.156 [http-nio-8080-exec-7] WARN  com.hms.common.exception.GlobalExceptionHandler - Authentication failed: Full authentication is required to access this resource
+2026-03-26 22:31:34.309 [http-nio-8080-exec-2] INFO  com.hms.security.jwt.JwtAuthenticationFilter - Request authorized for user: admin with authorities: [ROLE_ADMIN]
+2026-03-26 22:31:34.311 [http-nio-8080-exec-4] INFO  com.hms.security.jwt.JwtAuthenticationFilter - Request authorized for user: admin with authorities: [ROLE_ADMIN]
+2026-03-26 22:31:35.350 [http-nio-8080-exec-6] INFO  com.hms.security.jwt.JwtAuthenticationFilter - Request authorized for user: admin with authorities: [ROLE_ADMIN]
+2026-03-26 22:31:36.241 [http-nio-8080-exec-9] INFO  com.hms.security.jwt.JwtAuthenticationFilter - Request authorized for user: admin with authorities: [ROLE_ADMIN]
+2026-03-26 22:31:36.955 [http-nio-8080-exec-7] INFO  com.hms.security.jwt.JwtAuthenticationFilter - Request authorized for user: admin with authorities: [ROLE_ADMIN]
+2026-03-26 22:32:34.926 [http-nio-8080-exec-1] INFO  com.hms.security.jwt.JwtAuthenticationFilter - Request authorized for user: admin with authorities: [ROLE_ADMIN]
+2026-03-26 22:32:37.364 [http-nio-8080-exec-4] INFO  com.hms.security.jwt.JwtAuthenticationFilter - Request authorized for user: admin with authorities: [ROLE_ADMIN]
+2026-03-26 22:43:42.192 [http-nio-8080-exec-6] INFO  com.hms.security.jwt.JwtAuthenticationFilter - Request authorized for user: admin with authorities: [ROLE_ADMIN]
+2026-03-26 22:46:09.376 [http-nio-8080-exec-9] INFO  com.hms.security.jwt.JwtAuthenticationFilter - Request authorized for user: admin with authorities: [ROLE_ADMIN]
+2026-03-26 22:46:39.402 [http-nio-8080-exec-7] INFO  com.hms.security.jwt.JwtAuthenticationFilter - Request authorized for user: admin with authorities: [ROLE_ADMIN]
+2026-03-26 22:46:41.080 [http-nio-8080-exec-10] INFO  com.hms.security.jwt.JwtAuthenticationFilter - Request authorized for user: admin with authorities: [ROLE_ADMIN]
+2026-03-26 22:46:41.080 [http-nio-8080-exec-8] INFO  com.hms.security.jwt.JwtAuthenticationFilter - Request authorized for user: admin with authorities: [ROLE_ADMIN]
+2026-03-26 22:46:46.045 [http-nio-8080-exec-1] INFO  com.hms.security.jwt.JwtAuthenticationFilter - Request authorized for user: admin with authorities: [ROLE_ADMIN]
+2026-03-26 22:46:46.051 [http-nio-8080-exec-3] INFO  com.hms.security.jwt.JwtAuthenticationFilter - Request authorized for user: admin with authorities: [ROLE_ADMIN]
+2026-03-26 22:46:49.158 [http-nio-8080-exec-2] INFO  com.hms.security.jwt.JwtAuthenticationFilter - Request authorized for user: admin with authorities: [ROLE_ADMIN]
+2026-03-26 22:46:50.135 [http-nio-8080-exec-9] INFO  com.hms.security.jwt.JwtAuthenticationFilter - Request authorized for user: admin with authorities: [ROLE_ADMIN]
+2026-03-26 22:46:50.199 [http-nio-8080-exec-9] INFO  com.hms.security.jwt.JwtAuthenticationFilter - Request authorized for user: admin with authorities: [ROLE_ADMIN]
+2026-03-26 22:46:51.046 [http-nio-8080-exec-1] INFO  com.hms.security.jwt.JwtAuthenticationFilter - Request authorized for user: admin with authorities: [ROLE_ADMIN]
+2026-03-26 22:46:51.054 [http-nio-8080-exec-3] INFO  com.hms.security.jwt.JwtAuthenticationFilter - Request authorized for user: admin with authorities: [ROLE_ADMIN]
+2026-03-26 22:51:34.326 [http-nio-8080-exec-6] INFO  com.hms.security.jwt.JwtAuthenticationFilter - Request authorized for user: admin with authorities: [ROLE_ADMIN]
+2026-03-26 22:51:34.331 [http-nio-8080-exec-5] INFO  com.hms.security.jwt.JwtAuthenticationFilter - Request authorized for user: admin with authorities: [ROLE_ADMIN]
+2026-03-26 22:51:39.820 [http-nio-8080-exec-7] INFO  com.hms.security.jwt.JwtAuthenticationFilter - Request authorized for user: admin with authorities: [ROLE_ADMIN]
+2026-03-26 22:51:39.889 [http-nio-8080-exec-9] INFO  com.hms.security.jwt.JwtAuthenticationFilter - Request authorized for user: admin with authorities: [ROLE_ADMIN]
+2026-03-26 22:51:40.904 [http-nio-8080-exec-8] INFO  com.hms.security.jwt.JwtAuthenticationFilter - Request authorized for user: admin with authorities: [ROLE_ADMIN]
+2026-03-26 22:51:40.904 [http-nio-8080-exec-10] INFO  com.hms.security.jwt.JwtAuthenticationFilter - Request authorized for user: admin with authorities: [ROLE_ADMIN]
+2026-03-26 22:51:42.196 [http-nio-8080-exec-3] INFO  com.hms.security.jwt.JwtAuthenticationFilter - Request authorized for user: admin with authorities: [ROLE_ADMIN]
+2026-03-26 22:51:44.075 [http-nio-8080-exec-5] INFO  com.hms.security.jwt.JwtAuthenticationFilter - Request authorized for user: admin with authorities: [ROLE_ADMIN]
+2026-03-26 22:51:44.075 [http-nio-8080-exec-6] INFO  com.hms.security.jwt.JwtAuthenticationFilter - Request authorized for user: admin with authorities: [ROLE_ADMIN]
+2026-03-26 22:52:10.372 [http-nio-8080-exec-7] INFO  com.hms.security.jwt.JwtAuthenticationFilter - Request authorized for user: admin with authorities: [ROLE_ADMIN]
+2026-03-26 22:52:16.530 [http-nio-8080-exec-9] INFO  com.hms.security.jwt.JwtAuthenticationFilter - Request authorized for user: admin with authorities: [ROLE_ADMIN]
+2026-03-26 22:52:16.530 [http-nio-8080-exec-10] INFO  com.hms.security.jwt.JwtAuthenticationFilter - Request authorized for user: admin with authorities: [ROLE_ADMIN]
+2026-03-26 22:52:36.618 [http-nio-8080-exec-8] INFO  com.hms.security.jwt.JwtAuthenticationFilter - Request authorized for user: admin with authorities: [ROLE_ADMIN]
+2026-03-26 22:52:36.680 [http-nio-8080-exec-1] INFO  com.hms.security.jwt.JwtAuthenticationFilter - Request authorized for user: admin with authorities: [ROLE_ADMIN]
+2026-03-26 22:52:49.041 [http-nio-8080-exec-3] INFO  com.hms.security.jwt.JwtAuthenticationFilter - Request authorized for user: admin with authorities: [ROLE_ADMIN]
+2026-03-26 22:52:56.592 [http-nio-8080-exec-2] INFO  com.hms.security.jwt.JwtAuthenticationFilter - Request authorized for user: admin with authorities: [ROLE_ADMIN]
+2026-03-26 22:52:56.592 [http-nio-8080-exec-4] INFO  com.hms.security.jwt.JwtAuthenticationFilter - Request authorized for user: admin with authorities: [ROLE_ADMIN]
+2026-03-26 22:53:10.914 [http-nio-8080-exec-6] INFO  com.hms.security.jwt.JwtAuthenticationFilter - Request authorized for user: admin with authorities: [ROLE_ADMIN]
+2026-03-26 22:53:10.914 [http-nio-8080-exec-5] INFO  com.hms.security.jwt.JwtAuthenticationFilter - Request authorized for user: admin with authorities: [ROLE_ADMIN]
+2026-03-26 22:53:18.361 [http-nio-8080-exec-7] INFO  com.hms.security.jwt.JwtAuthenticationFilter - Request authorized for user: admin with authorities: [ROLE_ADMIN]
+2026-03-26 22:53:18.361 [http-nio-8080-exec-9] INFO  com.hms.security.jwt.JwtAuthenticationFilter - Request authorized for user: admin with authorities: [ROLE_ADMIN]
+2026-03-26 22:53:42.880 [http-nio-8080-exec-10] INFO  com.hms.security.jwt.JwtAuthenticationFilter - Request authorized for user: admin with authorities: [ROLE_ADMIN]
+2026-03-26 22:53:48.418 [http-nio-8080-exec-8] INFO  com.hms.security.jwt.JwtAuthenticationFilter - Request authorized for user: admin with authorities: [ROLE_ADMIN]
+2026-03-26 22:54:12.183 [http-nio-8080-exec-1] INFO  com.hms.security.jwt.JwtAuthenticationFilter - Request authorized for user: admin with authorities: [ROLE_ADMIN]
+2026-03-26 22:55:01.147 [http-nio-8080-exec-2] INFO  com.hms.security.jwt.JwtAuthenticationFilter - Request authorized for user: admin with authorities: [ROLE_ADMIN]
+2026-03-26 22:55:01.153 [http-nio-8080-exec-4] INFO  com.hms.security.jwt.JwtAuthenticationFilter - Request authorized for user: admin with authorities: [ROLE_ADMIN]
+2026-03-26 22:55:01.156 [http-nio-8080-exec-6] INFO  com.hms.security.jwt.JwtAuthenticationFilter - Request authorized for user: admin with authorities: [ROLE_ADMIN]
+2026-03-26 22:55:10.696 [http-nio-8080-exec-9] INFO  com.hms.security.jwt.JwtAuthenticationFilter - Request authorized for user: admin with authorities: [ROLE_ADMIN]
+2026-03-26 22:55:10.702 [http-nio-8080-exec-7] INFO  com.hms.security.jwt.JwtAuthenticationFilter - Request authorized for user: admin with authorities: [ROLE_ADMIN]
+2026-03-26 22:55:10.745 [http-nio-8080-exec-10] INFO  com.hms.security.jwt.JwtAuthenticationFilter - Request authorized for user: admin with authorities: [ROLE_ADMIN]
+2026-03-26 22:55:10.777 [http-nio-8080-exec-8] INFO  com.hms.security.jwt.JwtAuthenticationFilter - Request authorized for user: admin with authorities: [ROLE_ADMIN]
+2026-03-26 22:55:10.803 [http-nio-8080-exec-1] INFO  com.hms.security.jwt.JwtAuthenticationFilter - Request authorized for user: admin with authorities: [ROLE_ADMIN]
+2026-03-26 22:55:10.825 [http-nio-8080-exec-3] INFO  com.hms.security.jwt.JwtAuthenticationFilter - Request authorized for user: admin with authorities: [ROLE_ADMIN]
+2026-03-26 22:55:14.752 [http-nio-8080-exec-4] INFO  com.hms.security.jwt.JwtAuthenticationFilter - Request authorized for user: admin with authorities: [ROLE_ADMIN]
+2026-03-26 22:55:30.088 [http-nio-8080-exec-6] INFO  com.hms.security.jwt.JwtAuthenticationFilter - Request authorized for user: recep with authorities: [ROLE_RECEPTIONIST]
+2026-03-26 22:55:34.539 [http-nio-8080-exec-5] INFO  com.hms.security.jwt.JwtAuthenticationFilter - Request authorized for user: recep with authorities: [ROLE_RECEPTIONIST]
+2026-03-26 22:55:34.558 [http-nio-8080-exec-10] INFO  com.hms.security.jwt.JwtAuthenticationFilter - Request authorized for user: recep with authorities: [ROLE_RECEPTIONIST]
+2026-03-26 22:55:38.592 [http-nio-8080-exec-8] INFO  com.hms.security.jwt.JwtAuthenticationFilter - Request authorized for user: recep with authorities: [ROLE_RECEPTIONIST]
+2026-03-26 22:55:38.592 [http-nio-8080-exec-7] INFO  com.hms.security.jwt.JwtAuthenticationFilter - Request authorized for user: recep with authorities: [ROLE_RECEPTIONIST]
+2026-03-26 22:55:41.122 [http-nio-8080-exec-1] INFO  com.hms.security.jwt.JwtAuthenticationFilter - Request authorized for user: recep with authorities: [ROLE_RECEPTIONIST]
+2026-03-26 22:55:41.125 [http-nio-8080-exec-3] INFO  com.hms.security.jwt.JwtAuthenticationFilter - Request authorized for user: recep with authorities: [ROLE_RECEPTIONIST]
+2026-03-26 22:55:43.861 [http-nio-8080-exec-4] INFO  com.hms.security.jwt.JwtAuthenticationFilter - Request authorized for user: recep with authorities: [ROLE_RECEPTIONIST]
+2026-03-26 22:55:43.861 [http-nio-8080-exec-2] INFO  com.hms.security.jwt.JwtAuthenticationFilter - Request authorized for user: recep with authorities: [ROLE_RECEPTIONIST]
+2026-03-26 22:55:45.272 [http-nio-8080-exec-6] INFO  com.hms.security.jwt.JwtAuthenticationFilter - Request authorized for user: recep with authorities: [ROLE_RECEPTIONIST]
+2026-03-26 22:55:45.272 [http-nio-8080-exec-9] INFO  com.hms.security.jwt.JwtAuthenticationFilter - Request authorized for user: recep with authorities: [ROLE_RECEPTIONIST]
+2026-03-26 22:55:46.200 [http-nio-8080-exec-10] INFO  com.hms.security.jwt.JwtAuthenticationFilter - Request authorized for user: recep with authorities: [ROLE_RECEPTIONIST]
+2026-03-26 22:55:46.202 [http-nio-8080-exec-5] INFO  com.hms.security.jwt.JwtAuthenticationFilter - Request authorized for user: recep with authorities: [ROLE_RECEPTIONIST]
+2026-03-26 22:55:49.142 [http-nio-8080-exec-8] INFO  com.hms.security.jwt.JwtAuthenticationFilter - Request authorized for user: recep with authorities: [ROLE_RECEPTIONIST]
+2026-03-26 22:55:49.142 [http-nio-8080-exec-7] INFO  com.hms.security.jwt.JwtAuthenticationFilter - Request authorized for user: recep with authorities: [ROLE_RECEPTIONIST]
+2026-03-26 22:55:56.477 [http-nio-8080-exec-1] INFO  com.hms.security.jwt.JwtAuthenticationFilter - Request authorized for user: recep with authorities: [ROLE_RECEPTIONIST]
+2026-03-26 22:55:56.494 [http-nio-8080-exec-3] INFO  com.hms.security.jwt.JwtAuthenticationFilter - Request authorized for user: recep with authorities: [ROLE_RECEPTIONIST]
+2026-03-26 22:56:29.748 [http-nio-8080-exec-9] INFO  com.hms.security.jwt.JwtAuthenticationFilter - Request authorized for user: Chintan with authorities: [ROLE_DOCTOR]
+2026-03-26 22:56:32.815 [http-nio-8080-exec-6] INFO  com.hms.security.jwt.JwtAuthenticationFilter - Request authorized for user: Chintan with authorities: [ROLE_DOCTOR]
+2026-03-26 22:56:32.815 [http-nio-8080-exec-5] INFO  com.hms.security.jwt.JwtAuthenticationFilter - Request authorized for user: Chintan with authorities: [ROLE_DOCTOR]
+2026-03-26 22:56:46.688 [http-nio-8080-exec-10] INFO  com.hms.security.jwt.JwtAuthenticationFilter - Request authorized for user: Chintan with authorities: [ROLE_DOCTOR]
+2026-03-26 22:56:49.035 [http-nio-8080-exec-7] INFO  com.hms.security.jwt.JwtAuthenticationFilter - Request authorized for user: Chintan with authorities: [ROLE_DOCTOR]
+2026-03-26 22:57:00.780 [http-nio-8080-exec-8] INFO  com.hms.security.jwt.JwtAuthenticationFilter - Request authorized for user: Chintan with authorities: [ROLE_DOCTOR]
+2026-03-26 22:57:02.314 [http-nio-8080-exec-3] INFO  com.hms.security.jwt.JwtAuthenticationFilter - Request authorized for user: Chintan with authorities: [ROLE_DOCTOR]
+2026-03-26 22:57:02.314 [http-nio-8080-exec-1] INFO  com.hms.security.jwt.JwtAuthenticationFilter - Request authorized for user: Chintan with authorities: [ROLE_DOCTOR]
+2026-03-26 22:57:03.519 [http-nio-8080-exec-2] INFO  com.hms.security.jwt.JwtAuthenticationFilter - Request authorized for user: Chintan with authorities: [ROLE_DOCTOR]
+2026-03-26 22:57:31.060 [http-nio-8080-exec-4] INFO  com.hms.security.jwt.JwtAuthenticationFilter - Request authorized for user: Chintan with authorities: [ROLE_DOCTOR]
+2026-03-26 22:58:23.045 [http-nio-8080-exec-10] INFO  com.hms.security.jwt.JwtAuthenticationFilter - Request authorized for user: farm with authorities: [ROLE_PHARMACIST]
+2026-03-26 22:58:25.768 [http-nio-8080-exec-8] INFO  com.hms.security.jwt.JwtAuthenticationFilter - Request authorized for user: farm with authorities: [ROLE_PHARMACIST]
+2026-03-26 22:58:55.359 [http-nio-8080-exec-3] INFO  com.hms.security.jwt.JwtAuthenticationFilter - Request authorized for user: farm with authorities: [ROLE_PHARMACIST]
+2026-03-26 23:00:01.247 [http-nio-8080-exec-2] INFO  com.hms.security.jwt.JwtAuthenticationFilter - Request authorized for user: farm with authorities: [ROLE_PHARMACIST]
+2026-03-26 23:00:02.628 [http-nio-8080-exec-4] INFO  com.hms.security.jwt.JwtAuthenticationFilter - Request authorized for user: farm with authorities: [ROLE_PHARMACIST]
+2026-03-26 23:00:03.325 [http-nio-8080-exec-9] INFO  com.hms.security.jwt.JwtAuthenticationFilter - Request authorized for user: farm with authorities: [ROLE_PHARMACIST]
+2026-03-26 23:03:03.096 [http-nio-8080-exec-6] INFO  com.hms.security.jwt.JwtAuthenticationFilter - Request authorized for user: farm with authorities: [ROLE_PHARMACIST]
+2026-03-26 23:08:37.516 [http-nio-8080-exec-8] INFO  com.hms.security.jwt.JwtAuthenticationFilter - Request authorized for user: admin with authorities: [ROLE_ADMIN]
+2026-03-26 23:08:37.588 [http-nio-8080-exec-3] INFO  com.hms.security.jwt.JwtAuthenticationFilter - Request authorized for user: admin with authorities: [ROLE_ADMIN]
+2026-03-26 23:08:37.625 [http-nio-8080-exec-1] INFO  com.hms.security.jwt.JwtAuthenticationFilter - Request authorized for user: admin with authorities: [ROLE_ADMIN]
+2026-03-26 23:08:43.120 [http-nio-8080-exec-2] INFO  com.hms.security.jwt.JwtAuthenticationFilter - Request authorized for user: admin with authorities: [ROLE_ADMIN]
+2026-03-26 23:08:43.767 [http-nio-8080-exec-4] INFO  com.hms.security.jwt.JwtAuthenticationFilter - Request authorized for user: admin with authorities: [ROLE_ADMIN]
+2026-03-26 23:08:43.845 [http-nio-8080-exec-9] INFO  com.hms.security.jwt.JwtAuthenticationFilter - Request authorized for user: admin with authorities: [ROLE_ADMIN]
+2026-03-26 23:08:44.714 [http-nio-8080-exec-5] INFO  com.hms.security.jwt.JwtAuthenticationFilter - Request authorized for user: admin with authorities: [ROLE_ADMIN]
+2026-03-26 23:13:02.278 [http-nio-8080-exec-8] INFO  com.hms.security.jwt.JwtAuthenticationFilter - Request authorized for user: admin with authorities: [ROLE_ADMIN]
+2026-03-26 23:13:02.307 [http-nio-8080-exec-1] INFO  com.hms.security.jwt.JwtAuthenticationFilter - Request authorized for user: admin with authorities: [ROLE_ADMIN]
+2026-03-26 23:13:02.310 [http-nio-8080-exec-3] INFO  com.hms.security.jwt.JwtAuthenticationFilter - Request authorized for user: admin with authorities: [ROLE_ADMIN]
+2026-03-26 23:13:59.761 [SpringApplicationShutdownHook] INFO  o.s.orm.jpa.LocalContainerEntityManagerFactoryBean - Closing JPA EntityManagerFactory for persistence unit 'default'
+2026-03-26 23:13:59.768 [SpringApplicationShutdownHook] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Shutdown initiated...
+2026-03-26 23:13:59.788 [SpringApplicationShutdownHook] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Shutdown completed.
+2026-03-26 23:14:29.087 [main] INFO  com.hms.HospitalManagementSystemApplication - Starting HospitalManagementSystemApplication using Java 21.0.10 with PID 12268 (C:\Users\Piyush\Desktop\Project\backend\target\classes started by Piyush in C:\Users\Piyush\Desktop\Project\backend)
+2026-03-26 23:14:29.091 [main] DEBUG com.hms.HospitalManagementSystemApplication - Running with Spring Boot v3.3.4, Spring v6.1.13
+2026-03-26 23:14:29.093 [main] INFO  com.hms.HospitalManagementSystemApplication - No active profile set, falling back to 1 default profile: "mysql"
+2026-03-26 23:14:31.973 [main] INFO  o.s.d.r.config.RepositoryConfigurationDelegate - Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2026-03-26 23:14:32.502 [main] INFO  o.s.d.r.config.RepositoryConfigurationDelegate - Finished Spring Data repository scanning in 502 ms. Found 9 JPA repository interfaces.
+2026-03-26 23:14:38.321 [main] INFO  o.s.boot.web.embedded.tomcat.TomcatWebServer - Tomcat initialized with port 8080 (http)
+2026-03-26 23:14:38.371 [main] INFO  org.apache.catalina.core.StandardService - Starting service [Tomcat]
+2026-03-26 23:14:38.373 [main] INFO  org.apache.catalina.core.StandardEngine - Starting Servlet engine: [Apache Tomcat/10.1.30]
+2026-03-26 23:14:38.576 [main] INFO  o.a.c.core.ContainerBase.[Tomcat].[localhost].[/] - Initializing Spring embedded WebApplicationContext
+2026-03-26 23:14:38.578 [main] INFO  o.s.b.w.s.c.ServletWebServerApplicationContext - Root WebApplicationContext: initialization completed in 9294 ms
+2026-03-26 23:14:39.593 [main] INFO  org.hibernate.jpa.internal.util.LogHelper - HHH000204: Processing PersistenceUnitInfo [name: default]
+2026-03-26 23:14:39.897 [main] INFO  org.hibernate.Version - HHH000412: Hibernate ORM core version 6.5.3.Final
+2026-03-26 23:14:40.119 [main] INFO  o.hibernate.cache.internal.RegionFactoryInitiator - HHH000026: Second-level cache disabled
+2026-03-26 23:14:41.295 [main] INFO  o.s.o.j.persistenceunit.SpringPersistenceUnitInfo - No LoadTimeWeaver setup: ignoring JPA class transformer
+2026-03-26 23:14:41.366 [main] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Starting...
+2026-03-26 23:14:41.805 [main] INFO  com.zaxxer.hikari.pool.HikariPool - HikariPool-1 - Added connection com.mysql.cj.jdbc.ConnectionImpl@434d001d
+2026-03-26 23:14:41.812 [main] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Start completed.
+2026-03-26 23:14:46.140 [main] INFO  o.h.e.t.jta.platform.internal.JtaPlatformInitiator - HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
+2026-03-26 23:14:47.044 [main] INFO  o.s.orm.jpa.LocalContainerEntityManagerFactoryBean - Initialized JPA EntityManagerFactory for persistence unit 'default'
+2026-03-26 23:14:48.446 [main] DEBUG com.hms.security.jwt.JwtAuthenticationFilter - Filter 'jwtAuthenticationFilter' configured for use
+2026-03-26 23:14:48.451 [main] DEBUG com.hms.security.filter.RateLimitFilter - Filter 'rateLimitFilter' configured for use
+2026-03-26 23:14:48.834 [main] INFO  o.s.data.jpa.repository.query.QueryEnhancerFactory - Hibernate is in classpath; If applicable, HQL parser will be used.
+2026-03-26 23:14:50.437 [main] INFO  o.s.s.c.a.a.c.InitializeUserDetailsBeanManagerConfigurer$InitializeUserDetailsManagerConfigurer - Global AuthenticationManager configured with UserDetailsService bean with name customUserDetailsService
+2026-03-26 23:14:52.480 [main] INFO  o.s.b.actuate.endpoint.web.EndpointLinksResolver - Exposing 3 endpoints beneath base path '/actuator'
+2026-03-26 23:14:52.700 [main] INFO  com.hms.security.config.SecurityConfig - Production Security configuration successfully initialized.
+2026-03-26 23:14:54.220 [main] INFO  o.s.boot.web.embedded.tomcat.TomcatWebServer - Tomcat started on port 8080 (http) with context path '/'
+2026-03-26 23:14:54.272 [main] INFO  com.hms.HospitalManagementSystemApplication - Started HospitalManagementSystemApplication in 27.098 seconds (process running for 28.04)
+2026-03-26 23:14:54.663 [main] INFO  com.hms.common.config.DataInitializer - Starting database column initialization...
+2026-03-26 23:14:54.811 [main] INFO  com.hms.common.config.DataInitializer - Database column initialization completed.
+2026-03-26 23:15:27.045 [http-nio-8080-exec-1] INFO  o.a.c.core.ContainerBase.[Tomcat].[localhost].[/] - Initializing Spring DispatcherServlet 'dispatcherServlet'
+2026-03-26 23:15:27.048 [http-nio-8080-exec-1] INFO  org.springframework.web.servlet.DispatcherServlet - Initializing Servlet 'dispatcherServlet'
+2026-03-26 23:15:27.057 [http-nio-8080-exec-1] INFO  org.springframework.web.servlet.DispatcherServlet - Completed initialization in 6 ms
+2026-03-26 23:15:27.344 [http-nio-8080-exec-1] WARN  com.hms.security.config.SecurityConfig - Access unauthorized to /login - Full authentication is required to access this resource
+2026-03-26 23:15:27.360 [http-nio-8080-exec-1] WARN  com.hms.common.exception.GlobalExceptionHandler - Authentication failed: Full authentication is required to access this resource
+2026-03-26 23:15:53.472 [http-nio-8080-exec-2] WARN  com.hms.security.config.SecurityConfig - Access unauthorized to /login - Full authentication is required to access this resource
+2026-03-26 23:15:53.474 [http-nio-8080-exec-2] WARN  com.hms.common.exception.GlobalExceptionHandler - Authentication failed: Full authentication is required to access this resource
+2026-03-26 23:15:55.655 [http-nio-8080-exec-3] WARN  com.hms.security.config.SecurityConfig - Access unauthorized to /login - Full authentication is required to access this resource
+2026-03-26 23:15:55.656 [http-nio-8080-exec-3] WARN  com.hms.common.exception.GlobalExceptionHandler - Authentication failed: Full authentication is required to access this resource
+2026-03-26 23:15:57.055 [http-nio-8080-exec-4] WARN  com.hms.security.config.SecurityConfig - Access unauthorized to /login - Full authentication is required to access this resource
+2026-03-26 23:15:57.056 [http-nio-8080-exec-4] WARN  com.hms.common.exception.GlobalExceptionHandler - Authentication failed: Full authentication is required to access this resource
+2026-03-26 23:17:42.224 [http-nio-8080-exec-5] WARN  com.hms.security.config.SecurityConfig - Access unauthorized to /login - Full authentication is required to access this resource
+2026-03-26 23:17:42.226 [http-nio-8080-exec-5] WARN  com.hms.common.exception.GlobalExceptionHandler - Authentication failed: Full authentication is required to access this resource
+2026-03-26 23:18:06.357 [http-nio-8080-exec-7] INFO  com.hms.security.jwt.JwtAuthenticationFilter - Request authorized for user: admin with authorities: [ROLE_ADMIN]
+2026-03-26 23:18:06.357 [http-nio-8080-exec-8] INFO  com.hms.security.jwt.JwtAuthenticationFilter - Request authorized for user: admin with authorities: [ROLE_ADMIN]
+2026-03-26 23:18:06.486 [http-nio-8080-exec-9] INFO  com.hms.security.jwt.JwtAuthenticationFilter - Request authorized for user: admin with authorities: [ROLE_ADMIN]
+2026-03-26 23:18:06.552 [http-nio-8080-exec-10] INFO  com.hms.security.jwt.JwtAuthenticationFilter - Request authorized for user: admin with authorities: [ROLE_ADMIN]
+2026-03-26 23:18:06.636 [http-nio-8080-exec-1] INFO  com.hms.security.jwt.JwtAuthenticationFilter - Request authorized for user: admin with authorities: [ROLE_ADMIN]
+2026-03-26 23:19:17.676 [http-nio-8080-exec-6] WARN  com.hms.common.exception.GlobalExceptionHandler - Invalid credentials: Invalid username or password
+2026-03-26 23:19:48.172 [http-nio-8080-exec-5] WARN  com.hms.security.filter.RateLimitFilter - Rate limit exceeded for IP: 127.0.0.1 on path: /api/v1/auth/login
+2026-03-26 23:24:29.716 [http-nio-8080-exec-6] INFO  com.hms.security.jwt.JwtAuthenticationFilter - Request authorized for user: admin with authorities: [ROLE_ADMIN]
+2026-03-26 23:25:29.722 [http-nio-8080-exec-7] INFO  com.hms.security.jwt.JwtAuthenticationFilter - Request authorized for user: admin with authorities: [ROLE_ADMIN]
+2026-03-26 23:25:30.032 [http-nio-8080-exec-9] INFO  com.hms.security.jwt.JwtAuthenticationFilter - Request authorized for user: admin with authorities: [ROLE_ADMIN]
+2026-03-26 23:25:38.268 [http-nio-8080-exec-1] INFO  com.hms.security.jwt.JwtAuthenticationFilter - Request authorized for user: admin with authorities: [ROLE_ADMIN]
+2026-03-26 23:25:47.894 [http-nio-8080-exec-8] INFO  com.hms.security.jwt.JwtAuthenticationFilter - Request authorized for user: admin with authorities: [ROLE_ADMIN]
+2026-03-26 23:25:47.944 [http-nio-8080-exec-2] INFO  com.hms.security.jwt.JwtAuthenticationFilter - Request authorized for user: admin with authorities: [ROLE_ADMIN]
+2026-03-26 23:26:02.534 [http-nio-8080-exec-3] INFO  com.hms.security.jwt.JwtAuthenticationFilter - Request authorized for user: admin with authorities: [ROLE_ADMIN]
+2026-03-26 23:26:02.638 [http-nio-8080-exec-4] INFO  com.hms.security.jwt.JwtAuthenticationFilter - Request authorized for user: admin with authorities: [ROLE_ADMIN]
+2026-03-26 23:26:31.151 [http-nio-8080-exec-5] INFO  com.hms.security.jwt.JwtAuthenticationFilter - Request authorized for user: admin with authorities: [ROLE_ADMIN]
+2026-03-26 23:30:22.469 [http-nio-8080-exec-10] INFO  com.hms.security.jwt.JwtAuthenticationFilter - Request authorized for user: admin with authorities: [ROLE_ADMIN]
+2026-03-26 23:30:22.581 [http-nio-8080-exec-10] INFO  com.hms.patient.service.impl.PatientServiceImpl - Creating patient with contact number: 8888888888
+2026-03-26 23:30:22.767 [http-nio-8080-exec-10] INFO  com.hms.patient.service.impl.PatientServiceImpl - Patient created successfully with ID: 3
+2026-03-26 23:30:25.961 [http-nio-8080-exec-1] INFO  com.hms.security.jwt.JwtAuthenticationFilter - Request authorized for user: admin with authorities: [ROLE_ADMIN]
+2026-03-26 23:30:25.987 [http-nio-8080-exec-8] INFO  com.hms.security.jwt.JwtAuthenticationFilter - Request authorized for user: admin with authorities: [ROLE_ADMIN]
+2026-03-26 23:32:17.281 [http-nio-8080-exec-5] INFO  com.hms.security.jwt.JwtAuthenticationFilter - Request authorized for user: admin with authorities: [ROLE_ADMIN]
+2026-03-26 23:32:17.713 [http-nio-8080-exec-6] INFO  com.hms.security.jwt.JwtAuthenticationFilter - Request authorized for user: admin with authorities: [ROLE_ADMIN]
+2026-03-26 23:32:17.715 [http-nio-8080-exec-7] INFO  com.hms.security.jwt.JwtAuthenticationFilter - Request authorized for user: admin with authorities: [ROLE_ADMIN]
+2026-03-26 23:32:48.461 [http-nio-8080-exec-10] INFO  com.hms.security.jwt.JwtAuthenticationFilter - Request authorized for user: admin with authorities: [ROLE_ADMIN]
+2026-03-26 23:34:04.236 [http-nio-8080-exec-2] INFO  com.hms.security.jwt.JwtAuthenticationFilter - Request authorized for user: admin with authorities: [ROLE_ADMIN]
+2026-03-26 23:34:32.667 [http-nio-8080-exec-3] WARN  com.hms.security.config.SecurityConfig - Access unauthorized to /api/v1/appointments - Full authentication is required to access this resource
+2026-03-26 23:34:32.668 [http-nio-8080-exec-3] WARN  com.hms.common.exception.GlobalExceptionHandler - Authentication failed: Full authentication is required to access this resource
+2026-03-26 23:39:35.766 [http-nio-8080-exec-5] INFO  com.hms.security.jwt.JwtAuthenticationFilter - Request authorized for user: admin with authorities: [ROLE_ADMIN]
+2026-03-26 23:39:49.749 [http-nio-8080-exec-6] INFO  com.hms.security.jwt.JwtAuthenticationFilter - Request authorized for user: admin with authorities: [ROLE_ADMIN]
+2026-03-26 23:39:56.474 [http-nio-8080-exec-7] INFO  com.hms.security.jwt.JwtAuthenticationFilter - Request authorized for user: admin with authorities: [ROLE_ADMIN]
+2026-03-26 23:48:28.275 [http-nio-8080-exec-9] INFO  com.hms.security.jwt.JwtAuthenticationFilter - Request authorized for user: admin with authorities: [ROLE_ADMIN]
+2026-03-26 23:48:43.736 [http-nio-8080-exec-10] INFO  com.hms.security.jwt.JwtAuthenticationFilter - Request authorized for user: admin with authorities: [ROLE_ADMIN]
+2026-03-26 23:48:48.741 [http-nio-8080-exec-1] INFO  com.hms.security.jwt.JwtAuthenticationFilter - Request authorized for user: admin with authorities: [ROLE_ADMIN]
+2026-03-26 23:48:58.717 [http-nio-8080-exec-8] INFO  com.hms.security.jwt.JwtAuthenticationFilter - Request authorized for user: admin with authorities: [ROLE_ADMIN]
+2026-03-26 23:48:58.729 [http-nio-8080-exec-8] ERROR com.hms.common.exception.GlobalExceptionHandler - Unexpected error occurred at /api/v1/appointments/dsffsdfdfds
+org.springframework.web.method.annotation.MethodArgumentTypeMismatchException: Failed to convert value of type 'java.lang.String' to required type 'java.lang.Long'; For input string: "dsffsdfdfds"
+	at org.springframework.web.method.annotation.AbstractNamedValueMethodArgumentResolver.convertIfNecessary(AbstractNamedValueMethodArgumentResolver.java:302)
+	at org.springframework.web.method.annotation.AbstractNamedValueMethodArgumentResolver.resolveArgument(AbstractNamedValueMethodArgumentResolver.java:137)
+	at org.springframework.web.method.support.HandlerMethodArgumentResolverComposite.resolveArgument(HandlerMethodArgumentResolverComposite.java:122)
+	at org.springframework.web.method.support.InvocableHandlerMethod.getMethodArgumentValues(InvocableHandlerMethod.java:224)
+	at org.springframework.web.method.support.InvocableHandlerMethod.invokeForRequest(InvocableHandlerMethod.java:178)
+	at org.springframework.web.servlet.mvc.method.annotation.ServletInvocableHandlerMethod.invokeAndHandle(ServletInvocableHandlerMethod.java:118)
+	at org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerAdapter.invokeHandlerMethod(RequestMappingHandlerAdapter.java:926)
+	at org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerAdapter.handleInternal(RequestMappingHandlerAdapter.java:831)
+	at org.springframework.web.servlet.mvc.method.AbstractHandlerMethodAdapter.handle(AbstractHandlerMethodAdapter.java:87)
+	at org.springframework.web.servlet.DispatcherServlet.doDispatch(DispatcherServlet.java:1089)
+	at org.springframework.web.servlet.DispatcherServlet.doService(DispatcherServlet.java:979)
+	at org.springframework.web.servlet.FrameworkServlet.processRequest(FrameworkServlet.java:1014)
+	at org.springframework.web.servlet.FrameworkServlet.doGet(FrameworkServlet.java:903)
+	at jakarta.servlet.http.HttpServlet.service(HttpServlet.java:564)
+	at org.springframework.web.servlet.FrameworkServlet.service(FrameworkServlet.java:885)
+	at jakarta.servlet.http.HttpServlet.service(HttpServlet.java:658)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:195)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:140)
+	at org.apache.tomcat.websocket.server.WsFilter.doFilter(WsFilter.java:51)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:164)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:140)
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:110)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:164)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:140)
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:110)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:164)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:140)
+	at org.springframework.web.filter.CompositeFilter$VirtualFilterChain.doFilter(CompositeFilter.java:108)
+	at org.springframework.security.web.FilterChainProxy.lambda$doFilterInternal$3(FilterChainProxy.java:231)
+	at org.springframework.security.web.ObservationFilterChainDecorator$FilterObservation$SimpleFilterObservation.lambda$wrap$1(ObservationFilterChainDecorator.java:479)
+	at org.springframework.security.web.ObservationFilterChainDecorator$AroundFilterObservation$SimpleAroundFilterObservation.lambda$wrap$1(ObservationFilterChainDecorator.java:340)
+	at org.springframework.security.web.ObservationFilterChainDecorator.lambda$wrapSecured$0(ObservationFilterChainDecorator.java:82)
+	at org.springframework.security.web.ObservationFilterChainDecorator$VirtualFilterChain.doFilter(ObservationFilterChainDecorator.java:128)
+	at org.springframework.security.web.access.intercept.AuthorizationFilter.doFilter(AuthorizationFilter.java:100)
+	at org.springframework.security.web.ObservationFilterChainDecorator$ObservationFilter.wrapFilter(ObservationFilterChainDecorator.java:240)
+	at org.springframework.security.web.ObservationFilterChainDecorator$ObservationFilter.doFilter(ObservationFilterChainDecorator.java:227)
+	at org.springframework.security.web.ObservationFilterChainDecorator$VirtualFilterChain.doFilter(ObservationFilterChainDecorator.java:137)
+	at org.springframework.security.web.access.ExceptionTranslationFilter.doFilter(ExceptionTranslationFilter.java:126)
+	at org.springframework.security.web.access.ExceptionTranslationFilter.doFilter(ExceptionTranslationFilter.java:120)
+	at org.springframework.security.web.ObservationFilterChainDecorator$ObservationFilter.wrapFilter(ObservationFilterChainDecorator.java:240)
+	at org.springframework.security.web.ObservationFilterChainDecorator$ObservationFilter.doFilter(ObservationFilterChainDecorator.java:227)
+	at org.springframework.security.web.ObservationFilterChainDecorator$VirtualFilterChain.doFilter(ObservationFilterChainDecorator.java:137)
+	at org.springframework.security.web.session.SessionManagementFilter.doFilter(SessionManagementFilter.java:131)
+	at org.springframework.security.web.session.SessionManagementFilter.doFilter(SessionManagementFilter.java:85)
+	at org.springframework.security.web.ObservationFilterChainDecorator$ObservationFilter.wrapFilter(ObservationFilterChainDecorator.java:240)
+	at org.springframework.security.web.ObservationFilterChainDecorator$ObservationFilter.doFilter(ObservationFilterChainDecorator.java:227)
+	at org.springframework.security.web.ObservationFilterChainDecorator$VirtualFilterChain.doFilter(ObservationFilterChainDecorator.java:137)
+	at org.springframework.security.web.authentication.AnonymousAuthenticationFilter.doFilter(AnonymousAuthenticationFilter.java:100)
+	at org.springframework.security.web.ObservationFilterChainDecorator$ObservationFilter.wrapFilter(ObservationFilterChainDecorator.java:240)
+	at org.springframework.security.web.ObservationFilterChainDecorator$ObservationFilter.doFilter(ObservationFilterChainDecorator.java:227)
+	at org.springframework.security.web.ObservationFilterChainDecorator$VirtualFilterChain.doFilter(ObservationFilterChainDecorator.java:137)
+	at org.springframework.security.web.servletapi.SecurityContextHolderAwareRequestFilter.doFilter(SecurityContextHolderAwareRequestFilter.java:179)
+	at org.springframework.security.web.ObservationFilterChainDecorator$ObservationFilter.wrapFilter(ObservationFilterChainDecorator.java:240)
+	at org.springframework.security.web.ObservationFilterChainDecorator$ObservationFilter.doFilter(ObservationFilterChainDecorator.java:227)
+	at org.springframework.security.web.ObservationFilterChainDecorator$VirtualFilterChain.doFilter(ObservationFilterChainDecorator.java:137)
+	at org.springframework.security.web.savedrequest.RequestCacheAwareFilter.doFilter(RequestCacheAwareFilter.java:63)
+	at org.springframework.security.web.ObservationFilterChainDecorator$ObservationFilter.wrapFilter(ObservationFilterChainDecorator.java:240)
+	at org.springframework.security.web.ObservationFilterChainDecorator$ObservationFilter.doFilter(ObservationFilterChainDecorator.java:227)
+	at org.springframework.security.web.ObservationFilterChainDecorator$VirtualFilterChain.doFilter(ObservationFilterChainDecorator.java:137)
+	at com.hms.security.jwt.JwtAuthenticationFilter.doFilterInternal(JwtAuthenticationFilter.java:100)
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116)
+	at org.springframework.security.web.ObservationFilterChainDecorator$ObservationFilter.wrapFilter(ObservationFilterChainDecorator.java:240)
+	at org.springframework.security.web.ObservationFilterChainDecorator$ObservationFilter.doFilter(ObservationFilterChainDecorator.java:227)
+	at org.springframework.security.web.ObservationFilterChainDecorator$VirtualFilterChain.doFilter(ObservationFilterChainDecorator.java:137)
+	at com.hms.security.filter.RateLimitFilter.doFilterInternal(RateLimitFilter.java:47)
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116)
+	at org.springframework.security.web.ObservationFilterChainDecorator$ObservationFilter.wrapFilter(ObservationFilterChainDecorator.java:240)
+	at org.springframework.security.web.ObservationFilterChainDecorator$ObservationFilter.doFilter(ObservationFilterChainDecorator.java:227)
+	at org.springframework.security.web.ObservationFilterChainDecorator$VirtualFilterChain.doFilter(ObservationFilterChainDecorator.java:137)
+	at org.springframework.security.web.authentication.logout.LogoutFilter.doFilter(LogoutFilter.java:107)
+	at org.springframework.security.web.authentication.logout.LogoutFilter.doFilter(LogoutFilter.java:93)
+	at org.springframework.security.web.ObservationFilterChainDecorator$ObservationFilter.wrapFilter(ObservationFilterChainDecorator.java:240)
+	at org.springframework.security.web.ObservationFilterChainDecorator$ObservationFilter.doFilter(ObservationFilterChainDecorator.java:227)
+	at org.springframework.security.web.ObservationFilterChainDecorator$VirtualFilterChain.doFilter(ObservationFilterChainDecorator.java:137)
+	at org.springframework.web.filter.CorsFilter.doFilterInternal(CorsFilter.java:91)
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116)
+	at org.springframework.security.web.ObservationFilterChainDecorator$ObservationFilter.wrapFilter(ObservationFilterChainDecorator.java:240)
+	at org.springframework.security.web.ObservationFilterChainDecorator$ObservationFilter.doFilter(ObservationFilterChainDecorator.java:227)
+	at org.springframework.security.web.ObservationFilterChainDecorator$VirtualFilterChain.doFilter(ObservationFilterChainDecorator.java:137)
+	at org.springframework.security.web.header.HeaderWriterFilter.doHeadersAfter(HeaderWriterFilter.java:90)
+	at org.springframework.security.web.header.HeaderWriterFilter.doFilterInternal(HeaderWriterFilter.java:75)
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116)
+	at org.springframework.security.web.ObservationFilterChainDecorator$ObservationFilter.wrapFilter(ObservationFilterChainDecorator.java:240)
+	at org.springframework.security.web.ObservationFilterChainDecorator$ObservationFilter.doFilter(ObservationFilterChainDecorator.java:227)
+	at org.springframework.security.web.ObservationFilterChainDecorator$VirtualFilterChain.doFilter(ObservationFilterChainDecorator.java:137)
+	at org.springframework.security.web.context.SecurityContextHolderFilter.doFilter(SecurityContextHolderFilter.java:82)
+	at org.springframework.security.web.context.SecurityContextHolderFilter.doFilter(SecurityContextHolderFilter.java:69)
+	at org.springframework.security.web.ObservationFilterChainDecorator$ObservationFilter.wrapFilter(ObservationFilterChainDecorator.java:240)
+	at org.springframework.security.web.ObservationFilterChainDecorator$ObservationFilter.doFilter(ObservationFilterChainDecorator.java:227)
+	at org.springframework.security.web.ObservationFilterChainDecorator$VirtualFilterChain.doFilter(ObservationFilterChainDecorator.java:137)
+	at org.springframework.security.web.context.request.async.WebAsyncManagerIntegrationFilter.doFilterInternal(WebAsyncManagerIntegrationFilter.java:62)
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116)
+	at org.springframework.security.web.ObservationFilterChainDecorator$ObservationFilter.wrapFilter(ObservationFilterChainDecorator.java:240)
+	at org.springframework.security.web.ObservationFilterChainDecorator$ObservationFilter.doFilter(ObservationFilterChainDecorator.java:227)
+	at org.springframework.security.web.ObservationFilterChainDecorator$VirtualFilterChain.doFilter(ObservationFilterChainDecorator.java:137)
+	at org.springframework.security.web.session.DisableEncodeUrlFilter.doFilterInternal(DisableEncodeUrlFilter.java:42)
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116)
+	at org.springframework.security.web.ObservationFilterChainDecorator$ObservationFilter.wrapFilter(ObservationFilterChainDecorator.java:240)
+	at org.springframework.security.web.ObservationFilterChainDecorator$AroundFilterObservation$SimpleAroundFilterObservation.lambda$wrap$0(ObservationFilterChainDecorator.java:323)
+	at org.springframework.security.web.ObservationFilterChainDecorator$ObservationFilter.doFilter(ObservationFilterChainDecorator.java:224)
+	at org.springframework.security.web.ObservationFilterChainDecorator$VirtualFilterChain.doFilter(ObservationFilterChainDecorator.java:137)
+	at org.springframework.security.web.FilterChainProxy.doFilterInternal(FilterChainProxy.java:233)
+	at org.springframework.security.web.FilterChainProxy.doFilter(FilterChainProxy.java:191)
+	at org.springframework.web.filter.CompositeFilter$VirtualFilterChain.doFilter(CompositeFilter.java:113)
+	at org.springframework.web.servlet.handler.HandlerMappingIntrospector.lambda$createCacheFilter$3(HandlerMappingIntrospector.java:195)
+	at org.springframework.web.filter.CompositeFilter$VirtualFilterChain.doFilter(CompositeFilter.java:113)
+	at org.springframework.web.filter.CompositeFilter.doFilter(CompositeFilter.java:74)
+	at org.springframework.security.config.annotation.web.configuration.WebMvcSecurityConfiguration$CompositeFilterChainProxy.doFilter(WebMvcSecurityConfiguration.java:230)
+	at org.springframework.web.filter.DelegatingFilterProxy.invokeDelegate(DelegatingFilterProxy.java:352)
+	at org.springframework.web.filter.DelegatingFilterProxy.doFilter(DelegatingFilterProxy.java:268)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:164)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:140)
+	at org.springframework.web.filter.RequestContextFilter.doFilterInternal(RequestContextFilter.java:100)
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:164)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:140)
+	at org.springframework.web.filter.FormContentFilter.doFilterInternal(FormContentFilter.java:93)
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:164)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:140)
+	at org.springframework.web.filter.ServerHttpObservationFilter.doFilterInternal(ServerHttpObservationFilter.java:113)
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:164)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:140)
+	at org.springframework.web.filter.CharacterEncodingFilter.doFilterInternal(CharacterEncodingFilter.java:201)
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:164)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:140)
+	at org.apache.catalina.core.StandardWrapperValve.invoke(StandardWrapperValve.java:167)
+	at org.apache.catalina.core.StandardContextValve.invoke(StandardContextValve.java:90)
+	at org.apache.catalina.authenticator.AuthenticatorBase.invoke(AuthenticatorBase.java:483)
+	at org.apache.catalina.core.StandardHostValve.invoke(StandardHostValve.java:115)
+	at org.apache.catalina.valves.ErrorReportValve.invoke(ErrorReportValve.java:93)
+	at org.apache.catalina.core.StandardEngineValve.invoke(StandardEngineValve.java:74)
+	at org.apache.catalina.connector.CoyoteAdapter.service(CoyoteAdapter.java:344)
+	at org.apache.coyote.http11.Http11Processor.service(Http11Processor.java:384)
+	at org.apache.coyote.AbstractProcessorLight.process(AbstractProcessorLight.java:63)
+	at org.apache.coyote.AbstractProtocol$ConnectionHandler.process(AbstractProtocol.java:905)
+	at org.apache.tomcat.util.net.NioEndpoint$SocketProcessor.doRun(NioEndpoint.java:1741)
+	at org.apache.tomcat.util.net.SocketProcessorBase.run(SocketProcessorBase.java:52)
+	at org.apache.tomcat.util.threads.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1190)
+	at org.apache.tomcat.util.threads.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:659)
+	at org.apache.tomcat.util.threads.TaskThread$WrappingRunnable.run(TaskThread.java:63)
+	at java.base/java.lang.Thread.run(Thread.java:1583)
+Caused by: java.lang.NumberFormatException: For input string: "dsffsdfdfds"
+	at java.base/java.lang.NumberFormatException.forInputString(NumberFormatException.java:67)
+	at java.base/java.lang.Long.parseLong(Long.java:709)
+	at java.base/java.lang.Long.valueOf(Long.java:1157)
+	at org.springframework.util.NumberUtils.parseNumber(NumberUtils.java:206)
+	at org.springframework.beans.propertyeditors.CustomNumberEditor.setAsText(CustomNumberEditor.java:115)
+	at org.springframework.beans.TypeConverterDelegate.doConvertTextValue(TypeConverterDelegate.java:439)
+	at org.springframework.beans.TypeConverterDelegate.doConvertValue(TypeConverterDelegate.java:412)
+	at org.springframework.beans.TypeConverterDelegate.convertIfNecessary(TypeConverterDelegate.java:161)
+	at org.springframework.beans.TypeConverterSupport.convertIfNecessary(TypeConverterSupport.java:80)
+	at org.springframework.beans.TypeConverterSupport.convertIfNecessary(TypeConverterSupport.java:53)
+	at org.springframework.validation.DataBinder.convertIfNecessary(DataBinder.java:860)
+	at org.springframework.web.method.annotation.AbstractNamedValueMethodArgumentResolver.convertIfNecessary(AbstractNamedValueMethodArgumentResolver.java:294)
+	... 143 common frames omitted

@@ -1,5 +1,6 @@
 package com.hms.auth.service.impl;
 
+import com.hms.common.enums.Department;
 import com.hms.common.enums.Role;
 import com.hms.doctor.repository.DoctorRepository;
 import com.hms.doctor.entity.Doctor;
@@ -64,7 +65,8 @@ public class AuthServiceImpl implements AuthService {
                     .userId(savedUser.getId())
                     .firstName(savedUser.getUsername())
                     .lastName("(Auto-Generated)")
-                    .specialization("General")
+                    .specialization("General Medicine")
+                    .department(Department.GENERAL_MEDICINE)
                     .registrationNumber("REG-" + savedUser.getId())
                     .email(savedUser.getEmail())
                     .isAvailable(true)

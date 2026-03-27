@@ -5,6 +5,7 @@ import com.hms.appointment.dto.response.AppointmentResponseDTO;
 import com.hms.appointment.entity.Appointment;
 import com.hms.doctor.entity.Doctor;
 import com.hms.patient.entity.Patient;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import org.springframework.stereotype.Component;
@@ -12,7 +13,7 @@ import org.springframework.stereotype.Component;
 /*
 @Generated(
     value = "org.mapstruct.ap.MappingProcessor",
-    date = "2026-03-26T16:45:02+0530",
+    date = "2026-03-27T09:08:08+0530",
     comments = "version: 1.5.5.Final, compiler: Eclipse JDT (IDE) 3.45.0.v20260224-0835, environment: Java 21.0.10 (Eclipse Adoptium)"
 )
 */
@@ -30,11 +31,11 @@ public class AppointmentMapperImpl implements AppointmentMapper {
         appointmentResponseDTO.setPatientId( entityPatientId( entity ) );
         appointmentResponseDTO.setPatientName( entityPatientName( entity ) );
         appointmentResponseDTO.setDoctorId( entityDoctorId( entity ) );
-        appointmentResponseDTO.setId( entity.getId() );
-        appointmentResponseDTO.setDepartment( entity.getDepartment() );
         appointmentResponseDTO.setAppointmentTime( entity.getAppointmentTime() );
-        appointmentResponseDTO.setStatus( entity.getStatus() );
+        appointmentResponseDTO.setDepartment( entity.getDepartment() );
+        appointmentResponseDTO.setId( entity.getId() );
         appointmentResponseDTO.setReason( entity.getReason() );
+        appointmentResponseDTO.setStatus( entity.getStatus() );
         appointmentResponseDTO.setTokenNumber( entity.getTokenNumber() );
 
         appointmentResponseDTO.setDoctorName( entity.getDoctor() != null ? entity.getDoctor().getFirstName() + " " + entity.getDoctor().getLastName() : null );
@@ -51,11 +52,11 @@ public class AppointmentMapperImpl implements AppointmentMapper {
         Appointment appointment = new Appointment();
 
         appointment.setDepartment( dto.getDepartment() );
-        appointment.setReason( dto.getReason() );
-        appointment.setNotes( dto.getNotes() );
         appointment.setEmergency( dto.isEmergency() );
+        appointment.setNotes( dto.getNotes() );
+        appointment.setReason( dto.getReason() );
 
-        appointment.setAppointmentTime( LocalDateTime.of(dto.getAppointmentDate(), dto.getAppointmentTime()) );
+        appointment.setAppointmentTime( java.time.LocalDateTime.of(dto.getAppointmentDate(), dto.getAppointmentTime()) );
 
         return appointment;
     }

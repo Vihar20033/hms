@@ -1,6 +1,5 @@
 package com.hms.appointment.entity;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.hms.common.entity.Auditable;
 import com.hms.common.enums.Department;
 import com.hms.patient.entity.Patient;
@@ -27,13 +26,11 @@ import java.time.LocalDateTime;
 @SuperBuilder
 public class Appointment extends Auditable {
 
-    @JsonIgnore
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "patient_id", nullable = false)
     @NotNull(message = "Patient is required")
     private Patient patient;
 
-    @JsonIgnore // Avoid Infinite recursion
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "doctor_id")
     private Doctor doctor;

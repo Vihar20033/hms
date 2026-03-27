@@ -8,8 +8,6 @@ import {
   OnDestroy,
   OnInit,
   ViewChild,
-  computed,
-  signal,
 } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import { Chart, registerables } from 'chart.js';
@@ -45,6 +43,7 @@ interface QuickAction {
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class DashboardComponent implements OnInit, AfterViewInit, OnDestroy {
+  
   @ViewChild('patientChart') patientChartCanvas!: ElementRef<HTMLCanvasElement>;
 
   summary: DashboardSummary | null = null;
@@ -143,31 +142,43 @@ export class DashboardComponent implements OnInit, AfterViewInit, OnDestroy {
     const patientData = stats.map((s) => s.patients || 0);
 
     this.chart = new Chart(ctx, {
-      type: 'line',
       data: {
         labels,
         datasets: [
           {
+            type: 'bar',
             label: 'Appointments',
             data: appointmentData,
+            backgroundColor: '#6366f188',
             borderColor: '#6366f1',
-            tension: 0.4,
-            fill: true,
+            borderWidth: 1,
+            borderRadius: 4,
+            barThickness: 32,
           },
           {
+            type: 'line',
             label: 'New Patients',
             data: patientData,
             borderColor: '#10b981',
+            backgroundColor: '#10b981',
+            borderWidth: 3,
+            pointRadius: 6,
+            pointBackgroundColor: '#fff',
             tension: 0.4,
-            fill: true,
+            fill: false,
           },
         ],
       },
       options: {
         responsive: true,
         maintainAspectRatio: false,
+        plugins: {
+          legend: { position: 'top' },
+          tooltip: { mode: 'index', intersect: false },
+        },
         scales: {
-          y: { beginAtZero: true }
+          y: { beginAtZero: true, grid: { color: '#f3f4f6' } },
+          x: { grid: { display: false } },
         }
       },
     });

@@ -34,8 +34,21 @@ public class DataInitializer implements CommandLineRunner {
             if (userCount > 0) {
                 log.info("Initialized {} User-specific primitive fields", userCount);
             }
+            
+            // Fix Doctor fields (department and specialization)
+            int doctorCount = entityManager.createQuery(
+                    "UPDATE Doctor d SET d.department = 'GENERAL_MEDICINE' WHERE d.department IS NULL")
+                    .executeUpdate();
+            
+            doctorCount += entityManager.createQuery(
+                    "UPDATE Doctor d SET d.specialization = 'General Medicine' WHERE d.specialization = 'General'")
+                    .executeUpdate();
+            
+            if (doctorCount > 0) {
+                log.info("Repaired {} Doctor profile fields for system compatibility", doctorCount);
+            }
         } catch (Exception e) {
-            log.warn("Failed to initialize user fields: {}", e.getMessage());
+            log.warn("Failed to initialize database fields: {}", e.getMessage());
         }
 
         log.info("Database column initialization completed.");
