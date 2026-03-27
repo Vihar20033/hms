@@ -9,11 +9,6 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 import java.time.LocalDate;
 import java.time.LocalTime;
 
-
-/**
- * Request DTO for creating and updating appointments.
- * Includes comprehensive validation constraints for production use.
- */
 @Getter
 @Setter
 @NoArgsConstructor

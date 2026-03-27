@@ -29,7 +29,7 @@ import {
   formatTimeOnly,
   toDateOnly,
   toTimeOnly,
-} from './appointment-booking.utils';
+} from '../../utils/appointment-booking.utils';
 
 @Component({
   selector: 'app-appointment-booking',

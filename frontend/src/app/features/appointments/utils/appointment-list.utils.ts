@@ -1,4 +1,4 @@
-import { Appointment, AppointmentStatus } from '../../../../core/models/appointment.models';
+import { Appointment, AppointmentStatus } from '../../../core/models/appointment.models';
 
 export function getAppointmentPageLead(userRole: string | null): string {
   if (userRole === 'DOCTOR') {

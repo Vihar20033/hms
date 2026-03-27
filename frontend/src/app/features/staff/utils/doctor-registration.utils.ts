@@ -1,5 +1,5 @@
-import { formatDepartmentLabel } from '../../../../core/constants/department.constants';
-import { Doctor } from '../../../../core/models/doctor.models';
+import { formatDepartmentLabel } from '../../../core/constants/department.constants';
+import { Doctor } from '../../../core/models/doctor.models';
 
 export function buildDoctorDepartmentOptions(departments: string[]): Array<{ label: string; value: string }> {
   return departments.map((department) => ({

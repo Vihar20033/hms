@@ -92,12 +92,6 @@ export class SidebarComponent {
       roles: ['ADMIN', 'RECEPTIONIST'],
       summary: 'Invoices and payments',
     },
-    {
-      title: 'Logout',
-      icon: 'ri-logout-circle-line',
-      link: '/login',
-      summary: 'Securely exit system',
-    },
   ];
 
   canView(item: SidebarMenuItem, user: User | null): boolean {

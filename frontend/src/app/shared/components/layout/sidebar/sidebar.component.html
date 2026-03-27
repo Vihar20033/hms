@@ -21,10 +21,10 @@
       <ng-container *ngFor="let item of menuItems">
         <a 
           *ngIf="canView(item, user)" 
-          [routerLink]="item.title === 'Logout' ? null : item.link" 
+          [routerLink]="item.link" 
           routerLinkActive="active" 
           class="nav-item" 
-          (click)="item.title === 'Logout' ? logout() : closeSidebar()"
+          (click)="closeSidebar()"
         >
           <i [class]="item.icon"></i>
           <span class="nav-copy">

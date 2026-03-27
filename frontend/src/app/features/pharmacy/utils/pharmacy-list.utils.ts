@@ -1,4 +1,4 @@
-import { Medicine } from '../../../../core/models/pharmacy.models';
+import { Medicine } from '../../../core/models/pharmacy.models';
 
 export function filterMedicinesByLowStock(medicines: Medicine[], showLowStockOnly: boolean): Medicine[] {
   if (!showLowStockOnly) {

@@ -15,7 +15,7 @@ import { DoctorService } from '../../../../core/services/doctor.service';
 import { HeaderComponent } from '../../../../shared/components/layout/header/header.component';
 import { SidebarComponent } from '../../../../shared/components/layout/sidebar/sidebar.component';
 import { createDoctorRegistrationForm } from './doctor-registration-form';
-import { buildDoctorDepartmentOptions, buildDoctorFormPatch } from './doctor-registration.utils';
+import { buildDoctorDepartmentOptions, buildDoctorFormPatch } from '../../utils/doctor-registration.utils';
 
 @Component({
   selector: 'app-doctor-registration',

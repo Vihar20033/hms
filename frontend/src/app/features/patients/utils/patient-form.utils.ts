@@ -1,6 +1,6 @@
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { BloodGroup, Patient, UrgencyLevel } from '../../core/models/patient.models';
-import { FULL_NAME_PATTERN, PHONE_PATTERN, trimRequired } from '../../core/validators/app-validators';
+import { BloodGroup, Patient, UrgencyLevel } from '../../../core/models/patient.models';
+import { FULL_NAME_PATTERN, PHONE_PATTERN, trimRequired } from '../../../core/validators/app-validators';
 
 export function createPatientRegistrationForm(fb: FormBuilder): FormGroup {
   return fb.group({

@@ -13,3 +13,13 @@
 2026-03-27 11:26:10.403 | Chintan | APPOINTMENT_STATUS_UPDATE | Appointment | 3 | status=IN_CONSULTATION
 2026-03-27 11:27:36.061 | Chintan | APPOINTMENT_STATUS_UPDATE | Appointment | 3 | status=COMPLETED
 2026-03-27 11:34:06.570 | Chintan | USER_LOGOUT | User | 2 | 
+2026-03-27 11:48:18.917 | Chintan | USER_LOGIN | User | 2 | role=DOCTOR
+2026-03-27 11:48:50.605 | Chintan | USER_LOGOUT | User | 2 | 
+2026-03-27 11:50:33.526 | Chintan | USER_LOGIN | User | 2 | role=DOCTOR
+2026-03-27 12:06:20.819 | Chintan | USER_LOGOUT | User | 2 | 
+2026-03-27 12:06:25.232 | recep | USER_LOGIN | User | 3 | role=RECEPTIONIST
+2026-03-27 12:07:38.514 | recep | USER_LOGOUT | User | 3 | 
+2026-03-27 12:27:11.693 | recep | USER_LOGIN | User | 3 | role=RECEPTIONIST
+2026-03-27 12:27:44.828 | recep | USER_LOGIN | User | 3 | role=RECEPTIONIST
+2026-03-27 12:29:02.532 | recep | USER_LOGOUT | User | 3 | 
+2026-03-27 12:37:26.098 | recep | USER_LOGIN | User | 3 | role=RECEPTIONIST

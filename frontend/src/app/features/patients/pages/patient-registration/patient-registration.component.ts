@@ -20,7 +20,7 @@ import {
   buildUrgencyOptions,
   createPatientRegistrationForm,
   getUrgencyClass,
-} from '../../patient-form.utils';
+} from '../../utils/patient-form.utils';
 
 @Component({
   selector: 'app-patient-registration',

@@ -16,7 +16,7 @@ import {
   getAppointmentPageLead,
   getAppointmentStatusClass,
   getAppointmentWorkflowLabel,
-} from './appointment-list.utils';
+} from '../../utils/appointment-list.utils';
 
 @Component({
   selector: 'app-appointment-list',

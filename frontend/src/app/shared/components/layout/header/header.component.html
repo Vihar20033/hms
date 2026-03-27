@@ -15,10 +15,6 @@
   </div>
 
   <div class="header-actions">
-    <button class="action-btn logout-header-btn" title="Sign Out" (click)="$event.stopPropagation(); onLogout()">
-      <i class="ri-logout-box-r-line"></i>
-    </button>
-
     @if (user; as currentUser) {
       <div class="user-profile">
         <div class="user-info">

@@ -1,6 +1,6 @@
-import { formatDepartmentLabel } from '../../../../core/constants/department.constants';
-import { Doctor } from '../../../../core/models/doctor.models';
-import { Patient } from '../../../../core/models/patient.models';
+import { formatDepartmentLabel } from '../../../core/constants/department.constants';
+import { Doctor } from '../../../core/models/doctor.models';
+import { Patient } from '../../../core/models/patient.models';
 
 export interface SelectOption<T> {
   label: string;
