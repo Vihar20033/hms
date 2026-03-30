@@ -122,7 +122,6 @@ com\hms\prescription\entity\Prescription$PrescriptionBuilder.class
 com\hms\billing\service\BillingService.class
 com\hms\doctor\entity\Doctor$DoctorBuilderImpl.class
 com\hms\pharmacy\dto\request\MedicineRequestDTO.class
-com\hms\security\service\RateLimitService.class
 com\hms\appointment\entity\Appointment$AppointmentBuilder.class
 com\hms\doctor\specification\DoctorSpecification.class
 com\hms\appointment\exception\SlotAlreadyBookedException.class
@@ -165,7 +164,6 @@ com\hms\common\util\SecurityUtils.class
 com\hms\common\enums\PaymentMethod.class
 com\hms\appointment\entity\Appointment$AppointmentBuilderImpl.class
 com\hms\doctor\controller\DoctorController.class
-com\hms\security\filter\RateLimitFilter.class
 com\hms\appointment\service\impl\AppointmentServiceImpl.class
 com\hms\prescription\mapper\PrescriptionMapperImpl.class
 com\hms\billing\dto\request\BillingRequestDTO$BillingRequestDTOBuilder.class

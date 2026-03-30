@@ -1,0 +1,259 @@
+2026-03-30 11:31:52.098 [main] INFO  com.hms.HospitalManagementSystemApplication - Starting HospitalManagementSystemApplication using Java 21.0.10 with PID 1560 (C:\Users\Piyush\Desktop\Project\backend\target\classes started by Piyush in C:\Users\Piyush\Desktop\Project)
+2026-03-30 11:31:52.120 [main] DEBUG com.hms.HospitalManagementSystemApplication - Running with Spring Boot v3.3.4, Spring v6.1.13
+2026-03-30 11:31:52.126 [main] INFO  com.hms.HospitalManagementSystemApplication - No active profile set, falling back to 1 default profile: "mysql"
+2026-03-30 11:31:55.618 [main] INFO  o.s.d.r.config.RepositoryConfigurationDelegate - Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2026-03-30 11:31:56.171 [main] INFO  o.s.d.r.config.RepositoryConfigurationDelegate - Finished Spring Data repository scanning in 516 ms. Found 9 JPA repository interfaces.
+2026-03-30 11:31:59.743 [main] INFO  com.hms.HospitalManagementSystemApplication - Starting HospitalManagementSystemApplication using Java 21.0.10 with PID 21860 (C:\Users\Piyush\Desktop\Project\backend\target\classes started by Piyush in C:\Users\Piyush\Desktop\Project)
+2026-03-30 11:31:59.778 [main] DEBUG com.hms.HospitalManagementSystemApplication - Running with Spring Boot v3.3.4, Spring v6.1.13
+2026-03-30 11:31:59.784 [main] INFO  com.hms.HospitalManagementSystemApplication - No active profile set, falling back to 1 default profile: "mysql"
+2026-03-30 11:32:03.568 [main] INFO  o.s.boot.web.embedded.tomcat.TomcatWebServer - Tomcat initialized with port 8080 (http)
+2026-03-30 11:32:03.755 [main] INFO  org.apache.catalina.core.StandardService - Starting service [Tomcat]
+2026-03-30 11:32:03.782 [main] INFO  org.apache.catalina.core.StandardEngine - Starting Servlet engine: [Apache Tomcat/10.1.30]
+2026-03-30 11:32:04.208 [main] INFO  o.a.c.core.ContainerBase.[Tomcat].[localhost].[/] - Initializing Spring embedded WebApplicationContext
+2026-03-30 11:32:04.236 [main] INFO  o.s.b.w.s.c.ServletWebServerApplicationContext - Root WebApplicationContext: initialization completed in 11822 ms
+2026-03-30 11:32:05.221 [main] INFO  o.s.d.r.config.RepositoryConfigurationDelegate - Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2026-03-30 11:32:05.896 [main] INFO  org.hibernate.jpa.internal.util.LogHelper - HHH000204: Processing PersistenceUnitInfo [name: default]
+2026-03-30 11:32:06.063 [main] INFO  o.s.d.r.config.RepositoryConfigurationDelegate - Finished Spring Data repository scanning in 784 ms. Found 9 JPA repository interfaces.
+2026-03-30 11:32:06.289 [main] WARN  o.s.b.w.s.c.AnnotationConfigServletWebServerApplicationContext - Exception encountered during context initialization - cancelling refresh attempt: org.springframework.beans.factory.BeanDefinitionStoreException: Failed to read candidate component class: file [C:\Users\Piyush\Desktop\Project\backend\target\classes\com\hms\appointment\controller\AppointmentController.class]
+2026-03-30 11:32:06.336 [main] INFO  o.s.b.a.logging.ConditionEvaluationReportLogger - 
+
+Error starting ApplicationContext. To display the condition evaluation report re-run your application with 'debug' enabled.
+2026-03-30 11:32:06.419 [main] INFO  org.hibernate.Version - HHH000412: Hibernate ORM core version 6.5.3.Final
+2026-03-30 11:32:06.472 [main] ERROR org.springframework.boot.SpringApplication - Application run failed
+org.springframework.beans.factory.BeanDefinitionStoreException: Failed to read candidate component class: file [C:\Users\Piyush\Desktop\Project\backend\target\classes\com\hms\appointment\controller\AppointmentController.class]
+	at org.springframework.context.annotation.ClassPathScanningCandidateComponentProvider.scanCandidateComponents(ClassPathScanningCandidateComponentProvider.java:510)
+	at org.springframework.context.annotation.ClassPathScanningCandidateComponentProvider.findCandidateComponents(ClassPathScanningCandidateComponentProvider.java:351)
+	at org.springframework.boot.context.properties.ConfigurationPropertiesScanRegistrar.scan(ConfigurationPropertiesScanRegistrar.java:85)
+	at org.springframework.boot.context.properties.ConfigurationPropertiesScanRegistrar.registerBeanDefinitions(ConfigurationPropertiesScanRegistrar.java:62)
+	at org.springframework.context.annotation.ImportBeanDefinitionRegistrar.registerBeanDefinitions(ImportBeanDefinitionRegistrar.java:86)
+	at org.springframework.context.annotation.ConfigurationClassBeanDefinitionReader.lambda$loadBeanDefinitionsFromRegistrars$1(ConfigurationClassBeanDefinitionReader.java:376)
+	at java.base/java.util.LinkedHashMap.forEach(LinkedHashMap.java:986)
+	at org.springframework.context.annotation.ConfigurationClassBeanDefinitionReader.loadBeanDefinitionsFromRegistrars(ConfigurationClassBeanDefinitionReader.java:375)
+	at org.springframework.context.annotation.ConfigurationClassBeanDefinitionReader.loadBeanDefinitionsForConfigurationClass(ConfigurationClassBeanDefinitionReader.java:148)
+	at org.springframework.context.annotation.ConfigurationClassBeanDefinitionReader.loadBeanDefinitions(ConfigurationClassBeanDefinitionReader.java:120)
+	at org.springframework.context.annotation.ConfigurationClassPostProcessor.processConfigBeanDefinitions(ConfigurationClassPostProcessor.java:429)
+	at org.springframework.context.annotation.ConfigurationClassPostProcessor.postProcessBeanDefinitionRegistry(ConfigurationClassPostProcessor.java:290)
+	at org.springframework.context.support.PostProcessorRegistrationDelegate.invokeBeanDefinitionRegistryPostProcessors(PostProcessorRegistrationDelegate.java:349)
+	at org.springframework.context.support.PostProcessorRegistrationDelegate.invokeBeanFactoryPostProcessors(PostProcessorRegistrationDelegate.java:118)
+	at org.springframework.context.support.AbstractApplicationContext.invokeBeanFactoryPostProcessors(AbstractApplicationContext.java:789)
+	at org.springframework.context.support.AbstractApplicationContext.refresh(AbstractApplicationContext.java:607)
+	at org.springframework.boot.web.servlet.context.ServletWebServerApplicationContext.refresh(ServletWebServerApplicationContext.java:146)
+	at org.springframework.boot.SpringApplication.refresh(SpringApplication.java:754)
+	at org.springframework.boot.SpringApplication.refreshContext(SpringApplication.java:456)
+	at org.springframework.boot.SpringApplication.run(SpringApplication.java:335)
+	at org.springframework.boot.SpringApplication.run(SpringApplication.java:1363)
+	at org.springframework.boot.SpringApplication.run(SpringApplication.java:1352)
+	at com.hms.HospitalManagementSystemApplication.main(HospitalManagementSystemApplication.java:21)
+Caused by: org.springframework.beans.factory.CannotLoadBeanClassException: Cannot find class [com.hms.security.service.RateLimitService] for bean with name 'rateLimitService' defined in file [C:\Users\Piyush\Desktop\Project\backend\target\classes\com\hms\security\service\RateLimitService.class]
+	at org.springframework.beans.factory.support.AbstractBeanFactory.resolveBeanClass(AbstractBeanFactory.java:1556)
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.determineTargetType(AbstractAutowireCapableBeanFactory.java:685)
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.predictBeanType(AbstractAutowireCapableBeanFactory.java:653)
+	at org.springframework.beans.factory.support.AbstractBeanFactory.isFactoryBean(AbstractBeanFactory.java:1687)
+	at org.springframework.beans.factory.support.DefaultListableBeanFactory.doGetBeanNamesForType(DefaultListableBeanFactory.java:562)
+	at org.springframework.beans.factory.support.DefaultListableBeanFactory.getBeanNamesForType(DefaultListableBeanFactory.java:534)
+	at org.springframework.beans.factory.support.DefaultListableBeanFactory.getBeansOfType(DefaultListableBeanFactory.java:661)
+	at org.springframework.beans.factory.support.DefaultListableBeanFactory.getBeansOfType(DefaultListableBeanFactory.java:653)
+	at org.springframework.boot.context.TypeExcludeFilter.getDelegates(TypeExcludeFilter.java:77)
+	at org.springframework.boot.context.TypeExcludeFilter.match(TypeExcludeFilter.java:65)
+	at org.springframework.context.annotation.ClassPathScanningCandidateComponentProvider.isCandidateComponent(ClassPathScanningCandidateComponentProvider.java:541)
+	at org.springframework.context.annotation.ClassPathScanningCandidateComponentProvider.scanCandidateComponents(ClassPathScanningCandidateComponentProvider.java:471)
+	... 22 common frames omitted
+Caused by: java.lang.ClassNotFoundException: com.hms.security.service.RateLimitService
+	at java.base/jdk.internal.loader.BuiltinClassLoader.loadClass(BuiltinClassLoader.java:641)
+	at java.base/jdk.internal.loader.ClassLoaders$AppClassLoader.loadClass(ClassLoaders.java:188)
+	at java.base/java.lang.ClassLoader.loadClass(ClassLoader.java:526)
+	at java.base/java.lang.Class.forName0(Native Method)
+	at java.base/java.lang.Class.forName(Class.java:536)
+	at java.base/java.lang.Class.forName(Class.java:515)
+	at org.springframework.util.ClassUtils.forName(ClassUtils.java:304)
+	at org.springframework.beans.factory.support.AbstractBeanDefinition.resolveBeanClass(AbstractBeanDefinition.java:489)
+	at org.springframework.beans.factory.support.AbstractBeanFactory.doResolveBeanClass(AbstractBeanFactory.java:1624)
+	at org.springframework.beans.factory.support.AbstractBeanFactory.resolveBeanClass(AbstractBeanFactory.java:1549)
+	... 33 common frames omitted
+2026-03-30 11:32:06.635 [main] INFO  o.hibernate.cache.internal.RegionFactoryInitiator - HHH000026: Second-level cache disabled
+2026-03-30 11:32:08.175 [main] INFO  o.s.o.j.persistenceunit.SpringPersistenceUnitInfo - No LoadTimeWeaver setup: ignoring JPA class transformer
+2026-03-30 11:32:08.271 [main] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Starting...
+2026-03-30 11:32:08.880 [main] INFO  com.zaxxer.hikari.pool.HikariPool - HikariPool-1 - Added connection com.mysql.cj.jdbc.ConnectionImpl@5e3cb58e
+2026-03-30 11:32:08.894 [main] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Start completed.
+2026-03-30 11:32:17.300 [main] INFO  com.hms.HospitalManagementSystemApplication - Starting HospitalManagementSystemApplication using Java 21.0.10 with PID 15092 (C:\Users\Piyush\Desktop\Project\backend\target\classes started by Piyush in C:\Users\Piyush\Desktop\Project)
+2026-03-30 11:32:17.308 [main] DEBUG com.hms.HospitalManagementSystemApplication - Running with Spring Boot v3.3.4, Spring v6.1.13
+2026-03-30 11:32:17.335 [main] INFO  com.hms.HospitalManagementSystemApplication - No active profile set, falling back to 1 default profile: "mysql"
+2026-03-30 11:32:17.372 [main] INFO  com.hms.HospitalManagementSystemApplication - Starting HospitalManagementSystemApplication using Java 21.0.10 with PID 27924 (C:\Users\Piyush\Desktop\Project\backend\target\classes started by Piyush in C:\Users\Piyush\Desktop\Project)
+2026-03-30 11:32:17.416 [main] DEBUG com.hms.HospitalManagementSystemApplication - Running with Spring Boot v3.3.4, Spring v6.1.13
+2026-03-30 11:32:17.425 [main] INFO  com.hms.HospitalManagementSystemApplication - No active profile set, falling back to 1 default profile: "mysql"
+2026-03-30 11:32:20.595 [main] INFO  o.h.e.t.jta.platform.internal.JtaPlatformInitiator - HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
+2026-03-30 11:32:22.157 [main] INFO  o.s.d.r.config.RepositoryConfigurationDelegate - Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2026-03-30 11:32:22.366 [main] INFO  o.s.d.r.config.RepositoryConfigurationDelegate - Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2026-03-30 11:32:23.037 [main] INFO  o.s.orm.jpa.LocalContainerEntityManagerFactoryBean - Initialized JPA EntityManagerFactory for persistence unit 'default'
+2026-03-30 11:32:23.554 [main] INFO  o.s.d.r.config.RepositoryConfigurationDelegate - Finished Spring Data repository scanning in 1331 ms. Found 9 JPA repository interfaces.
+2026-03-30 11:32:23.827 [main] INFO  o.s.d.r.config.RepositoryConfigurationDelegate - Finished Spring Data repository scanning in 1434 ms. Found 9 JPA repository interfaces.
+2026-03-30 11:32:27.106 [main] WARN  o.s.b.w.s.c.AnnotationConfigServletWebServerApplicationContext - Exception encountered during context initialization - cancelling refresh attempt: java.lang.IllegalStateException: Unable to load cache item
+2026-03-30 11:32:27.435 [main] INFO  o.s.b.a.logging.ConditionEvaluationReportLogger - 
+
+Error starting ApplicationContext. To display the condition evaluation report re-run your application with 'debug' enabled.
+2026-03-30 11:32:27.477 [main] WARN  o.s.b.w.s.c.AnnotationConfigServletWebServerApplicationContext - Exception encountered during context initialization - cancelling refresh attempt: java.lang.IllegalStateException: Unable to load cache item
+2026-03-30 11:32:27.529 [main] DEBUG com.hms.security.jwt.JwtAuthenticationFilter - Filter 'jwtAuthenticationFilter' configured for use
+2026-03-30 11:32:27.615 [main] DEBUG com.hms.security.filter.RateLimitFilter - Filter 'rateLimitFilter' configured for use
+2026-03-30 11:32:27.623 [main] INFO  o.s.b.a.logging.ConditionEvaluationReportLogger - 
+
+Error starting ApplicationContext. To display the condition evaluation report re-run your application with 'debug' enabled.
+2026-03-30 11:32:27.648 [main] ERROR org.springframework.boot.SpringApplication - Application run failed
+java.lang.IllegalStateException: Unable to load cache item
+	at org.springframework.cglib.core.internal.LoadingCache.createEntry(LoadingCache.java:75)
+	at org.springframework.cglib.core.internal.LoadingCache.get(LoadingCache.java:34)
+	at org.springframework.cglib.core.AbstractClassGenerator$ClassLoaderData.get(AbstractClassGenerator.java:130)
+	at org.springframework.cglib.core.AbstractClassGenerator.create(AbstractClassGenerator.java:317)
+	at org.springframework.cglib.proxy.Enhancer.createHelper(Enhancer.java:562)
+	at org.springframework.cglib.proxy.Enhancer.createClass(Enhancer.java:407)
+	at org.springframework.context.annotation.ConfigurationClassEnhancer.createClass(ConfigurationClassEnhancer.java:156)
+	at org.springframework.context.annotation.ConfigurationClassEnhancer.enhance(ConfigurationClassEnhancer.java:113)
+	at org.springframework.context.annotation.ConfigurationClassPostProcessor.enhanceConfigurationClasses(ConfigurationClassPostProcessor.java:534)
+	at org.springframework.context.annotation.ConfigurationClassPostProcessor.postProcessBeanFactory(ConfigurationClassPostProcessor.java:311)
+	at org.springframework.context.support.PostProcessorRegistrationDelegate.invokeBeanFactoryPostProcessors(PostProcessorRegistrationDelegate.java:363)
+	at org.springframework.context.support.PostProcessorRegistrationDelegate.invokeBeanFactoryPostProcessors(PostProcessorRegistrationDelegate.java:153)
+	at org.springframework.context.support.AbstractApplicationContext.invokeBeanFactoryPostProcessors(AbstractApplicationContext.java:789)
+	at org.springframework.context.support.AbstractApplicationContext.refresh(AbstractApplicationContext.java:607)
+	at org.springframework.boot.web.servlet.context.ServletWebServerApplicationContext.refresh(ServletWebServerApplicationContext.java:146)
+	at org.springframework.boot.SpringApplication.refresh(SpringApplication.java:754)
+	at org.springframework.boot.SpringApplication.refreshContext(SpringApplication.java:456)
+	at org.springframework.boot.SpringApplication.run(SpringApplication.java:335)
+	at org.springframework.boot.SpringApplication.run(SpringApplication.java:1363)
+	at org.springframework.boot.SpringApplication.run(SpringApplication.java:1352)
+	at com.hms.HospitalManagementSystemApplication.main(HospitalManagementSystemApplication.java:21)
+Caused by: java.lang.NoClassDefFoundError: RateLimitFilter
+	at java.base/java.lang.Class.getDeclaredConstructors0(Native Method)
+	at java.base/java.lang.Class.privateGetDeclaredConstructors(Class.java:3551)
+	at java.base/java.lang.Class.getDeclaredConstructors(Class.java:2729)
+	at org.springframework.cglib.proxy.Enhancer.generateClass(Enhancer.java:655)
+	at org.springframework.cglib.transform.TransformingClassGenerator.generateClass(TransformingClassGenerator.java:35)
+	at org.springframework.cglib.core.DefaultGeneratorStrategy.generate(DefaultGeneratorStrategy.java:26)
+	at org.springframework.cglib.core.ClassLoaderAwareGeneratorStrategy.generate(ClassLoaderAwareGeneratorStrategy.java:57)
+	at org.springframework.cglib.core.AbstractClassGenerator.generate(AbstractClassGenerator.java:366)
+	at org.springframework.cglib.proxy.Enhancer.generate(Enhancer.java:575)
+	at org.springframework.cglib.core.AbstractClassGenerator$ClassLoaderData.lambda$new$1(AbstractClassGenerator.java:107)
+	at org.springframework.cglib.core.internal.LoadingCache.lambda$createEntry$1(LoadingCache.java:52)
+	at java.base/java.util.concurrent.FutureTask.run(FutureTask.java:317)
+	at org.springframework.cglib.core.internal.LoadingCache.createEntry(LoadingCache.java:57)
+	... 20 common frames omitted
+Caused by: java.lang.ClassNotFoundException: RateLimitFilter
+	at java.base/jdk.internal.loader.BuiltinClassLoader.loadClass(BuiltinClassLoader.java:641)
+	at java.base/jdk.internal.loader.ClassLoaders$AppClassLoader.loadClass(ClassLoaders.java:188)
+	at java.base/java.lang.ClassLoader.loadClass(ClassLoader.java:526)
+	... 33 common frames omitted
+2026-03-30 11:32:27.900 [main] ERROR org.springframework.boot.SpringApplication - Application run failed
+java.lang.IllegalStateException: Unable to load cache item
+	at org.springframework.cglib.core.internal.LoadingCache.createEntry(LoadingCache.java:75)
+	at org.springframework.cglib.core.internal.LoadingCache.get(LoadingCache.java:34)
+	at org.springframework.cglib.core.AbstractClassGenerator$ClassLoaderData.get(AbstractClassGenerator.java:130)
+	at org.springframework.cglib.core.AbstractClassGenerator.create(AbstractClassGenerator.java:317)
+	at org.springframework.cglib.proxy.Enhancer.createHelper(Enhancer.java:562)
+	at org.springframework.cglib.proxy.Enhancer.createClass(Enhancer.java:407)
+	at org.springframework.context.annotation.ConfigurationClassEnhancer.createClass(ConfigurationClassEnhancer.java:156)
+	at org.springframework.context.annotation.ConfigurationClassEnhancer.enhance(ConfigurationClassEnhancer.java:113)
+	at org.springframework.context.annotation.ConfigurationClassPostProcessor.enhanceConfigurationClasses(ConfigurationClassPostProcessor.java:534)
+	at org.springframework.context.annotation.ConfigurationClassPostProcessor.postProcessBeanFactory(ConfigurationClassPostProcessor.java:311)
+	at org.springframework.context.support.PostProcessorRegistrationDelegate.invokeBeanFactoryPostProcessors(PostProcessorRegistrationDelegate.java:363)
+	at org.springframework.context.support.PostProcessorRegistrationDelegate.invokeBeanFactoryPostProcessors(PostProcessorRegistrationDelegate.java:153)
+	at org.springframework.context.support.AbstractApplicationContext.invokeBeanFactoryPostProcessors(AbstractApplicationContext.java:789)
+	at org.springframework.context.support.AbstractApplicationContext.refresh(AbstractApplicationContext.java:607)
+	at org.springframework.boot.web.servlet.context.ServletWebServerApplicationContext.refresh(ServletWebServerApplicationContext.java:146)
+	at org.springframework.boot.SpringApplication.refresh(SpringApplication.java:754)
+	at org.springframework.boot.SpringApplication.refreshContext(SpringApplication.java:456)
+	at org.springframework.boot.SpringApplication.run(SpringApplication.java:335)
+	at org.springframework.boot.SpringApplication.run(SpringApplication.java:1363)
+	at org.springframework.boot.SpringApplication.run(SpringApplication.java:1352)
+	at com.hms.HospitalManagementSystemApplication.main(HospitalManagementSystemApplication.java:21)
+Caused by: java.lang.NoClassDefFoundError: RateLimitFilter
+	at java.base/java.lang.Class.getDeclaredConstructors0(Native Method)
+	at java.base/java.lang.Class.privateGetDeclaredConstructors(Class.java:3551)
+	at java.base/java.lang.Class.getDeclaredConstructors(Class.java:2729)
+	at org.springframework.cglib.proxy.Enhancer.generateClass(Enhancer.java:655)
+	at org.springframework.cglib.transform.TransformingClassGenerator.generateClass(TransformingClassGenerator.java:35)
+	at org.springframework.cglib.core.DefaultGeneratorStrategy.generate(DefaultGeneratorStrategy.java:26)
+	at org.springframework.cglib.core.ClassLoaderAwareGeneratorStrategy.generate(ClassLoaderAwareGeneratorStrategy.java:57)
+	at org.springframework.cglib.core.AbstractClassGenerator.generate(AbstractClassGenerator.java:366)
+	at org.springframework.cglib.proxy.Enhancer.generate(Enhancer.java:575)
+	at org.springframework.cglib.core.AbstractClassGenerator$ClassLoaderData.lambda$new$1(AbstractClassGenerator.java:107)
+	at org.springframework.cglib.core.internal.LoadingCache.lambda$createEntry$1(LoadingCache.java:52)
+	at java.base/java.util.concurrent.FutureTask.run(FutureTask.java:317)
+	at org.springframework.cglib.core.internal.LoadingCache.createEntry(LoadingCache.java:57)
+	... 20 common frames omitted
+Caused by: java.lang.ClassNotFoundException: RateLimitFilter
+	at java.base/jdk.internal.loader.BuiltinClassLoader.loadClass(BuiltinClassLoader.java:641)
+	at java.base/jdk.internal.loader.ClassLoaders$AppClassLoader.loadClass(ClassLoaders.java:188)
+	at java.base/java.lang.ClassLoader.loadClass(ClassLoader.java:526)
+	... 33 common frames omitted
+2026-03-30 11:44:00.466 [main] INFO  com.hms.HospitalManagementSystemApplication - Starting HospitalManagementSystemApplication using Java 21.0.10 with PID 10756 (C:\Users\Piyush\Desktop\Project\backend\target\classes started by Piyush in C:\Users\Piyush\Desktop\Project)
+2026-03-30 11:44:00.470 [main] DEBUG com.hms.HospitalManagementSystemApplication - Running with Spring Boot v3.3.4, Spring v6.1.13
+2026-03-30 11:44:00.472 [main] INFO  com.hms.HospitalManagementSystemApplication - No active profile set, falling back to 1 default profile: "mysql"
+2026-03-30 11:44:03.539 [main] INFO  o.s.d.r.config.RepositoryConfigurationDelegate - Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2026-03-30 11:44:04.064 [main] INFO  o.s.d.r.config.RepositoryConfigurationDelegate - Finished Spring Data repository scanning in 507 ms. Found 9 JPA repository interfaces.
+2026-03-30 11:44:08.550 [main] INFO  o.s.boot.web.embedded.tomcat.TomcatWebServer - Tomcat initialized with port 8080 (http)
+2026-03-30 11:44:08.866 [main] INFO  o.s.b.w.s.c.ServletWebServerApplicationContext - Root WebApplicationContext: initialization completed in 8135 ms
+2026-03-30 11:44:10.360 [main] INFO  org.hibernate.jpa.internal.util.LogHelper - HHH000204: Processing PersistenceUnitInfo [name: default]
+2026-03-30 11:44:10.706 [main] INFO  org.hibernate.Version - HHH000412: Hibernate ORM core version 6.5.3.Final
+2026-03-30 11:44:10.868 [main] INFO  o.hibernate.cache.internal.RegionFactoryInitiator - HHH000026: Second-level cache disabled
+2026-03-30 11:44:11.037 [main] INFO  com.hms.HospitalManagementSystemApplication - Starting HospitalManagementSystemApplication using Java 21.0.10 with PID 16252 (C:\Users\Piyush\Desktop\Project\backend\target\classes started by Piyush in C:\Users\Piyush\Desktop\Project)
+2026-03-30 11:44:11.045 [main] DEBUG com.hms.HospitalManagementSystemApplication - Running with Spring Boot v3.3.4, Spring v6.1.13
+2026-03-30 11:44:11.055 [main] INFO  com.hms.HospitalManagementSystemApplication - No active profile set, falling back to 1 default profile: "mysql"
+2026-03-30 11:44:12.081 [main] INFO  o.s.o.j.persistenceunit.SpringPersistenceUnitInfo - No LoadTimeWeaver setup: ignoring JPA class transformer
+2026-03-30 11:44:12.187 [main] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Starting...
+2026-03-30 11:44:12.959 [main] INFO  com.zaxxer.hikari.pool.HikariPool - HikariPool-1 - Added connection com.mysql.cj.jdbc.ConnectionImpl@3dee3a6c
+2026-03-30 11:44:12.965 [main] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Start completed.
+2026-03-30 11:44:14.660 [main] INFO  o.s.d.r.config.RepositoryConfigurationDelegate - Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2026-03-30 11:44:15.554 [main] INFO  o.s.d.r.config.RepositoryConfigurationDelegate - Finished Spring Data repository scanning in 853 ms. Found 9 JPA repository interfaces.
+2026-03-30 11:44:19.810 [main] INFO  o.h.e.t.jta.platform.internal.JtaPlatformInitiator - HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
+2026-03-30 11:44:20.964 [main] INFO  o.s.boot.web.embedded.tomcat.TomcatWebServer - Tomcat initialized with port 8080 (http)
+2026-03-30 11:44:21.023 [main] INFO  org.apache.catalina.core.StandardService - Starting service [Tomcat]
+2026-03-30 11:44:21.062 [main] INFO  org.apache.catalina.core.StandardEngine - Starting Servlet engine: [Apache Tomcat/10.1.30]
+2026-03-30 11:44:21.412 [main] INFO  o.a.c.core.ContainerBase.[Tomcat].[localhost].[/] - Initializing Spring embedded WebApplicationContext
+2026-03-30 11:44:21.424 [main] INFO  o.s.b.w.s.c.ServletWebServerApplicationContext - Root WebApplicationContext: initialization completed in 10152 ms
+2026-03-30 11:44:22.870 [main] INFO  o.s.orm.jpa.LocalContainerEntityManagerFactoryBean - Initialized JPA EntityManagerFactory for persistence unit 'default'
+2026-03-30 11:44:23.457 [main] INFO  org.hibernate.jpa.internal.util.LogHelper - HHH000204: Processing PersistenceUnitInfo [name: default]
+2026-03-30 11:44:23.779 [main] INFO  org.hibernate.Version - HHH000412: Hibernate ORM core version 6.5.3.Final
+2026-03-30 11:44:24.053 [main] INFO  o.hibernate.cache.internal.RegionFactoryInitiator - HHH000026: Second-level cache disabled
+2026-03-30 11:44:25.560 [main] INFO  com.hms.HospitalManagementSystemApplication - Starting HospitalManagementSystemApplication using Java 21.0.10 with PID 3172 (C:\Users\Piyush\Desktop\Project\backend\target\classes started by Piyush in C:\Users\Piyush\Desktop\Project)
+2026-03-30 11:44:25.570 [main] DEBUG com.hms.HospitalManagementSystemApplication - Running with Spring Boot v3.3.4, Spring v6.1.13
+2026-03-30 11:44:25.579 [main] INFO  com.hms.HospitalManagementSystemApplication - No active profile set, falling back to 1 default profile: "mysql"
+2026-03-30 11:44:25.726 [main] INFO  o.s.o.j.persistenceunit.SpringPersistenceUnitInfo - No LoadTimeWeaver setup: ignoring JPA class transformer
+2026-03-30 11:44:25.997 [main] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Starting...
+2026-03-30 11:44:34.024 [main] INFO  com.hms.HospitalManagementSystemApplication - Starting HospitalManagementSystemApplication using Java 21.0.10 with PID 1992 (C:\Users\Piyush\Desktop\Project\backend\target\classes started by Piyush in C:\Users\Piyush\Desktop\Project)
+2026-03-30 11:44:34.038 [main] DEBUG com.hms.HospitalManagementSystemApplication - Running with Spring Boot v3.3.4, Spring v6.1.13
+2026-03-30 11:44:34.041 [main] INFO  com.hms.HospitalManagementSystemApplication - No active profile set, falling back to 1 default profile: "mysql"
+2026-03-30 11:44:37.399 [main] INFO  com.hms.HospitalManagementSystemApplication - Starting HospitalManagementSystemApplication using Java 21.0.10 with PID 7616 (C:\Users\Piyush\Desktop\Project\backend\target\classes started by Piyush in C:\Users\Piyush\Desktop\Project)
+2026-03-30 11:44:37.403 [main] DEBUG com.hms.HospitalManagementSystemApplication - Running with Spring Boot v3.3.4, Spring v6.1.13
+2026-03-30 11:44:37.405 [main] INFO  com.hms.HospitalManagementSystemApplication - No active profile set, falling back to 1 default profile: "mysql"
+2026-03-30 11:44:40.652 [main] INFO  o.s.d.r.config.RepositoryConfigurationDelegate - Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2026-03-30 11:44:41.334 [main] INFO  o.s.d.r.config.RepositoryConfigurationDelegate - Finished Spring Data repository scanning in 651 ms. Found 9 JPA repository interfaces.
+2026-03-30 11:44:42.581 [main] INFO  com.hms.HospitalManagementSystemApplication - Starting HospitalManagementSystemApplication using Java 21.0.10 with PID 28332 (C:\Users\Piyush\Desktop\Project\backend\target\classes started by Piyush in C:\Users\Piyush\Desktop\Project)
+2026-03-30 11:44:42.591 [main] DEBUG com.hms.HospitalManagementSystemApplication - Running with Spring Boot v3.3.4, Spring v6.1.13
+2026-03-30 11:44:42.597 [main] INFO  com.hms.HospitalManagementSystemApplication - No active profile set, falling back to 1 default profile: "mysql"
+2026-03-30 11:44:48.066 [main] INFO  o.s.boot.web.embedded.tomcat.TomcatWebServer - Tomcat initialized with port 8080 (http)
+2026-03-30 11:44:48.126 [main] INFO  org.apache.catalina.core.StandardService - Starting service [Tomcat]
+2026-03-30 11:44:48.130 [main] INFO  org.apache.catalina.core.StandardEngine - Starting Servlet engine: [Apache Tomcat/10.1.30]
+2026-03-30 11:44:48.420 [main] INFO  o.a.c.core.ContainerBase.[Tomcat].[localhost].[/] - Initializing Spring embedded WebApplicationContext
+2026-03-30 11:44:48.427 [main] INFO  o.s.b.w.s.c.ServletWebServerApplicationContext - Root WebApplicationContext: initialization completed in 10790 ms
+2026-03-30 11:44:48.627 [main] INFO  o.s.d.r.config.RepositoryConfigurationDelegate - Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2026-03-30 11:44:49.608 [main] INFO  o.s.d.r.config.RepositoryConfigurationDelegate - Finished Spring Data repository scanning in 959 ms. Found 9 JPA repository interfaces.
+2026-03-30 11:44:49.821 [main] INFO  org.hibernate.jpa.internal.util.LogHelper - HHH000204: Processing PersistenceUnitInfo [name: default]
+2026-03-30 11:44:50.103 [main] INFO  org.hibernate.Version - HHH000412: Hibernate ORM core version 6.5.3.Final
+2026-03-30 11:44:50.213 [main] INFO  o.hibernate.cache.internal.RegionFactoryInitiator - HHH000026: Second-level cache disabled
+2026-03-30 11:44:51.592 [main] INFO  o.s.o.j.persistenceunit.SpringPersistenceUnitInfo - No LoadTimeWeaver setup: ignoring JPA class transformer
+2026-03-30 11:44:51.810 [main] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Starting...
+2026-03-30 11:44:54.429 [main] INFO  o.s.boot.web.embedded.tomcat.TomcatWebServer - Tomcat initialized with port 8080 (http)
+2026-03-30 11:44:54.495 [main] INFO  org.apache.catalina.core.StandardService - Starting service [Tomcat]
+2026-03-30 11:44:54.501 [main] INFO  org.apache.catalina.core.StandardEngine - Starting Servlet engine: [Apache Tomcat/10.1.30]
+2026-03-30 11:44:54.774 [main] INFO  o.a.c.core.ContainerBase.[Tomcat].[localhost].[/] - Initializing Spring embedded WebApplicationContext
+2026-03-30 11:44:54.778 [main] INFO  o.s.b.w.s.c.ServletWebServerApplicationContext - Root WebApplicationContext: initialization completed in 11891 ms
+2026-03-30 11:44:56.257 [main] INFO  org.hibernate.jpa.internal.util.LogHelper - HHH000204: Processing PersistenceUnitInfo [name: default]
+2026-03-30 11:44:56.526 [main] INFO  org.hibernate.Version - HHH000412: Hibernate ORM core version 6.5.3.Final
+2026-03-30 11:44:56.702 [main] INFO  o.hibernate.cache.internal.RegionFactoryInitiator - HHH000026: Second-level cache disabled
+2026-03-30 11:44:57.682 [main] INFO  o.s.o.j.persistenceunit.SpringPersistenceUnitInfo - No LoadTimeWeaver setup: ignoring JPA class transformer
+2026-03-30 11:44:57.749 [main] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Starting...
+2026-03-30 11:44:58.035 [main] INFO  com.hms.HospitalManagementSystemApplication - Starting HospitalManagementSystemApplication using Java 21.0.10 with PID 5940 (C:\Users\Piyush\Desktop\Project\backend\target\classes started by Piyush in C:\Users\Piyush\Desktop\Project)
+2026-03-30 11:44:58.039 [main] DEBUG com.hms.HospitalManagementSystemApplication - Running with Spring Boot v3.3.4, Spring v6.1.13
+2026-03-30 11:44:58.042 [main] INFO  com.hms.HospitalManagementSystemApplication - No active profile set, falling back to 1 default profile: "mysql"
+2026-03-30 11:44:58.222 [main] INFO  com.zaxxer.hikari.pool.HikariPool - HikariPool-1 - Added connection com.mysql.cj.jdbc.ConnectionImpl@1f72fbd1
+2026-03-30 11:44:58.228 [main] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Start completed.
+2026-03-30 11:45:00.989 [main] INFO  o.s.d.r.config.RepositoryConfigurationDelegate - Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2026-03-30 11:45:01.604 [main] INFO  o.s.d.r.config.RepositoryConfigurationDelegate - Finished Spring Data repository scanning in 587 ms. Found 9 JPA repository interfaces.

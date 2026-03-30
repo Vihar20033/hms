@@ -376,3 +376,53 @@ Consider defining a bean of type 'com.hms.dashboard.service.DashboardService' in
 2026-03-30 10:21:21.948 [main] INFO  com.hms.HospitalManagementSystemApplication - Started HospitalManagementSystemApplication in 9.182 seconds (process running for 9.73)
 2026-03-30 10:21:22.058 [main] INFO  com.hms.common.config.DataInitializer - Starting database column initialization...
 2026-03-30 10:21:22.107 [main] INFO  com.hms.common.config.DataInitializer - Database column initialization completed.
+2026-03-30 11:06:25.537 [http-nio-8080-exec-1] INFO  o.a.c.core.ContainerBase.[Tomcat].[localhost].[/] - Initializing Spring DispatcherServlet 'dispatcherServlet'
+2026-03-30 11:06:25.568 [http-nio-8080-exec-1] INFO  org.springframework.web.servlet.DispatcherServlet - Initializing Servlet 'dispatcherServlet'
+2026-03-30 11:06:25.713 [http-nio-8080-exec-1] INFO  org.springframework.web.servlet.DispatcherServlet - Completed initialization in 141 ms
+2026-03-30 11:16:58.383 [http-nio-8080-exec-10] INFO  com.hms.security.jwt.JwtAuthenticationFilter - Request authorized for user: admin with authorities: [ROLE_ADMIN]
+2026-03-30 11:16:58.390 [http-nio-8080-exec-4] INFO  com.hms.security.jwt.JwtAuthenticationFilter - Request authorized for user: admin with authorities: [ROLE_ADMIN]
+2026-03-30 11:16:58.393 [http-nio-8080-exec-9] INFO  com.hms.security.jwt.JwtAuthenticationFilter - Request authorized for user: admin with authorities: [ROLE_ADMIN]
+2026-03-30 11:18:11.365 [http-nio-8080-exec-5] INFO  com.hms.security.jwt.JwtAuthenticationFilter - Request authorized for user: admin with authorities: [ROLE_ADMIN]
+2026-03-30 11:25:01.247 [http-nio-8080-exec-10] INFO  com.hms.security.jwt.JwtAuthenticationFilter - Request authorized for user: admin with authorities: [ROLE_ADMIN]
+2026-03-30 11:25:01.395 [http-nio-8080-exec-9] INFO  com.hms.security.jwt.JwtAuthenticationFilter - Request authorized for user: admin with authorities: [ROLE_ADMIN]
+2026-03-30 11:25:03.348 [http-nio-8080-exec-2] INFO  com.hms.security.jwt.JwtAuthenticationFilter - Request authorized for user: admin with authorities: [ROLE_ADMIN]
+2026-03-30 11:25:03.353 [http-nio-8080-exec-7] INFO  com.hms.security.jwt.JwtAuthenticationFilter - Request authorized for user: admin with authorities: [ROLE_ADMIN]
+2026-03-30 11:25:04.619 [http-nio-8080-exec-5] INFO  com.hms.security.jwt.JwtAuthenticationFilter - Request authorized for user: admin with authorities: [ROLE_ADMIN]
+2026-03-30 11:25:04.665 [http-nio-8080-exec-6] INFO  com.hms.security.jwt.JwtAuthenticationFilter - Request authorized for user: admin with authorities: [ROLE_ADMIN]
+2026-03-30 11:25:08.098 [http-nio-8080-exec-4] INFO  com.hms.security.jwt.JwtAuthenticationFilter - Request authorized for user: admin with authorities: [ROLE_ADMIN]
+2026-03-30 11:25:08.098 [http-nio-8080-exec-8] INFO  com.hms.security.jwt.JwtAuthenticationFilter - Request authorized for user: admin with authorities: [ROLE_ADMIN]
+2026-03-30 11:25:14.831 [http-nio-8080-exec-9] INFO  com.hms.security.jwt.JwtAuthenticationFilter - Request authorized for user: admin with authorities: [ROLE_ADMIN]
+2026-03-30 11:25:45.623 [http-nio-8080-exec-1] INFO  com.hms.security.jwt.JwtAuthenticationFilter - Request authorized for user: admin with authorities: [ROLE_ADMIN]
+2026-03-30 11:25:49.567 [http-nio-8080-exec-7] INFO  com.hms.security.jwt.JwtAuthenticationFilter - Request authorized for user: admin with authorities: [ROLE_ADMIN]
+2026-03-30 11:25:51.397 [http-nio-8080-exec-5] INFO  com.hms.security.jwt.JwtAuthenticationFilter - Request authorized for user: admin with authorities: [ROLE_ADMIN]
+2026-03-30 11:32:39.130 [SpringApplicationShutdownHook] INFO  o.s.orm.jpa.LocalContainerEntityManagerFactoryBean - Closing JPA EntityManagerFactory for persistence unit 'default'
+2026-03-30 11:32:39.150 [SpringApplicationShutdownHook] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Shutdown initiated...
+2026-03-30 11:32:39.160 [SpringApplicationShutdownHook] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Shutdown completed.
+2026-03-30 11:34:07.146 [main] INFO  com.hms.HospitalManagementSystemApplication - Starting HospitalManagementSystemApplication using Java 21.0.10 with PID 11280 (C:\Users\Piyush\Desktop\Project\backend\target\classes started by Piyush in C:\Users\Piyush\Desktop\Project\backend)
+2026-03-30 11:34:07.155 [main] DEBUG com.hms.HospitalManagementSystemApplication - Running with Spring Boot v3.3.4, Spring v6.1.13
+2026-03-30 11:34:07.157 [main] INFO  com.hms.HospitalManagementSystemApplication - No active profile set, falling back to 1 default profile: "mysql"
+2026-03-30 11:34:08.334 [main] INFO  o.s.d.r.config.RepositoryConfigurationDelegate - Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2026-03-30 11:34:08.522 [main] INFO  o.s.d.r.config.RepositoryConfigurationDelegate - Finished Spring Data repository scanning in 179 ms. Found 9 JPA repository interfaces.
+2026-03-30 11:34:09.821 [main] INFO  o.s.boot.web.embedded.tomcat.TomcatWebServer - Tomcat initialized with port 8080 (http)
+2026-03-30 11:34:09.841 [main] INFO  org.apache.catalina.core.StandardService - Starting service [Tomcat]
+2026-03-30 11:34:09.842 [main] INFO  org.apache.catalina.core.StandardEngine - Starting Servlet engine: [Apache Tomcat/10.1.30]
+2026-03-30 11:34:09.927 [main] INFO  o.a.c.core.ContainerBase.[Tomcat].[localhost].[/] - Initializing Spring embedded WebApplicationContext
+2026-03-30 11:34:09.929 [main] INFO  o.s.b.w.s.c.ServletWebServerApplicationContext - Root WebApplicationContext: initialization completed in 2661 ms
+2026-03-30 11:34:10.322 [main] INFO  org.hibernate.jpa.internal.util.LogHelper - HHH000204: Processing PersistenceUnitInfo [name: default]
+2026-03-30 11:34:10.387 [main] INFO  org.hibernate.Version - HHH000412: Hibernate ORM core version 6.5.3.Final
+2026-03-30 11:34:10.430 [main] INFO  o.hibernate.cache.internal.RegionFactoryInitiator - HHH000026: Second-level cache disabled
+2026-03-30 11:34:10.765 [main] INFO  o.s.o.j.persistenceunit.SpringPersistenceUnitInfo - No LoadTimeWeaver setup: ignoring JPA class transformer
+2026-03-30 11:34:10.813 [main] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Starting...
+2026-03-30 11:34:10.986 [main] INFO  com.zaxxer.hikari.pool.HikariPool - HikariPool-1 - Added connection com.mysql.cj.jdbc.ConnectionImpl@5db04bd2
+2026-03-30 11:34:10.988 [main] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Start completed.
+2026-03-30 11:34:12.723 [main] INFO  o.h.e.t.jta.platform.internal.JtaPlatformInitiator - HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
+2026-03-30 11:34:13.244 [main] INFO  o.s.orm.jpa.LocalContainerEntityManagerFactoryBean - Initialized JPA EntityManagerFactory for persistence unit 'default'
+2026-03-30 11:34:13.889 [main] DEBUG com.hms.security.jwt.JwtAuthenticationFilter - Filter 'jwtAuthenticationFilter' configured for use
+2026-03-30 11:34:14.153 [main] INFO  o.s.s.c.a.a.c.InitializeUserDetailsBeanManagerConfigurer$InitializeUserDetailsManagerConfigurer - Global AuthenticationManager configured with UserDetailsService bean with name customUserDetailsService
+2026-03-30 11:34:14.199 [main] INFO  o.s.data.jpa.repository.query.QueryEnhancerFactory - Hibernate is in classpath; If applicable, HQL parser will be used.
+2026-03-30 11:34:15.337 [main] INFO  o.s.b.actuate.endpoint.web.EndpointLinksResolver - Exposing 3 endpoints beneath base path '/actuator'
+2026-03-30 11:34:15.376 [main] INFO  com.hms.security.config.SecurityConfig - Production Security configuration successfully initialized.
+2026-03-30 11:34:15.956 [main] INFO  o.s.boot.web.embedded.tomcat.TomcatWebServer - Tomcat started on port 8080 (http) with context path '/'
+2026-03-30 11:34:15.967 [main] INFO  com.hms.HospitalManagementSystemApplication - Started HospitalManagementSystemApplication in 9.611 seconds (process running for 10.173)
+2026-03-30 11:34:16.094 [main] INFO  com.hms.common.config.DataInitializer - Starting database column initialization...
+2026-03-30 11:34:16.145 [main] INFO  com.hms.common.config.DataInitializer - Database column initialization completed.

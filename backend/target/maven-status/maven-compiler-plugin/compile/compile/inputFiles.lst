@@ -93,7 +93,6 @@ C:\Users\Piyush\Desktop\Project\backend\src\main\java\com\hms\billing\dto\reques
 C:\Users\Piyush\Desktop\Project\backend\src\main\java\com\hms\common\enums\Department.java
 C:\Users\Piyush\Desktop\Project\backend\src\main\java\com\hms\patient\service\impl\PatientServiceImpl.java
 C:\Users\Piyush\Desktop\Project\backend\src\main\java\com\hms\pharmacy\dto\response\MedicineResponseDTO.java
-C:\Users\Piyush\Desktop\Project\backend\src\main\java\com\hms\security\filter\RateLimitFilter.java
 C:\Users\Piyush\Desktop\Project\backend\src\main\java\com\hms\common\exception\BadRequestException.java
 C:\Users\Piyush\Desktop\Project\backend\src\main\java\com\hms\pharmacy\service\MedicineService.java
 C:\Users\Piyush\Desktop\Project\backend\src\main\java\com\hms\auth\dto\request\LoginRequest.java
@@ -132,7 +131,6 @@ C:\Users\Piyush\Desktop\Project\backend\src\main\java\com\hms\pharmacy\repositor
 C:\Users\Piyush\Desktop\Project\backend\src\main\java\com\hms\security\config\JwtProperties.java
 C:\Users\Piyush\Desktop\Project\backend\src\main\java\com\hms\appointment\entity\Appointment.java
 C:\Users\Piyush\Desktop\Project\backend\src\main\java\com\hms\common\config\LocalDateTimeDeserializer.java
-C:\Users\Piyush\Desktop\Project\backend\src\main\java\com\hms\security\service\RateLimitService.java
 C:\Users\Piyush\Desktop\Project\backend\src\main\java\com\hms\billing\service\impl\BillingServiceImpl.java
 C:\Users\Piyush\Desktop\Project\backend\src\main\java\com\hms\patient\repository\PatientRepositoryImpl.java
 C:\Users\Piyush\Desktop\Project\backend\src\main\java\com\hms\patient\mapper\PatientMapper.java
