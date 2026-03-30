@@ -5,34 +5,34 @@ import { roleGuard } from './core/guards/role.guard';
 
 export const routes: Routes = [
   { path: '', redirectTo: 'login', pathMatch: 'full' },
-  { 
-    path: 'login', 
+  {
+    path: 'login',
     loadComponent: () => import('./features/auth/pages/login/login.component')
-    .then(m => m.LoginComponent),
-    canActivate: [guestGuard] 
+      .then(m => m.LoginComponent),
+    canActivate: [guestGuard]
   },
-  { 
-    path: 'register', 
+  {
+    path: 'register',
     loadComponent: () => import('./features/auth/pages/register/register.component')
-    .then(m => m.RegisterComponent),
-    canActivate: [guestGuard] 
+      .then(m => m.RegisterComponent),
+    canActivate: [guestGuard]
   },
   {
     path: 'change-password',
     loadComponent: () => import('./features/auth/pages/change-password/change-password.component')
-    .then(m => m.ChangePasswordComponent),
+      .then(m => m.ChangePasswordComponent),
     canActivate: [authGuard],
   },
   {
     path: 'unauthorized',
     loadComponent: () => import('./features/auth/pages/unauthorized/unauthorized.component')
-    .then(m => m.UnauthorizedComponent),
+      .then(m => m.UnauthorizedComponent),
     canActivate: [authGuard],
   },
   {
     path: 'dashboard',
     loadComponent: () => import('./features/dashboard/pages/dashboard.component')
-    .then(m => m.DashboardComponent),
+      .then(m => m.DashboardComponent),
     canActivate: [authGuard, roleGuard],
     data: {
       roles: ['ADMIN', 'DOCTOR', 'NURSE', 'RECEPTIONIST', 'PHARMACIST'],
@@ -158,7 +158,7 @@ export const routes: Routes = [
     children: [
       {
         path: '',
-        loadComponent: () => import('./features/billing/pages/billing-list/billing-list.component').then(m => m.BillingListComponent),
+        loadComponent: () => import('./features/billing/billing-list/billing-list.component').then(m => m.BillingListComponent),
         data: { roles: ['ADMIN', 'RECEPTIONIST'] },
       },
     ],

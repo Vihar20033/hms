@@ -23,3 +23,12 @@
 2026-03-27 12:27:44.828 | recep | USER_LOGIN | User | 3 | role=RECEPTIONIST
 2026-03-27 12:29:02.532 | recep | USER_LOGOUT | User | 3 | 
 2026-03-27 12:37:26.098 | recep | USER_LOGIN | User | 3 | role=RECEPTIONIST
+2026-03-27 12:43:53.577 | recep | PATIENT_CREATE | Patient | 4 | name=Vihar
+2026-03-27 13:18:12.917 | recep | USER_LOGIN | User | 3 | role=RECEPTIONIST
+2026-03-27 13:18:18.485 | recep | USER_LOGOUT | User | 3 | 
+2026-03-27 13:18:32.739 | admin | USER_LOGIN | User | 1 | role=ADMIN
+2026-03-27 14:42:42.931 | admin | USER_LOGIN | User | 1 | role=ADMIN
+2026-03-27 15:06:11.151 | admin | USER_LOGOUT | User | 1 | 
+2026-03-27 15:25:07.537 | admin | USER_LOGIN | User | 1 | role=ADMIN
+2026-03-27 15:25:51.702 | admin | APPOINTMENT_CREATE | Appointment | 4 | patient=Vihar
+2026-03-27 16:45:13.874 | admin | USER_LOGIN | User | 1 | role=ADMIN

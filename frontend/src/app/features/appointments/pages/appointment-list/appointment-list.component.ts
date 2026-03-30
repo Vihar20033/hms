@@ -49,6 +49,7 @@ export class AppointmentListComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
+    
     this.userRole = this.authService.getUserRole();
 
     if (this.userRole === 'RECEPTIONIST') {

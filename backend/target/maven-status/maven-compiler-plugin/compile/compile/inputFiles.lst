@@ -72,6 +72,7 @@ C:\Users\Piyush\Desktop\Project\backend\src\main\java\com\hms\user\exception\Ema
 C:\Users\Piyush\Desktop\Project\backend\src\main\java\com\hms\user\repository\UserRepository.java
 C:\Users\Piyush\Desktop\Project\backend\src\main\java\com\hms\doctor\dto\request\UpdateDoctorRequest.java
 C:\Users\Piyush\Desktop\Project\backend\src\main\java\com\hms\user\mapper\UserMapper.java
+C:\Users\Piyush\Desktop\Project\backend\src\main\java\com\hms\dashboard\dto\DepartmentStatisticsDTO.java
 C:\Users\Piyush\Desktop\Project\backend\src\main\java\com\hms\common\audit\AuditLogRepository.java
 C:\Users\Piyush\Desktop\Project\backend\src\main\java\com\hms\common\enums\AppointmentStatus.java
 C:\Users\Piyush\Desktop\Project\backend\src\main\java\com\hms\common\util\SecurityUtils.java

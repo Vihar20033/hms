@@ -13,6 +13,7 @@ import com.hms.billing.exception.BillingNotFoundException;
 import com.hms.billing.mapper.BillingMapper;
 import com.hms.billing.repository.BillingRepository;
 import com.hms.billing.service.BillingService;
+import com.hms.common.audit.AuditLogService;
 import com.hms.common.enums.PaymentMethod;
 import com.hms.common.enums.PaymentStatus;
 import com.hms.common.enums.Role;
@@ -29,6 +30,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.access.AccessDeniedException;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -49,7 +51,7 @@ public class BillingServiceImpl implements BillingService {
     private final BillingMapper billingMapper;
     private final PrescriptionRepository prescriptionRepository;
     private final MedicineRepository medicineRepository;
-    private final com.hms.common.audit.AuditLogService auditLogService;
+    private final AuditLogService auditLogService;
 
     @Value("${hospital.billing.tax-rate:0.05}")
     private BigDecimal taxRate;
@@ -270,7 +272,7 @@ public class BillingServiceImpl implements BillingService {
     }
 
     private String getCurrentUsername() {
-        org.springframework.security.core.Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         return (auth != null && auth.isAuthenticated()) ? auth.getName() : "system";
     }
 }

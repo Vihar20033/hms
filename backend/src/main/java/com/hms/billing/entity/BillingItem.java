@@ -19,7 +19,7 @@ public class BillingItem {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "billing_id", nullable = false)
     private Billing billing;
 

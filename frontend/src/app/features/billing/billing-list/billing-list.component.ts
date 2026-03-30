@@ -3,28 +3,28 @@ import { HttpErrorResponse } from '@angular/common/http';
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnInit } from '@angular/core';
 import { FormArray, FormBuilder, FormGroup } from '@angular/forms';
 import { RouterLink } from '@angular/router';
-import { Appointment } from '../../../../core/models/appointment.models';
-import { Billing, PaymentMethod, PaymentStatus } from '../../../../core/models/billing.models';
-import { ApiResponse, PagedResponse } from '../../../../core/models/common.models';
-import { Patient } from '../../../../core/models/patient.models';
-import { AppointmentService } from '../../../../core/services/appointment.service';
-import { AuthService } from '../../../../core/services/auth.service';
-import { BillingService } from '../../../../core/services/billing.service';
-import { PatientService } from '../../../../core/services/patient.service';
-import { PdfExportService } from '../../../../core/services/pdf-export.service';
-import { StatusModalService } from '../../../../core/services/status-modal.service';
-import { HeaderComponent } from '../../../../shared/components/layout/header/header.component';
-import { SidebarComponent } from '../../../../shared/components/layout/sidebar/sidebar.component';
-import { BillingFormComponent } from '../../components/billing-form/billing-form.component';
-import { BillingTableComponent } from '../../components/billing-table/billing-table.component';
-import { BillingViewModalComponent } from '../../components/billing-view-modal/billing-view-modal.component';
-import { createBillingForm, createBillingItemGroup, getBillingItems } from '../../utils/billing-form.utils';
+import { Appointment } from '../../../core/models/appointment.models';
+import { Billing, PaymentMethod, PaymentStatus } from '../../../core/models/billing.models';
+import { ApiResponse, PagedResponse } from '../../../core/models/common.models';
+import { Patient } from '../../../core/models/patient.models';
+import { AppointmentService } from '../../../core/services/appointment.service';
+import { AuthService } from '../../../core/services/auth.service';
+import { BillingService } from '../../../core/services/billing.service';
+import { PatientService } from '../../../core/services/patient.service';
+import { PdfExportService } from '../../../core/services/pdf-export.service';
+import { StatusModalService } from '../../../core/services/status-modal.service';
+import { HeaderComponent } from '../../../shared/components/layout/header/header.component';
+import { SidebarComponent } from '../../../shared/components/layout/sidebar/sidebar.component';
+import { BillingFormComponent } from '../components/billing-form/billing-form.component';
+import { BillingTableComponent } from '../components/billing-table/billing-table.component';
+import { BillingViewModalComponent } from '../components/billing-view-modal/billing-view-modal.component';
+import { createBillingForm, createBillingItemGroup, getBillingItems } from '../utils/billing-form.utils';
 import {
   buildBillingPayload,
   buildPreviewItemGroups,
   mapAppointmentOptions,
-} from '../../utils/billing-data.utils';
-import { getBillingItemTotal, getBillingNetTotal, getBillingSubtotal, getBillingStatusClass, buildPatientOptions, buildPaymentMethodOptions } from '../../utils/billing-data.utils';
+} from '../utils/billing-data.utils';
+import { getBillingItemTotal, getBillingNetTotal, getBillingSubtotal, getBillingStatusClass, buildPatientOptions, buildPaymentMethodOptions } from '../utils/billing-data.utils';
 
 @Component({
   selector: 'app-billing-list',
@@ -79,7 +79,7 @@ export class BillingListComponent implements OnInit {
     private statusModalService: StatusModalService,
     private pdfExportService: PdfExportService,
     private cdr: ChangeDetectorRef,
-  ) {}
+  ) { }
 
   ngOnInit(): void {
     this.userRole = this.authService.getUserRole();
@@ -93,8 +93,9 @@ export class BillingListComponent implements OnInit {
 
   initForm(): void {
     this.billingForm = createBillingForm(this.fb);
-
-    this.billingForm.get('patientId')?.valueChanges.subscribe((id: number) => this.onPatientSelectedForManual(id));
+    this.billingForm.get('patientId')?.valueChanges.
+      subscribe((id: number) => 
+        this.onPatientSelectedForManual(id));
 
     this.billingForm.get('items')?.valueChanges.subscribe(() => {
       const subtotal = this.getSubtotal();

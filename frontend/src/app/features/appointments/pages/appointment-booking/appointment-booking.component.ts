@@ -81,19 +81,18 @@ export class AppointmentBookingComponent implements OnInit {
   }
 
   private initializeFormListeners(): void {
-    // React to Emergency toggle
     this.bookingForm.get('isEmergency')?.valueChanges.subscribe((isEmergency) => {
       updateAppointmentTimeValidators(this.bookingForm, isEmergency);
     });
-
-    // React to Department changes
     this.bookingForm.get('department')?.valueChanges.subscribe((dept) => {
       this.filterDoctors(dept);
     });
   }
 
   private loadInitialData(): void {
-    this.patientService.getAll().subscribe((res) => (this.patients = res.data));
+    this.patientService.getAll().subscribe((res) => {
+      this.patients = res.data;
+    });
     this.doctorService.getAll().subscribe((res) => {
       this.doctors = res.data;
       this.filterDoctors(this.bookingForm.get('department')?.value);
@@ -184,8 +183,14 @@ export class AppointmentBookingComponent implements OnInit {
   }
 
   // Helpers for template
-  get patientOptions() { return buildPatientOptions(this.patients); }
-  get departmentOptions() { return buildDepartmentOptions(this.departments); }
-  get doctorOptions() { return buildDoctorOptions(this.filteredDoctors); }
+  get patientOptions() 
+  { return buildPatientOptions(this.patients); }
+
+  get departmentOptions() 
+  { return buildDepartmentOptions(this.departments); }
+
+  get doctorOptions() 
+  { return buildDoctorOptions(this.filteredDoctors); }
+
   getDepartmentLabel = (dept: string) => formatDepartmentLabel(dept);
 }

@@ -104,3 +104,51 @@ export function createDashboardChart(ctx: CanvasRenderingContext2D, data: Dashbo
 
   return new Chart(ctx, config);
 }
+
+export function createDepartmentChart(ctx: CanvasRenderingContext2D, data: DashboardSummary): Chart {
+  const stats = data.departmentStats || [];
+  const labels = stats.map((s) => s.department.replace('_', ' ').toLowerCase());
+  const counts = stats.map((s) => s.appointmentCount);
+
+  const colors = [
+    '#6366f1', '#10b981', '#f59e0b', '#ef4444', '#8b5cf6',
+    '#ec4899', '#06b6d4', '#f97316', '#14b8a6', '#4f46e5'
+  ];
+
+  const config: ChartConfiguration<'doughnut'> = {
+    type: 'doughnut',
+    data: {
+      labels,
+      datasets: [
+        {
+          data: counts,
+          backgroundColor: colors.slice(0, stats.length),
+          hoverOffset: 4,
+          borderWidth: 0,
+        },
+      ],
+    },
+    options: {
+      responsive: true,
+      maintainAspectRatio: false,
+      plugins: {
+        legend: {
+          position: 'right',
+          labels: {
+            usePointStyle: true,
+            padding: 20,
+            font: { size: 12, family: "'Inter', sans-serif" }
+          }
+        },
+        tooltip: {
+          callbacks: {
+            label: (item: any) => ` ${item.label}: ${item.raw} appointments`
+          }
+        }
+      },
+      cutout: '70%',
+    },
+  };
+
+  return new Chart(ctx, config);
+}

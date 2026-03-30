@@ -27,6 +27,7 @@ import {
   QuickAction,
   buildDashboardQuickActions,
   createDashboardChart,
+  createDepartmentChart,
   getDashboardStatusClass,
   getDashboardWorkflowLabel,
 } from '../utils/dashboard.utils';
@@ -43,6 +44,7 @@ Chart.register(...registerables);
 })
 export class DashboardComponent implements OnInit, AfterViewInit, OnDestroy {
   @ViewChild('patientChart') patientChartCanvas!: ElementRef<HTMLCanvasElement>;
+  @ViewChild('deptChart') deptChartCanvas!: ElementRef<HTMLCanvasElement>;
 
   summary: DashboardSummary | null = null;
   isLoading = true;
@@ -53,6 +55,7 @@ export class DashboardComponent implements OnInit, AfterViewInit, OnDestroy {
   isAdminOrStaff = false;
 
   chart: Chart | null = null;
+  deptChart: Chart | null = null;
   quickActions: QuickAction[] = [];
 
   todayAppointments: Appointment[] = [];
@@ -94,7 +97,7 @@ export class DashboardComponent implements OnInit, AfterViewInit, OnDestroy {
         // Short delay to ensure canvas is in DOM
         setTimeout(() => {
           if (this.summary) {
-            this.initChart(this.summary);
+            this.initCharts(this.summary);
           }
         }, 100);
       },
@@ -120,7 +123,7 @@ export class DashboardComponent implements OnInit, AfterViewInit, OnDestroy {
 
   ngAfterViewInit(): void {
     if (this.summary) {
-      this.initChart(this.summary);
+      this.initCharts(this.summary);
     }
   }
 
@@ -128,20 +131,31 @@ export class DashboardComponent implements OnInit, AfterViewInit, OnDestroy {
     if (this.chart) {
       this.chart.destroy();
     }
+    if (this.deptChart) {
+      this.deptChart.destroy();
+    }
   }
 
-  private initChart(data: DashboardSummary): void {
-    const canvas = this.patientChartCanvas?.nativeElement;
-    if (!canvas) return;
-
-    const ctx = canvas.getContext('2d');
-    if (!ctx) return;
-
-    if (this.chart) {
-      this.chart.destroy();
+  private initCharts(data: DashboardSummary): void {
+    // 1. Activity Chart
+    const activityCanvas = this.patientChartCanvas?.nativeElement;
+    if (activityCanvas) {
+      const ctx = activityCanvas.getContext('2d');
+      if (ctx) {
+        if (this.chart) this.chart.destroy();
+        this.chart = createDashboardChart(ctx, data);
+      }
     }
 
-    this.chart = createDashboardChart(ctx, data);
+    // 2. Department Chart
+    const deptCanvas = this.deptChartCanvas?.nativeElement;
+    if (deptCanvas) {
+      const ctx = deptCanvas.getContext('2d');
+      if (ctx) {
+        if (this.deptChart) this.deptChart.destroy();
+        this.deptChart = createDepartmentChart(ctx, data);
+      }
+    }
   }
 
   loadTodayAppointments(): void {

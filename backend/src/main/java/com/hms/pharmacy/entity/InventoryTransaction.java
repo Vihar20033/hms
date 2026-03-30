@@ -15,7 +15,7 @@ import lombok.*;
 @Builder
 public class InventoryTransaction extends Auditable {
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "medicine_id", nullable = false)
     private Medicine medicine;
 

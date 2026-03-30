@@ -10,6 +10,7 @@ import org.springframework.data.jpa.repository.EntityGraph;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.stereotype.Repository;
+import com.hms.common.enums.Department;
 import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
@@ -47,5 +48,7 @@ public interface AppointmentRepository extends JpaRepository<Appointment, Long>,
         long countByDoctorId(Long doctorId);
 
         long countByDoctorIdAndStatus(Long doctorId, AppointmentStatus status);
+
+        long countByDepartment(Department department);
 }
 

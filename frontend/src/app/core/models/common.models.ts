@@ -14,6 +14,11 @@ export interface WeeklyStatistics {
   patients: number;
 }
 
+export interface DepartmentStatistics {
+  department: string;
+  appointmentCount: number;
+}
+
 export interface DashboardSummary {
   totalPatients: number;
   todayAppointments: number;
@@ -24,6 +29,7 @@ export interface DashboardSummary {
   completedConsultations: number;
   totalCompletedConsultations: number;
   weeklyStats: WeeklyStatistics[];
+  departmentStats: DepartmentStatistics[];
 }
 
 export interface PagedResponse<T> {

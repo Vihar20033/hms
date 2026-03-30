@@ -24,8 +24,6 @@ export class UserListComponent implements OnInit {
   Role = Role;
   searchTerm = '';
 
-  // Event Emitter for search input
-
   constructor(private userService: UserService) {}
 
   ngOnInit(): void {
