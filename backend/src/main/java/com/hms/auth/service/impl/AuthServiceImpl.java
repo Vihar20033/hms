@@ -25,6 +25,8 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.math.BigDecimal;
+
 @Service
 @RequiredArgsConstructor
 @Transactional
@@ -64,6 +66,7 @@ public class AuthServiceImpl implements AuthService {
             doctorRepository.save(Doctor.builder()
                     .userId(savedUser.getId())
                     .firstName(savedUser.getUsername())
+                    .consultationFee(new BigDecimal("50.00"))
                     .lastName("(Auto-Generated)")
                     .specialization("General Medicine")
                     .department(Department.GENERAL_MEDICINE)

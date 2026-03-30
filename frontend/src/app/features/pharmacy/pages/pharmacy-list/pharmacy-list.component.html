@@ -113,6 +113,7 @@
                     [showIcon]="true"
                     dateFormat="yy-mm-dd"
                     styleClass="w-full"
+                    [minDate]="minExpiryDate"
                     [class.ng-invalid]="medicineForm.get('expiryDate')?.invalid && medicineForm.get('expiryDate')?.touched"
                   ></p-calendar>
                   <small

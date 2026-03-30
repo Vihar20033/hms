@@ -31,7 +31,6 @@ import { getBillingItemTotal, getBillingNetTotal, getBillingSubtotal, getBilling
   standalone: true,
   imports: [
     CommonModule,
-    RouterLink,
     HeaderComponent,
     SidebarComponent,
     BillingFormComponent,

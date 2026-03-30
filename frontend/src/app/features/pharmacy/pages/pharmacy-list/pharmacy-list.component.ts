@@ -56,6 +56,7 @@ export class PharmacyListComponent implements OnInit {
   errorMessage = '';
   successMessage = '';
   showLowStockOnly = false;
+  minExpiryDate: Date = new Date();
 
   categories = Object.values(MedicineCategory);
 
@@ -68,7 +69,13 @@ export class PharmacyListComponent implements OnInit {
   ngOnInit(): void {
     this.userRole = this.authService.getUserRole();
     this.initForm();
+    this.calculateMinDate();
     this.loadMedicines();
+  }
+
+  calculateMinDate(): void {
+    const today = new Date();
+    this.minExpiryDate = new Date(today.getFullYear(), today.getMonth(), today.getDate() + 1);
   }
 
   initForm(): void {
