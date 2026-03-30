@@ -11,15 +11,14 @@ import com.hms.prescription.entity.Prescription;
 import com.hms.prescription.entity.PrescriptionMedicine;
 import java.util.ArrayList;
 import java.util.List;
+import javax.annotation.processing.Generated;
 import org.springframework.stereotype.Component;
 
-/*
 @Generated(
     value = "org.mapstruct.ap.MappingProcessor",
-    date = "2026-03-27T16:40:28+0530",
-    comments = "version: 1.5.5.Final, compiler: Eclipse JDT (IDE) 3.45.0.v20260224-0835, environment: Java 21.0.10 (Eclipse Adoptium)"
+    date = "2026-03-30T09:58:15+0530",
+    comments = "version: 1.5.5.Final, compiler: javac, environment: Java 21.0.10 (Eclipse Adoptium)"
 )
-*/
 @Component
 public class PrescriptionMapperImpl implements PrescriptionMapper {
 
@@ -31,11 +30,11 @@ public class PrescriptionMapperImpl implements PrescriptionMapper {
 
         Prescription prescription = new Prescription();
 
-        prescription.setAdvice( dto.getAdvice() );
+        prescription.setSymptoms( dto.getSymptoms() );
         prescription.setDiagnosis( dto.getDiagnosis() );
         prescription.setMedicines( prescriptionMedicineRequestDTOListToPrescriptionMedicineList( dto.getMedicines() ) );
+        prescription.setAdvice( dto.getAdvice() );
         prescription.setNotes( dto.getNotes() );
-        prescription.setSymptoms( dto.getSymptoms() );
 
         return prescription;
     }

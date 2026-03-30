@@ -105,6 +105,7 @@ com\hms\billing\dto\response\BillingItemResponseDTO$BillingItemResponseDTOBuilde
 com\hms\auth\dto\request\LoginRequest.class
 com\hms\billing\exception\BillingNotFoundException.class
 com\hms\auth\dto\response\AuthResponse.class
+com\hms\dashboard\dto\DepartmentStatisticsDTO.class
 com\hms\user\dto\UserResponseDTO.class
 com\hms\billing\mapper\BillingMapperImpl.class
 com\hms\common\exception\BadRequestException.class
@@ -195,6 +196,7 @@ com\hms\patient\entity\Patient$PatientBuilderImpl.class
 com\hms\user\exception\UserNotFoundException.class
 com\hms\user\service\UserService.class
 com\hms\doctor\dto\request\CreateDoctorRequest.class
+com\hms\dashboard\dto\DepartmentStatisticsDTO$DepartmentStatisticsDTOBuilder.class
 com\hms\common\enums\TestStatus.class
 com\hms\appointment\repository\AppointmentRepository.class
 com\hms\user\repository\UserRepository.class

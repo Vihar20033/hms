@@ -26,6 +26,5 @@ export function updateAppointmentTimeValidators(form: FormGroup, isEmergency: bo
   } else {
     timeControl?.setValidators([Validators.required, clinicHoursValidator(8, 20)]);
   }
-
   timeControl?.updateValueAndValidity();
 }
