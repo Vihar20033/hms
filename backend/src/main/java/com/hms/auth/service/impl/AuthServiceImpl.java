@@ -173,3 +173,4 @@ public class AuthServiceImpl implements AuthService {
         auditLogService.log(username, "USER_LOGOUT", "User", user.getId().toString(), null);
     }
 }
+

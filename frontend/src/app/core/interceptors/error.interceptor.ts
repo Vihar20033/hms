@@ -7,11 +7,14 @@ import { AuthService } from '../services/auth.service';
 export const errorInterceptor: HttpInterceptorFn = (req, next) => {
   const router = inject(Router);
   const authService = inject(AuthService);
+  const isAuthRequest =
+    req.url.includes('/auth/login') ||
+    req.url.includes('/auth/refresh') ||
+    req.url.includes('/auth/logout');
 
   return next(req).pipe(
     catchError((err: HttpErrorResponse) => {
-      // Handle Unauthorized error (401)
-      if (err.status === 401 && !req.url.includes('/auth/login')) {
+      if (err.status === 401 && !isAuthRequest) {
         authService.logout();
         router.navigate(['/login']);
         return throwError(() => 'Session expired. Please log in again.');
@@ -28,9 +31,6 @@ export const errorInterceptor: HttpInterceptorFn = (req, next) => {
             errorMessage = 'Unable to connect to server. Please check your internet connection.';
             break;
           case 401:
-            // If we're here, it means either the refresh token failed or it was a login attempt
-            authService.logout();
-            router.navigate(['/login']);
             errorMessage = 'Please log in again.';
             break;
           case 403:

@@ -1,4 +1,3 @@
-import { HttpHeaders } from '@angular/common/http';
 import { AuthResponse, User } from '../models/auth.models';
 
 export function buildSessionUser(auth: AuthResponse): User {
@@ -10,38 +9,22 @@ export function buildSessionUser(auth: AuthResponse): User {
   };
 }
 
-export function readStoredUser(storageKey: string): User | null {
-  const user = sessionStorage.getItem(storageKey);
-  if (!user) {
+export function readStoredUser(serializedUser: string | null): User | null {
+  if (!serializedUser) {
     return null;
   }
 
   try {
-    return JSON.parse(user) as User;
+    return JSON.parse(serializedUser) as User;
   } catch {
     return null;
   }
 }
 
-export function persistSession(
-  tokenKey: string,
-  refreshKey: string,
-  userKey: string,
-  token: string,
-  refreshToken: string,
-  user: User,
-): void { 
-  sessionStorage.setItem(tokenKey, token);
-  sessionStorage.setItem(refreshKey, refreshToken);
-  sessionStorage.setItem(userKey, JSON.stringify(user));
+export function persistUser(user: User): string {
+  return JSON.stringify(user);
 }
 
-export function clearStoredSession(tokenKey: string, refreshKey: string, userKey: string): void {
-  sessionStorage.removeItem(tokenKey);
-  sessionStorage.removeItem(refreshKey);
-  sessionStorage.removeItem(userKey);
-}
-
-export function buildLogoutHeaders(token: string): HttpHeaders {
-  return new HttpHeaders({ Authorization: `Bearer ${token}` });
+export function clearUser(): null {
+  return null;
 }

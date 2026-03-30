@@ -426,3 +426,149 @@ Consider defining a bean of type 'com.hms.dashboard.service.DashboardService' in
 2026-03-30 11:34:15.967 [main] INFO  com.hms.HospitalManagementSystemApplication - Started HospitalManagementSystemApplication in 9.611 seconds (process running for 10.173)
 2026-03-30 11:34:16.094 [main] INFO  com.hms.common.config.DataInitializer - Starting database column initialization...
 2026-03-30 11:34:16.145 [main] INFO  com.hms.common.config.DataInitializer - Database column initialization completed.
+2026-03-30 12:00:19.903 [http-nio-8080-exec-2] INFO  o.a.c.core.ContainerBase.[Tomcat].[localhost].[/] - Initializing Spring DispatcherServlet 'dispatcherServlet'
+2026-03-30 12:00:19.903 [http-nio-8080-exec-2] INFO  org.springframework.web.servlet.DispatcherServlet - Initializing Servlet 'dispatcherServlet'
+2026-03-30 12:00:19.906 [http-nio-8080-exec-2] INFO  org.springframework.web.servlet.DispatcherServlet - Completed initialization in 3 ms
+2026-03-30 12:00:20.194 [http-nio-8080-exec-2] INFO  com.hms.security.jwt.JwtAuthenticationFilter - Request authorized for user: admin with authorities: [ROLE_ADMIN]
+2026-03-30 12:00:20.194 [http-nio-8080-exec-1] INFO  com.hms.security.jwt.JwtAuthenticationFilter - Request authorized for user: admin with authorities: [ROLE_ADMIN]
+2026-03-30 12:00:20.194 [http-nio-8080-exec-3] INFO  com.hms.security.jwt.JwtAuthenticationFilter - Request authorized for user: admin with authorities: [ROLE_ADMIN]
+2026-03-30 12:05:39.341 [http-nio-8080-exec-8] INFO  com.hms.security.jwt.JwtAuthenticationFilter - Request authorized for user: admin with authorities: [ROLE_ADMIN]
+2026-03-30 12:23:54.769 [HikariPool-1 housekeeper] WARN  com.zaxxer.hikari.pool.HikariPool - HikariPool-1 - Thread starvation or clock leap detected (housekeeper delta=1m12s880ms547µs100ns).
+2026-03-30 13:16:19.748 [HikariPool-1 housekeeper] WARN  com.zaxxer.hikari.pool.HikariPool - HikariPool-1 - Thread starvation or clock leap detected (housekeeper delta=54s261ms124µs700ns).
+2026-03-30 13:30:00.527 [HikariPool-1 housekeeper] WARN  com.zaxxer.hikari.pool.HikariPool - HikariPool-1 - Thread starvation or clock leap detected (housekeeper delta=2m10s718ms988µs100ns).
+2026-03-30 13:32:02.726 [HikariPool-1 housekeeper] WARN  com.zaxxer.hikari.pool.HikariPool - HikariPool-1 - Thread starvation or clock leap detected (housekeeper delta=1m32s248ms509µs800ns).
+2026-03-30 13:42:34.537 [http-nio-8080-exec-5] INFO  com.hms.security.jwt.JwtAuthenticationFilter - Request authorized for user: admin with authorities: [ROLE_ADMIN]
+2026-03-30 13:42:34.539 [http-nio-8080-exec-6] INFO  com.hms.security.jwt.JwtAuthenticationFilter - Request authorized for user: admin with authorities: [ROLE_ADMIN]
+2026-03-30 13:42:34.539 [http-nio-8080-exec-4] INFO  com.hms.security.jwt.JwtAuthenticationFilter - Request authorized for user: admin with authorities: [ROLE_ADMIN]
+2026-03-30 13:44:39.762 [http-nio-8080-exec-1] INFO  com.hms.security.jwt.JwtAuthenticationFilter - Request authorized for user: admin with authorities: [ROLE_ADMIN]
+2026-03-30 13:44:46.863 [http-nio-8080-exec-5] INFO  com.hms.security.jwt.JwtAuthenticationFilter - Request authorized for user: admin with authorities: [ROLE_ADMIN]
+2026-03-30 13:44:47.012 [http-nio-8080-exec-6] INFO  com.hms.security.jwt.JwtAuthenticationFilter - Request authorized for user: admin with authorities: [ROLE_ADMIN]
+2026-03-30 13:44:51.061 [http-nio-8080-exec-7] INFO  com.hms.security.jwt.JwtAuthenticationFilter - Request authorized for user: admin with authorities: [ROLE_ADMIN]
+2026-03-30 13:44:51.065 [http-nio-8080-exec-9] INFO  com.hms.security.jwt.JwtAuthenticationFilter - Request authorized for user: admin with authorities: [ROLE_ADMIN]
+2026-03-30 13:44:57.193 [http-nio-8080-exec-1] INFO  com.hms.security.jwt.JwtAuthenticationFilter - Request authorized for user: admin with authorities: [ROLE_ADMIN]
+2026-03-30 13:45:33.601 [http-nio-8080-exec-2] INFO  com.hms.security.jwt.JwtAuthenticationFilter - Request authorized for user: admin with authorities: [ROLE_ADMIN]
+2026-03-30 13:45:36.928 [http-nio-8080-exec-6] INFO  com.hms.security.jwt.JwtAuthenticationFilter - Request authorized for user: admin with authorities: [ROLE_ADMIN]
+2026-03-30 13:45:41.905 [http-nio-8080-exec-8] INFO  com.hms.security.jwt.JwtAuthenticationFilter - Request authorized for user: admin with authorities: [ROLE_ADMIN]
+2026-03-30 13:45:56.618 [http-nio-8080-exec-10] INFO  com.hms.security.jwt.JwtAuthenticationFilter - Request authorized for user: admin with authorities: [ROLE_ADMIN]
+2026-03-30 13:46:05.085 [http-nio-8080-exec-2] INFO  com.hms.security.jwt.JwtAuthenticationFilter - Request authorized for user: admin with authorities: [ROLE_ADMIN]
+2026-03-30 13:46:05.085 [http-nio-8080-exec-5] INFO  com.hms.security.jwt.JwtAuthenticationFilter - Request authorized for user: admin with authorities: [ROLE_ADMIN]
+2026-03-30 13:46:15.797 [http-nio-8080-exec-4] INFO  com.hms.security.jwt.JwtAuthenticationFilter - Request authorized for user: admin with authorities: [ROLE_ADMIN]
+2026-03-30 13:46:22.393 [http-nio-8080-exec-7] INFO  com.hms.security.jwt.JwtAuthenticationFilter - Request authorized for user: admin with authorities: [ROLE_ADMIN]
+2026-03-30 13:46:43.366 [http-nio-8080-exec-10] INFO  com.hms.security.jwt.JwtAuthenticationFilter - Request authorized for user: admin with authorities: [ROLE_ADMIN]
+2026-03-30 13:46:43.366 [http-nio-8080-exec-9] INFO  com.hms.security.jwt.JwtAuthenticationFilter - Request authorized for user: admin with authorities: [ROLE_ADMIN]
+2026-03-30 13:46:43.366 [http-nio-8080-exec-1] INFO  com.hms.security.jwt.JwtAuthenticationFilter - Request authorized for user: admin with authorities: [ROLE_ADMIN]
+2026-03-30 14:04:03.969 [HikariPool-1 housekeeper] WARN  com.zaxxer.hikari.pool.HikariPool - HikariPool-1 - Thread starvation or clock leap detected (housekeeper delta=47s639ms220µs200ns).
+2026-03-30 14:42:15.601 [HikariPool-1 housekeeper] WARN  com.zaxxer.hikari.pool.HikariPool - HikariPool-1 - Thread starvation or clock leap detected (housekeeper delta=28m11s491ms40µs100ns).
+2026-03-30 15:06:48.471 [http-nio-8080-exec-8] WARN  com.hms.security.config.SecurityConfig - Access unauthorized to /api/v1/appointments - Full authentication is required to access this resource
+2026-03-30 15:06:48.471 [http-nio-8080-exec-4] WARN  com.hms.security.config.SecurityConfig - Access unauthorized to /api/v1/dashboard/summary - Full authentication is required to access this resource
+2026-03-30 15:06:48.554 [http-nio-8080-exec-8] WARN  com.hms.common.exception.GlobalExceptionHandler - Authentication failed: Full authentication is required to access this resource
+2026-03-30 15:06:48.554 [http-nio-8080-exec-4] WARN  com.hms.common.exception.GlobalExceptionHandler - Authentication failed: Full authentication is required to access this resource
+2026-03-30 15:06:48.686 [http-nio-8080-exec-1] WARN  com.hms.security.config.SecurityConfig - Access unauthorized to /api/v1/auth/logout - Full authentication is required to access this resource
+2026-03-30 15:06:48.687 [http-nio-8080-exec-1] WARN  com.hms.common.exception.GlobalExceptionHandler - Authentication failed: Full authentication is required to access this resource
+2026-03-30 15:06:48.691 [http-nio-8080-exec-10] WARN  com.hms.security.config.SecurityConfig - Access unauthorized to /api/v1/auth/logout - Full authentication is required to access this resource
+2026-03-30 15:06:48.693 [http-nio-8080-exec-10] WARN  com.hms.common.exception.GlobalExceptionHandler - Authentication failed: Full authentication is required to access this resource
+2026-03-30 15:06:48.719 [http-nio-8080-exec-3] WARN  com.hms.security.config.SecurityConfig - Access unauthorized to /api/v1/auth/logout - Full authentication is required to access this resource
+2026-03-30 15:06:48.724 [http-nio-8080-exec-3] WARN  com.hms.common.exception.GlobalExceptionHandler - Authentication failed: Full authentication is required to access this resource
+2026-03-30 15:07:08.286 [SpringApplicationShutdownHook] INFO  o.s.orm.jpa.LocalContainerEntityManagerFactoryBean - Closing JPA EntityManagerFactory for persistence unit 'default'
+2026-03-30 15:07:08.376 [SpringApplicationShutdownHook] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Shutdown initiated...
+2026-03-30 15:07:08.401 [SpringApplicationShutdownHook] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Shutdown completed.
+2026-03-30 15:21:13.641 [main] INFO  com.hms.HospitalManagementSystemApplication - Starting HospitalManagementSystemApplication using Java 21.0.10 with PID 7356 (C:\Users\Piyush\Desktop\Project\backend\target\classes started by Piyush in C:\Users\Piyush\Desktop\Project\backend)
+2026-03-30 15:21:13.643 [main] DEBUG com.hms.HospitalManagementSystemApplication - Running with Spring Boot v3.3.4, Spring v6.1.13
+2026-03-30 15:21:13.652 [main] INFO  com.hms.HospitalManagementSystemApplication - No active profile set, falling back to 1 default profile: "mysql"
+2026-03-30 15:21:14.955 [main] INFO  o.s.d.r.config.RepositoryConfigurationDelegate - Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2026-03-30 15:21:15.142 [main] INFO  o.s.d.r.config.RepositoryConfigurationDelegate - Finished Spring Data repository scanning in 177 ms. Found 9 JPA repository interfaces.
+2026-03-30 15:21:16.647 [main] INFO  o.s.boot.web.embedded.tomcat.TomcatWebServer - Tomcat initialized with port 8080 (http)
+2026-03-30 15:21:16.667 [main] INFO  org.apache.catalina.core.StandardService - Starting service [Tomcat]
+2026-03-30 15:21:16.668 [main] INFO  org.apache.catalina.core.StandardEngine - Starting Servlet engine: [Apache Tomcat/10.1.30]
+2026-03-30 15:21:16.753 [main] INFO  o.a.c.core.ContainerBase.[Tomcat].[localhost].[/] - Initializing Spring embedded WebApplicationContext
+2026-03-30 15:21:16.754 [main] INFO  o.s.b.w.s.c.ServletWebServerApplicationContext - Root WebApplicationContext: initialization completed in 2972 ms
+2026-03-30 15:21:17.192 [main] INFO  org.hibernate.jpa.internal.util.LogHelper - HHH000204: Processing PersistenceUnitInfo [name: default]
+2026-03-30 15:21:17.267 [main] INFO  org.hibernate.Version - HHH000412: Hibernate ORM core version 6.5.3.Final
+2026-03-30 15:21:17.316 [main] INFO  o.hibernate.cache.internal.RegionFactoryInitiator - HHH000026: Second-level cache disabled
+2026-03-30 15:21:17.706 [main] INFO  o.s.o.j.persistenceunit.SpringPersistenceUnitInfo - No LoadTimeWeaver setup: ignoring JPA class transformer
+2026-03-30 15:21:17.743 [main] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Starting...
+2026-03-30 15:21:17.942 [main] INFO  com.zaxxer.hikari.pool.HikariPool - HikariPool-1 - Added connection com.mysql.cj.jdbc.ConnectionImpl@798b36fd
+2026-03-30 15:21:17.946 [main] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Start completed.
+2026-03-30 15:21:19.888 [main] INFO  o.h.e.t.jta.platform.internal.JtaPlatformInitiator - HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
+2026-03-30 15:21:20.688 [main] INFO  o.s.orm.jpa.LocalContainerEntityManagerFactoryBean - Initialized JPA EntityManagerFactory for persistence unit 'default'
+2026-03-30 15:21:21.471 [main] DEBUG com.hms.security.jwt.JwtAuthenticationFilter - Filter 'jwtAuthenticationFilter' configured for use
+2026-03-30 15:21:21.798 [main] INFO  o.s.s.c.a.a.c.InitializeUserDetailsBeanManagerConfigurer$InitializeUserDetailsManagerConfigurer - Global AuthenticationManager configured with UserDetailsService bean with name customUserDetailsService
+2026-03-30 15:21:21.849 [main] INFO  o.s.data.jpa.repository.query.QueryEnhancerFactory - Hibernate is in classpath; If applicable, HQL parser will be used.
+2026-03-30 15:21:23.064 [main] INFO  o.s.b.actuate.endpoint.web.EndpointLinksResolver - Exposing 3 endpoints beneath base path '/actuator'
+2026-03-30 15:21:23.114 [main] INFO  com.hms.security.config.SecurityConfig - Production Security configuration successfully initialized.
+2026-03-30 15:21:23.735 [main] INFO  o.s.boot.web.embedded.tomcat.TomcatWebServer - Tomcat started on port 8080 (http) with context path '/'
+2026-03-30 15:21:23.750 [main] INFO  com.hms.HospitalManagementSystemApplication - Started HospitalManagementSystemApplication in 10.921 seconds (process running for 11.492)
+2026-03-30 15:21:23.854 [main] INFO  com.hms.common.config.DataInitializer - Starting database column initialization...
+2026-03-30 15:21:23.913 [main] INFO  com.hms.common.config.DataInitializer - Database column initialization completed.
+2026-03-30 15:22:47.687 [http-nio-8080-exec-1] INFO  o.a.c.core.ContainerBase.[Tomcat].[localhost].[/] - Initializing Spring DispatcherServlet 'dispatcherServlet'
+2026-03-30 15:22:47.697 [http-nio-8080-exec-1] INFO  org.springframework.web.servlet.DispatcherServlet - Initializing Servlet 'dispatcherServlet'
+2026-03-30 15:22:47.712 [http-nio-8080-exec-1] INFO  org.springframework.web.servlet.DispatcherServlet - Completed initialization in 9 ms
+2026-03-30 15:22:51.182 [http-nio-8080-exec-2] WARN  com.hms.common.exception.GlobalExceptionHandler - Invalid credentials: Invalid username or password
+2026-03-30 15:33:18.762 [SpringApplicationShutdownHook] INFO  o.s.orm.jpa.LocalContainerEntityManagerFactoryBean - Closing JPA EntityManagerFactory for persistence unit 'default'
+2026-03-30 15:33:18.771 [SpringApplicationShutdownHook] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Shutdown initiated...
+2026-03-30 15:33:18.812 [SpringApplicationShutdownHook] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Shutdown completed.
+2026-03-30 15:46:26.824 [main] INFO  com.hms.HospitalManagementSystemApplication - Starting HospitalManagementSystemApplication using Java 21.0.10 with PID 24132 (C:\Users\Piyush\Desktop\Project\backend\target\classes started by Piyush in C:\Users\Piyush\Desktop\Project\backend)
+2026-03-30 15:46:26.827 [main] DEBUG com.hms.HospitalManagementSystemApplication - Running with Spring Boot v3.3.4, Spring v6.1.13
+2026-03-30 15:46:26.829 [main] INFO  com.hms.HospitalManagementSystemApplication - No active profile set, falling back to 1 default profile: "mysql"
+2026-03-30 15:46:28.206 [main] INFO  o.s.d.r.config.RepositoryConfigurationDelegate - Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2026-03-30 15:46:28.432 [main] INFO  o.s.d.r.config.RepositoryConfigurationDelegate - Finished Spring Data repository scanning in 215 ms. Found 9 JPA repository interfaces.
+2026-03-30 15:46:30.075 [main] INFO  o.s.boot.web.embedded.tomcat.TomcatWebServer - Tomcat initialized with port 8080 (http)
+2026-03-30 15:46:30.098 [main] INFO  org.apache.catalina.core.StandardService - Starting service [Tomcat]
+2026-03-30 15:46:30.098 [main] INFO  org.apache.catalina.core.StandardEngine - Starting Servlet engine: [Apache Tomcat/10.1.30]
+2026-03-30 15:46:30.207 [main] INFO  o.a.c.core.ContainerBase.[Tomcat].[localhost].[/] - Initializing Spring embedded WebApplicationContext
+2026-03-30 15:46:30.209 [main] INFO  o.s.b.w.s.c.ServletWebServerApplicationContext - Root WebApplicationContext: initialization completed in 3262 ms
+2026-03-30 15:46:30.726 [main] INFO  org.hibernate.jpa.internal.util.LogHelper - HHH000204: Processing PersistenceUnitInfo [name: default]
+2026-03-30 15:46:30.815 [main] INFO  org.hibernate.Version - HHH000412: Hibernate ORM core version 6.5.3.Final
+2026-03-30 15:46:30.868 [main] INFO  o.hibernate.cache.internal.RegionFactoryInitiator - HHH000026: Second-level cache disabled
+2026-03-30 15:46:31.292 [main] INFO  o.s.o.j.persistenceunit.SpringPersistenceUnitInfo - No LoadTimeWeaver setup: ignoring JPA class transformer
+2026-03-30 15:46:31.351 [main] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Starting...
+2026-03-30 15:46:31.567 [main] INFO  com.zaxxer.hikari.pool.HikariPool - HikariPool-1 - Added connection com.mysql.cj.jdbc.ConnectionImpl@61becbcf
+2026-03-30 15:46:31.570 [main] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Start completed.
+2026-03-30 15:46:33.717 [main] INFO  o.h.e.t.jta.platform.internal.JtaPlatformInitiator - HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
+2026-03-30 15:46:34.236 [main] INFO  o.s.orm.jpa.LocalContainerEntityManagerFactoryBean - Initialized JPA EntityManagerFactory for persistence unit 'default'
+2026-03-30 15:46:35.056 [main] DEBUG com.hms.security.jwt.JwtAuthenticationFilter - Filter 'jwtAuthenticationFilter' configured for use
+2026-03-30 15:46:35.391 [main] INFO  o.s.s.c.a.a.c.InitializeUserDetailsBeanManagerConfigurer$InitializeUserDetailsManagerConfigurer - Global AuthenticationManager configured with UserDetailsService bean with name customUserDetailsService
+2026-03-30 15:46:35.452 [main] INFO  o.s.data.jpa.repository.query.QueryEnhancerFactory - Hibernate is in classpath; If applicable, HQL parser will be used.
+2026-03-30 15:46:36.811 [main] INFO  o.s.b.actuate.endpoint.web.EndpointLinksResolver - Exposing 3 endpoints beneath base path '/actuator'
+2026-03-30 15:46:36.860 [main] INFO  com.hms.security.config.SecurityConfig - Production Security configuration successfully initialized.
+2026-03-30 15:46:37.516 [main] INFO  o.s.boot.web.embedded.tomcat.TomcatWebServer - Tomcat started on port 8080 (http) with context path '/'
+2026-03-30 15:46:37.534 [main] INFO  com.hms.HospitalManagementSystemApplication - Started HospitalManagementSystemApplication in 11.524 seconds (process running for 12.272)
+2026-03-30 15:46:37.643 [main] INFO  com.hms.common.config.DataInitializer - Starting database column initialization...
+2026-03-30 15:46:37.704 [main] INFO  com.hms.common.config.DataInitializer - Database column initialization completed.
+2026-03-30 15:47:04.656 [http-nio-8080-exec-1] INFO  o.a.c.core.ContainerBase.[Tomcat].[localhost].[/] - Initializing Spring DispatcherServlet 'dispatcherServlet'
+2026-03-30 15:47:04.657 [http-nio-8080-exec-1] INFO  org.springframework.web.servlet.DispatcherServlet - Initializing Servlet 'dispatcherServlet'
+2026-03-30 15:47:04.659 [http-nio-8080-exec-1] INFO  org.springframework.web.servlet.DispatcherServlet - Completed initialization in 2 ms
+2026-03-30 15:47:20.180 [http-nio-8080-exec-4] DEBUG com.hms.security.jwt.JwtAuthenticationFilter - Token successfully extracted from cookie.
+2026-03-30 15:47:20.186 [http-nio-8080-exec-5] DEBUG com.hms.security.jwt.JwtAuthenticationFilter - Token successfully extracted from cookie.
+2026-03-30 15:47:20.205 [http-nio-8080-exec-6] DEBUG com.hms.security.jwt.JwtAuthenticationFilter - Token successfully extracted from cookie.
+2026-03-30 15:47:20.424 [http-nio-8080-exec-6] INFO  com.hms.security.jwt.JwtAuthenticationFilter - Request authorized for user: admin with authorities: [ROLE_ADMIN]
+2026-03-30 15:47:20.424 [http-nio-8080-exec-4] INFO  com.hms.security.jwt.JwtAuthenticationFilter - Request authorized for user: admin with authorities: [ROLE_ADMIN]
+2026-03-30 15:47:20.425 [http-nio-8080-exec-5] INFO  com.hms.security.jwt.JwtAuthenticationFilter - Request authorized for user: admin with authorities: [ROLE_ADMIN]
+2026-03-30 15:47:32.459 [http-nio-8080-exec-8] DEBUG com.hms.security.jwt.JwtAuthenticationFilter - Token successfully extracted from cookie.
+2026-03-30 15:47:32.477 [http-nio-8080-exec-8] INFO  com.hms.security.jwt.JwtAuthenticationFilter - Request authorized for user: admin with authorities: [ROLE_ADMIN]
+2026-03-30 15:47:33.289 [http-nio-8080-exec-7] DEBUG com.hms.security.jwt.JwtAuthenticationFilter - Token successfully extracted from cookie.
+2026-03-30 15:47:33.291 [http-nio-8080-exec-9] DEBUG com.hms.security.jwt.JwtAuthenticationFilter - Token successfully extracted from cookie.
+2026-03-30 15:47:33.298 [http-nio-8080-exec-10] DEBUG com.hms.security.jwt.JwtAuthenticationFilter - Token successfully extracted from cookie.
+2026-03-30 15:47:33.315 [http-nio-8080-exec-7] INFO  com.hms.security.jwt.JwtAuthenticationFilter - Request authorized for user: admin with authorities: [ROLE_ADMIN]
+2026-03-30 15:47:33.325 [http-nio-8080-exec-9] INFO  com.hms.security.jwt.JwtAuthenticationFilter - Request authorized for user: admin with authorities: [ROLE_ADMIN]
+2026-03-30 15:47:33.328 [http-nio-8080-exec-10] INFO  com.hms.security.jwt.JwtAuthenticationFilter - Request authorized for user: admin with authorities: [ROLE_ADMIN]
+2026-03-30 15:47:34.381 [http-nio-8080-exec-1] DEBUG com.hms.security.jwt.JwtAuthenticationFilter - Token successfully extracted from cookie.
+2026-03-30 15:47:34.395 [http-nio-8080-exec-1] INFO  com.hms.security.jwt.JwtAuthenticationFilter - Request authorized for user: admin with authorities: [ROLE_ADMIN]
+2026-03-30 15:47:35.757 [http-nio-8080-exec-2] DEBUG com.hms.security.jwt.JwtAuthenticationFilter - Token successfully extracted from cookie.
+2026-03-30 15:47:35.759 [http-nio-8080-exec-3] DEBUG com.hms.security.jwt.JwtAuthenticationFilter - Token successfully extracted from cookie.
+2026-03-30 15:47:35.766 [http-nio-8080-exec-4] DEBUG com.hms.security.jwt.JwtAuthenticationFilter - Token successfully extracted from cookie.
+2026-03-30 15:47:35.800 [http-nio-8080-exec-2] INFO  com.hms.security.jwt.JwtAuthenticationFilter - Request authorized for user: admin with authorities: [ROLE_ADMIN]
+2026-03-30 15:47:35.825 [http-nio-8080-exec-3] INFO  com.hms.security.jwt.JwtAuthenticationFilter - Request authorized for user: admin with authorities: [ROLE_ADMIN]
+2026-03-30 15:47:35.842 [http-nio-8080-exec-4] INFO  com.hms.security.jwt.JwtAuthenticationFilter - Request authorized for user: admin with authorities: [ROLE_ADMIN]
+2026-03-30 16:14:45.115 [http-nio-8080-exec-9] DEBUG com.hms.security.jwt.JwtAuthenticationFilter - Token successfully extracted from cookie.
+2026-03-30 16:14:45.116 [http-nio-8080-exec-1] DEBUG com.hms.security.jwt.JwtAuthenticationFilter - Token successfully extracted from cookie.
+2026-03-30 16:14:45.132 [http-nio-8080-exec-2] DEBUG com.hms.security.jwt.JwtAuthenticationFilter - Token successfully extracted from cookie.
+2026-03-30 16:14:45.144 [http-nio-8080-exec-1] INFO  com.hms.security.jwt.JwtAuthenticationFilter - Request authorized for user: admin with authorities: [ROLE_ADMIN]
+2026-03-30 16:14:45.146 [http-nio-8080-exec-9] INFO  com.hms.security.jwt.JwtAuthenticationFilter - Request authorized for user: admin with authorities: [ROLE_ADMIN]
+2026-03-30 16:14:45.180 [http-nio-8080-exec-2] INFO  com.hms.security.jwt.JwtAuthenticationFilter - Request authorized for user: admin with authorities: [ROLE_ADMIN]
+2026-03-30 16:14:50.352 [http-nio-8080-exec-4] DEBUG com.hms.security.jwt.JwtAuthenticationFilter - Token successfully extracted from cookie.
+2026-03-30 16:14:50.353 [http-nio-8080-exec-3] DEBUG com.hms.security.jwt.JwtAuthenticationFilter - Token successfully extracted from cookie.
+2026-03-30 16:14:50.383 [http-nio-8080-exec-3] INFO  com.hms.security.jwt.JwtAuthenticationFilter - Request authorized for user: admin with authorities: [ROLE_ADMIN]
+2026-03-30 16:14:50.383 [http-nio-8080-exec-4] INFO  com.hms.security.jwt.JwtAuthenticationFilter - Request authorized for user: admin with authorities: [ROLE_ADMIN]
+2026-03-30 16:14:50.414 [http-nio-8080-exec-6] DEBUG com.hms.security.jwt.JwtAuthenticationFilter - Token successfully extracted from cookie.
+2026-03-30 16:14:50.441 [http-nio-8080-exec-6] INFO  com.hms.security.jwt.JwtAuthenticationFilter - Request authorized for user: admin with authorities: [ROLE_ADMIN]

@@ -1,5 +1,6 @@
 {
   "java.compile.nullAnalysis.mode": "disabled",
   "java.configuration.updateBuildConfiguration": "interactive",
-  "kiroAgent.configureMCP": "Disabled"
+  "kiroAgent.configureMCP": "Disabled",
+  "java.debug.settings.onBuildFailureProceed": true
 }

@@ -6,13 +6,12 @@ import com.hms.auth.dto.request.RegisterRequest;
 import com.hms.auth.dto.request.TokenRefreshRequest;
 import com.hms.auth.dto.response.AuthResponse;
 import com.hms.auth.service.AuthService;
+import com.hms.security.jwt.CookieUtil;
 import com.hms.common.response.ApiResponse;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.Objects;
 
 @RestController
 @RequestMapping("/api/v1/auth")
@@ -20,6 +19,7 @@ import java.util.Objects;
 public class AuthController {
 
     private final AuthService service;
+    private final CookieUtil cookieUtil;
 
     @PostMapping("/register")
     public ApiResponse<String> register(
@@ -30,14 +30,31 @@ public class AuthController {
 
     @PostMapping("/login")
     public ApiResponse<AuthResponse> login(
-            @Valid @RequestBody LoginRequest request) {
-        return ApiResponse.success(service.login(request));
+            @Valid @RequestBody LoginRequest request,
+            jakarta.servlet.http.HttpServletResponse response) {
+        AuthResponse loginResponse = service.login(request);
+        cookieUtil.setAccessTokenCookie(response, loginResponse.getToken());
+        cookieUtil.setRefreshTokenCookie(response, loginResponse.getRefreshToken());
+        return ApiResponse.success(loginResponse);
     }
 
     @PostMapping("/refresh")
     public ApiResponse<AuthResponse> refresh(
-            @Valid @RequestBody TokenRefreshRequest request) {
-        return ApiResponse.success(service.refreshToken(request));
+            @RequestBody(required = false) TokenRefreshRequest request,
+            jakarta.servlet.http.HttpServletRequest httpRequest,
+            jakarta.servlet.http.HttpServletResponse response) {
+        String refreshToken = cookieUtil.getRefreshToken(httpRequest)
+                .orElseGet(() -> request != null ? request.getRefreshToken() : null);
+
+        TokenRefreshRequest updatedRequest = TokenRefreshRequest.builder()
+                .refreshToken(refreshToken)
+                .build();
+        AuthResponse refreshResponse = service.refreshToken(updatedRequest);
+        
+        cookieUtil.setAccessTokenCookie(response, refreshResponse.getToken());
+        cookieUtil.setRefreshTokenCookie(response, refreshResponse.getRefreshToken());
+        
+        return ApiResponse.success(refreshResponse);
     }
 
     @PostMapping("/change-password")
@@ -48,12 +65,12 @@ public class AuthController {
     }
 
     @PostMapping("/logout")
-    public ApiResponse<String> logout() {
-        String username = Objects.requireNonNull(SecurityContextHolder
-                .getContext()
-                .getAuthentication())
-                .getName();
-        service.logout(username);
+    public ApiResponse<String> logout(jakarta.servlet.http.HttpServletResponse response) {
+        var authentication = SecurityContextHolder.getContext().getAuthentication();
+        if (authentication != null && authentication.isAuthenticated()) {
+            service.logout(authentication.getName());
+        }
+        cookieUtil.clearAuthCookies(response);
         return ApiResponse.success("Logged out successfully");
     }
 

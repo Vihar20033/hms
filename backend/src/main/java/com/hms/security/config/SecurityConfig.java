@@ -56,7 +56,7 @@ public class SecurityConfig {
                 
                 // Add Security Headers for hardening
                 .headers(headers -> headers
-                    .frameOptions(Customizer.withDefaults()) // Deny by default in modern Spring Security (SpringBoot 3+)
+                    .frameOptions(Customizer.withDefaults())
                     .contentSecurityPolicy(csp -> csp.policyDirectives("default-src 'self'"))
                     .xssProtection(Customizer.withDefaults())
                     .contentTypeOptions(Customizer.withDefaults())
@@ -66,7 +66,8 @@ public class SecurityConfig {
                         // Public Endpoints
                         .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()
                         .requestMatchers("/api/v1/auth/login", "/api/v1/auth/register", "/api/v1/auth/refresh").permitAll()
-                        .requestMatchers("/api/v1/auth/logout", "/api/v1/auth/change-password").authenticated()
+                        .requestMatchers("/api/v1/auth/logout").permitAll()
+                        .requestMatchers("/api/v1/auth/change-password").authenticated()
                         .requestMatchers("/actuator/health").permitAll()
                         .requestMatchers("/actuator/**").hasRole(Role.ADMIN.name())
                         .requestMatchers("/error").permitAll()
@@ -95,7 +96,6 @@ public class SecurityConfig {
                         }));
 
         // Insert custom filters
-        // http.addFilterBefore(rateLimitFilter, UsernamePasswordAuthenticationFilter.class);
         http.addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class);
 
         log.info("Production Security configuration successfully initialized.");

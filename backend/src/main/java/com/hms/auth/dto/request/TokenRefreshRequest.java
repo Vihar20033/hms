@@ -1,12 +1,11 @@
 package com.hms.auth.dto.request;
 
-import jakarta.validation.constraints.NotBlank;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 
-@Getter
-@Setter
+@Data
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
 public class TokenRefreshRequest {
-    @NotBlank(message = "Refresh token is required")
     private String refreshToken;
 }

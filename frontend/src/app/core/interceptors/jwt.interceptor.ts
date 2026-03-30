@@ -5,32 +5,21 @@ import { AuthService } from '../services/auth.service';
 
 export const jwtInterceptor: HttpInterceptorFn = (req, next) => {
   const authService = inject(AuthService);
-  const token = authService.getToken();
 
-  let authReq = req;
-  if (token) {
-    authReq = req.clone({
-      setHeaders: {
-        Authorization: `Bearer ${token}`,
-      },
-    });
-  }
+  // Enable cookies for all API requests
+  const authReq = req.clone({
+    withCredentials: true,
+  });
 
   return next(authReq).pipe(
     catchError((error: HttpErrorResponse) => {
+      // If 401 Unauthorized, attempt to refresh the session automatically
       if (error.status === 401 && !req.url.includes('/auth/refresh') && !req.url.includes('/auth/login')) {
         return authService.refreshToken().pipe(
-          switchMap((res) => {
-            if (res.success && res.data) {
-              const newAuthReq = req.clone({
-                setHeaders: {
-                   Authorization: `Bearer ${res.data.token}`,
-                },
-              });
-              return next(newAuthReq);
-            }
-            authService.logout();
-            return throwError(() => error);
+          switchMap(() => {
+            // After successful refresh, retry the original request
+            // withCredentials will still be true so the new cookie is used
+            return next(authReq);
           }),
           catchError((refreshError) => {
             authService.logout();

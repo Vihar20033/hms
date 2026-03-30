@@ -77,6 +77,7 @@ com\hms\prescription\dto\request\PrescriptionRequestDTO.class
 com\hms\pharmacy\repository\InventoryTransactionRepository.class
 com\hms\patient\entity\Patient$PatientBuilder.class
 com\hms\doctor\mapper\DoctorMapper.class
+com\hms\security\jwt\CookieUtil.class
 com\hms\prescription\repository\PrescriptionRepository.class
 com\hms\appointment\dto\request\AppointmentSearchCriteria.class
 com\hms\user\entity\User$UserBuilder.class
@@ -177,6 +178,7 @@ com\hms\common\enums\UrgencyLevel.class
 com\hms\pharmacy\exception\InsufficientStockException.class
 com\hms\patient\dto\request\PatientRequestDTO.class
 com\hms\billing\dto\request\BillingRequestDTO.class
+com\hms\auth\dto\request\TokenRefreshRequest$TokenRefreshRequestBuilder.class
 com\hms\billing\entity\Billing$BillingBuilder.class
 com\hms\patient\dto\request\PatientSearchCriteria.class
 com\hms\appointment\mapper\AppointmentMapperImpl.class
