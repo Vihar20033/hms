@@ -45,13 +45,40 @@ export function getDashboardStatusClass(status: AppointmentStatus): string {
   return map[status] || 'status-scheduled';
 }
 
-export function getDashboardWorkflowLabel(appointment: Appointment): string {
-  if (appointment.status === AppointmentStatus.SCHEDULED) return 'Awaiting Arrival';
-  if (appointment.status === AppointmentStatus.CHECKED_IN) return 'In Dr. Queue';
-  if (appointment.status === AppointmentStatus.IN_CONSULTATION) return 'Active Now';
-  if (appointment.status === AppointmentStatus.COMPLETED) return 'Visit Ended';
-  return '-';
-}
+const valueLabelPlugin = {
+  id: 'valueLabelPlugin',
+  afterDatasetsDraw(chart: Chart) {
+    const { ctx } = chart;
+    ctx.save();
+    ctx.textAlign = 'center';
+    ctx.textBaseline = 'bottom';
+    ctx.fillStyle = '#334155';
+    ctx.font = '700 11px system-ui';
+
+    chart.data.datasets.forEach((dataset, datasetIndex) => {
+      const meta = chart.getDatasetMeta(datasetIndex);
+      if (meta.hidden) {
+        return;
+      }
+
+      meta.data.forEach((element, index) => {
+        const rawValue = dataset.data[index];
+        if (typeof rawValue !== 'number') {
+          return;
+        }
+
+        const position = element.tooltipPosition(false);
+        if (position.x == null || position.y == null) {
+          return;
+        }
+
+        ctx.fillText(String(rawValue), position.x, position.y - 8);
+      });
+    });
+
+    ctx.restore();
+  },
+};
 
 export function createDashboardChart(ctx: CanvasRenderingContext2D, data: DashboardSummary): Chart {
   const stats: WeeklyStatistics[] = data.weeklyStats || [];
@@ -59,32 +86,28 @@ export function createDashboardChart(ctx: CanvasRenderingContext2D, data: Dashbo
   const appointmentData = stats.map((s) => s.appointments || 0);
   const patientData = stats.map((s) => s.patients || 0);
 
-  const config: ChartConfiguration = {
+  const config: ChartConfiguration<'bar'> = {
     type: 'bar',
     data: {
       labels,
       datasets: [
         {
-          type: 'bar',
           label: 'Appointments',
           data: appointmentData,
-          backgroundColor: '#6366f188',
-          borderColor: '#6366f1',
+          backgroundColor: '#2563ebcc',
+          borderColor: '#1d4ed8',
           borderWidth: 1,
-          borderRadius: 4,
-          barThickness: 32,
+          borderRadius: 8,
+          barThickness: 26,
         },
         {
-          type: 'line',
           label: 'New Patients',
           data: patientData,
-          borderColor: '#10b981',
-          backgroundColor: '#10b981',
-          borderWidth: 3,
-          pointRadius: 6,
-          pointBackgroundColor: '#fff',
-          tension: 0.4,
-          fill: false,
+          backgroundColor: '#14b8a6cc',
+          borderColor: '#0f766e',
+          borderWidth: 1,
+          borderRadius: 8,
+          barThickness: 26,
         },
       ],
     },
@@ -96,10 +119,19 @@ export function createDashboardChart(ctx: CanvasRenderingContext2D, data: Dashbo
         tooltip: { mode: 'index', intersect: false },
       },
       scales: {
-        y: { beginAtZero: true, grid: { color: '#f3f4f6' } },
+        y: {
+          beginAtZero: true,
+          grace: 1,
+          ticks: {
+            precision: 0,
+            stepSize: 1,
+          },
+          grid: { color: '#f3f4f6' },
+        },
         x: { grid: { display: false } },
       },
     },
+    plugins: [valueLabelPlugin],
   };
 
   return new Chart(ctx, config);
@@ -107,24 +139,30 @@ export function createDashboardChart(ctx: CanvasRenderingContext2D, data: Dashbo
 
 export function createDepartmentChart(ctx: CanvasRenderingContext2D, data: DashboardSummary): Chart {
   const stats = data.departmentStats || [];
-  const labels = stats.map((s) => s.department.replace('_', ' ').toLowerCase());
+  const labels = stats.map((s) =>
+    s.department
+      .replace(/_/g, ' ')
+      .toLowerCase()
+      .replace(/\b\w/g, (char) => char.toUpperCase()),
+  );
   const counts = stats.map((s) => s.appointmentCount);
 
   const colors = [
-    '#6366f1', '#10b981', '#f59e0b', '#ef4444', '#8b5cf6',
-    '#ec4899', '#06b6d4', '#f97316', '#14b8a6', '#4f46e5'
+    '#1d4ed8', '#0f766e', '#c2410c', '#be123c', '#6d28d9',
+    '#0f766e', '#0369a1', '#b45309', '#0f766e', '#4338ca'
   ];
 
-  const config: ChartConfiguration<'doughnut'> = {
-    type: 'doughnut',
+  const config: ChartConfiguration<'bar'> = {
+    type: 'bar',
     data: {
       labels,
       datasets: [
         {
+          label: 'Appointments',
           data: counts,
           backgroundColor: colors.slice(0, stats.length),
-          hoverOffset: 4,
-          borderWidth: 0,
+          borderRadius: 8,
+          borderWidth: 1,
         },
       ],
     },
@@ -133,21 +171,28 @@ export function createDepartmentChart(ctx: CanvasRenderingContext2D, data: Dashb
       maintainAspectRatio: false,
       plugins: {
         legend: {
-          position: 'right',
-          labels: {
-            usePointStyle: true,
-            padding: 20,
-            font: { size: 12, family: "'Inter', sans-serif" }
-          }
+          display: false,
         },
         tooltip: {
           callbacks: {
-            label: (item: any) => ` ${item.label}: ${item.raw} appointments`
-          }
-        }
+            label: (item) => ` ${item.label}: ${item.raw} appointments`,
+          },
+        },
       },
-      cutout: '70%',
+      scales: {
+        y: {
+          beginAtZero: true,
+          grace: 1,
+          ticks: {
+            precision: 0,
+            stepSize: 1,
+          },
+          grid: { color: '#f3f4f6' },
+        },
+        x: { grid: { display: false } },
+      },
     },
+    plugins: [valueLabelPlugin],
   };
 
   return new Chart(ctx, config);

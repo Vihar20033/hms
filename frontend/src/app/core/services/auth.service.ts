@@ -1,65 +1,51 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { BehaviorSubject, Observable } from 'rxjs';
-import { tap } from 'rxjs/operators';
+import { BehaviorSubject, Observable, firstValueFrom, of } from 'rxjs';
+import { catchError, finalize, mapTo, tap } from 'rxjs/operators';
 import { environment } from '../../../environments/environment';
 import { AuthResponse, ChangePasswordRequest, LoginRequest, RegisterRequest, User } from '../models/auth.models';
 import { ApiResponse } from '../models/common.models';
 import { AccessFeedbackService } from './access-feedback.service';
-import { CookieService } from './cookie.service';
-import { UserService } from './user.service';
-import {
-  buildSessionUser,
-  clearUser,
-  persistUser,
-  readStoredUser,
-} from './auth-session.utils';
+import { buildSessionUser } from '../utils/auth-session.utils';
 
 @Injectable({
   providedIn: 'root',
 })
 export class AuthService {
-  private readonly userKey = 'hms_user';
-  private readonly loggedInKey = 'hms_logged_in';
 
-  private currentUserSubject = new BehaviorSubject<User | null>(null);
-  public currentUser$ = this.currentUserSubject.asObservable();
+  private readonly authUrl = `${environment.apiUrl}/auth`;
+
+  private readonly currentUserSubject = new BehaviorSubject<User | null>(null);
+  readonly currentUser$ = this.currentUserSubject.asObservable();
+  private accessToken: string | null = null;
+  private restorePromise: Promise<void> | null = null; // Stores on going refresh token operation
 
   constructor(
     private http: HttpClient,
-    private accessFeedbackService: AccessFeedbackService,
-    private cookieService: CookieService,
-    private userService: UserService
-  ) {
-    const storedUser = readStoredUser(this.cookieService.get(this.userKey));
-    if (storedUser) {
-      this.currentUserSubject.next(storedUser);
-      return;
-    }
+    private accessFeedbackService: AccessFeedbackService
+  ) {}
 
-    if (this.cookieService.get(this.loggedInKey) === 'true') {
-      this.checkUserStatus();
-      return;
-    }
-
-    this.clearSession();
-  }
-
+  // Getters for current user and access token
   get currentUserValue(): User | null {
     return this.currentUserSubject.value;
   }
 
+  // Expose current user as an observable for components to subscribe to
   get currentUser(): User | null {
     return this.currentUserValue;
   }
 
+  getAccessToken(): string | null {
+    return this.accessToken;
+  }
+
+  // Tap used for side effects to store session on successful login or token refresh
   login(request: LoginRequest): Observable<ApiResponse<AuthResponse>> {
-    return this.http.post<ApiResponse<AuthResponse>>(`${environment.apiUrl}/auth/login`, request, {
-      withCredentials: true,
-    }).pipe(
+    return this.http.post<ApiResponse<AuthResponse>>
+    (`${this.authUrl}/login`, request, this.cookieOptions()).pipe(
       tap((res) => {
         if (res.success && res.data) {
-          this.handleAuthSuccess(res.data);
+          this.storeSession(res.data);
         }
       }),
     );
@@ -67,57 +53,63 @@ export class AuthService {
 
   refreshToken(): Observable<ApiResponse<AuthResponse>> {
     return this.http
-      .post<ApiResponse<AuthResponse>>(`${environment.apiUrl}/auth/refresh`, {}, {
-        withCredentials: true,
-      })
+      .post<ApiResponse<AuthResponse>>
+      (`${this.authUrl}/refresh`, {}, this.cookieOptions())
       .pipe(
         tap((res) => {
           if (res.success && res.data) {
-            this.handleAuthSuccess(res.data);
+            this.storeSession(res.data);
           }
         }),
       );
   }
 
-  register(request: RegisterRequest): Observable<ApiResponse<string>> {
-    return this.http.post<ApiResponse<string>>
-    (`${environment.apiUrl}/auth/register`, request);
+  initializeSession(): Promise<void> {
+    if (this.currentUserValue) {
+      return Promise.resolve();
+    }
+
+    // Problem 5 Request coalescing: Ensure only one refresh token request is made when multiple components call initializeSession simultaneously
+    if (!this.restorePromise) {
+      this.restorePromise = firstValueFrom(
+        this.refreshToken().pipe(mapTo(void 0),catchError(() => {
+            this.clearUserState();
+            return of(void 0);
+          }),
+          finalize(() => {
+            this.restorePromise = null;
+          }),
+        ),
+      );
+    }
+    return this.restorePromise;
   }
 
-  logout(): void {
-    const user = this.currentUserValue;
-    if (user) {
-      this.http
-        .post(
-          `${environment.apiUrl}/auth/logout`,
-          {},
-          {
-            withCredentials: true,
-            responseType: 'text',
-          },
-        )
-        .subscribe({
-          next: () => this.clearSession(),
-          error: () => this.clearSession(),
-        });
-    } else {
-      this.clearSession();
+  register(request: RegisterRequest): Observable<ApiResponse<string>> {
+    return this.http.post<ApiResponse<string>>
+    (`${this.authUrl}/register`, request);
+  }
+
+  logout(notifyServer: boolean = true): Observable<void> {
+    if (!notifyServer) {
+      this.clearUserState();
+      return of(void 0);
     }
+
+    return this.http
+      .post(`${this.authUrl}/logout`, {}, 
+        { ...this.cookieOptions(), responseType: 'text' })
+      .pipe(
+        mapTo(void 0),
+        finalize(() => this.clearUserState()),
+      );
   }
 
   changePassword(request: ChangePasswordRequest): Observable<string> {
-    return this.http.post(`${environment.apiUrl}/auth/change-password`, request, { 
-      withCredentials: true,
-      responseType: 'text' 
+    return this.http.post(`${this.authUrl}/change-password`, request, {
+      ...this.cookieOptions(),
+      responseType: 'text',
     });
-  }
-
-  getToken(): string | null {
-    return null;
-  }
-
-  getRefreshToken(): string | null {
-    return null;
   }
 
   getUserRole(): string | null {
@@ -125,7 +117,7 @@ export class AuthService {
   }
 
   isAuthenticated(): boolean {
-    return !!this.currentUserValue;
+    return !!this.currentUserValue && !!this.accessToken;
   }
 
   isPasswordChangeRequired(): boolean {
@@ -135,43 +127,30 @@ export class AuthService {
   markPasswordChanged(): void {
     const user = this.currentUserValue;
     if (user) {
-      this.persistCurrentUser({
+      this.currentUserSubject.next({
         ...user,
         passwordChangeRequired: false,
       });
     }
   }
 
-  private handleAuthSuccess(data: AuthResponse): void {
-    this.persistCurrentUser(buildSessionUser(data));
+  private storeSession(auth: AuthResponse): void {
+    if (!auth.token) {
+      this.clearUserState();
+      return;
+    }
+
+    this.accessToken = auth.token;
+    this.currentUserSubject.next(buildSessionUser(auth));
   }
 
-  private checkUserStatus(): void {
-    this.userService.getCurrentUser().subscribe({
-      next: (res) => {
-        if (res.success && res.data) {
-          this.persistCurrentUser(buildSessionUser(res.data as AuthResponse));
-          return;
-        }
-
-        this.clearSession();
-      },
-      error: () => this.clearSession(),
-    });
-  }
-
-  private persistCurrentUser(user: User): void {
-    this.currentUserSubject.next(user);
-    this.cookieService.set(this.userKey, persistUser(user));
-    this.cookieService.set(this.loggedInKey, 'true');
-  }
-
-  private clearSession(): void {
-    clearUser();
-    this.cookieService.delete(this.userKey);
-    this.cookieService.delete(this.loggedInKey);
+  private clearUserState(): void {
+    this.accessToken = null;
     this.currentUserSubject.next(null);
     this.accessFeedbackService.close();
   }
 
+  private cookieOptions(): { withCredentials: true } {
+    return { withCredentials: true };
+  }
 }

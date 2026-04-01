@@ -1,5 +1,5 @@
-2026-03-30 10:09:25.661 | admin | USER_LOGIN | User | 1 | role=ADMIN
-2026-03-30 10:14:24.080 | admin | MEDICINE_CREATE | Medicine | 2 | name=Acrlyn
-2026-03-30 11:16:57.943 | admin | USER_LOGIN | User | 1 | role=ADMIN
-2026-03-30 12:05:39.410 | admin | USER_LOGOUT | User | 1 | 
-2026-03-30 13:42:34.343 | admin | USER_LOGIN | User | 1 | role=ADMIN
+2026-04-01 10:16:32.710 | recep | PATIENT_CREATE | Patient | 2 | name=Krishna
+2026-04-01 10:17:00.931 | recep | APPOINTMENT_CREATE | Appointment | 2 | patient=Krishna
+2026-04-01 10:17:44.715 | recep | PATIENT_CREATE | Patient | 3 | name=dsx
+2026-04-01 11:10:37.214 | recep | BILLING_CREATE | Billing | 2 | invoice=INV-FE0111A2
+2026-04-01 11:21:44.344 | recep | BILLING_PAYMENT_UPDATE | Billing | 1 | status=PAID

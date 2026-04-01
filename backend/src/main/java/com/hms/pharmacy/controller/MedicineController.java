@@ -7,9 +7,6 @@ import com.hms.pharmacy.dto.response.MedicineResponseDTO;
 import com.hms.pharmacy.service.MedicineService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -68,17 +65,6 @@ public class MedicineController {
     @GetMapping
     public ResponseEntity<ApiResponse<List<MedicineResponseDTO>>> getAllMedicines() {
         return ResponseEntity.ok(ApiResponse.success(medicineService.getAllMedicines()));
-    }
-
-    @PreAuthorize("hasAnyRole('PHARMACIST', 'DOCTOR', 'ADMIN', 'NURSE')")
-    @GetMapping("/search")
-    public ResponseEntity<ApiResponse<com.hms.common.response.PagedResponse<MedicineResponseDTO>>> searchMedicines(
-            @RequestParam(name = "query", required = false) String query,
-            @RequestParam(name = "category", required = false) String category,
-            @RequestParam(name = "isActive", required = false) Boolean isActive,
-            @PageableDefault(size = 20) Pageable pageable) {
-        Page<MedicineResponseDTO> page = medicineService.searchMedicines(query, category, isActive, pageable);
-        return ResponseEntity.ok(ApiResponse.success(com.hms.common.response.PagedResponse.from(page, dto -> dto)));
     }
 
     @PreAuthorize("hasAnyRole('ADMIN','DOCTOR','PHARMACIST')")

@@ -17,7 +17,10 @@ export class UnauthorizedComponent {
   ) {}
 
   logout() {
-    this.authService.logout();
-    this.router.navigate(['/login']);
+    this.authService.logout().subscribe({
+      complete: () => {
+        this.router.navigate(['/login']);
+      },
+    });
   }
 }

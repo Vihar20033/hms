@@ -6,10 +6,6 @@ import lombok.*;
 
 import java.math.BigDecimal;
 
-
-/**
- * Request DTO for creating a new doctor
- */
 @Data
 @NoArgsConstructor
 @AllArgsConstructor

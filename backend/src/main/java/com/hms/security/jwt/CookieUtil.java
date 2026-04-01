@@ -14,36 +14,23 @@ import java.util.Optional;
 public class CookieUtil {
 
     private final JwtProperties jwtProperties;
-    private static final String ACCESS_TOKEN_COOKIE = "accessToken";
     private static final String REFRESH_TOKEN_COOKIE = "refreshToken";
-    private static final String LOGGED_IN_CLIENT_COOKIE = "hms_logged_in";
-
-    public void setAccessTokenCookie(HttpServletResponse response, String token) {
-        setCookie(response, ACCESS_TOKEN_COOKIE, token, (int) (jwtProperties.getExpirationMs() / 1000), true);
-        setCookie(response, LOGGED_IN_CLIENT_COOKIE, "true", (int) (jwtProperties.getExpirationMs() / 1000), false);
-    }
 
     public void setRefreshTokenCookie(HttpServletResponse response, String token) {
-        setCookie(response, REFRESH_TOKEN_COOKIE, token, (int) (jwtProperties.getRefreshExpirationMs() / 1000), true);
+        setCookie(response, token, (int) (jwtProperties.getRefreshExpirationMs() / 1000));
     }
 
     public void clearAuthCookies(HttpServletResponse response) {
-        setCookie(response, ACCESS_TOKEN_COOKIE, "", 0, true);
-        setCookie(response, REFRESH_TOKEN_COOKIE, "", 0, true);
-        setCookie(response, LOGGED_IN_CLIENT_COOKIE, "", 0, false);
-    }
-
-    public Optional<String> getAccessToken(HttpServletRequest request) {
-        return getCookieValue(request, ACCESS_TOKEN_COOKIE);
+        setCookie(response, "", 0);
     }
 
     public Optional<String> getRefreshToken(HttpServletRequest request) {
-        return getCookieValue(request, REFRESH_TOKEN_COOKIE);
+        return getCookieValue(request);
     }
 
-    private void setCookie(HttpServletResponse response, String name, String value, int maxAge, boolean httpOnly) {
-        Cookie cookie = new Cookie(name, value);
-        cookie.setHttpOnly(httpOnly);
+    private void setCookie(HttpServletResponse response, String value, int maxAge) {
+        Cookie cookie = new Cookie(CookieUtil.REFRESH_TOKEN_COOKIE, value);
+        cookie.setHttpOnly(true);
         cookie.setSecure(jwtProperties.isCookieSecure());
         cookie.setPath("/");
         cookie.setMaxAge(maxAge);
@@ -51,10 +38,10 @@ public class CookieUtil {
         response.addCookie(cookie);
     }
 
-    private Optional<String> getCookieValue(HttpServletRequest request, String name) {
+    private Optional<String> getCookieValue(HttpServletRequest request) {
         if (request.getCookies() == null) return Optional.empty();
         for (Cookie cookie : request.getCookies()) {
-            if (cookie.getName().equals(name)) {
+            if (cookie.getName().equals(CookieUtil.REFRESH_TOKEN_COOKIE)) {
                 return Optional.of(cookie.getValue());
             }
         }

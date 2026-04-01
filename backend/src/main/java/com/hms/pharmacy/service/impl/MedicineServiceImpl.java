@@ -15,11 +15,7 @@ import com.hms.pharmacy.repository.InventoryTransactionRepository;
 import com.hms.pharmacy.mapper.MedicineMapper;
 import com.hms.pharmacy.repository.MedicineRepository;
 import com.hms.pharmacy.service.MedicineService;
-import com.hms.pharmacy.specification.MedicineSpecification;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.jpa.domain.Specification;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
@@ -60,19 +56,6 @@ public class MedicineServiceImpl implements MedicineService {
 
         auditLogService.log(getCurrentUsername(), "MEDICINE_CREATE", "Medicine", savedMedicine.getId().toString(), "name=" + savedMedicine.getName());
         return medicineMapper.toDto(savedMedicine);
-    }
-
-    @Override
-    @Transactional(readOnly = true)
-    public Page<MedicineResponseDTO> searchMedicines(String query, String category, Boolean isActive, Pageable pageable) {
-        MedicineCategory cat = (category != null && !category.isBlank()) ? MedicineCategory.valueOf(category) : null;
-        
-        Specification<Medicine> spec = Specification.where(MedicineSpecification.fuzzySearch(query))
-                .and(MedicineSpecification.fuzzySearch(query))
-                .and(MedicineSpecification.hasCategory(cat))
-                .and(MedicineSpecification.isActive(isActive));
-
-        return medicineRepository.findAll(spec, pageable).map(medicineMapper::toDto);
     }
 
     @Override

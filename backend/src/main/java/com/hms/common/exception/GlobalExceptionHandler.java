@@ -3,7 +3,6 @@ package com.hms.common.exception;
 import com.hms.appointment.exception.AppointmentNotFoundException;
 import com.hms.appointment.exception.DoctorUnavailableException;
 import com.hms.appointment.exception.SlotAlreadyBookedException;
-import com.hms.auth.exception.SelfRegistrationRoleNotAllowedException;
 import com.hms.billing.exception.BillingNotFoundException;
 import com.hms.doctor.exception.DoctorNotFoundException;
 import com.hms.prescription.exception.PrescriptionNotFoundException;
@@ -13,7 +12,9 @@ import com.hms.common.response.ApiError;
 import com.hms.common.response.ValidationError;
 import com.hms.patient.exception.DuplicatePatientException;
 import com.hms.patient.exception.PatientNotFoundException;
+import com.hms.pharmacy.exception.DuplicateMedicineException;
 import com.hms.pharmacy.exception.InsufficientStockException;
+import com.hms.pharmacy.exception.MedicineNotFoundException;
 import com.hms.user.exception.EmailAlreadyExistsException;
 import com.hms.user.exception.InvalidCredentialsException;
 import com.hms.user.exception.UsernameAlreadyExistsException;
@@ -98,17 +99,22 @@ public class GlobalExceptionHandler {
                 return buildResponse(HmsErrorCode.EMAIL_ALREADY_EXISTS, HttpStatus.CONFLICT, ex.getMessage(), request);
         }
 
-        @ExceptionHandler(SelfRegistrationRoleNotAllowedException.class)
-        public ResponseEntity<ApiError> handleSelfRegistrationRoleNotAllowed(SelfRegistrationRoleNotAllowedException ex,
-                        HttpServletRequest request) {
-                log.warn("Rejected self-registration role: {}", ex.getMessage());
-                return buildResponse(HmsErrorCode.SELF_REGISTRATION_ROLE_NOT_ALLOWED, HttpStatus.FORBIDDEN, ex.getMessage(), request);
-        }
-
         @ExceptionHandler(InsufficientStockException.class)
         public ResponseEntity<ApiError> handleInsufficientStock(InsufficientStockException ex, HttpServletRequest request) {
                 log.warn("Pharmacy stock low for {}: {}", ex.getMedicineName(), ex.getMessage());
                 return buildResponse(HmsErrorCode.INSUFFICIENT_STOCK, HttpStatus.BAD_REQUEST, ex.getMessage(), request);
+        }
+
+        @ExceptionHandler(MedicineNotFoundException.class)
+        public ResponseEntity<ApiError> handleMedicineNotFound(MedicineNotFoundException ex, HttpServletRequest request) {
+                log.warn("Medicine not found: {}", ex.getMessage());
+                return buildResponse(HmsErrorCode.MEDICINE_NOT_FOUND, HttpStatus.NOT_FOUND, ex.getMessage(), request);
+        }
+
+        @ExceptionHandler(DuplicateMedicineException.class)
+        public ResponseEntity<ApiError> handleDuplicateMedicine(DuplicateMedicineException ex, HttpServletRequest request) {
+                log.warn("Duplicate medicine: {}", ex.getMessage());
+                return buildResponse(HmsErrorCode.DUPLICATE_MEDICINE, HttpStatus.CONFLICT, ex.getMessage(), request);
         }
 
         // ========== Doctor Exceptions ==========

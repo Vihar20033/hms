@@ -17,10 +17,6 @@ export class DoctorService {
     return this.http.get<ApiResponse<Doctor[]>>(this.apiUrl);
   }
 
-  getMe(userId: number): Observable<ApiResponse<Doctor>> {
-    return this.http.get<ApiResponse<Doctor>>(`${this.apiUrl}/me?userId=${userId}`);
-  }
-
   getById(id: number): Observable<ApiResponse<Doctor>> {
     return this.http.get<ApiResponse<Doctor>>(`${this.apiUrl}/${id}`);
   }

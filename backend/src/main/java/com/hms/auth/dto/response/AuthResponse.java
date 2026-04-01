@@ -12,7 +12,6 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class AuthResponse {
 
-    @JsonIgnore
     private String token;
     @JsonIgnore
     private String refreshToken;

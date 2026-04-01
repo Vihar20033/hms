@@ -1,574 +1,97 @@
-2026-03-30 09:54:18.738 [main] INFO  com.hms.HospitalManagementSystemApplication - Starting HospitalManagementSystemApplication using Java 21.0.10 with PID 2932 (C:\Users\Piyush\Desktop\Project\backend\target\classes started by Piyush in C:\Users\Piyush\Desktop\Project\backend)
-2026-03-30 09:54:18.763 [main] DEBUG com.hms.HospitalManagementSystemApplication - Running with Spring Boot v3.3.4, Spring v6.1.13
-2026-03-30 09:54:18.766 [main] INFO  com.hms.HospitalManagementSystemApplication - No active profile set, falling back to 1 default profile: "mysql"
-2026-03-30 09:54:19.988 [main] INFO  o.s.d.r.config.RepositoryConfigurationDelegate - Bootstrapping Spring Data JPA repositories in DEFAULT mode.
-2026-03-30 09:54:20.194 [main] INFO  o.s.d.r.config.RepositoryConfigurationDelegate - Finished Spring Data repository scanning in 195 ms. Found 9 JPA repository interfaces.
-2026-03-30 09:54:21.514 [main] INFO  o.s.boot.web.embedded.tomcat.TomcatWebServer - Tomcat initialized with port 8080 (http)
-2026-03-30 09:54:21.538 [main] INFO  org.apache.catalina.core.StandardService - Starting service [Tomcat]
-2026-03-30 09:54:21.540 [main] INFO  org.apache.catalina.core.StandardEngine - Starting Servlet engine: [Apache Tomcat/10.1.30]
-2026-03-30 09:54:21.637 [main] INFO  o.a.c.core.ContainerBase.[Tomcat].[localhost].[/] - Initializing Spring embedded WebApplicationContext
-2026-03-30 09:54:21.640 [main] INFO  o.s.b.w.s.c.ServletWebServerApplicationContext - Root WebApplicationContext: initialization completed in 2747 ms
-2026-03-30 09:54:22.149 [main] INFO  org.hibernate.jpa.internal.util.LogHelper - HHH000204: Processing PersistenceUnitInfo [name: default]
-2026-03-30 09:54:22.233 [main] INFO  org.hibernate.Version - HHH000412: Hibernate ORM core version 6.5.3.Final
-2026-03-30 09:54:22.282 [main] INFO  o.hibernate.cache.internal.RegionFactoryInitiator - HHH000026: Second-level cache disabled
-2026-03-30 09:54:22.664 [main] INFO  o.s.o.j.persistenceunit.SpringPersistenceUnitInfo - No LoadTimeWeaver setup: ignoring JPA class transformer
-2026-03-30 09:54:22.720 [main] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Starting...
-2026-03-30 09:54:23.079 [main] INFO  com.zaxxer.hikari.pool.HikariPool - HikariPool-1 - Added connection com.mysql.cj.jdbc.ConnectionImpl@796fe2b5
-2026-03-30 09:54:23.082 [main] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Start completed.
-2026-03-30 09:54:24.721 [main] ERROR o.s.orm.jpa.LocalContainerEntityManagerFactoryBean - Failed to initialize JPA EntityManagerFactory: [PersistenceUnit: default] Unable to build Hibernate SessionFactory; nested exception is org.hibernate.metamodel.UnsupportedMappingException: To-one attribute (com.hms.billing.entity.Billing.appointment) cannot be mapped as LAZY as its associated entity is defined with @SoftDelete
-2026-03-30 09:54:24.722 [main] ERROR o.s.boot.web.embedded.tomcat.TomcatStarter - Error starting Tomcat context. Exception: org.springframework.beans.factory.UnsatisfiedDependencyException. Message: Error creating bean with name 'jwtAuthenticationFilter' defined in file [C:\Users\Piyush\Desktop\Project\backend\target\classes\com\hms\security\jwt\JwtAuthenticationFilter.class]: Unsatisfied dependency expressed through constructor parameter 1: Error creating bean with name 'customUserDetailsService' defined in file [C:\Users\Piyush\Desktop\Project\backend\target\classes\com\hms\user\service\CustomUserDetailsService.class]: Unsatisfied dependency expressed through constructor parameter 0: Error creating bean with name 'userRepository' defined in com.hms.user.repository.UserRepository defined in @EnableJpaRepositories declared on HospitalManagementSystemApplication: Cannot resolve reference to bean 'jpaSharedEM_entityManagerFactory' while setting bean property 'entityManager'
-2026-03-30 09:54:24.762 [main] INFO  org.apache.catalina.core.StandardService - Stopping service [Tomcat]
-2026-03-30 09:54:24.766 [main] WARN  org.apache.catalina.loader.WebappClassLoaderBase - The web application [ROOT] appears to have started a thread named [HikariPool-1 housekeeper] but has failed to stop it. This is very likely to create a memory leak. Stack trace of thread:
- java.base/jdk.internal.misc.Unsafe.park(Native Method)
- java.base/java.util.concurrent.locks.LockSupport.parkNanos(LockSupport.java:269)
- java.base/java.util.concurrent.locks.AbstractQueuedSynchronizer$ConditionObject.awaitNanos(AbstractQueuedSynchronizer.java:1797)
- java.base/java.util.concurrent.ScheduledThreadPoolExecutor$DelayedWorkQueue.take(ScheduledThreadPoolExecutor.java:1182)
- java.base/java.util.concurrent.ScheduledThreadPoolExecutor$DelayedWorkQueue.take(ScheduledThreadPoolExecutor.java:899)
- java.base/java.util.concurrent.ThreadPoolExecutor.getTask(ThreadPoolExecutor.java:1070)
- java.base/java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1130)
- java.base/java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:642)
- java.base/java.lang.Thread.run(Thread.java:1583)
-2026-03-30 09:54:24.767 [main] WARN  org.apache.catalina.loader.WebappClassLoaderBase - The web application [ROOT] appears to have started a thread named [HikariPool-1 connection adder] but has failed to stop it. This is very likely to create a memory leak. Stack trace of thread:
- java.base/jdk.internal.misc.Unsafe.park(Native Method)
- java.base/java.util.concurrent.locks.LockSupport.parkNanos(LockSupport.java:269)
- java.base/java.util.concurrent.locks.AbstractQueuedSynchronizer$ConditionObject.awaitNanos(AbstractQueuedSynchronizer.java:1797)
- java.base/java.util.concurrent.LinkedBlockingQueue.poll(LinkedBlockingQueue.java:460)
- java.base/java.util.concurrent.ThreadPoolExecutor.getTask(ThreadPoolExecutor.java:1069)
- java.base/java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1130)
- java.base/java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:642)
- java.base/java.lang.Thread.run(Thread.java:1583)
-2026-03-30 09:54:24.771 [main] WARN  o.s.b.w.s.c.AnnotationConfigServletWebServerApplicationContext - Exception encountered during context initialization - cancelling refresh attempt: org.springframework.context.ApplicationContextException: Unable to start web server
-2026-03-30 09:54:24.771 [main] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Shutdown initiated...
-2026-03-30 09:54:24.783 [main] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Shutdown completed.
-2026-03-30 09:54:24.805 [main] INFO  o.s.b.a.logging.ConditionEvaluationReportLogger - 
-
-Error starting ApplicationContext. To display the condition evaluation report re-run your application with 'debug' enabled.
-2026-03-30 09:54:24.837 [main] ERROR org.springframework.boot.SpringApplication - Application run failed
-org.springframework.context.ApplicationContextException: Unable to start web server
-	at org.springframework.boot.web.servlet.context.ServletWebServerApplicationContext.onRefresh(ServletWebServerApplicationContext.java:165)
-	at org.springframework.context.support.AbstractApplicationContext.refresh(AbstractApplicationContext.java:619)
-	at org.springframework.boot.web.servlet.context.ServletWebServerApplicationContext.refresh(ServletWebServerApplicationContext.java:146)
-	at org.springframework.boot.SpringApplication.refresh(SpringApplication.java:754)
-	at org.springframework.boot.SpringApplication.refreshContext(SpringApplication.java:456)
-	at org.springframework.boot.SpringApplication.run(SpringApplication.java:335)
-	at org.springframework.boot.SpringApplication.run(SpringApplication.java:1363)
-	at org.springframework.boot.SpringApplication.run(SpringApplication.java:1352)
-	at com.hms.HospitalManagementSystemApplication.main(HospitalManagementSystemApplication.java:21)
-Caused by: org.springframework.boot.web.server.WebServerException: Unable to start embedded Tomcat
-	at org.springframework.boot.web.embedded.tomcat.TomcatWebServer.initialize(TomcatWebServer.java:147)
-	at org.springframework.boot.web.embedded.tomcat.TomcatWebServer.<init>(TomcatWebServer.java:107)
-	at org.springframework.boot.web.embedded.tomcat.TomcatServletWebServerFactory.getTomcatWebServer(TomcatServletWebServerFactory.java:516)
-	at org.springframework.boot.web.embedded.tomcat.TomcatServletWebServerFactory.getWebServer(TomcatServletWebServerFactory.java:222)
-	at org.springframework.boot.web.servlet.context.ServletWebServerApplicationContext.createWebServer(ServletWebServerApplicationContext.java:188)
-	at org.springframework.boot.web.servlet.context.ServletWebServerApplicationContext.onRefresh(ServletWebServerApplicationContext.java:162)
-	... 8 common frames omitted
-Caused by: org.springframework.beans.factory.UnsatisfiedDependencyException: Error creating bean with name 'jwtAuthenticationFilter' defined in file [C:\Users\Piyush\Desktop\Project\backend\target\classes\com\hms\security\jwt\JwtAuthenticationFilter.class]: Unsatisfied dependency expressed through constructor parameter 1: Error creating bean with name 'customUserDetailsService' defined in file [C:\Users\Piyush\Desktop\Project\backend\target\classes\com\hms\user\service\CustomUserDetailsService.class]: Unsatisfied dependency expressed through constructor parameter 0: Error creating bean with name 'userRepository' defined in com.hms.user.repository.UserRepository defined in @EnableJpaRepositories declared on HospitalManagementSystemApplication: Cannot resolve reference to bean 'jpaSharedEM_entityManagerFactory' while setting bean property 'entityManager'
-	at org.springframework.beans.factory.support.ConstructorResolver.createArgumentArray(ConstructorResolver.java:795)
-	at org.springframework.beans.factory.support.ConstructorResolver.autowireConstructor(ConstructorResolver.java:237)
-	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.autowireConstructor(AbstractAutowireCapableBeanFactory.java:1375)
-	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.createBeanInstance(AbstractAutowireCapableBeanFactory.java:1212)
-	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.doCreateBean(AbstractAutowireCapableBeanFactory.java:562)
-	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.createBean(AbstractAutowireCapableBeanFactory.java:522)
-	at org.springframework.beans.factory.support.AbstractBeanFactory.lambda$doGetBean$0(AbstractBeanFactory.java:337)
-	at org.springframework.beans.factory.support.DefaultSingletonBeanRegistry.getSingleton(DefaultSingletonBeanRegistry.java:234)
-	at org.springframework.beans.factory.support.AbstractBeanFactory.doGetBean(AbstractBeanFactory.java:335)
-	at org.springframework.beans.factory.support.AbstractBeanFactory.getBean(AbstractBeanFactory.java:205)
-	at org.springframework.boot.web.servlet.ServletContextInitializerBeans.getOrderedBeansOfType(ServletContextInitializerBeans.java:211)
-	at org.springframework.boot.web.servlet.ServletContextInitializerBeans.addAsRegistrationBean(ServletContextInitializerBeans.java:174)
-	at org.springframework.boot.web.servlet.ServletContextInitializerBeans.addAsRegistrationBean(ServletContextInitializerBeans.java:169)
-	at org.springframework.boot.web.servlet.ServletContextInitializerBeans.addAdaptableBeans(ServletContextInitializerBeans.java:154)
-	at org.springframework.boot.web.servlet.ServletContextInitializerBeans.<init>(ServletContextInitializerBeans.java:87)
-	at org.springframework.boot.web.servlet.context.ServletWebServerApplicationContext.getServletContextInitializerBeans(ServletWebServerApplicationContext.java:266)
-	at org.springframework.boot.web.servlet.context.ServletWebServerApplicationContext.selfInitialize(ServletWebServerApplicationContext.java:240)
-	at org.springframework.boot.web.embedded.tomcat.TomcatStarter.onStartup(TomcatStarter.java:52)
-	at org.apache.catalina.core.StandardContext.startInternal(StandardContext.java:4412)
-	at org.apache.catalina.util.LifecycleBase.start(LifecycleBase.java:164)
-	at org.apache.catalina.core.ContainerBase$StartChild.call(ContainerBase.java:1203)
-	at org.apache.catalina.core.ContainerBase$StartChild.call(ContainerBase.java:1193)
-	at java.base/java.util.concurrent.FutureTask.run(FutureTask.java:317)
-	at org.apache.tomcat.util.threads.InlineExecutorService.execute(InlineExecutorService.java:75)
-	at java.base/java.util.concurrent.AbstractExecutorService.submit(AbstractExecutorService.java:145)
-	at org.apache.catalina.core.ContainerBase.startInternal(ContainerBase.java:749)
-	at org.apache.catalina.core.StandardHost.startInternal(StandardHost.java:772)
-	at org.apache.catalina.util.LifecycleBase.start(LifecycleBase.java:164)
-	at org.apache.catalina.core.ContainerBase$StartChild.call(ContainerBase.java:1203)
-	at org.apache.catalina.core.ContainerBase$StartChild.call(ContainerBase.java:1193)
-	at java.base/java.util.concurrent.FutureTask.run(FutureTask.java:317)
-	at org.apache.tomcat.util.threads.InlineExecutorService.execute(InlineExecutorService.java:75)
-	at java.base/java.util.concurrent.AbstractExecutorService.submit(AbstractExecutorService.java:145)
-	at org.apache.catalina.core.ContainerBase.startInternal(ContainerBase.java:749)
-	at org.apache.catalina.core.StandardEngine.startInternal(StandardEngine.java:203)
-	at org.apache.catalina.util.LifecycleBase.start(LifecycleBase.java:164)
-	at org.apache.catalina.core.StandardService.startInternal(StandardService.java:415)
-	at org.apache.catalina.util.LifecycleBase.start(LifecycleBase.java:164)
-	at org.apache.catalina.core.StandardServer.startInternal(StandardServer.java:870)
-	at org.apache.catalina.util.LifecycleBase.start(LifecycleBase.java:164)
-	at org.apache.catalina.startup.Tomcat.start(Tomcat.java:437)
-	at org.springframework.boot.web.embedded.tomcat.TomcatWebServer.initialize(TomcatWebServer.java:128)
-	... 13 common frames omitted
-Caused by: org.springframework.beans.factory.UnsatisfiedDependencyException: Error creating bean with name 'customUserDetailsService' defined in file [C:\Users\Piyush\Desktop\Project\backend\target\classes\com\hms\user\service\CustomUserDetailsService.class]: Unsatisfied dependency expressed through constructor parameter 0: Error creating bean with name 'userRepository' defined in com.hms.user.repository.UserRepository defined in @EnableJpaRepositories declared on HospitalManagementSystemApplication: Cannot resolve reference to bean 'jpaSharedEM_entityManagerFactory' while setting bean property 'entityManager'
-	at org.springframework.beans.factory.support.ConstructorResolver.createArgumentArray(ConstructorResolver.java:795)
-	at org.springframework.beans.factory.support.ConstructorResolver.autowireConstructor(ConstructorResolver.java:237)
-	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.autowireConstructor(AbstractAutowireCapableBeanFactory.java:1375)
-	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.createBeanInstance(AbstractAutowireCapableBeanFactory.java:1212)
-	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.doCreateBean(AbstractAutowireCapableBeanFactory.java:562)
-	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.createBean(AbstractAutowireCapableBeanFactory.java:522)
-	at org.springframework.beans.factory.support.AbstractBeanFactory.lambda$doGetBean$0(AbstractBeanFactory.java:337)
-	at org.springframework.beans.factory.support.DefaultSingletonBeanRegistry.getSingleton(DefaultSingletonBeanRegistry.java:234)
-	at org.springframework.beans.factory.support.AbstractBeanFactory.doGetBean(AbstractBeanFactory.java:335)
-	at org.springframework.beans.factory.support.AbstractBeanFactory.getBean(AbstractBeanFactory.java:200)
-	at org.springframework.beans.factory.config.DependencyDescriptor.resolveCandidate(DependencyDescriptor.java:254)
-	at org.springframework.beans.factory.support.DefaultListableBeanFactory.doResolveDependency(DefaultListableBeanFactory.java:1443)
-	at org.springframework.beans.factory.support.DefaultListableBeanFactory.resolveDependency(DefaultListableBeanFactory.java:1353)
-	at org.springframework.beans.factory.support.ConstructorResolver.resolveAutowiredArgument(ConstructorResolver.java:904)
-	at org.springframework.beans.factory.support.ConstructorResolver.createArgumentArray(ConstructorResolver.java:782)
-	... 54 common frames omitted
-Caused by: org.springframework.beans.factory.BeanCreationException: Error creating bean with name 'userRepository' defined in com.hms.user.repository.UserRepository defined in @EnableJpaRepositories declared on HospitalManagementSystemApplication: Cannot resolve reference to bean 'jpaSharedEM_entityManagerFactory' while setting bean property 'entityManager'
-	at org.springframework.beans.factory.support.BeanDefinitionValueResolver.resolveReference(BeanDefinitionValueResolver.java:377)
-	at org.springframework.beans.factory.support.BeanDefinitionValueResolver.resolveValueIfNecessary(BeanDefinitionValueResolver.java:135)
-	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.applyPropertyValues(AbstractAutowireCapableBeanFactory.java:1705)
-	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.populateBean(AbstractAutowireCapableBeanFactory.java:1454)
-	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.doCreateBean(AbstractAutowireCapableBeanFactory.java:599)
-	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.createBean(AbstractAutowireCapableBeanFactory.java:522)
-	at org.springframework.beans.factory.support.AbstractBeanFactory.lambda$doGetBean$0(AbstractBeanFactory.java:337)
-	at org.springframework.beans.factory.support.DefaultSingletonBeanRegistry.getSingleton(DefaultSingletonBeanRegistry.java:234)
-	at org.springframework.beans.factory.support.AbstractBeanFactory.doGetBean(AbstractBeanFactory.java:335)
-	at org.springframework.beans.factory.support.AbstractBeanFactory.getBean(AbstractBeanFactory.java:200)
-	at org.springframework.beans.factory.config.DependencyDescriptor.resolveCandidate(DependencyDescriptor.java:254)
-	at org.springframework.beans.factory.support.DefaultListableBeanFactory.doResolveDependency(DefaultListableBeanFactory.java:1443)
-	at org.springframework.beans.factory.support.DefaultListableBeanFactory.resolveDependency(DefaultListableBeanFactory.java:1353)
-	at org.springframework.beans.factory.support.ConstructorResolver.resolveAutowiredArgument(ConstructorResolver.java:904)
-	at org.springframework.beans.factory.support.ConstructorResolver.createArgumentArray(ConstructorResolver.java:782)
-	... 68 common frames omitted
-Caused by: org.springframework.beans.factory.BeanCreationException: Error creating bean with name 'jpaSharedEM_entityManagerFactory': Cannot resolve reference to bean 'entityManagerFactory' while setting constructor argument
-	at org.springframework.beans.factory.support.BeanDefinitionValueResolver.resolveReference(BeanDefinitionValueResolver.java:377)
-	at org.springframework.beans.factory.support.BeanDefinitionValueResolver.resolveValueIfNecessary(BeanDefinitionValueResolver.java:135)
-	at org.springframework.beans.factory.support.ConstructorResolver.resolveConstructorArguments(ConstructorResolver.java:682)
-	at org.springframework.beans.factory.support.ConstructorResolver.instantiateUsingFactoryMethod(ConstructorResolver.java:509)
-	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.instantiateUsingFactoryMethod(AbstractAutowireCapableBeanFactory.java:1355)
-	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.createBeanInstance(AbstractAutowireCapableBeanFactory.java:1185)
-	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.doCreateBean(AbstractAutowireCapableBeanFactory.java:562)
-	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.createBean(AbstractAutowireCapableBeanFactory.java:522)
-	at org.springframework.beans.factory.support.AbstractBeanFactory.lambda$doGetBean$0(AbstractBeanFactory.java:337)
-	at org.springframework.beans.factory.support.DefaultSingletonBeanRegistry.getSingleton(DefaultSingletonBeanRegistry.java:234)
-	at org.springframework.beans.factory.support.AbstractBeanFactory.doGetBean(AbstractBeanFactory.java:335)
-	at org.springframework.beans.factory.support.AbstractBeanFactory.getBean(AbstractBeanFactory.java:200)
-	at org.springframework.beans.factory.support.BeanDefinitionValueResolver.resolveReference(BeanDefinitionValueResolver.java:365)
-	... 82 common frames omitted
-Caused by: org.springframework.beans.factory.BeanCreationException: Error creating bean with name 'entityManagerFactory' defined in class path resource [org/springframework/boot/autoconfigure/orm/jpa/HibernateJpaConfiguration.class]: [PersistenceUnit: default] Unable to build Hibernate SessionFactory; nested exception is org.hibernate.metamodel.UnsupportedMappingException: To-one attribute (com.hms.billing.entity.Billing.appointment) cannot be mapped as LAZY as its associated entity is defined with @SoftDelete
-	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.initializeBean(AbstractAutowireCapableBeanFactory.java:1806)
-	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.doCreateBean(AbstractAutowireCapableBeanFactory.java:600)
-	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.createBean(AbstractAutowireCapableBeanFactory.java:522)
-	at org.springframework.beans.factory.support.AbstractBeanFactory.lambda$doGetBean$0(AbstractBeanFactory.java:337)
-	at org.springframework.beans.factory.support.DefaultSingletonBeanRegistry.getSingleton(DefaultSingletonBeanRegistry.java:234)
-	at org.springframework.beans.factory.support.AbstractBeanFactory.doGetBean(AbstractBeanFactory.java:335)
-	at org.springframework.beans.factory.support.AbstractBeanFactory.getBean(AbstractBeanFactory.java:200)
-	at org.springframework.beans.factory.support.BeanDefinitionValueResolver.resolveReference(BeanDefinitionValueResolver.java:365)
-	... 94 common frames omitted
-Caused by: jakarta.persistence.PersistenceException: [PersistenceUnit: default] Unable to build Hibernate SessionFactory; nested exception is org.hibernate.metamodel.UnsupportedMappingException: To-one attribute (com.hms.billing.entity.Billing.appointment) cannot be mapped as LAZY as its associated entity is defined with @SoftDelete
-	at org.springframework.orm.jpa.AbstractEntityManagerFactoryBean.buildNativeEntityManagerFactory(AbstractEntityManagerFactoryBean.java:421)
-	at org.springframework.orm.jpa.AbstractEntityManagerFactoryBean.afterPropertiesSet(AbstractEntityManagerFactoryBean.java:396)
-	at org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean.afterPropertiesSet(LocalContainerEntityManagerFactoryBean.java:366)
-	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.invokeInitMethods(AbstractAutowireCapableBeanFactory.java:1853)
-	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.initializeBean(AbstractAutowireCapableBeanFactory.java:1802)
-	... 101 common frames omitted
-Caused by: org.hibernate.metamodel.UnsupportedMappingException: To-one attribute (com.hms.billing.entity.Billing.appointment) cannot be mapped as LAZY as its associated entity is defined with @SoftDelete
-	at org.hibernate.metamodel.mapping.internal.ToOneAttributeMapping.<init>(ToOneAttributeMapping.java:438)
-	at org.hibernate.metamodel.mapping.internal.MappingModelCreationHelper.buildSingularAssociationAttributeMapping(MappingModelCreationHelper.java:1743)
-	at org.hibernate.metamodel.mapping.internal.MappingModelCreationHelper.buildSingularAssociationAttributeMapping(MappingModelCreationHelper.java:1657)
-	at org.hibernate.persister.entity.AbstractEntityPersister.buildSingularAssociationAttributeMapping(AbstractEntityPersister.java:5878)
-	at org.hibernate.persister.entity.AbstractEntityPersister.generateNonIdAttributeMapping(AbstractEntityPersister.java:5809)
-	at org.hibernate.persister.entity.AbstractEntityPersister.prepareMappingModel(AbstractEntityPersister.java:5047)
-	at org.hibernate.metamodel.mapping.internal.MappingModelCreationProcess.execute(MappingModelCreationProcess.java:84)
-	at org.hibernate.metamodel.mapping.internal.MappingModelCreationProcess.process(MappingModelCreationProcess.java:42)
-	at org.hibernate.metamodel.model.domain.internal.MappingMetamodelImpl.finishInitialization(MappingMetamodelImpl.java:199)
-	at org.hibernate.internal.SessionFactoryImpl.initializeMappingModel(SessionFactoryImpl.java:371)
-	at org.hibernate.internal.SessionFactoryImpl.<init>(SessionFactoryImpl.java:300)
-	at org.hibernate.boot.internal.SessionFactoryBuilderImpl.build(SessionFactoryBuilderImpl.java:457)
-	at org.hibernate.jpa.boot.internal.EntityManagerFactoryBuilderImpl.build(EntityManagerFactoryBuilderImpl.java:1506)
-	at org.springframework.orm.jpa.vendor.SpringHibernateJpaPersistenceProvider.createContainerEntityManagerFactory(SpringHibernateJpaPersistenceProvider.java:75)
-	at org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean.createNativeEntityManagerFactory(LocalContainerEntityManagerFactoryBean.java:390)
-	at org.springframework.orm.jpa.AbstractEntityManagerFactoryBean.buildNativeEntityManagerFactory(AbstractEntityManagerFactoryBean.java:409)
-	... 105 common frames omitted
-2026-03-30 09:56:35.964 [main] INFO  com.hms.HospitalManagementSystemApplication - Starting HospitalManagementSystemApplication using Java 21.0.10 with PID 2764 (C:\Users\Piyush\Desktop\Project\backend\target\classes started by Piyush in C:\Users\Piyush\Desktop\Project\backend)
-2026-03-30 09:56:35.964 [main] DEBUG com.hms.HospitalManagementSystemApplication - Running with Spring Boot v3.3.4, Spring v6.1.13
-2026-03-30 09:56:35.968 [main] INFO  com.hms.HospitalManagementSystemApplication - No active profile set, falling back to 1 default profile: "mysql"
-2026-03-30 09:56:37.084 [main] INFO  o.s.d.r.config.RepositoryConfigurationDelegate - Bootstrapping Spring Data JPA repositories in DEFAULT mode.
-2026-03-30 09:56:37.263 [main] INFO  o.s.d.r.config.RepositoryConfigurationDelegate - Finished Spring Data repository scanning in 166 ms. Found 9 JPA repository interfaces.
-2026-03-30 09:56:38.533 [main] INFO  o.s.boot.web.embedded.tomcat.TomcatWebServer - Tomcat initialized with port 8080 (http)
-2026-03-30 09:56:38.539 [main] INFO  org.apache.catalina.core.StandardService - Starting service [Tomcat]
-2026-03-30 09:56:38.539 [main] INFO  org.apache.catalina.core.StandardEngine - Starting Servlet engine: [Apache Tomcat/10.1.30]
-2026-03-30 09:56:38.629 [main] INFO  o.a.c.core.ContainerBase.[Tomcat].[localhost].[/] - Initializing Spring embedded WebApplicationContext
-2026-03-30 09:56:38.629 [main] INFO  o.s.b.w.s.c.ServletWebServerApplicationContext - Root WebApplicationContext: initialization completed in 2544 ms
-2026-03-30 09:56:39.082 [main] INFO  org.hibernate.jpa.internal.util.LogHelper - HHH000204: Processing PersistenceUnitInfo [name: default]
-2026-03-30 09:56:39.154 [main] INFO  org.hibernate.Version - HHH000412: Hibernate ORM core version 6.5.3.Final
-2026-03-30 09:56:39.195 [main] INFO  o.hibernate.cache.internal.RegionFactoryInitiator - HHH000026: Second-level cache disabled
-2026-03-30 09:56:39.529 [main] INFO  o.s.o.j.persistenceunit.SpringPersistenceUnitInfo - No LoadTimeWeaver setup: ignoring JPA class transformer
-2026-03-30 09:56:39.564 [main] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Starting...
-2026-03-30 09:56:39.761 [main] INFO  com.zaxxer.hikari.pool.HikariPool - HikariPool-1 - Added connection com.mysql.cj.jdbc.ConnectionImpl@24cbf894
-2026-03-30 09:56:39.763 [main] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Start completed.
-2026-03-30 09:56:41.567 [main] INFO  o.h.e.t.jta.platform.internal.JtaPlatformInitiator - HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
-2026-03-30 09:56:42.274 [main] INFO  o.s.orm.jpa.LocalContainerEntityManagerFactoryBean - Initialized JPA EntityManagerFactory for persistence unit 'default'
-2026-03-30 09:56:42.889 [main] DEBUG com.hms.security.jwt.JwtAuthenticationFilter - Filter 'jwtAuthenticationFilter' configured for use
-2026-03-30 09:56:42.889 [main] DEBUG com.hms.security.filter.RateLimitFilter - Filter 'rateLimitFilter' configured for use
-2026-03-30 09:56:43.177 [main] INFO  o.s.s.c.a.a.c.InitializeUserDetailsBeanManagerConfigurer$InitializeUserDetailsManagerConfigurer - Global AuthenticationManager configured with UserDetailsService bean with name customUserDetailsService
-2026-03-30 09:56:43.229 [main] INFO  o.s.data.jpa.repository.query.QueryEnhancerFactory - Hibernate is in classpath; If applicable, HQL parser will be used.
-2026-03-30 09:56:43.890 [main] WARN  o.s.b.w.s.c.AnnotationConfigServletWebServerApplicationContext - Exception encountered during context initialization - cancelling refresh attempt: org.springframework.beans.factory.UnsatisfiedDependencyException: Error creating bean with name 'dashboardController' defined in file [C:\Users\Piyush\Desktop\Project\backend\target\classes\com\hms\dashboard\controller\DashboardController.class]: Unsatisfied dependency expressed through constructor parameter 0: No qualifying bean of type 'com.hms.dashboard.service.DashboardService' available: expected at least 1 bean which qualifies as autowire candidate. Dependency annotations: {}
-2026-03-30 09:56:43.900 [main] INFO  o.s.orm.jpa.LocalContainerEntityManagerFactoryBean - Closing JPA EntityManagerFactory for persistence unit 'default'
-2026-03-30 09:56:43.901 [main] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Shutdown initiated...
-2026-03-30 09:56:43.912 [main] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Shutdown completed.
-2026-03-30 09:56:43.915 [main] INFO  org.apache.catalina.core.StandardService - Stopping service [Tomcat]
-2026-03-30 09:56:43.947 [main] INFO  o.s.b.a.logging.ConditionEvaluationReportLogger - 
-
-Error starting ApplicationContext. To display the condition evaluation report re-run your application with 'debug' enabled.
-2026-03-30 09:56:43.990 [main] ERROR o.s.b.diagnostics.LoggingFailureAnalysisReporter - 
-
-***************************
-APPLICATION FAILED TO START
-***************************
-
-Description:
-
-Parameter 0 of constructor in com.hms.dashboard.controller.DashboardController required a bean of type 'com.hms.dashboard.service.DashboardService' that could not be found.
-
-
-Action:
-
-Consider defining a bean of type 'com.hms.dashboard.service.DashboardService' in your configuration.
-
-2026-03-30 09:57:31.522 [main] INFO  com.hms.HospitalManagementSystemApplication - Starting HospitalManagementSystemApplication using Java 21.0.10 with PID 3192 (C:\Users\Piyush\Desktop\Project\backend\target\classes started by Piyush in C:\Users\Piyush\Desktop\Project\backend)
-2026-03-30 09:57:31.524 [main] DEBUG com.hms.HospitalManagementSystemApplication - Running with Spring Boot v3.3.4, Spring v6.1.13
-2026-03-30 09:57:31.533 [main] INFO  com.hms.HospitalManagementSystemApplication - No active profile set, falling back to 1 default profile: "mysql"
-2026-03-30 09:57:32.514 [main] INFO  o.s.d.r.config.RepositoryConfigurationDelegate - Bootstrapping Spring Data JPA repositories in DEFAULT mode.
-2026-03-30 09:57:32.697 [main] INFO  o.s.d.r.config.RepositoryConfigurationDelegate - Finished Spring Data repository scanning in 162 ms. Found 9 JPA repository interfaces.
-2026-03-30 09:57:33.975 [main] INFO  o.s.boot.web.embedded.tomcat.TomcatWebServer - Tomcat initialized with port 8080 (http)
-2026-03-30 09:57:33.989 [main] INFO  org.apache.catalina.core.StandardService - Starting service [Tomcat]
-2026-03-30 09:57:33.990 [main] INFO  org.apache.catalina.core.StandardEngine - Starting Servlet engine: [Apache Tomcat/10.1.30]
-2026-03-30 09:57:34.067 [main] INFO  o.a.c.core.ContainerBase.[Tomcat].[localhost].[/] - Initializing Spring embedded WebApplicationContext
-2026-03-30 09:57:34.068 [main] INFO  o.s.b.w.s.c.ServletWebServerApplicationContext - Root WebApplicationContext: initialization completed in 2424 ms
-2026-03-30 09:57:34.435 [main] INFO  org.hibernate.jpa.internal.util.LogHelper - HHH000204: Processing PersistenceUnitInfo [name: default]
-2026-03-30 09:57:34.498 [main] INFO  org.hibernate.Version - HHH000412: Hibernate ORM core version 6.5.3.Final
-2026-03-30 09:57:34.538 [main] INFO  o.hibernate.cache.internal.RegionFactoryInitiator - HHH000026: Second-level cache disabled
-2026-03-30 09:57:34.861 [main] INFO  o.s.o.j.persistenceunit.SpringPersistenceUnitInfo - No LoadTimeWeaver setup: ignoring JPA class transformer
-2026-03-30 09:57:34.898 [main] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Starting...
-2026-03-30 09:57:35.088 [main] INFO  com.zaxxer.hikari.pool.HikariPool - HikariPool-1 - Added connection com.mysql.cj.jdbc.ConnectionImpl@12e40e98
-2026-03-30 09:57:35.090 [main] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Start completed.
-2026-03-30 09:57:36.668 [main] INFO  o.h.e.t.jta.platform.internal.JtaPlatformInitiator - HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
-2026-03-30 09:57:37.105 [main] INFO  o.s.orm.jpa.LocalContainerEntityManagerFactoryBean - Initialized JPA EntityManagerFactory for persistence unit 'default'
-2026-03-30 09:57:37.705 [main] DEBUG com.hms.security.jwt.JwtAuthenticationFilter - Filter 'jwtAuthenticationFilter' configured for use
-2026-03-30 09:57:37.707 [main] DEBUG com.hms.security.filter.RateLimitFilter - Filter 'rateLimitFilter' configured for use
-2026-03-30 09:57:37.963 [main] INFO  o.s.s.c.a.a.c.InitializeUserDetailsBeanManagerConfigurer$InitializeUserDetailsManagerConfigurer - Global AuthenticationManager configured with UserDetailsService bean with name customUserDetailsService
-2026-03-30 09:57:38.006 [main] INFO  o.s.data.jpa.repository.query.QueryEnhancerFactory - Hibernate is in classpath; If applicable, HQL parser will be used.
-2026-03-30 09:57:38.574 [main] WARN  o.s.b.w.s.c.AnnotationConfigServletWebServerApplicationContext - Exception encountered during context initialization - cancelling refresh attempt: org.springframework.beans.factory.UnsatisfiedDependencyException: Error creating bean with name 'dashboardController' defined in file [C:\Users\Piyush\Desktop\Project\backend\target\classes\com\hms\dashboard\controller\DashboardController.class]: Unsatisfied dependency expressed through constructor parameter 0: No qualifying bean of type 'com.hms.dashboard.service.DashboardService' available: expected at least 1 bean which qualifies as autowire candidate. Dependency annotations: {}
-2026-03-30 09:57:38.575 [main] INFO  o.s.orm.jpa.LocalContainerEntityManagerFactoryBean - Closing JPA EntityManagerFactory for persistence unit 'default'
-2026-03-30 09:57:38.576 [main] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Shutdown initiated...
-2026-03-30 09:57:38.586 [main] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Shutdown completed.
-2026-03-30 09:57:38.589 [main] INFO  org.apache.catalina.core.StandardService - Stopping service [Tomcat]
-2026-03-30 09:57:38.609 [main] INFO  o.s.b.a.logging.ConditionEvaluationReportLogger - 
-
-Error starting ApplicationContext. To display the condition evaluation report re-run your application with 'debug' enabled.
-2026-03-30 09:57:38.639 [main] ERROR o.s.b.diagnostics.LoggingFailureAnalysisReporter - 
-
-***************************
-APPLICATION FAILED TO START
-***************************
-
-Description:
-
-Parameter 0 of constructor in com.hms.dashboard.controller.DashboardController required a bean of type 'com.hms.dashboard.service.DashboardService' that could not be found.
-
-
-Action:
-
-Consider defining a bean of type 'com.hms.dashboard.service.DashboardService' in your configuration.
-
-2026-03-30 09:58:35.598 [main] INFO  com.hms.HospitalManagementSystemApplication - Starting HospitalManagementSystemApplication using Java 21.0.10 with PID 19288 (C:\Users\Piyush\Desktop\Project\backend\target\classes started by Piyush in C:\Users\Piyush\Desktop\Project\backend)
-2026-03-30 09:58:35.609 [main] DEBUG com.hms.HospitalManagementSystemApplication - Running with Spring Boot v3.3.4, Spring v6.1.13
-2026-03-30 09:58:35.611 [main] INFO  com.hms.HospitalManagementSystemApplication - No active profile set, falling back to 1 default profile: "mysql"
-2026-03-30 09:58:36.726 [main] INFO  o.s.d.r.config.RepositoryConfigurationDelegate - Bootstrapping Spring Data JPA repositories in DEFAULT mode.
-2026-03-30 09:58:36.922 [main] INFO  o.s.d.r.config.RepositoryConfigurationDelegate - Finished Spring Data repository scanning in 178 ms. Found 9 JPA repository interfaces.
-2026-03-30 09:58:38.230 [main] INFO  o.s.boot.web.embedded.tomcat.TomcatWebServer - Tomcat initialized with port 8080 (http)
-2026-03-30 09:58:38.247 [main] INFO  org.apache.catalina.core.StandardService - Starting service [Tomcat]
-2026-03-30 09:58:38.248 [main] INFO  org.apache.catalina.core.StandardEngine - Starting Servlet engine: [Apache Tomcat/10.1.30]
-2026-03-30 09:58:38.322 [main] INFO  o.a.c.core.ContainerBase.[Tomcat].[localhost].[/] - Initializing Spring embedded WebApplicationContext
-2026-03-30 09:58:38.325 [main] INFO  o.s.b.w.s.c.ServletWebServerApplicationContext - Root WebApplicationContext: initialization completed in 2592 ms
-2026-03-30 09:58:38.711 [main] INFO  org.hibernate.jpa.internal.util.LogHelper - HHH000204: Processing PersistenceUnitInfo [name: default]
-2026-03-30 09:58:38.778 [main] INFO  org.hibernate.Version - HHH000412: Hibernate ORM core version 6.5.3.Final
-2026-03-30 09:58:38.829 [main] INFO  o.hibernate.cache.internal.RegionFactoryInitiator - HHH000026: Second-level cache disabled
-2026-03-30 09:58:39.248 [main] INFO  o.s.o.j.persistenceunit.SpringPersistenceUnitInfo - No LoadTimeWeaver setup: ignoring JPA class transformer
-2026-03-30 09:58:39.286 [main] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Starting...
-2026-03-30 09:58:39.475 [main] INFO  com.zaxxer.hikari.pool.HikariPool - HikariPool-1 - Added connection com.mysql.cj.jdbc.ConnectionImpl@434d001d
-2026-03-30 09:58:39.476 [main] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Start completed.
-2026-03-30 09:58:41.157 [main] INFO  o.h.e.t.jta.platform.internal.JtaPlatformInitiator - HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
-2026-03-30 09:58:41.591 [main] INFO  o.s.orm.jpa.LocalContainerEntityManagerFactoryBean - Initialized JPA EntityManagerFactory for persistence unit 'default'
-2026-03-30 09:58:42.218 [main] DEBUG com.hms.security.jwt.JwtAuthenticationFilter - Filter 'jwtAuthenticationFilter' configured for use
-2026-03-30 09:58:42.221 [main] DEBUG com.hms.security.filter.RateLimitFilter - Filter 'rateLimitFilter' configured for use
-2026-03-30 09:58:42.496 [main] INFO  o.s.s.c.a.a.c.InitializeUserDetailsBeanManagerConfigurer$InitializeUserDetailsManagerConfigurer - Global AuthenticationManager configured with UserDetailsService bean with name customUserDetailsService
-2026-03-30 09:58:42.544 [main] INFO  o.s.data.jpa.repository.query.QueryEnhancerFactory - Hibernate is in classpath; If applicable, HQL parser will be used.
-2026-03-30 09:58:43.596 [main] INFO  o.s.b.actuate.endpoint.web.EndpointLinksResolver - Exposing 3 endpoints beneath base path '/actuator'
-2026-03-30 09:58:43.638 [main] INFO  com.hms.security.config.SecurityConfig - Production Security configuration successfully initialized.
-2026-03-30 09:58:44.242 [main] INFO  o.s.boot.web.embedded.tomcat.TomcatWebServer - Tomcat started on port 8080 (http) with context path '/'
-2026-03-30 09:58:44.257 [main] INFO  com.hms.HospitalManagementSystemApplication - Started HospitalManagementSystemApplication in 9.479 seconds (process running for 10.142)
-2026-03-30 09:58:44.417 [main] INFO  com.hms.common.config.DataInitializer - Starting database column initialization...
-2026-03-30 09:58:44.477 [main] INFO  com.hms.common.config.DataInitializer - Database column initialization completed.
-2026-03-30 10:09:24.037 [http-nio-8080-exec-1] INFO  o.a.c.core.ContainerBase.[Tomcat].[localhost].[/] - Initializing Spring DispatcherServlet 'dispatcherServlet'
-2026-03-30 10:09:24.038 [http-nio-8080-exec-1] INFO  org.springframework.web.servlet.DispatcherServlet - Initializing Servlet 'dispatcherServlet'
-2026-03-30 10:09:24.041 [http-nio-8080-exec-1] INFO  org.springframework.web.servlet.DispatcherServlet - Completed initialization in 3 ms
-2026-03-30 10:09:26.080 [http-nio-8080-exec-7] INFO  com.hms.security.jwt.JwtAuthenticationFilter - Request authorized for user: admin with authorities: [ROLE_ADMIN]
-2026-03-30 10:09:26.082 [http-nio-8080-exec-6] INFO  com.hms.security.jwt.JwtAuthenticationFilter - Request authorized for user: admin with authorities: [ROLE_ADMIN]
-2026-03-30 10:09:26.090 [http-nio-8080-exec-9] INFO  com.hms.security.jwt.JwtAuthenticationFilter - Request authorized for user: admin with authorities: [ROLE_ADMIN]
-2026-03-30 10:12:52.606 [http-nio-8080-exec-2] INFO  com.hms.security.jwt.JwtAuthenticationFilter - Request authorized for user: admin with authorities: [ROLE_ADMIN]
-2026-03-30 10:14:23.970 [http-nio-8080-exec-7] INFO  com.hms.security.jwt.JwtAuthenticationFilter - Request authorized for user: admin with authorities: [ROLE_ADMIN]
-2026-03-30 10:14:24.101 [http-nio-8080-exec-9] INFO  com.hms.security.jwt.JwtAuthenticationFilter - Request authorized for user: admin with authorities: [ROLE_ADMIN]
-2026-03-30 10:14:26.734 [http-nio-8080-exec-8] INFO  com.hms.security.jwt.JwtAuthenticationFilter - Request authorized for user: admin with authorities: [ROLE_ADMIN]
-2026-03-30 10:14:26.734 [http-nio-8080-exec-6] INFO  com.hms.security.jwt.JwtAuthenticationFilter - Request authorized for user: admin with authorities: [ROLE_ADMIN]
-2026-03-30 10:14:26.734 [http-nio-8080-exec-5] INFO  com.hms.security.jwt.JwtAuthenticationFilter - Request authorized for user: admin with authorities: [ROLE_ADMIN]
-2026-03-30 10:15:38.570 [http-nio-8080-exec-4] INFO  com.hms.security.jwt.JwtAuthenticationFilter - Request authorized for user: admin with authorities: [ROLE_ADMIN]
-2026-03-30 10:15:38.570 [http-nio-8080-exec-3] INFO  com.hms.security.jwt.JwtAuthenticationFilter - Request authorized for user: admin with authorities: [ROLE_ADMIN]
-2026-03-30 10:15:38.574 [http-nio-8080-exec-7] INFO  com.hms.security.jwt.JwtAuthenticationFilter - Request authorized for user: admin with authorities: [ROLE_ADMIN]
-2026-03-30 10:15:41.778 [http-nio-8080-exec-6] INFO  com.hms.security.jwt.JwtAuthenticationFilter - Request authorized for user: admin with authorities: [ROLE_ADMIN]
-2026-03-30 10:15:41.780 [http-nio-8080-exec-9] INFO  com.hms.security.jwt.JwtAuthenticationFilter - Request authorized for user: admin with authorities: [ROLE_ADMIN]
-2026-03-30 10:15:41.781 [http-nio-8080-exec-5] INFO  com.hms.security.jwt.JwtAuthenticationFilter - Request authorized for user: admin with authorities: [ROLE_ADMIN]
-2026-03-30 10:16:52.619 [http-nio-8080-exec-3] INFO  com.hms.security.jwt.JwtAuthenticationFilter - Request authorized for user: admin with authorities: [ROLE_ADMIN]
-2026-03-30 10:16:52.619 [http-nio-8080-exec-7] INFO  com.hms.security.jwt.JwtAuthenticationFilter - Request authorized for user: admin with authorities: [ROLE_ADMIN]
-2026-03-30 10:17:09.722 [http-nio-8080-exec-5] INFO  com.hms.security.jwt.JwtAuthenticationFilter - Request authorized for user: admin with authorities: [ROLE_ADMIN]
-2026-03-30 10:17:25.572 [http-nio-8080-exec-8] INFO  com.hms.security.jwt.JwtAuthenticationFilter - Request authorized for user: admin with authorities: [ROLE_ADMIN]
-2026-03-30 10:17:25.572 [http-nio-8080-exec-6] INFO  com.hms.security.jwt.JwtAuthenticationFilter - Request authorized for user: admin with authorities: [ROLE_ADMIN]
-2026-03-30 10:17:27.202 [http-nio-8080-exec-2] INFO  com.hms.security.jwt.JwtAuthenticationFilter - Request authorized for user: admin with authorities: [ROLE_ADMIN]
-2026-03-30 10:17:27.267 [http-nio-8080-exec-4] INFO  com.hms.security.jwt.JwtAuthenticationFilter - Request authorized for user: admin with authorities: [ROLE_ADMIN]
-2026-03-30 10:17:28.190 [http-nio-8080-exec-7] INFO  com.hms.security.jwt.JwtAuthenticationFilter - Request authorized for user: admin with authorities: [ROLE_ADMIN]
-2026-03-30 10:17:28.190 [http-nio-8080-exec-3] INFO  com.hms.security.jwt.JwtAuthenticationFilter - Request authorized for user: admin with authorities: [ROLE_ADMIN]
-2026-03-30 10:17:31.521 [http-nio-8080-exec-5] INFO  com.hms.security.jwt.JwtAuthenticationFilter - Request authorized for user: admin with authorities: [ROLE_ADMIN]
-2026-03-30 10:17:31.525 [http-nio-8080-exec-8] INFO  com.hms.security.jwt.JwtAuthenticationFilter - Request authorized for user: admin with authorities: [ROLE_ADMIN]
-2026-03-30 10:17:40.019 [http-nio-8080-exec-6] INFO  com.hms.security.jwt.JwtAuthenticationFilter - Request authorized for user: admin with authorities: [ROLE_ADMIN]
-2026-03-30 10:17:40.020 [http-nio-8080-exec-10] INFO  com.hms.security.jwt.JwtAuthenticationFilter - Request authorized for user: admin with authorities: [ROLE_ADMIN]
-2026-03-30 10:17:40.019 [http-nio-8080-exec-1] INFO  com.hms.security.jwt.JwtAuthenticationFilter - Request authorized for user: admin with authorities: [ROLE_ADMIN]
-2026-03-30 10:19:44.543 [http-nio-8080-exec-3] INFO  com.hms.security.jwt.JwtAuthenticationFilter - Request authorized for user: admin with authorities: [ROLE_ADMIN]
-2026-03-30 10:21:02.139 [SpringApplicationShutdownHook] INFO  o.s.orm.jpa.LocalContainerEntityManagerFactoryBean - Closing JPA EntityManagerFactory for persistence unit 'default'
-2026-03-30 10:21:02.141 [SpringApplicationShutdownHook] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Shutdown initiated...
-2026-03-30 10:21:02.152 [SpringApplicationShutdownHook] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Shutdown completed.
-2026-03-30 10:21:13.524 [main] INFO  com.hms.HospitalManagementSystemApplication - Starting HospitalManagementSystemApplication using Java 21.0.10 with PID 17652 (C:\Users\Piyush\Desktop\Project\backend\target\classes started by Piyush in C:\Users\Piyush\Desktop\Project\backend)
-2026-03-30 10:21:13.527 [main] DEBUG com.hms.HospitalManagementSystemApplication - Running with Spring Boot v3.3.4, Spring v6.1.13
-2026-03-30 10:21:13.528 [main] INFO  com.hms.HospitalManagementSystemApplication - No active profile set, falling back to 1 default profile: "mysql"
-2026-03-30 10:21:14.544 [main] INFO  o.s.d.r.config.RepositoryConfigurationDelegate - Bootstrapping Spring Data JPA repositories in DEFAULT mode.
-2026-03-30 10:21:14.718 [main] INFO  o.s.d.r.config.RepositoryConfigurationDelegate - Finished Spring Data repository scanning in 164 ms. Found 9 JPA repository interfaces.
-2026-03-30 10:21:15.998 [main] INFO  o.s.boot.web.embedded.tomcat.TomcatWebServer - Tomcat initialized with port 8080 (http)
-2026-03-30 10:21:16.018 [main] INFO  org.apache.catalina.core.StandardService - Starting service [Tomcat]
-2026-03-30 10:21:16.018 [main] INFO  org.apache.catalina.core.StandardEngine - Starting Servlet engine: [Apache Tomcat/10.1.30]
-2026-03-30 10:21:16.114 [main] INFO  o.a.c.core.ContainerBase.[Tomcat].[localhost].[/] - Initializing Spring embedded WebApplicationContext
-2026-03-30 10:21:16.116 [main] INFO  o.s.b.w.s.c.ServletWebServerApplicationContext - Root WebApplicationContext: initialization completed in 2451 ms
-2026-03-30 10:21:16.538 [main] INFO  org.hibernate.jpa.internal.util.LogHelper - HHH000204: Processing PersistenceUnitInfo [name: default]
-2026-03-30 10:21:16.601 [main] INFO  org.hibernate.Version - HHH000412: Hibernate ORM core version 6.5.3.Final
-2026-03-30 10:21:16.640 [main] INFO  o.hibernate.cache.internal.RegionFactoryInitiator - HHH000026: Second-level cache disabled
-2026-03-30 10:21:16.957 [main] INFO  o.s.o.j.persistenceunit.SpringPersistenceUnitInfo - No LoadTimeWeaver setup: ignoring JPA class transformer
-2026-03-30 10:21:16.990 [main] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Starting...
-2026-03-30 10:21:17.153 [main] INFO  com.zaxxer.hikari.pool.HikariPool - HikariPool-1 - Added connection com.mysql.cj.jdbc.ConnectionImpl@7d70ba18
-2026-03-30 10:21:17.155 [main] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Start completed.
-2026-03-30 10:21:18.773 [main] INFO  o.h.e.t.jta.platform.internal.JtaPlatformInitiator - HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
-2026-03-30 10:21:19.283 [main] INFO  o.s.orm.jpa.LocalContainerEntityManagerFactoryBean - Initialized JPA EntityManagerFactory for persistence unit 'default'
-2026-03-30 10:21:19.910 [main] DEBUG com.hms.security.jwt.JwtAuthenticationFilter - Filter 'jwtAuthenticationFilter' configured for use
-2026-03-30 10:21:19.912 [main] DEBUG com.hms.security.filter.RateLimitFilter - Filter 'rateLimitFilter' configured for use
-2026-03-30 10:21:20.175 [main] INFO  o.s.s.c.a.a.c.InitializeUserDetailsBeanManagerConfigurer$InitializeUserDetailsManagerConfigurer - Global AuthenticationManager configured with UserDetailsService bean with name customUserDetailsService
-2026-03-30 10:21:20.220 [main] INFO  o.s.data.jpa.repository.query.QueryEnhancerFactory - Hibernate is in classpath; If applicable, HQL parser will be used.
-2026-03-30 10:21:21.396 [main] INFO  o.s.b.actuate.endpoint.web.EndpointLinksResolver - Exposing 3 endpoints beneath base path '/actuator'
-2026-03-30 10:21:21.431 [main] INFO  com.hms.security.config.SecurityConfig - Production Security configuration successfully initialized.
-2026-03-30 10:21:21.935 [main] INFO  o.s.boot.web.embedded.tomcat.TomcatWebServer - Tomcat started on port 8080 (http) with context path '/'
-2026-03-30 10:21:21.948 [main] INFO  com.hms.HospitalManagementSystemApplication - Started HospitalManagementSystemApplication in 9.182 seconds (process running for 9.73)
-2026-03-30 10:21:22.058 [main] INFO  com.hms.common.config.DataInitializer - Starting database column initialization...
-2026-03-30 10:21:22.107 [main] INFO  com.hms.common.config.DataInitializer - Database column initialization completed.
-2026-03-30 11:06:25.537 [http-nio-8080-exec-1] INFO  o.a.c.core.ContainerBase.[Tomcat].[localhost].[/] - Initializing Spring DispatcherServlet 'dispatcherServlet'
-2026-03-30 11:06:25.568 [http-nio-8080-exec-1] INFO  org.springframework.web.servlet.DispatcherServlet - Initializing Servlet 'dispatcherServlet'
-2026-03-30 11:06:25.713 [http-nio-8080-exec-1] INFO  org.springframework.web.servlet.DispatcherServlet - Completed initialization in 141 ms
-2026-03-30 11:16:58.383 [http-nio-8080-exec-10] INFO  com.hms.security.jwt.JwtAuthenticationFilter - Request authorized for user: admin with authorities: [ROLE_ADMIN]
-2026-03-30 11:16:58.390 [http-nio-8080-exec-4] INFO  com.hms.security.jwt.JwtAuthenticationFilter - Request authorized for user: admin with authorities: [ROLE_ADMIN]
-2026-03-30 11:16:58.393 [http-nio-8080-exec-9] INFO  com.hms.security.jwt.JwtAuthenticationFilter - Request authorized for user: admin with authorities: [ROLE_ADMIN]
-2026-03-30 11:18:11.365 [http-nio-8080-exec-5] INFO  com.hms.security.jwt.JwtAuthenticationFilter - Request authorized for user: admin with authorities: [ROLE_ADMIN]
-2026-03-30 11:25:01.247 [http-nio-8080-exec-10] INFO  com.hms.security.jwt.JwtAuthenticationFilter - Request authorized for user: admin with authorities: [ROLE_ADMIN]
-2026-03-30 11:25:01.395 [http-nio-8080-exec-9] INFO  com.hms.security.jwt.JwtAuthenticationFilter - Request authorized for user: admin with authorities: [ROLE_ADMIN]
-2026-03-30 11:25:03.348 [http-nio-8080-exec-2] INFO  com.hms.security.jwt.JwtAuthenticationFilter - Request authorized for user: admin with authorities: [ROLE_ADMIN]
-2026-03-30 11:25:03.353 [http-nio-8080-exec-7] INFO  com.hms.security.jwt.JwtAuthenticationFilter - Request authorized for user: admin with authorities: [ROLE_ADMIN]
-2026-03-30 11:25:04.619 [http-nio-8080-exec-5] INFO  com.hms.security.jwt.JwtAuthenticationFilter - Request authorized for user: admin with authorities: [ROLE_ADMIN]
-2026-03-30 11:25:04.665 [http-nio-8080-exec-6] INFO  com.hms.security.jwt.JwtAuthenticationFilter - Request authorized for user: admin with authorities: [ROLE_ADMIN]
-2026-03-30 11:25:08.098 [http-nio-8080-exec-4] INFO  com.hms.security.jwt.JwtAuthenticationFilter - Request authorized for user: admin with authorities: [ROLE_ADMIN]
-2026-03-30 11:25:08.098 [http-nio-8080-exec-8] INFO  com.hms.security.jwt.JwtAuthenticationFilter - Request authorized for user: admin with authorities: [ROLE_ADMIN]
-2026-03-30 11:25:14.831 [http-nio-8080-exec-9] INFO  com.hms.security.jwt.JwtAuthenticationFilter - Request authorized for user: admin with authorities: [ROLE_ADMIN]
-2026-03-30 11:25:45.623 [http-nio-8080-exec-1] INFO  com.hms.security.jwt.JwtAuthenticationFilter - Request authorized for user: admin with authorities: [ROLE_ADMIN]
-2026-03-30 11:25:49.567 [http-nio-8080-exec-7] INFO  com.hms.security.jwt.JwtAuthenticationFilter - Request authorized for user: admin with authorities: [ROLE_ADMIN]
-2026-03-30 11:25:51.397 [http-nio-8080-exec-5] INFO  com.hms.security.jwt.JwtAuthenticationFilter - Request authorized for user: admin with authorities: [ROLE_ADMIN]
-2026-03-30 11:32:39.130 [SpringApplicationShutdownHook] INFO  o.s.orm.jpa.LocalContainerEntityManagerFactoryBean - Closing JPA EntityManagerFactory for persistence unit 'default'
-2026-03-30 11:32:39.150 [SpringApplicationShutdownHook] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Shutdown initiated...
-2026-03-30 11:32:39.160 [SpringApplicationShutdownHook] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Shutdown completed.
-2026-03-30 11:34:07.146 [main] INFO  com.hms.HospitalManagementSystemApplication - Starting HospitalManagementSystemApplication using Java 21.0.10 with PID 11280 (C:\Users\Piyush\Desktop\Project\backend\target\classes started by Piyush in C:\Users\Piyush\Desktop\Project\backend)
-2026-03-30 11:34:07.155 [main] DEBUG com.hms.HospitalManagementSystemApplication - Running with Spring Boot v3.3.4, Spring v6.1.13
-2026-03-30 11:34:07.157 [main] INFO  com.hms.HospitalManagementSystemApplication - No active profile set, falling back to 1 default profile: "mysql"
-2026-03-30 11:34:08.334 [main] INFO  o.s.d.r.config.RepositoryConfigurationDelegate - Bootstrapping Spring Data JPA repositories in DEFAULT mode.
-2026-03-30 11:34:08.522 [main] INFO  o.s.d.r.config.RepositoryConfigurationDelegate - Finished Spring Data repository scanning in 179 ms. Found 9 JPA repository interfaces.
-2026-03-30 11:34:09.821 [main] INFO  o.s.boot.web.embedded.tomcat.TomcatWebServer - Tomcat initialized with port 8080 (http)
-2026-03-30 11:34:09.841 [main] INFO  org.apache.catalina.core.StandardService - Starting service [Tomcat]
-2026-03-30 11:34:09.842 [main] INFO  org.apache.catalina.core.StandardEngine - Starting Servlet engine: [Apache Tomcat/10.1.30]
-2026-03-30 11:34:09.927 [main] INFO  o.a.c.core.ContainerBase.[Tomcat].[localhost].[/] - Initializing Spring embedded WebApplicationContext
-2026-03-30 11:34:09.929 [main] INFO  o.s.b.w.s.c.ServletWebServerApplicationContext - Root WebApplicationContext: initialization completed in 2661 ms
-2026-03-30 11:34:10.322 [main] INFO  org.hibernate.jpa.internal.util.LogHelper - HHH000204: Processing PersistenceUnitInfo [name: default]
-2026-03-30 11:34:10.387 [main] INFO  org.hibernate.Version - HHH000412: Hibernate ORM core version 6.5.3.Final
-2026-03-30 11:34:10.430 [main] INFO  o.hibernate.cache.internal.RegionFactoryInitiator - HHH000026: Second-level cache disabled
-2026-03-30 11:34:10.765 [main] INFO  o.s.o.j.persistenceunit.SpringPersistenceUnitInfo - No LoadTimeWeaver setup: ignoring JPA class transformer
-2026-03-30 11:34:10.813 [main] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Starting...
-2026-03-30 11:34:10.986 [main] INFO  com.zaxxer.hikari.pool.HikariPool - HikariPool-1 - Added connection com.mysql.cj.jdbc.ConnectionImpl@5db04bd2
-2026-03-30 11:34:10.988 [main] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Start completed.
-2026-03-30 11:34:12.723 [main] INFO  o.h.e.t.jta.platform.internal.JtaPlatformInitiator - HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
-2026-03-30 11:34:13.244 [main] INFO  o.s.orm.jpa.LocalContainerEntityManagerFactoryBean - Initialized JPA EntityManagerFactory for persistence unit 'default'
-2026-03-30 11:34:13.889 [main] DEBUG com.hms.security.jwt.JwtAuthenticationFilter - Filter 'jwtAuthenticationFilter' configured for use
-2026-03-30 11:34:14.153 [main] INFO  o.s.s.c.a.a.c.InitializeUserDetailsBeanManagerConfigurer$InitializeUserDetailsManagerConfigurer - Global AuthenticationManager configured with UserDetailsService bean with name customUserDetailsService
-2026-03-30 11:34:14.199 [main] INFO  o.s.data.jpa.repository.query.QueryEnhancerFactory - Hibernate is in classpath; If applicable, HQL parser will be used.
-2026-03-30 11:34:15.337 [main] INFO  o.s.b.actuate.endpoint.web.EndpointLinksResolver - Exposing 3 endpoints beneath base path '/actuator'
-2026-03-30 11:34:15.376 [main] INFO  com.hms.security.config.SecurityConfig - Production Security configuration successfully initialized.
-2026-03-30 11:34:15.956 [main] INFO  o.s.boot.web.embedded.tomcat.TomcatWebServer - Tomcat started on port 8080 (http) with context path '/'
-2026-03-30 11:34:15.967 [main] INFO  com.hms.HospitalManagementSystemApplication - Started HospitalManagementSystemApplication in 9.611 seconds (process running for 10.173)
-2026-03-30 11:34:16.094 [main] INFO  com.hms.common.config.DataInitializer - Starting database column initialization...
-2026-03-30 11:34:16.145 [main] INFO  com.hms.common.config.DataInitializer - Database column initialization completed.
-2026-03-30 12:00:19.903 [http-nio-8080-exec-2] INFO  o.a.c.core.ContainerBase.[Tomcat].[localhost].[/] - Initializing Spring DispatcherServlet 'dispatcherServlet'
-2026-03-30 12:00:19.903 [http-nio-8080-exec-2] INFO  org.springframework.web.servlet.DispatcherServlet - Initializing Servlet 'dispatcherServlet'
-2026-03-30 12:00:19.906 [http-nio-8080-exec-2] INFO  org.springframework.web.servlet.DispatcherServlet - Completed initialization in 3 ms
-2026-03-30 12:00:20.194 [http-nio-8080-exec-2] INFO  com.hms.security.jwt.JwtAuthenticationFilter - Request authorized for user: admin with authorities: [ROLE_ADMIN]
-2026-03-30 12:00:20.194 [http-nio-8080-exec-1] INFO  com.hms.security.jwt.JwtAuthenticationFilter - Request authorized for user: admin with authorities: [ROLE_ADMIN]
-2026-03-30 12:00:20.194 [http-nio-8080-exec-3] INFO  com.hms.security.jwt.JwtAuthenticationFilter - Request authorized for user: admin with authorities: [ROLE_ADMIN]
-2026-03-30 12:05:39.341 [http-nio-8080-exec-8] INFO  com.hms.security.jwt.JwtAuthenticationFilter - Request authorized for user: admin with authorities: [ROLE_ADMIN]
-2026-03-30 12:23:54.769 [HikariPool-1 housekeeper] WARN  com.zaxxer.hikari.pool.HikariPool - HikariPool-1 - Thread starvation or clock leap detected (housekeeper delta=1m12s880ms547µs100ns).
-2026-03-30 13:16:19.748 [HikariPool-1 housekeeper] WARN  com.zaxxer.hikari.pool.HikariPool - HikariPool-1 - Thread starvation or clock leap detected (housekeeper delta=54s261ms124µs700ns).
-2026-03-30 13:30:00.527 [HikariPool-1 housekeeper] WARN  com.zaxxer.hikari.pool.HikariPool - HikariPool-1 - Thread starvation or clock leap detected (housekeeper delta=2m10s718ms988µs100ns).
-2026-03-30 13:32:02.726 [HikariPool-1 housekeeper] WARN  com.zaxxer.hikari.pool.HikariPool - HikariPool-1 - Thread starvation or clock leap detected (housekeeper delta=1m32s248ms509µs800ns).
-2026-03-30 13:42:34.537 [http-nio-8080-exec-5] INFO  com.hms.security.jwt.JwtAuthenticationFilter - Request authorized for user: admin with authorities: [ROLE_ADMIN]
-2026-03-30 13:42:34.539 [http-nio-8080-exec-6] INFO  com.hms.security.jwt.JwtAuthenticationFilter - Request authorized for user: admin with authorities: [ROLE_ADMIN]
-2026-03-30 13:42:34.539 [http-nio-8080-exec-4] INFO  com.hms.security.jwt.JwtAuthenticationFilter - Request authorized for user: admin with authorities: [ROLE_ADMIN]
-2026-03-30 13:44:39.762 [http-nio-8080-exec-1] INFO  com.hms.security.jwt.JwtAuthenticationFilter - Request authorized for user: admin with authorities: [ROLE_ADMIN]
-2026-03-30 13:44:46.863 [http-nio-8080-exec-5] INFO  com.hms.security.jwt.JwtAuthenticationFilter - Request authorized for user: admin with authorities: [ROLE_ADMIN]
-2026-03-30 13:44:47.012 [http-nio-8080-exec-6] INFO  com.hms.security.jwt.JwtAuthenticationFilter - Request authorized for user: admin with authorities: [ROLE_ADMIN]
-2026-03-30 13:44:51.061 [http-nio-8080-exec-7] INFO  com.hms.security.jwt.JwtAuthenticationFilter - Request authorized for user: admin with authorities: [ROLE_ADMIN]
-2026-03-30 13:44:51.065 [http-nio-8080-exec-9] INFO  com.hms.security.jwt.JwtAuthenticationFilter - Request authorized for user: admin with authorities: [ROLE_ADMIN]
-2026-03-30 13:44:57.193 [http-nio-8080-exec-1] INFO  com.hms.security.jwt.JwtAuthenticationFilter - Request authorized for user: admin with authorities: [ROLE_ADMIN]
-2026-03-30 13:45:33.601 [http-nio-8080-exec-2] INFO  com.hms.security.jwt.JwtAuthenticationFilter - Request authorized for user: admin with authorities: [ROLE_ADMIN]
-2026-03-30 13:45:36.928 [http-nio-8080-exec-6] INFO  com.hms.security.jwt.JwtAuthenticationFilter - Request authorized for user: admin with authorities: [ROLE_ADMIN]
-2026-03-30 13:45:41.905 [http-nio-8080-exec-8] INFO  com.hms.security.jwt.JwtAuthenticationFilter - Request authorized for user: admin with authorities: [ROLE_ADMIN]
-2026-03-30 13:45:56.618 [http-nio-8080-exec-10] INFO  com.hms.security.jwt.JwtAuthenticationFilter - Request authorized for user: admin with authorities: [ROLE_ADMIN]
-2026-03-30 13:46:05.085 [http-nio-8080-exec-2] INFO  com.hms.security.jwt.JwtAuthenticationFilter - Request authorized for user: admin with authorities: [ROLE_ADMIN]
-2026-03-30 13:46:05.085 [http-nio-8080-exec-5] INFO  com.hms.security.jwt.JwtAuthenticationFilter - Request authorized for user: admin with authorities: [ROLE_ADMIN]
-2026-03-30 13:46:15.797 [http-nio-8080-exec-4] INFO  com.hms.security.jwt.JwtAuthenticationFilter - Request authorized for user: admin with authorities: [ROLE_ADMIN]
-2026-03-30 13:46:22.393 [http-nio-8080-exec-7] INFO  com.hms.security.jwt.JwtAuthenticationFilter - Request authorized for user: admin with authorities: [ROLE_ADMIN]
-2026-03-30 13:46:43.366 [http-nio-8080-exec-10] INFO  com.hms.security.jwt.JwtAuthenticationFilter - Request authorized for user: admin with authorities: [ROLE_ADMIN]
-2026-03-30 13:46:43.366 [http-nio-8080-exec-9] INFO  com.hms.security.jwt.JwtAuthenticationFilter - Request authorized for user: admin with authorities: [ROLE_ADMIN]
-2026-03-30 13:46:43.366 [http-nio-8080-exec-1] INFO  com.hms.security.jwt.JwtAuthenticationFilter - Request authorized for user: admin with authorities: [ROLE_ADMIN]
-2026-03-30 14:04:03.969 [HikariPool-1 housekeeper] WARN  com.zaxxer.hikari.pool.HikariPool - HikariPool-1 - Thread starvation or clock leap detected (housekeeper delta=47s639ms220µs200ns).
-2026-03-30 14:42:15.601 [HikariPool-1 housekeeper] WARN  com.zaxxer.hikari.pool.HikariPool - HikariPool-1 - Thread starvation or clock leap detected (housekeeper delta=28m11s491ms40µs100ns).
-2026-03-30 15:06:48.471 [http-nio-8080-exec-8] WARN  com.hms.security.config.SecurityConfig - Access unauthorized to /api/v1/appointments - Full authentication is required to access this resource
-2026-03-30 15:06:48.471 [http-nio-8080-exec-4] WARN  com.hms.security.config.SecurityConfig - Access unauthorized to /api/v1/dashboard/summary - Full authentication is required to access this resource
-2026-03-30 15:06:48.554 [http-nio-8080-exec-8] WARN  com.hms.common.exception.GlobalExceptionHandler - Authentication failed: Full authentication is required to access this resource
-2026-03-30 15:06:48.554 [http-nio-8080-exec-4] WARN  com.hms.common.exception.GlobalExceptionHandler - Authentication failed: Full authentication is required to access this resource
-2026-03-30 15:06:48.686 [http-nio-8080-exec-1] WARN  com.hms.security.config.SecurityConfig - Access unauthorized to /api/v1/auth/logout - Full authentication is required to access this resource
-2026-03-30 15:06:48.687 [http-nio-8080-exec-1] WARN  com.hms.common.exception.GlobalExceptionHandler - Authentication failed: Full authentication is required to access this resource
-2026-03-30 15:06:48.691 [http-nio-8080-exec-10] WARN  com.hms.security.config.SecurityConfig - Access unauthorized to /api/v1/auth/logout - Full authentication is required to access this resource
-2026-03-30 15:06:48.693 [http-nio-8080-exec-10] WARN  com.hms.common.exception.GlobalExceptionHandler - Authentication failed: Full authentication is required to access this resource
-2026-03-30 15:06:48.719 [http-nio-8080-exec-3] WARN  com.hms.security.config.SecurityConfig - Access unauthorized to /api/v1/auth/logout - Full authentication is required to access this resource
-2026-03-30 15:06:48.724 [http-nio-8080-exec-3] WARN  com.hms.common.exception.GlobalExceptionHandler - Authentication failed: Full authentication is required to access this resource
-2026-03-30 15:07:08.286 [SpringApplicationShutdownHook] INFO  o.s.orm.jpa.LocalContainerEntityManagerFactoryBean - Closing JPA EntityManagerFactory for persistence unit 'default'
-2026-03-30 15:07:08.376 [SpringApplicationShutdownHook] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Shutdown initiated...
-2026-03-30 15:07:08.401 [SpringApplicationShutdownHook] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Shutdown completed.
-2026-03-30 15:21:13.641 [main] INFO  com.hms.HospitalManagementSystemApplication - Starting HospitalManagementSystemApplication using Java 21.0.10 with PID 7356 (C:\Users\Piyush\Desktop\Project\backend\target\classes started by Piyush in C:\Users\Piyush\Desktop\Project\backend)
-2026-03-30 15:21:13.643 [main] DEBUG com.hms.HospitalManagementSystemApplication - Running with Spring Boot v3.3.4, Spring v6.1.13
-2026-03-30 15:21:13.652 [main] INFO  com.hms.HospitalManagementSystemApplication - No active profile set, falling back to 1 default profile: "mysql"
-2026-03-30 15:21:14.955 [main] INFO  o.s.d.r.config.RepositoryConfigurationDelegate - Bootstrapping Spring Data JPA repositories in DEFAULT mode.
-2026-03-30 15:21:15.142 [main] INFO  o.s.d.r.config.RepositoryConfigurationDelegate - Finished Spring Data repository scanning in 177 ms. Found 9 JPA repository interfaces.
-2026-03-30 15:21:16.647 [main] INFO  o.s.boot.web.embedded.tomcat.TomcatWebServer - Tomcat initialized with port 8080 (http)
-2026-03-30 15:21:16.667 [main] INFO  org.apache.catalina.core.StandardService - Starting service [Tomcat]
-2026-03-30 15:21:16.668 [main] INFO  org.apache.catalina.core.StandardEngine - Starting Servlet engine: [Apache Tomcat/10.1.30]
-2026-03-30 15:21:16.753 [main] INFO  o.a.c.core.ContainerBase.[Tomcat].[localhost].[/] - Initializing Spring embedded WebApplicationContext
-2026-03-30 15:21:16.754 [main] INFO  o.s.b.w.s.c.ServletWebServerApplicationContext - Root WebApplicationContext: initialization completed in 2972 ms
-2026-03-30 15:21:17.192 [main] INFO  org.hibernate.jpa.internal.util.LogHelper - HHH000204: Processing PersistenceUnitInfo [name: default]
-2026-03-30 15:21:17.267 [main] INFO  org.hibernate.Version - HHH000412: Hibernate ORM core version 6.5.3.Final
-2026-03-30 15:21:17.316 [main] INFO  o.hibernate.cache.internal.RegionFactoryInitiator - HHH000026: Second-level cache disabled
-2026-03-30 15:21:17.706 [main] INFO  o.s.o.j.persistenceunit.SpringPersistenceUnitInfo - No LoadTimeWeaver setup: ignoring JPA class transformer
-2026-03-30 15:21:17.743 [main] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Starting...
-2026-03-30 15:21:17.942 [main] INFO  com.zaxxer.hikari.pool.HikariPool - HikariPool-1 - Added connection com.mysql.cj.jdbc.ConnectionImpl@798b36fd
-2026-03-30 15:21:17.946 [main] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Start completed.
-2026-03-30 15:21:19.888 [main] INFO  o.h.e.t.jta.platform.internal.JtaPlatformInitiator - HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
-2026-03-30 15:21:20.688 [main] INFO  o.s.orm.jpa.LocalContainerEntityManagerFactoryBean - Initialized JPA EntityManagerFactory for persistence unit 'default'
-2026-03-30 15:21:21.471 [main] DEBUG com.hms.security.jwt.JwtAuthenticationFilter - Filter 'jwtAuthenticationFilter' configured for use
-2026-03-30 15:21:21.798 [main] INFO  o.s.s.c.a.a.c.InitializeUserDetailsBeanManagerConfigurer$InitializeUserDetailsManagerConfigurer - Global AuthenticationManager configured with UserDetailsService bean with name customUserDetailsService
-2026-03-30 15:21:21.849 [main] INFO  o.s.data.jpa.repository.query.QueryEnhancerFactory - Hibernate is in classpath; If applicable, HQL parser will be used.
-2026-03-30 15:21:23.064 [main] INFO  o.s.b.actuate.endpoint.web.EndpointLinksResolver - Exposing 3 endpoints beneath base path '/actuator'
-2026-03-30 15:21:23.114 [main] INFO  com.hms.security.config.SecurityConfig - Production Security configuration successfully initialized.
-2026-03-30 15:21:23.735 [main] INFO  o.s.boot.web.embedded.tomcat.TomcatWebServer - Tomcat started on port 8080 (http) with context path '/'
-2026-03-30 15:21:23.750 [main] INFO  com.hms.HospitalManagementSystemApplication - Started HospitalManagementSystemApplication in 10.921 seconds (process running for 11.492)
-2026-03-30 15:21:23.854 [main] INFO  com.hms.common.config.DataInitializer - Starting database column initialization...
-2026-03-30 15:21:23.913 [main] INFO  com.hms.common.config.DataInitializer - Database column initialization completed.
-2026-03-30 15:22:47.687 [http-nio-8080-exec-1] INFO  o.a.c.core.ContainerBase.[Tomcat].[localhost].[/] - Initializing Spring DispatcherServlet 'dispatcherServlet'
-2026-03-30 15:22:47.697 [http-nio-8080-exec-1] INFO  org.springframework.web.servlet.DispatcherServlet - Initializing Servlet 'dispatcherServlet'
-2026-03-30 15:22:47.712 [http-nio-8080-exec-1] INFO  org.springframework.web.servlet.DispatcherServlet - Completed initialization in 9 ms
-2026-03-30 15:22:51.182 [http-nio-8080-exec-2] WARN  com.hms.common.exception.GlobalExceptionHandler - Invalid credentials: Invalid username or password
-2026-03-30 15:33:18.762 [SpringApplicationShutdownHook] INFO  o.s.orm.jpa.LocalContainerEntityManagerFactoryBean - Closing JPA EntityManagerFactory for persistence unit 'default'
-2026-03-30 15:33:18.771 [SpringApplicationShutdownHook] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Shutdown initiated...
-2026-03-30 15:33:18.812 [SpringApplicationShutdownHook] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Shutdown completed.
-2026-03-30 15:46:26.824 [main] INFO  com.hms.HospitalManagementSystemApplication - Starting HospitalManagementSystemApplication using Java 21.0.10 with PID 24132 (C:\Users\Piyush\Desktop\Project\backend\target\classes started by Piyush in C:\Users\Piyush\Desktop\Project\backend)
-2026-03-30 15:46:26.827 [main] DEBUG com.hms.HospitalManagementSystemApplication - Running with Spring Boot v3.3.4, Spring v6.1.13
-2026-03-30 15:46:26.829 [main] INFO  com.hms.HospitalManagementSystemApplication - No active profile set, falling back to 1 default profile: "mysql"
-2026-03-30 15:46:28.206 [main] INFO  o.s.d.r.config.RepositoryConfigurationDelegate - Bootstrapping Spring Data JPA repositories in DEFAULT mode.
-2026-03-30 15:46:28.432 [main] INFO  o.s.d.r.config.RepositoryConfigurationDelegate - Finished Spring Data repository scanning in 215 ms. Found 9 JPA repository interfaces.
-2026-03-30 15:46:30.075 [main] INFO  o.s.boot.web.embedded.tomcat.TomcatWebServer - Tomcat initialized with port 8080 (http)
-2026-03-30 15:46:30.098 [main] INFO  org.apache.catalina.core.StandardService - Starting service [Tomcat]
-2026-03-30 15:46:30.098 [main] INFO  org.apache.catalina.core.StandardEngine - Starting Servlet engine: [Apache Tomcat/10.1.30]
-2026-03-30 15:46:30.207 [main] INFO  o.a.c.core.ContainerBase.[Tomcat].[localhost].[/] - Initializing Spring embedded WebApplicationContext
-2026-03-30 15:46:30.209 [main] INFO  o.s.b.w.s.c.ServletWebServerApplicationContext - Root WebApplicationContext: initialization completed in 3262 ms
-2026-03-30 15:46:30.726 [main] INFO  org.hibernate.jpa.internal.util.LogHelper - HHH000204: Processing PersistenceUnitInfo [name: default]
-2026-03-30 15:46:30.815 [main] INFO  org.hibernate.Version - HHH000412: Hibernate ORM core version 6.5.3.Final
-2026-03-30 15:46:30.868 [main] INFO  o.hibernate.cache.internal.RegionFactoryInitiator - HHH000026: Second-level cache disabled
-2026-03-30 15:46:31.292 [main] INFO  o.s.o.j.persistenceunit.SpringPersistenceUnitInfo - No LoadTimeWeaver setup: ignoring JPA class transformer
-2026-03-30 15:46:31.351 [main] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Starting...
-2026-03-30 15:46:31.567 [main] INFO  com.zaxxer.hikari.pool.HikariPool - HikariPool-1 - Added connection com.mysql.cj.jdbc.ConnectionImpl@61becbcf
-2026-03-30 15:46:31.570 [main] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Start completed.
-2026-03-30 15:46:33.717 [main] INFO  o.h.e.t.jta.platform.internal.JtaPlatformInitiator - HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
-2026-03-30 15:46:34.236 [main] INFO  o.s.orm.jpa.LocalContainerEntityManagerFactoryBean - Initialized JPA EntityManagerFactory for persistence unit 'default'
-2026-03-30 15:46:35.056 [main] DEBUG com.hms.security.jwt.JwtAuthenticationFilter - Filter 'jwtAuthenticationFilter' configured for use
-2026-03-30 15:46:35.391 [main] INFO  o.s.s.c.a.a.c.InitializeUserDetailsBeanManagerConfigurer$InitializeUserDetailsManagerConfigurer - Global AuthenticationManager configured with UserDetailsService bean with name customUserDetailsService
-2026-03-30 15:46:35.452 [main] INFO  o.s.data.jpa.repository.query.QueryEnhancerFactory - Hibernate is in classpath; If applicable, HQL parser will be used.
-2026-03-30 15:46:36.811 [main] INFO  o.s.b.actuate.endpoint.web.EndpointLinksResolver - Exposing 3 endpoints beneath base path '/actuator'
-2026-03-30 15:46:36.860 [main] INFO  com.hms.security.config.SecurityConfig - Production Security configuration successfully initialized.
-2026-03-30 15:46:37.516 [main] INFO  o.s.boot.web.embedded.tomcat.TomcatWebServer - Tomcat started on port 8080 (http) with context path '/'
-2026-03-30 15:46:37.534 [main] INFO  com.hms.HospitalManagementSystemApplication - Started HospitalManagementSystemApplication in 11.524 seconds (process running for 12.272)
-2026-03-30 15:46:37.643 [main] INFO  com.hms.common.config.DataInitializer - Starting database column initialization...
-2026-03-30 15:46:37.704 [main] INFO  com.hms.common.config.DataInitializer - Database column initialization completed.
-2026-03-30 15:47:04.656 [http-nio-8080-exec-1] INFO  o.a.c.core.ContainerBase.[Tomcat].[localhost].[/] - Initializing Spring DispatcherServlet 'dispatcherServlet'
-2026-03-30 15:47:04.657 [http-nio-8080-exec-1] INFO  org.springframework.web.servlet.DispatcherServlet - Initializing Servlet 'dispatcherServlet'
-2026-03-30 15:47:04.659 [http-nio-8080-exec-1] INFO  org.springframework.web.servlet.DispatcherServlet - Completed initialization in 2 ms
-2026-03-30 15:47:20.180 [http-nio-8080-exec-4] DEBUG com.hms.security.jwt.JwtAuthenticationFilter - Token successfully extracted from cookie.
-2026-03-30 15:47:20.186 [http-nio-8080-exec-5] DEBUG com.hms.security.jwt.JwtAuthenticationFilter - Token successfully extracted from cookie.
-2026-03-30 15:47:20.205 [http-nio-8080-exec-6] DEBUG com.hms.security.jwt.JwtAuthenticationFilter - Token successfully extracted from cookie.
-2026-03-30 15:47:20.424 [http-nio-8080-exec-6] INFO  com.hms.security.jwt.JwtAuthenticationFilter - Request authorized for user: admin with authorities: [ROLE_ADMIN]
-2026-03-30 15:47:20.424 [http-nio-8080-exec-4] INFO  com.hms.security.jwt.JwtAuthenticationFilter - Request authorized for user: admin with authorities: [ROLE_ADMIN]
-2026-03-30 15:47:20.425 [http-nio-8080-exec-5] INFO  com.hms.security.jwt.JwtAuthenticationFilter - Request authorized for user: admin with authorities: [ROLE_ADMIN]
-2026-03-30 15:47:32.459 [http-nio-8080-exec-8] DEBUG com.hms.security.jwt.JwtAuthenticationFilter - Token successfully extracted from cookie.
-2026-03-30 15:47:32.477 [http-nio-8080-exec-8] INFO  com.hms.security.jwt.JwtAuthenticationFilter - Request authorized for user: admin with authorities: [ROLE_ADMIN]
-2026-03-30 15:47:33.289 [http-nio-8080-exec-7] DEBUG com.hms.security.jwt.JwtAuthenticationFilter - Token successfully extracted from cookie.
-2026-03-30 15:47:33.291 [http-nio-8080-exec-9] DEBUG com.hms.security.jwt.JwtAuthenticationFilter - Token successfully extracted from cookie.
-2026-03-30 15:47:33.298 [http-nio-8080-exec-10] DEBUG com.hms.security.jwt.JwtAuthenticationFilter - Token successfully extracted from cookie.
-2026-03-30 15:47:33.315 [http-nio-8080-exec-7] INFO  com.hms.security.jwt.JwtAuthenticationFilter - Request authorized for user: admin with authorities: [ROLE_ADMIN]
-2026-03-30 15:47:33.325 [http-nio-8080-exec-9] INFO  com.hms.security.jwt.JwtAuthenticationFilter - Request authorized for user: admin with authorities: [ROLE_ADMIN]
-2026-03-30 15:47:33.328 [http-nio-8080-exec-10] INFO  com.hms.security.jwt.JwtAuthenticationFilter - Request authorized for user: admin with authorities: [ROLE_ADMIN]
-2026-03-30 15:47:34.381 [http-nio-8080-exec-1] DEBUG com.hms.security.jwt.JwtAuthenticationFilter - Token successfully extracted from cookie.
-2026-03-30 15:47:34.395 [http-nio-8080-exec-1] INFO  com.hms.security.jwt.JwtAuthenticationFilter - Request authorized for user: admin with authorities: [ROLE_ADMIN]
-2026-03-30 15:47:35.757 [http-nio-8080-exec-2] DEBUG com.hms.security.jwt.JwtAuthenticationFilter - Token successfully extracted from cookie.
-2026-03-30 15:47:35.759 [http-nio-8080-exec-3] DEBUG com.hms.security.jwt.JwtAuthenticationFilter - Token successfully extracted from cookie.
-2026-03-30 15:47:35.766 [http-nio-8080-exec-4] DEBUG com.hms.security.jwt.JwtAuthenticationFilter - Token successfully extracted from cookie.
-2026-03-30 15:47:35.800 [http-nio-8080-exec-2] INFO  com.hms.security.jwt.JwtAuthenticationFilter - Request authorized for user: admin with authorities: [ROLE_ADMIN]
-2026-03-30 15:47:35.825 [http-nio-8080-exec-3] INFO  com.hms.security.jwt.JwtAuthenticationFilter - Request authorized for user: admin with authorities: [ROLE_ADMIN]
-2026-03-30 15:47:35.842 [http-nio-8080-exec-4] INFO  com.hms.security.jwt.JwtAuthenticationFilter - Request authorized for user: admin with authorities: [ROLE_ADMIN]
-2026-03-30 16:14:45.115 [http-nio-8080-exec-9] DEBUG com.hms.security.jwt.JwtAuthenticationFilter - Token successfully extracted from cookie.
-2026-03-30 16:14:45.116 [http-nio-8080-exec-1] DEBUG com.hms.security.jwt.JwtAuthenticationFilter - Token successfully extracted from cookie.
-2026-03-30 16:14:45.132 [http-nio-8080-exec-2] DEBUG com.hms.security.jwt.JwtAuthenticationFilter - Token successfully extracted from cookie.
-2026-03-30 16:14:45.144 [http-nio-8080-exec-1] INFO  com.hms.security.jwt.JwtAuthenticationFilter - Request authorized for user: admin with authorities: [ROLE_ADMIN]
-2026-03-30 16:14:45.146 [http-nio-8080-exec-9] INFO  com.hms.security.jwt.JwtAuthenticationFilter - Request authorized for user: admin with authorities: [ROLE_ADMIN]
-2026-03-30 16:14:45.180 [http-nio-8080-exec-2] INFO  com.hms.security.jwt.JwtAuthenticationFilter - Request authorized for user: admin with authorities: [ROLE_ADMIN]
-2026-03-30 16:14:50.352 [http-nio-8080-exec-4] DEBUG com.hms.security.jwt.JwtAuthenticationFilter - Token successfully extracted from cookie.
-2026-03-30 16:14:50.353 [http-nio-8080-exec-3] DEBUG com.hms.security.jwt.JwtAuthenticationFilter - Token successfully extracted from cookie.
-2026-03-30 16:14:50.383 [http-nio-8080-exec-3] INFO  com.hms.security.jwt.JwtAuthenticationFilter - Request authorized for user: admin with authorities: [ROLE_ADMIN]
-2026-03-30 16:14:50.383 [http-nio-8080-exec-4] INFO  com.hms.security.jwt.JwtAuthenticationFilter - Request authorized for user: admin with authorities: [ROLE_ADMIN]
-2026-03-30 16:14:50.414 [http-nio-8080-exec-6] DEBUG com.hms.security.jwt.JwtAuthenticationFilter - Token successfully extracted from cookie.
-2026-03-30 16:14:50.441 [http-nio-8080-exec-6] INFO  com.hms.security.jwt.JwtAuthenticationFilter - Request authorized for user: admin with authorities: [ROLE_ADMIN]
+2026-04-01 09:33:38.686 [HikariPool-1 housekeeper] WARN  com.zaxxer.hikari.pool.HikariPool - HikariPool-1 - Thread starvation or clock leap detected (housekeeper delta=14h30m34s692ms18µs700ns).
+2026-04-01 09:35:01.603 [HikariPool-1 housekeeper] WARN  com.zaxxer.hikari.pool.HikariPool - HikariPool-1 - Thread starvation or clock leap detected (housekeeper delta=1m22s918ms846µs900ns).
+2026-04-01 10:10:35.385 [HikariPool-1 housekeeper] WARN  com.zaxxer.hikari.pool.HikariPool - HikariPool-1 - Thread starvation or clock leap detected (housekeeper delta=21m3s589ms906µs700ns).
+2026-04-01 10:15:21.885 [http-nio-8080-exec-5] INFO  com.hms.security.jwt.JwtAuthenticationFilter - Request authorized for user: recep with authorities: [ROLE_RECEPTIONIST]
+2026-04-01 10:15:21.893 [http-nio-8080-exec-9] INFO  com.hms.security.jwt.JwtAuthenticationFilter - Request authorized for user: recep with authorities: [ROLE_RECEPTIONIST]
+2026-04-01 10:15:26.301 [http-nio-8080-exec-1] INFO  com.hms.security.jwt.JwtAuthenticationFilter - Request authorized for user: recep with authorities: [ROLE_RECEPTIONIST]
+2026-04-01 10:16:02.039 [http-nio-8080-exec-3] INFO  com.hms.security.jwt.JwtAuthenticationFilter - Request authorized for user: recep with authorities: [ROLE_RECEPTIONIST]
+2026-04-01 10:16:02.369 [http-nio-8080-exec-3] INFO  com.hms.patient.service.impl.PatientServiceImpl - Creating patient with contact number: 9824957356
+2026-04-01 10:16:02.441 [http-nio-8080-exec-3] WARN  com.hms.common.exception.GlobalExceptionHandler - Duplicate patient: Patient already exists
+2026-04-01 10:16:32.558 [http-nio-8080-exec-8] INFO  com.hms.security.jwt.JwtAuthenticationFilter - Request authorized for user: recep with authorities: [ROLE_RECEPTIONIST]
+2026-04-01 10:16:32.573 [http-nio-8080-exec-8] INFO  com.hms.patient.service.impl.PatientServiceImpl - Creating patient with contact number: 9824957357
+2026-04-01 10:16:32.690 [http-nio-8080-exec-8] INFO  com.hms.patient.service.impl.PatientServiceImpl - Patient created successfully with ID: 2
+2026-04-01 10:16:35.845 [http-nio-8080-exec-7] INFO  com.hms.security.jwt.JwtAuthenticationFilter - Request authorized for user: recep with authorities: [ROLE_RECEPTIONIST]
+2026-04-01 10:16:35.853 [http-nio-8080-exec-9] INFO  com.hms.security.jwt.JwtAuthenticationFilter - Request authorized for user: recep with authorities: [ROLE_RECEPTIONIST]
+2026-04-01 10:17:00.740 [http-nio-8080-exec-1] INFO  com.hms.security.jwt.JwtAuthenticationFilter - Request authorized for user: recep with authorities: [ROLE_RECEPTIONIST]
+2026-04-01 10:17:00.981 [http-nio-8080-exec-2] INFO  com.hms.security.jwt.JwtAuthenticationFilter - Request authorized for user: recep with authorities: [ROLE_RECEPTIONIST]
+2026-04-01 10:17:00.983 [http-nio-8080-exec-3] INFO  com.hms.security.jwt.JwtAuthenticationFilter - Request authorized for user: recep with authorities: [ROLE_RECEPTIONIST]
+2026-04-01 10:17:11.008 [http-nio-8080-exec-6] INFO  com.hms.security.jwt.JwtAuthenticationFilter - Request authorized for user: recep with authorities: [ROLE_RECEPTIONIST]
+2026-04-01 10:17:44.688 [http-nio-8080-exec-4] INFO  com.hms.security.jwt.JwtAuthenticationFilter - Request authorized for user: recep with authorities: [ROLE_RECEPTIONIST]
+2026-04-01 10:17:44.697 [http-nio-8080-exec-4] INFO  com.hms.patient.service.impl.PatientServiceImpl - Creating patient with contact number: 7587279291
+2026-04-01 10:17:44.708 [http-nio-8080-exec-4] INFO  com.hms.patient.service.impl.PatientServiceImpl - Patient created successfully with ID: 3
+2026-04-01 10:17:47.833 [http-nio-8080-exec-5] INFO  com.hms.security.jwt.JwtAuthenticationFilter - Request authorized for user: recep with authorities: [ROLE_RECEPTIONIST]
+2026-04-01 10:17:47.836 [http-nio-8080-exec-8] INFO  com.hms.security.jwt.JwtAuthenticationFilter - Request authorized for user: recep with authorities: [ROLE_RECEPTIONIST]
+2026-04-01 10:18:08.783 [http-nio-8080-exec-9] INFO  com.hms.security.jwt.JwtAuthenticationFilter - Request authorized for user: recep with authorities: [ROLE_RECEPTIONIST]
+2026-04-01 10:18:08.814 [http-nio-8080-exec-9] WARN  com.hms.common.exception.GlobalExceptionHandler - Slot already booked: Doctor is already booked for 2026-04-02T09:15
+2026-04-01 10:18:18.645 [http-nio-8080-exec-2] INFO  com.hms.security.jwt.JwtAuthenticationFilter - Request authorized for user: recep with authorities: [ROLE_RECEPTIONIST]
+2026-04-01 10:18:18.645 [http-nio-8080-exec-3] INFO  com.hms.security.jwt.JwtAuthenticationFilter - Request authorized for user: recep with authorities: [ROLE_RECEPTIONIST]
+2026-04-01 10:18:32.919 [http-nio-8080-exec-4] INFO  com.hms.security.jwt.JwtAuthenticationFilter - Request authorized for user: recep with authorities: [ROLE_RECEPTIONIST]
+2026-04-01 10:18:32.926 [http-nio-8080-exec-6] INFO  com.hms.security.jwt.JwtAuthenticationFilter - Request authorized for user: recep with authorities: [ROLE_RECEPTIONIST]
+2026-04-01 10:18:37.555 [http-nio-8080-exec-5] INFO  com.hms.security.jwt.JwtAuthenticationFilter - Request authorized for user: recep with authorities: [ROLE_RECEPTIONIST]
+2026-04-01 10:18:38.639 [http-nio-8080-exec-7] INFO  com.hms.security.jwt.JwtAuthenticationFilter - Request authorized for user: recep with authorities: [ROLE_RECEPTIONIST]
+2026-04-01 10:18:38.646 [http-nio-8080-exec-9] INFO  com.hms.security.jwt.JwtAuthenticationFilter - Request authorized for user: recep with authorities: [ROLE_RECEPTIONIST]
+2026-04-01 10:18:39.304 [http-nio-8080-exec-1] INFO  com.hms.security.jwt.JwtAuthenticationFilter - Request authorized for user: recep with authorities: [ROLE_RECEPTIONIST]
+2026-04-01 10:18:39.304 [http-nio-8080-exec-10] INFO  com.hms.security.jwt.JwtAuthenticationFilter - Request authorized for user: recep with authorities: [ROLE_RECEPTIONIST]
+2026-04-01 10:18:45.701 [http-nio-8080-exec-3] INFO  com.hms.security.jwt.JwtAuthenticationFilter - Request authorized for user: recep with authorities: [ROLE_RECEPTIONIST]
+2026-04-01 10:18:45.704 [http-nio-8080-exec-2] INFO  com.hms.security.jwt.JwtAuthenticationFilter - Request authorized for user: recep with authorities: [ROLE_RECEPTIONIST]
+2026-04-01 11:10:02.245 [http-nio-8080-exec-9] INFO  com.hms.security.jwt.JwtAuthenticationFilter - Request authorized for user: recep with authorities: [ROLE_RECEPTIONIST]
+2026-04-01 11:10:02.245 [http-nio-8080-exec-7] INFO  com.hms.security.jwt.JwtAuthenticationFilter - Request authorized for user: recep with authorities: [ROLE_RECEPTIONIST]
+2026-04-01 11:10:06.855 [http-nio-8080-exec-10] INFO  com.hms.security.jwt.JwtAuthenticationFilter - Request authorized for user: recep with authorities: [ROLE_RECEPTIONIST]
+2026-04-01 11:10:10.520 [http-nio-8080-exec-2] INFO  com.hms.security.jwt.JwtAuthenticationFilter - Request authorized for user: recep with authorities: [ROLE_RECEPTIONIST]
+2026-04-01 11:10:37.059 [http-nio-8080-exec-6] INFO  com.hms.security.jwt.JwtAuthenticationFilter - Request authorized for user: recep with authorities: [ROLE_RECEPTIONIST]
+2026-04-01 11:10:37.248 [http-nio-8080-exec-5] INFO  com.hms.security.jwt.JwtAuthenticationFilter - Request authorized for user: recep with authorities: [ROLE_RECEPTIONIST]
+2026-04-01 11:15:21.334 [http-nio-8080-exec-3] INFO  com.hms.security.jwt.JwtAuthenticationFilter - Request authorized for user: recep with authorities: [ROLE_RECEPTIONIST]
+2026-04-01 11:15:21.338 [http-nio-8080-exec-2] INFO  com.hms.security.jwt.JwtAuthenticationFilter - Request authorized for user: recep with authorities: [ROLE_RECEPTIONIST]
+2026-04-01 11:16:13.099 [http-nio-8080-exec-5] INFO  com.hms.security.jwt.JwtAuthenticationFilter - Request authorized for user: recep with authorities: [ROLE_RECEPTIONIST]
+2026-04-01 11:16:13.100 [http-nio-8080-exec-4] INFO  com.hms.security.jwt.JwtAuthenticationFilter - Request authorized for user: recep with authorities: [ROLE_RECEPTIONIST]
+2026-04-01 11:19:39.140 [http-nio-8080-exec-5] INFO  com.hms.security.jwt.JwtAuthenticationFilter - Request authorized for user: recep with authorities: [ROLE_RECEPTIONIST]
+2026-04-01 11:19:39.145 [http-nio-8080-exec-4] INFO  com.hms.security.jwt.JwtAuthenticationFilter - Request authorized for user: recep with authorities: [ROLE_RECEPTIONIST]
+2026-04-01 11:19:46.033 [http-nio-8080-exec-8] INFO  com.hms.security.jwt.JwtAuthenticationFilter - Request authorized for user: recep with authorities: [ROLE_RECEPTIONIST]
+2026-04-01 11:19:46.090 [http-nio-8080-exec-7] INFO  com.hms.security.jwt.JwtAuthenticationFilter - Request authorized for user: recep with authorities: [ROLE_RECEPTIONIST]
+2026-04-01 11:19:55.311 [http-nio-8080-exec-10] INFO  com.hms.security.jwt.JwtAuthenticationFilter - Request authorized for user: recep with authorities: [ROLE_RECEPTIONIST]
+2026-04-01 11:19:56.379 [http-nio-8080-exec-2] INFO  com.hms.security.jwt.JwtAuthenticationFilter - Request authorized for user: recep with authorities: [ROLE_RECEPTIONIST]
+2026-04-01 11:20:54.376 [SpringApplicationShutdownHook] INFO  o.s.orm.jpa.LocalContainerEntityManagerFactoryBean - Closing JPA EntityManagerFactory for persistence unit 'default'
+2026-04-01 11:20:54.434 [SpringApplicationShutdownHook] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Shutdown initiated...
+2026-04-01 11:20:54.476 [SpringApplicationShutdownHook] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Shutdown completed.
+2026-04-01 11:21:08.980 [main] INFO  com.hms.HospitalManagementSystemApplication - Starting HospitalManagementSystemApplication using Java 21.0.10 with PID 15580 (C:\Users\Piyush\Desktop\Project\backend\target\classes started by Piyush in C:\Users\Piyush\Desktop\Project\backend)
+2026-04-01 11:21:08.983 [main] DEBUG com.hms.HospitalManagementSystemApplication - Running with Spring Boot v3.3.4, Spring v6.1.13
+2026-04-01 11:21:08.984 [main] INFO  com.hms.HospitalManagementSystemApplication - No active profile set, falling back to 1 default profile: "mysql"
+2026-04-01 11:21:10.267 [main] INFO  o.s.d.r.config.RepositoryConfigurationDelegate - Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2026-04-01 11:21:10.518 [main] INFO  o.s.d.r.config.RepositoryConfigurationDelegate - Finished Spring Data repository scanning in 239 ms. Found 10 JPA repository interfaces.
+2026-04-01 11:21:12.497 [main] INFO  o.s.boot.web.embedded.tomcat.TomcatWebServer - Tomcat initialized with port 8080 (http)
+2026-04-01 11:21:12.526 [main] INFO  org.apache.catalina.core.StandardService - Starting service [Tomcat]
+2026-04-01 11:21:12.526 [main] INFO  org.apache.catalina.core.StandardEngine - Starting Servlet engine: [Apache Tomcat/10.1.30]
+2026-04-01 11:21:12.637 [main] INFO  o.a.c.core.ContainerBase.[Tomcat].[localhost].[/] - Initializing Spring embedded WebApplicationContext
+2026-04-01 11:21:12.638 [main] INFO  o.s.b.w.s.c.ServletWebServerApplicationContext - Root WebApplicationContext: initialization completed in 3519 ms
+2026-04-01 11:21:13.249 [main] INFO  org.hibernate.jpa.internal.util.LogHelper - HHH000204: Processing PersistenceUnitInfo [name: default]
+2026-04-01 11:21:13.356 [main] INFO  org.hibernate.Version - HHH000412: Hibernate ORM core version 6.5.3.Final
+2026-04-01 11:21:13.421 [main] INFO  o.hibernate.cache.internal.RegionFactoryInitiator - HHH000026: Second-level cache disabled
+2026-04-01 11:21:13.933 [main] INFO  o.s.o.j.persistenceunit.SpringPersistenceUnitInfo - No LoadTimeWeaver setup: ignoring JPA class transformer
+2026-04-01 11:21:13.989 [main] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Starting...
+2026-04-01 11:21:14.285 [main] INFO  com.zaxxer.hikari.pool.HikariPool - HikariPool-1 - Added connection com.mysql.cj.jdbc.ConnectionImpl@54d35ed5
+2026-04-01 11:21:14.288 [main] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Start completed.
+2026-04-01 11:21:16.718 [main] INFO  o.h.e.t.jta.platform.internal.JtaPlatformInitiator - HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
+2026-04-01 11:21:17.479 [main] INFO  o.s.orm.jpa.LocalContainerEntityManagerFactoryBean - Initialized JPA EntityManagerFactory for persistence unit 'default'
+2026-04-01 11:21:18.471 [main] DEBUG com.hms.security.jwt.JwtAuthenticationFilter - Filter 'jwtAuthenticationFilter' configured for use
+2026-04-01 11:21:18.584 [main] INFO  o.s.data.jpa.repository.query.QueryEnhancerFactory - Hibernate is in classpath; If applicable, HQL parser will be used.
+2026-04-01 11:21:19.460 [main] INFO  o.s.s.c.a.a.c.InitializeUserDetailsBeanManagerConfigurer$InitializeUserDetailsManagerConfigurer - Global AuthenticationManager configured with UserDetailsService bean with name customUserDetailsService
+2026-04-01 11:21:20.533 [main] INFO  o.s.b.actuate.endpoint.web.EndpointLinksResolver - Exposing 3 endpoints beneath base path '/actuator'
+2026-04-01 11:21:20.594 [main] INFO  com.hms.security.config.SecurityConfig - Production Security configuration successfully initialized.
+2026-04-01 11:21:21.334 [main] INFO  o.s.boot.web.embedded.tomcat.TomcatWebServer - Tomcat started on port 8080 (http) with context path '/'
+2026-04-01 11:21:21.356 [main] INFO  com.hms.HospitalManagementSystemApplication - Started HospitalManagementSystemApplication in 13.203 seconds (process running for 13.808)
+2026-04-01 11:21:21.538 [main] INFO  com.hms.common.config.DataInitializer - Starting database column initialization...
+2026-04-01 11:21:21.621 [main] INFO  com.hms.common.config.DataInitializer - Database column initialization completed.
+2026-04-01 11:21:26.792 [http-nio-8080-exec-2] INFO  o.a.c.core.ContainerBase.[Tomcat].[localhost].[/] - Initializing Spring DispatcherServlet 'dispatcherServlet'
+2026-04-01 11:21:26.792 [http-nio-8080-exec-2] INFO  org.springframework.web.servlet.DispatcherServlet - Initializing Servlet 'dispatcherServlet'
+2026-04-01 11:21:26.798 [http-nio-8080-exec-2] INFO  org.springframework.web.servlet.DispatcherServlet - Completed initialization in 6 ms
+2026-04-01 11:21:27.481 [http-nio-8080-exec-1] INFO  com.hms.security.jwt.JwtAuthenticationFilter - Request authorized for user: recep with authorities: [ROLE_RECEPTIONIST]
+2026-04-01 11:21:27.481 [http-nio-8080-exec-2] INFO  com.hms.security.jwt.JwtAuthenticationFilter - Request authorized for user: recep with authorities: [ROLE_RECEPTIONIST]
+2026-04-01 11:21:30.759 [http-nio-8080-exec-5] INFO  com.hms.security.jwt.JwtAuthenticationFilter - Request authorized for user: recep with authorities: [ROLE_RECEPTIONIST]
+2026-04-01 11:21:30.759 [http-nio-8080-exec-4] INFO  com.hms.security.jwt.JwtAuthenticationFilter - Request authorized for user: recep with authorities: [ROLE_RECEPTIONIST]
+2026-04-01 11:21:44.155 [http-nio-8080-exec-7] INFO  com.hms.security.jwt.JwtAuthenticationFilter - Request authorized for user: recep with authorities: [ROLE_RECEPTIONIST]
+2026-04-01 11:21:44.408 [http-nio-8080-exec-8] INFO  com.hms.security.jwt.JwtAuthenticationFilter - Request authorized for user: recep with authorities: [ROLE_RECEPTIONIST]
+2026-04-01 11:21:49.341 [http-nio-8080-exec-9] INFO  com.hms.security.jwt.JwtAuthenticationFilter - Request authorized for user: recep with authorities: [ROLE_RECEPTIONIST]
+2026-04-01 11:21:49.345 [http-nio-8080-exec-10] INFO  com.hms.security.jwt.JwtAuthenticationFilter - Request authorized for user: recep with authorities: [ROLE_RECEPTIONIST]
+2026-04-01 11:39:00.394 [HikariPool-1 housekeeper] WARN  com.zaxxer.hikari.pool.HikariPool - HikariPool-1 - Thread starvation or clock leap detected (housekeeper delta=1m15s795ms93µs900ns).
+2026-04-01 11:47:03.338 [http-nio-8080-exec-6] INFO  com.hms.security.jwt.JwtAuthenticationFilter - Request authorized for user: recep with authorities: [ROLE_RECEPTIONIST]
+2026-04-01 11:47:03.338 [http-nio-8080-exec-4] INFO  com.hms.security.jwt.JwtAuthenticationFilter - Request authorized for user: recep with authorities: [ROLE_RECEPTIONIST]

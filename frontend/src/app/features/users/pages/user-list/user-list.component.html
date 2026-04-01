@@ -18,21 +18,6 @@
         </div>
       </div>
 
-      <!-- Search Section -->
-      <div class="search-bar-row mb-4">
-        <div class="input-wrapper search-bar">
-          <i class="ri-search-line icon"></i>
-          <input 
-            type="text" 
-            pInputText 
-            [(ngModel)]="searchTerm" 
-            (ngModelChange)="onSearchChange()"
-            placeholder="Search by username, email or role..." 
-            class="form-control"
-          >
-        </div>
-      </div>
-
       <!-- Stats Section -->
       <div class="row mb-4">
         <div class="col-md-4">
@@ -51,7 +36,7 @@
       <!-- PrimeNG Table -->
       <div class="card shadow-sm border-0 overflow-hidden">
         <p-table 
-          [value]="filteredUsers" 
+          [value]="users" 
           [loading]="isLoading" 
           [rows]="10" 
           [paginator]="true" 
@@ -105,7 +90,7 @@
               <td colspan="5" class="text-center py-5">
                 <div class="empty-state">
                   <i class="ri-user-search-line h1 text-muted"></i>
-                  <p class="text-muted">No system users matching your search.</p>
+                  <p class="text-muted">No system users available.</p>
                 </div>
               </td>
             </tr>

@@ -95,6 +95,10 @@ export class PrescriptionCreateComponent implements OnInit {
 
   private initForm(): void {
     this.prescriptionForm = createPrescriptionForm(this.fb);
+    // Wire up valueChanges for the initial medicine group (Medication #1)
+    const initialGroup = this.medicines.at(0) as FormGroup;
+    initialGroup.get('dosage')?.valueChanges.subscribe(() => this.calculateQuantity(initialGroup));
+    initialGroup.get('duration')?.valueChanges.subscribe(() => this.calculateQuantity(initialGroup));
   }
 
   get medicines(): FormArray {

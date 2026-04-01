@@ -1,10 +1,9 @@
 import { CommonModule } from '@angular/common';
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnInit } from '@angular/core';
 import { Router, RouterLink } from '@angular/router';
-import { PaginatorModule, PaginatorState } from 'primeng/paginator';
 import { TableModule } from 'primeng/table';
 import { Appointment, AppointmentStatus, AppointmentSummary } from '../../../../core/models/appointment.models';
-import { ApiResponse, PagedResponse } from '../../../../core/models/common.models';
+import { ApiResponse } from '../../../../core/models/common.models';
 import { AppointmentService } from '../../../../core/services/appointment.service';
 import { AuthService } from '../../../../core/services/auth.service';
 import { BillingService } from '../../../../core/services/billing.service';
@@ -21,7 +20,7 @@ import {
 @Component({
   selector: 'app-appointment-list',
   standalone: true,
-  imports: [CommonModule, SidebarComponent, HeaderComponent, RouterLink, TableModule, PaginatorModule],
+  imports: [CommonModule, SidebarComponent, HeaderComponent, RouterLink, TableModule],
   templateUrl: './appointment-list.component.html',
   styleUrl: './appointment-list.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -32,9 +31,6 @@ export class AppointmentListComponent implements OnInit {
   isLoading = true;
 
   selectedStatusFilter: 'ALL' | AppointmentStatus = 'ALL';
-  page = 0;
-  size = 10;
-  totalElements = 0;
 
   statusEnum = AppointmentStatus;
   userRole: string | null = null;
@@ -74,15 +70,12 @@ export class AppointmentListComponent implements OnInit {
     this.isLoading = true;
 
     const params = {
-      page: this.page,
-      size: this.size,
       status: this.selectedStatusFilter === 'ALL' ? undefined : (this.selectedStatusFilter as AppointmentStatus),
     };
 
-    this.appointmentService.search(params).subscribe({
-      next: (res: ApiResponse<PagedResponse<Appointment>>) => {
-        this.appointments = res.data.content;
-        this.totalElements = res.data.totalElements;
+    this.appointmentService.getAll(params).subscribe({
+      next: (res: ApiResponse<Appointment[]>) => {
+        this.appointments = res.data;
         this.isLoading = false;
         this.cdr.markForCheck();
       },
@@ -91,12 +84,6 @@ export class AppointmentListComponent implements OnInit {
         this.cdr.markForCheck();
       },
     });
-  }
-
-  onPageChange(event: PaginatorState): void {
-    this.page = event.first! / event.rows!;
-    this.size = event.rows!;
-    this.loadAppointments();
   }
 
   onCheckIn(id: number): void {
@@ -153,7 +140,6 @@ export class AppointmentListComponent implements OnInit {
 
   setStatusFilter(filter: 'ALL' | AppointmentStatus): void {
     this.selectedStatusFilter = filter;
-    this.page = 0;
     this.loadAppointments();
   }
 

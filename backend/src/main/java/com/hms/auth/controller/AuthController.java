@@ -8,8 +8,11 @@ import com.hms.auth.dto.response.AuthResponse;
 import com.hms.auth.service.AuthService;
 import com.hms.security.jwt.CookieUtil;
 import com.hms.common.response.ApiResponse;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
@@ -31,9 +34,8 @@ public class AuthController {
     @PostMapping("/login")
     public ApiResponse<AuthResponse> login(
             @Valid @RequestBody LoginRequest request,
-            jakarta.servlet.http.HttpServletResponse response) {
+            HttpServletResponse response) {
         AuthResponse loginResponse = service.login(request);
-        cookieUtil.setAccessTokenCookie(response, loginResponse.getToken());
         cookieUtil.setRefreshTokenCookie(response, loginResponse.getRefreshToken());
         return ApiResponse.success(loginResponse);
     }
@@ -41,8 +43,9 @@ public class AuthController {
     @PostMapping("/refresh")
     public ApiResponse<AuthResponse> refresh(
             @RequestBody(required = false) TokenRefreshRequest request,
-            jakarta.servlet.http.HttpServletRequest httpRequest,
-            jakarta.servlet.http.HttpServletResponse response) {
+            HttpServletRequest httpRequest,
+            HttpServletResponse response)
+    {
         String refreshToken = cookieUtil.getRefreshToken(httpRequest)
                 .orElseGet(() -> request != null ? request.getRefreshToken() : null);
 
@@ -51,7 +54,6 @@ public class AuthController {
                 .build();
         AuthResponse refreshResponse = service.refreshToken(updatedRequest);
         
-        cookieUtil.setAccessTokenCookie(response, refreshResponse.getToken());
         cookieUtil.setRefreshTokenCookie(response, refreshResponse.getRefreshToken());
         
         return ApiResponse.success(refreshResponse);
@@ -65,10 +67,11 @@ public class AuthController {
     }
 
     @PostMapping("/logout")
-    public ApiResponse<String> logout(jakarta.servlet.http.HttpServletResponse response) {
-        var authentication = SecurityContextHolder.getContext().getAuthentication();
+    public ApiResponse<String> logout(HttpServletRequest request, HttpServletResponse response) {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String refreshToken = cookieUtil.getRefreshToken(request).orElse(null);
         if (authentication != null && authentication.isAuthenticated()) {
-            service.logout(authentication.getName());
+            service.logout(authentication.getName(), refreshToken);
         }
         cookieUtil.clearAuthCookies(response);
         return ApiResponse.success("Logged out successfully");

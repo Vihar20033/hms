@@ -1,12 +1,11 @@
 package com.hms.appointment.service;
 
 import com.hms.appointment.dto.request.AppointmentRequestDTO;
-import com.hms.appointment.dto.request.AppointmentSearchCriteria;
 import com.hms.appointment.dto.response.AppointmentSummaryDTO;
 import com.hms.appointment.entity.Appointment;
 import com.hms.common.enums.AppointmentStatus;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
+
+import java.util.List;
 
 public interface AppointmentService {
 
@@ -20,7 +19,9 @@ public interface AppointmentService {
 
     Appointment updateStatus(Long id, AppointmentStatus status);
 
-    Page<Appointment> findAppointments(AppointmentSearchCriteria criteria, Pageable pageable);
+    List<Appointment> getAppointments(Long patientId, AppointmentStatus status);
+
+    List<Appointment> getTodayAppointments();
 
     void deleteAppointment(Long id);
 }

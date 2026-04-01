@@ -14,6 +14,8 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 @JsonInclude(JsonInclude.Include.NON_NULL)
+
+// Generic wrapper class for all APIs response
 public class ApiResponse<T> {
 
     private boolean success;

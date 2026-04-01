@@ -1,18 +1,4 @@
-import { Role, User } from '../../../../core/models/auth.models';
-
-export function filterUsersByTerm(users: User[], term: string): User[] {
-  if (!term) {
-    return [...users];
-  }
-
-  const lowerTerm = term.toLowerCase();
-  return users.filter(
-    (user) =>
-      user.username.toLowerCase().includes(lowerTerm) ||
-      user.email.toLowerCase().includes(lowerTerm) ||
-      user.role.toLowerCase().includes(lowerTerm),
-  );
-}
+import { Role } from '../../../../core/models/auth.models';
 
 export function getRoleBadgeClass(role: Role): string {
   switch (role) {

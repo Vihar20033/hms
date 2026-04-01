@@ -9,6 +9,8 @@ import com.hms.auth.dto.request.LoginRequest;
 import com.hms.auth.dto.request.RegisterRequest;
 import com.hms.auth.dto.request.TokenRefreshRequest;
 import com.hms.auth.dto.response.AuthResponse;
+import com.hms.auth.entity.RevokedRefreshToken;
+import com.hms.auth.repository.RevokedRefreshTokenRepository;
 import com.hms.auth.service.AuthService;
 import com.hms.common.audit.AuditLogService;
 import com.hms.user.exception.EmailAlreadyExistsException;
@@ -26,6 +28,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
 
 @Service
 @RequiredArgsConstructor
@@ -38,6 +42,7 @@ public class AuthServiceImpl implements AuthService {
     private final JwtUtil jwtUtil;
     private final AuditLogService auditLogService;
     private final DoctorRepository doctorRepository;
+    private final RevokedRefreshTokenRepository revokedRefreshTokenRepository;
 
     @Override
     public void register(RegisterRequest request) {
@@ -124,6 +129,9 @@ public class AuthServiceImpl implements AuthService {
         if (!jwtUtil.validateToken(refreshToken)) {
             throw new InvalidCredentialsException("Invalid refresh token");
         }
+        if (revokedRefreshTokenRepository.existsByTokenHash(jwtUtil.hashToken(refreshToken))) {
+            throw new InvalidCredentialsException("Refresh token has been revoked. Please log in again.");
+        }
 
         String username = jwtUtil.extractUsername(refreshToken);
         User user = userRepository.findByUsername(username)
@@ -163,14 +171,39 @@ public class AuthServiceImpl implements AuthService {
     }
 
     @Override
-    public void logout(String username) {
+    public void logout(String username, String refreshToken) {
 
         User user = userRepository.findByUsername(username)
-                .orElseThrow(() -> new UserNotFoundException("User not found"));
+                .orElse(null);
 
-        user.setTokenVersion(user.getTokenVersion() + 1);
-        userRepository.save(user);
+        if (user == null) {
+            auditLogService.log(username, "USER_LOGOUT", "User", null, "userMissing=true");
+            return;
+        }
+
+        revokeRefreshTokenIfPresent(refreshToken, username);
         auditLogService.log(username, "USER_LOGOUT", "User", user.getId().toString(), null);
+    }
+
+    private void revokeRefreshTokenIfPresent(String refreshToken, String username) {
+        if (refreshToken == null ||
+                refreshToken.isBlank() ||
+                !jwtUtil.validateToken(refreshToken)) {
+            return;
+        }
+
+        String tokenHash = jwtUtil.hashToken(refreshToken);
+        if (revokedRefreshTokenRepository.existsByTokenHash(tokenHash)) {
+            return;
+        }
+
+        revokedRefreshTokenRepository.save(RevokedRefreshToken.builder()
+                .tokenHash(tokenHash)
+                .username(username)
+                .expiresAt(LocalDateTime.ofInstant(
+                        jwtUtil.extractExpiration(refreshToken)
+                                .toInstant(), ZoneId.systemDefault()))
+                .build());
     }
 }
 

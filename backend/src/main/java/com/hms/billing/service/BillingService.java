@@ -8,7 +8,7 @@ import java.util.List;
 public interface BillingService {
     BillingResponseDTO createBilling(BillingRequestDTO dto);
 
-    BillingResponseDTO updateBilling(Long id, BillingRequestDTO dto);
+
 
     BillingResponseDTO getBillingById(Long id);
 
@@ -20,8 +20,6 @@ public interface BillingService {
 
     void deleteBilling(Long id);
 
-
     BillingResponseDTO generateBillingFromAppointment(Long appointmentId);
     BillingResponseDTO calculatePreviewBilling(Long appointmentId);
 }
-

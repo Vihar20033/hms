@@ -17,10 +17,6 @@ export class UserService {
     return this.http.get<ApiResponse<User[]>>(this.apiUrl);
   }
 
-  getCurrentUser(): Observable<ApiResponse<User>> {
-    return this.http.get<ApiResponse<User>>(`${this.apiUrl}/me`);
-  }
-
   delete(id: number): Observable<ApiResponse<void>> {
     return this.http.delete<ApiResponse<void>>(`${this.apiUrl}/${id}`);
   }

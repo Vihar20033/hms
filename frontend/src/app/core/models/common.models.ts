@@ -22,7 +22,6 @@ export interface DepartmentStatistics {
 export interface DashboardSummary {
   totalPatients: number;
   todayAppointments: number;
-  totalDoctors: number;
   lowStockMedicines: number;
   totalRevenue: number;
   patientsInQueue: number;
@@ -30,13 +29,4 @@ export interface DashboardSummary {
   totalCompletedConsultations: number;
   weeklyStats: WeeklyStatistics[];
   departmentStats: DepartmentStatistics[];
-}
-
-export interface PagedResponse<T> {
-  content: T[];
-  pageNumber: number;
-  pageSize: number;
-  totalElements: number;
-  totalPages: number;
-  last: boolean;
 }

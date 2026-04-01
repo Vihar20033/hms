@@ -14,13 +14,11 @@ import { Chart, registerables } from 'chart.js';
 import { TableModule } from 'primeng/table';
 import { Appointment, AppointmentStatus } from '../../../core/models/appointment.models';
 import { User } from '../../../core/models/auth.models';
-import { ApiResponse, DashboardSummary, PagedResponse } from '../../../core/models/common.models';
-import { AdminService, HealthResponse } from '../../../core/services/admin.service';
+import { ApiResponse, DashboardSummary } from '../../../core/models/common.models';
 import { AppointmentService } from '../../../core/services/appointment.service';
 import { AuthService } from '../../../core/services/auth.service';
 import { DashboardService } from '../../../core/services/dashboard.service';
 import { StatusModalService } from '../../../core/services/status-modal.service';
-import { DateUtils } from '../../../core/utils/date.utils';
 import { HeaderComponent } from '../../../shared/components/layout/header/header.component';
 import { SidebarComponent } from '../../../shared/components/layout/sidebar/sidebar.component';
 import {
@@ -29,7 +27,6 @@ import {
   createDashboardChart,
   createDepartmentChart,
   getDashboardStatusClass,
-  getDashboardWorkflowLabel,
 } from '../utils/dashboard.utils';
 
 Chart.register(...registerables);
@@ -48,11 +45,9 @@ export class DashboardComponent implements OnInit, AfterViewInit, OnDestroy {
 
   summary: DashboardSummary | null = null;
   isLoading = true;
-  healthStatus: HealthResponse | null = null;
 
   currentUser: User | null = null;
   role = '';
-  isAdminOrStaff = false;
 
   chart: Chart | null = null;
   deptChart: Chart | null = null;
@@ -66,7 +61,6 @@ export class DashboardComponent implements OnInit, AfterViewInit, OnDestroy {
     private dashboardService: DashboardService,
     private appointmentService: AppointmentService,
     private authService: AuthService,
-    private adminService: AdminService,
     private statusModalService: StatusModalService,
     private cdr: ChangeDetectorRef,
   ) {}
@@ -75,12 +69,7 @@ export class DashboardComponent implements OnInit, AfterViewInit, OnDestroy {
     this.authService.currentUser$.subscribe((user) => {
       this.currentUser = user;
       this.role = user?.role || '';
-      this.isAdminOrStaff = true; // Show same dashboard experience to all
       this.quickActions = buildDashboardQuickActions(this.role);
-
-      if (this.role === 'ADMIN') {
-        this.loadHealth();
-      }
     });
 
     this.loadSummary();
@@ -103,19 +92,6 @@ export class DashboardComponent implements OnInit, AfterViewInit, OnDestroy {
       },
       error: () => {
         this.isLoading = false;
-        this.cdr.markForCheck();
-      },
-    });
-  }
-
-  loadHealth(): void {
-    this.adminService.getHealth().subscribe({
-      next: (health) => {
-        this.healthStatus = health;
-        this.cdr.markForCheck();
-      },
-      error: () => {
-        this.healthStatus = { status: 'DOWN' };
         this.cdr.markForCheck();
       },
     });
@@ -160,25 +136,18 @@ export class DashboardComponent implements OnInit, AfterViewInit, OnDestroy {
 
   loadTodayAppointments(): void {
     this.isAppointmentsLoading = true;
-    const today = DateUtils.formatDate(new Date());
 
-    this.appointmentService
-      .search({
-        start: today + 'T00:00:00',
-        end: today + 'T23:59:59',
-        size: 50, // Show all for today
-      })
-      .subscribe({
-        next: (res: ApiResponse<PagedResponse<Appointment>>) => {
-          this.todayAppointments = res.data.content;
-          this.isAppointmentsLoading = false;
-          this.cdr.markForCheck();
-        },
-        error: () => {
-          this.isAppointmentsLoading = false;
-          this.cdr.markForCheck();
-        },
-      });
+    this.appointmentService.getTodayAppointments().subscribe({
+      next: (res: ApiResponse<Appointment[]>) => {
+        this.todayAppointments = res.data;
+        this.isAppointmentsLoading = false;
+        this.cdr.markForCheck();
+      },
+      error: () => {
+        this.isAppointmentsLoading = false;
+        this.cdr.markForCheck();
+      },
+    });
   }
 
   onCheckIn(id: number): void {
@@ -217,9 +186,5 @@ export class DashboardComponent implements OnInit, AfterViewInit, OnDestroy {
 
   getStatusClass(status: AppointmentStatus): string {
     return getDashboardStatusClass(status);
-  }
-
-  getWorkflowLabel(apt: Appointment): string {
-    return getDashboardWorkflowLabel(apt);
   }
 }

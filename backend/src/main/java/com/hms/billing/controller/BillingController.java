@@ -72,6 +72,8 @@ public class BillingController {
                 billingService.updatePaymentStatus(id, status)));
     }
 
+
+
     @PreAuthorize("hasAnyRole('ADMIN','RECEPTIONIST')")
     @PostMapping("/generate/appointment/{appointmentId}")
     public ResponseEntity<ApiResponse<BillingResponseDTO>> generateBilling(

@@ -1,6 +1,7 @@
 package com.hms.doctor.service.impl;
 
 import com.hms.common.audit.AuditLogService;
+import com.hms.common.enums.Department;
 import com.hms.common.enums.Role;
 import com.hms.common.util.SecurityUtils;
 import com.hms.doctor.dto.request.CreateDoctorRequest;
@@ -12,16 +13,12 @@ import com.hms.doctor.exception.DoctorNotFoundException;
 import com.hms.doctor.mapper.DoctorMapper;
 import com.hms.doctor.repository.DoctorRepository;
 import com.hms.doctor.service.DoctorService;
-import com.hms.doctor.specification.DoctorSpecification;
 import com.hms.user.entity.User;
 import com.hms.user.exception.EmailAlreadyExistsException;
 import com.hms.user.exception.UsernameAlreadyExistsException;
 import com.hms.user.repository.UserRepository;
 import com.hms.user.service.UserService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.jpa.domain.Specification;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -87,17 +84,6 @@ public class DoctorServiceImpl implements DoctorService {
     }
 
     @Override
-    @Transactional(readOnly = true)
-    public Page<Doctor> searchDoctors(String query, com.hms.common.enums.Department department, Boolean isAvailable, Pageable pageable) {
-        Specification<Doctor> spec = Specification.where(DoctorSpecification.fuzzySearch(query))
-                .and(DoctorSpecification.fuzzySearch(query))
-                .and(DoctorSpecification.hasDepartment(department))
-                .and(DoctorSpecification.isAvailable(isAvailable));
-
-        return doctorRepository.findAll(spec, pageable);
-    }
-
-    @Override
     @Transactional
     public Doctor updateDoctor(Long id, UpdateDoctorRequest request) {
         Doctor doctor = getDoctorById(id);
@@ -116,20 +102,13 @@ public class DoctorServiceImpl implements DoctorService {
 
     @Override
     @Transactional(readOnly = true)
-    public Doctor getDoctorByUserId(Long userId) {
-        return doctorRepository.findByUserId(userId)
-                .orElseThrow(() -> new DoctorNotFoundException("Doctor profile not found for user: " + userId, userId.toString()));
-    }
-
-    @Override
-    @Transactional(readOnly = true)
     public List<Doctor> getAllDoctors() {
         return doctorRepository.findAll();
     }
 
     @Override
     @Transactional(readOnly = true)
-    public List<Doctor> getDoctorsByDepartment(com.hms.common.enums.Department department) {
+    public List<Doctor> getDoctorsByDepartment(Department department) {
         return doctorRepository.findByDepartment(department);
     }
 
@@ -140,8 +119,6 @@ public class DoctorServiceImpl implements DoctorService {
         doctorRepository.delete(doctor);
         auditLogService.log(SecurityUtils.getCurrentUsername(), "DOCTOR_DELETE", "Doctor", id.toString(), "name=" + doctor.getFirstName() + " " + doctor.getLastName());
 
-        userRepository.findById(doctor.getUserId()).ifPresent(user -> {
-            userService.deleteUser(user.getId());
-        });
+        userRepository.findById(doctor.getUserId()).ifPresent(user -> userService.deleteUser(user.getId()));
     }
 }

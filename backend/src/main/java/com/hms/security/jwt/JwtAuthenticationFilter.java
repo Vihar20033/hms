@@ -26,17 +26,14 @@ import java.util.Objects;
 public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
     private final JwtUtil jwtUtil;
-    private final CookieUtil cookieUtil;
     private final CustomUserDetailsService userDetailsService;
     private final HandlerExceptionResolver resolver;
 
     public JwtAuthenticationFilter(
             JwtUtil jwtUtil,
-            CookieUtil cookieUtil,
             CustomUserDetailsService userDetailsService,
             @Qualifier("handlerExceptionResolver") HandlerExceptionResolver resolver) {
         this.jwtUtil = jwtUtil;
-        this.cookieUtil = cookieUtil;
         this.userDetailsService = userDetailsService;
         this.resolver = resolver;
     }
@@ -48,18 +45,10 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
             @NonNull FilterChain filterChain
     ) throws ServletException, IOException {
 
-        // 1. Try to get token from Cookie first (Production Grade)
-        String jwt = cookieUtil.getAccessToken(request).orElse(null);
-        if (jwt != null) {
-            log.debug("Token successfully extracted from cookie.");
-        }
-
-        // 2. Fallback to Authorization Header (Optional Migration Layer)
-        if (jwt == null) {
-            String authHeader = request.getHeader("Authorization");
-            if (authHeader != null && authHeader.startsWith("Bearer ")) {
-                jwt = authHeader.substring(7);
-            }
+        String jwt = null;
+        String authHeader = request.getHeader("Authorization");
+        if (authHeader != null && authHeader.startsWith("Bearer ")) {
+            jwt = authHeader.substring(7);
         }
 
         if (jwt == null) {

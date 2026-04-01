@@ -41,14 +41,3 @@ export interface PatientRequest {
   contactNumber: string;
   urgencyLevel: UrgencyLevel;
 }
-
-export interface PatientSlice {
-  content: Patient[];
-  numberOfElements: number;
-  totalElements: number;
-  totalPages: number;
-  first: boolean;
-  last: boolean;
-  size: number;
-  number: number;
-}

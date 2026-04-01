@@ -112,31 +112,11 @@ public class BillingServiceImpl implements BillingService {
     }
 
     @Override
-    @Transactional
-    public BillingResponseDTO updateBilling(Long id, BillingRequestDTO dto) {
-        Billing existing = billingRepository.findById(id)
-                .orElseThrow(() -> new BillingNotFoundException("Billing not found: " + id, id.toString()));
-
-        existing.setTotalAmount(dto.getTotalAmount());
-        existing.setNetAmount(dto.getNetAmount());
-        existing.setPaymentStatus(dto.getPaymentStatus());
-        existing.setPaymentMethod(dto.getPaymentMethod());
-        existing.setNotes(dto.getNotes());
-
-        Billing updated = billingRepository.save(existing);
-        auditLogService.log(getCurrentUsername(), "BILLING_UPDATE", "Billing", id.toString(),
-                "status=" + updated.getPaymentStatus());
-        return billingMapper.toDto(updated);
-    }
-
-    @Override
     @Transactional(readOnly = true)
     public BillingResponseDTO getBillingById(Long id) {
         Billing billing = billingRepository.findById(id)
                 .orElseThrow(() -> new BillingNotFoundException("Billing not found: " + id, id.toString()));
-
         checkOwnership(billing);
-
         return billingMapper.toDto(billing);
     }
 
@@ -211,20 +191,33 @@ public class BillingServiceImpl implements BillingService {
         billing.setInvoiceNumber("INV-" + UUID.randomUUID().toString().substring(0, 8).toUpperCase());
         billing.setBillingDate(LocalDateTime.now());
         billing.setPaymentMethod(PaymentMethod.CASH);
-        billing.setPaymentStatus(PaymentStatus.PENDING);
+        billing.setPaymentStatus(PaymentStatus.UNPAID);
         billing.setItems(new ArrayList<>());
 
         BigDecimal rate = (this.taxRate != null) ? this.taxRate : new BigDecimal("0.05");
 
-        if (doctor != null && doctor.getConsultationFee() != null) {
-            BillingItem item = new BillingItem();
-            item.setItemName("Consultation - Dr. " + doctor.getLastName());
-            item.setQuantity(1);
-            item.setUnitPrice(doctor.getConsultationFee());
-            item.setTotalValue(doctor.getConsultationFee());
-            billing.addItem(item);
+        // 1. Registration Fee (entered during patient registration)
+        if (patient.getFees() != null && patient.getFees().compareTo(BigDecimal.ZERO) > 0) {
+            BillingItem regItem = new BillingItem();
+            regItem.setItemName("Registration Fee");
+            regItem.setQuantity(1);
+            regItem.setUnitPrice(patient.getFees());
+            regItem.setTotalValue(patient.getFees());
+            billing.addItem(regItem);
         }
 
+        // 2. Doctor Consultation Fee (from doctor profile)
+        if (doctor != null && doctor.getConsultationFee() != null && doctor.getConsultationFee().compareTo(BigDecimal.ZERO) > 0) {
+            BillingItem consultItem = new BillingItem();
+            String doctorLabel = "Consultation - Dr. " + doctor.getLastName();
+            consultItem.setItemName(doctorLabel);
+            consultItem.setQuantity(1);
+            consultItem.setUnitPrice(doctor.getConsultationFee());
+            consultItem.setTotalValue(doctor.getConsultationFee());
+            billing.addItem(consultItem);
+        }
+
+        // 3. Medicine unit price * total quantity fee
         prescriptionRepository.findByAppointmentId(appointmentId).ifPresent(p -> {
             if (p.getMedicines() != null) {
                 p.getMedicines().forEach(pm -> {
@@ -245,6 +238,7 @@ public class BillingServiceImpl implements BillingService {
             }
         });
 
+        // Set total amount
         BigDecimal subtotal = billing.getItems().stream()
                 .map(i -> i.getTotalValue() != null ? i.getTotalValue() : BigDecimal.ZERO)
                 .reduce(BigDecimal.ZERO, BigDecimal::add);

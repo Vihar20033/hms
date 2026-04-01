@@ -8,7 +8,6 @@ import com.hms.dashboard.dto.DashboardSummaryDTO;
 import com.hms.dashboard.dto.DepartmentStatisticsDTO;
 import com.hms.dashboard.dto.WeeklyStatisticsDTO;
 import com.hms.dashboard.service.DashboardService;
-import com.hms.doctor.repository.DoctorRepository;
 import com.hms.patient.repository.PatientRepository;
 import com.hms.pharmacy.repository.MedicineRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,7 +28,6 @@ public class DashboardServiceImpl implements DashboardService {
 
         private final PatientRepository patientRepository;
         private final AppointmentRepository appointmentRepository;
-        private final DoctorRepository doctorRepository;
         private final MedicineRepository medicineRepository;
         private final BillingRepository billingRepository;
 
@@ -37,12 +35,10 @@ public class DashboardServiceImpl implements DashboardService {
         public DashboardServiceImpl(
                         PatientRepository patientRepository,
                         AppointmentRepository appointmentRepository,
-                        DoctorRepository doctorRepository,
                         MedicineRepository medicineRepository,
                         BillingRepository billingRepository) {
                 this.patientRepository = patientRepository;
                 this.appointmentRepository = appointmentRepository;
-                this.doctorRepository = doctorRepository;
                 this.medicineRepository = medicineRepository;
                 this.billingRepository = billingRepository;
         }
@@ -54,8 +50,6 @@ public class DashboardServiceImpl implements DashboardService {
 
                 long totalPatients = patientRepository.count();
                 long todayAppointments = appointmentRepository.countByAppointmentTimeBetween(startOfDay, endOfDay);
-                long totalDoctors = doctorRepository.count();
-
                 long lowStock = medicineRepository.countLowStock();
 
                 BigDecimal totalRevenue = billingRepository.sumTotalRevenue();
@@ -102,7 +96,6 @@ public class DashboardServiceImpl implements DashboardService {
                 return DashboardSummaryDTO.builder()
                                 .totalPatients(totalPatients)
                                 .todayAppointments(todayAppointments)
-                                .totalDoctors(totalDoctors)
                                 .lowStockMedicines(lowStock)
                                 .totalRevenue(totalRevenue)
                                 .patientsInQueue(inQueue)

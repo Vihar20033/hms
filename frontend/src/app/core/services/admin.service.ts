@@ -23,8 +23,4 @@ export class AdminService {
   getHealth(): Observable<HealthResponse> {
     return this.http.get<HealthResponse>(`${this.apiUrl.replace('/api/v1', '')}/actuator/health`);
   }
-
-  getMetrics(): Observable<any> {
-    return this.http.get<any>(`${this.apiUrl.replace('/api/v1', '')}/actuator/metrics`);
-  }
 }

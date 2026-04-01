@@ -3,7 +3,7 @@ import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { environment } from '../../../environments/environment';
 import { Appointment, AppointmentRequest, AppointmentStatus, AppointmentSummary } from '../models/appointment.models';
-import { ApiResponse, PagedResponse } from '../models/common.models';
+import { ApiResponse } from '../models/common.models';
 
 @Injectable({
   providedIn: 'root',
@@ -18,34 +18,28 @@ export class AppointmentService {
     return this.http.get<ApiResponse<AppointmentSummary>>(`${this.apiUrl}/summary`);
   }
 
-  search(params: {
-    page?: number;
-    size?: number;
-    sort?: string;
-    doctorId?: number;
+  getAll(params?: {
     patientId?: number;
     status?: AppointmentStatus;
-    department?: string;
-    start?: string;
-    end?: string;
-    isEmergency?: boolean;
-  }): Observable<ApiResponse<PagedResponse<Appointment>>> {
-    const httpParams: any  = {};
-    Object.keys(params).forEach(key => {
-      if ((params as any)[key] !== undefined && (params as any)[key] !== null) {
-        httpParams[key] = (params as any)[key].toString();
-      }
-    });
+  }): Observable<ApiResponse<Appointment[]>> {
+    const httpParams: Record<string, string> = {};
 
-    return this.http.get<ApiResponse<PagedResponse<Appointment>>>(this.apiUrl, { params: httpParams });
+    if (params?.patientId !== undefined) {
+      httpParams['patientId'] = params.patientId.toString();
+    }
+    if (params?.status !== undefined) {
+      httpParams['status'] = params.status;
+    }
+
+    return this.http.get<ApiResponse<Appointment[]>>(this.apiUrl, { params: httpParams });
   }
 
   getById(id: number): Observable<ApiResponse<Appointment>> {
     return this.http.get<ApiResponse<Appointment>>(`${this.apiUrl}/${id}`);
   }
 
-  getByPatientId(patientId: number): Observable<ApiResponse<PagedResponse<Appointment>>> {
-    return this.search({ patientId });
+  getByPatientId(patientId: number): Observable<ApiResponse<Appointment[]>> {
+    return this.getAll({ patientId });
   }
 
   create(appointment: AppointmentRequest): Observable<ApiResponse<Appointment>> {

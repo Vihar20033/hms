@@ -1,26 +1,20 @@
 package com.hms.appointment.controller;
 
-import org.springframework.transaction.annotation.Transactional;
 import com.hms.appointment.dto.response.AppointmentSummaryDTO;
-import com.hms.appointment.entity.Appointment;
 import com.hms.common.response.ApiResponse;
 import com.hms.appointment.dto.response.AppointmentResponseDTO;
 import com.hms.appointment.mapper.AppointmentMapper;
 import com.hms.common.enums.AppointmentStatus;
 import com.hms.appointment.service.AppointmentService;
-import com.hms.common.response.PagedResponse;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
-import org.springframework.data.web.PageableDefault;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import jakarta.validation.Valid;
 import com.hms.appointment.dto.request.AppointmentRequestDTO;
-import com.hms.appointment.dto.request.AppointmentSearchCriteria;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/api/v1/appointments")
@@ -48,16 +42,18 @@ public class AppointmentController {
 
     @PreAuthorize("hasAnyRole('ADMIN','RECEPTIONIST','DOCTOR','NURSE')")
     @GetMapping
-    @Transactional(readOnly = true)
-    public ResponseEntity<ApiResponse<PagedResponse<AppointmentResponseDTO>>> searchAppointments(
-            @ModelAttribute AppointmentSearchCriteria criteria,
-            @PageableDefault(sort = "appointmentTime", direction = Sort.Direction.DESC, size = 20) Pageable pageable) {
-        
-        Page<Appointment> appointments = appointmentService.findAppointments(
-                criteria, pageable);
-        
+    public ResponseEntity<ApiResponse<List<AppointmentResponseDTO>>> getAppointments(
+            @RequestParam(name = "patientId", required = false) Long patientId,
+            @RequestParam(name = "status", required = false) AppointmentStatus status) {
         return ResponseEntity.ok(ApiResponse.success(
-                PagedResponse.from(appointments, appointmentMapper::toDto)));
+                appointmentMapper.toDtoList(appointmentService.getAppointments(patientId, status))));
+    }
+
+    @PreAuthorize("hasAnyRole('ADMIN','RECEPTIONIST','DOCTOR','NURSE')")
+    @GetMapping("/today")
+    public ResponseEntity<ApiResponse<List<AppointmentResponseDTO>>> getTodayAppointments() {
+        return ResponseEntity.ok(ApiResponse.success(
+                appointmentMapper.toDtoList(appointmentService.getTodayAppointments())));
     }
 
     @PreAuthorize("hasAnyRole('ADMIN','DOCTOR','NURSE','RECEPTIONIST')")
@@ -78,16 +74,6 @@ public class AppointmentController {
                 appointmentMapper.toDto(appointmentService.updateAppointment(id, dto))));
     }
 
-    @PreAuthorize("hasAnyRole('ADMIN','DOCTOR','RECEPTIONIST')")
-    @PatchMapping("/{id}/status")
-    public ResponseEntity<ApiResponse<AppointmentResponseDTO>> updateStatus(
-            @PathVariable("id") Long id,
-            @RequestParam("status") AppointmentStatus status) {
-        return ResponseEntity
-                .ok(ApiResponse.success(
-                        appointmentMapper.toDto(appointmentService.updateStatus(id, status))));
-    }
-
     @PreAuthorize("hasAnyRole('ADMIN','RECEPTIONIST')")
     @DeleteMapping("/{id}")
     public ResponseEntity<ApiResponse<Void>> deleteAppointment(
@@ -101,7 +87,7 @@ public class AppointmentController {
     public ResponseEntity<ApiResponse<AppointmentResponseDTO>> checkInAppointment(
             @PathVariable("id") Long id) {
         return ResponseEntity.ok(ApiResponse.success(
-                        appointmentMapper.toDto(appointmentService.updateStatus(id, AppointmentStatus.CHECKED_IN))));
+                appointmentMapper.toDto(appointmentService.updateStatus(id, AppointmentStatus.CHECKED_IN))));
     }
 
     @PreAuthorize("hasAnyRole('ADMIN','DOCTOR')")
@@ -109,7 +95,7 @@ public class AppointmentController {
     public ResponseEntity<ApiResponse<AppointmentResponseDTO>> startConsultation(
             @PathVariable("id") Long id) {
         return ResponseEntity.ok(ApiResponse.success(
-                        appointmentMapper.toDto(appointmentService.updateStatus(id, AppointmentStatus.IN_CONSULTATION))));
+                appointmentMapper.toDto(appointmentService.updateStatus(id, AppointmentStatus.IN_CONSULTATION))));
     }
 
     @PreAuthorize("hasAnyRole('ADMIN','DOCTOR')")
@@ -117,6 +103,6 @@ public class AppointmentController {
     public ResponseEntity<ApiResponse<AppointmentResponseDTO>> completeConsultation(
             @PathVariable("id") Long id) {
         return ResponseEntity.ok(ApiResponse.success(
-                        appointmentMapper.toDto(appointmentService.updateStatus(id, AppointmentStatus.COMPLETED))));
+                appointmentMapper.toDto(appointmentService.updateStatus(id, AppointmentStatus.COMPLETED))));
     }
 }

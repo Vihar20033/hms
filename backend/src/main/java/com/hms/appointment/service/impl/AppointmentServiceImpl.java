@@ -7,7 +7,6 @@ import com.hms.appointment.mapper.AppointmentMapper;
 import com.hms.appointment.repository.AppointmentRepository;
 import com.hms.appointment.service.AppointmentService;
 import com.hms.common.enums.AppointmentStatus;
-import com.hms.common.enums.Department;
 import com.hms.common.exception.BadRequestException;
 import com.hms.doctor.entity.Doctor;
 import com.hms.doctor.repository.DoctorRepository;
@@ -16,20 +15,15 @@ import com.hms.patient.repository.PatientRepository;
 import com.hms.user.entity.User;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.data.domain.Pageable;
 import org.springframework.security.access.AccessDeniedException;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import com.hms.appointment.dto.request.AppointmentRequestDTO;
-import com.hms.appointment.dto.request.AppointmentSearchCriteria;
 import com.hms.appointment.dto.response.AppointmentSummaryDTO;
-import com.hms.appointment.specification.AppointmentSpecification;
 import com.hms.common.audit.AuditLogService;
 import com.hms.common.enums.Role;
-import org.springframework.data.domain.Page;
-import org.springframework.data.jpa.domain.Specification;
-import org.springframework.security.core.Authentication;
 
 import java.time.LocalDateTime;
 import java.time.LocalTime;
@@ -245,31 +239,34 @@ public class AppointmentServiceImpl implements AppointmentService {
 
     @Override
     @Transactional(readOnly = true)
-    public Page<Appointment> findAppointments(AppointmentSearchCriteria criteria, Pageable pageable) {
-
-        Specification<Appointment> spec = Specification.where(null);
-
+    public List<Appointment> getAppointments(Long patientId, AppointmentStatus status) {
         User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        if (user.getRole() == Role.DOCTOR) {
-            spec = spec.and(AppointmentSpecification.hasDoctorUserId(user.getId()));
-        }
+        Long doctorUserId = (user.getRole() == Role.DOCTOR) ? user.getId() : null;
 
-        if (criteria.getQuery() != null && !criteria.getQuery().isEmpty())
-            spec = spec.and(AppointmentSpecification.fuzzySearch(criteria.getQuery()));
-        if (criteria.getDoctorId() != null)
-            spec = spec.and(AppointmentSpecification.hasDoctorId(criteria.getDoctorId()));
-        if (criteria.getPatientId() != null)
-            spec = spec.and(AppointmentSpecification.hasPatientId(criteria.getPatientId()));
-        if (criteria.getStatus() != null)
-            spec = spec.and(AppointmentSpecification.hasStatus(criteria.getStatus()));
-        if (criteria.getDepartment() != null)
-            spec = spec.and(AppointmentSpecification.hasDepartment(criteria.getDepartment()));
-        if (criteria.getStart() != null || criteria.getEnd() != null)
-            spec = spec.and(AppointmentSpecification.hasTimeBetween(criteria.getStart(), criteria.getEnd()));
-        if (criteria.getIsEmergency() != null)
-            spec = spec.and(AppointmentSpecification.isEmergency(criteria.getIsEmergency()));
+        return appointmentRepository.findAppointments(
+                doctorUserId,
+                patientId,
+                status,
+                null,
+                null
+        );
+    }
 
-        return appointmentRepository.findAll(spec, pageable);
+    @Override
+    @Transactional(readOnly = true)
+    public List<Appointment> getTodayAppointments() {
+        User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        Long doctorUserId = (user.getRole() == Role.DOCTOR) ? user.getId() : null;
+        LocalDateTime startOfDay = LocalDateTime.now().with(LocalTime.MIN);
+        LocalDateTime endOfDay = LocalDateTime.now().with(LocalTime.MAX);
+
+        return appointmentRepository.findAppointments(
+                doctorUserId,
+                null,
+                null,
+                startOfDay,
+                endOfDay
+        );
     }
 
     @Override

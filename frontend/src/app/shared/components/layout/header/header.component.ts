@@ -30,7 +30,10 @@ export class HeaderComponent {
   }
 
   onLogout(): void {
-    this.authService.logout();
-    this.router.navigate(['/login'], { replaceUrl: true });
+    this.authService.logout().subscribe({
+      complete: () => {
+        this.router.navigate(['/login'], { replaceUrl: true });
+      },
+    });
   }
 }

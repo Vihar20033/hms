@@ -15,7 +15,6 @@ import java.util.List;
 public class DashboardSummaryDTO {
     private long totalPatients;
     private long todayAppointments;
-    private long totalDoctors;
     private long lowStockMedicines;
     private BigDecimal totalRevenue;
     private long patientsInQueue;

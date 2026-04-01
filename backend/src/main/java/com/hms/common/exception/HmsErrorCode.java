@@ -18,7 +18,6 @@ public enum HmsErrorCode {
     USERNAME_EXISTS("AUTH_002", "Username already taken"),
     TOKEN_EXPIRED("AUTH_003", "Session has expired"),
     EMAIL_ALREADY_EXISTS("AUTH_004", "Email address already in use"),
-    SELF_REGISTRATION_ROLE_NOT_ALLOWED("AUTH_005", "Only patient self-registration is allowed"),
     
     // Patient Errors
     PATIENT_NOT_FOUND("PAT_001", "Patient not found"),
@@ -41,6 +40,7 @@ public enum HmsErrorCode {
     // Pharmacy Errors
     MEDICINE_NOT_FOUND("PHR_001", "Medicine not found in inventory"),
     INSUFFICIENT_STOCK("PHR_002", "Insufficient medicine quantity in stock"),
+    DUPLICATE_MEDICINE("PHR_003", "Medicine code already exists"),
 
 
     // Billing Errors

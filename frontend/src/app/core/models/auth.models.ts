@@ -19,7 +19,6 @@ export interface User {
 
 export interface AuthResponse {
   token?: string;
-  refreshToken?: string;
   username: string;
   email: string;
   role: Role;

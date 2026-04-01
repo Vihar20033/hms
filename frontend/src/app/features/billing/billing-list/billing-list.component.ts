@@ -5,7 +5,7 @@ import { FormArray, FormBuilder, FormGroup } from '@angular/forms';
 import { RouterLink } from '@angular/router';
 import { Appointment } from '../../../core/models/appointment.models';
 import { Billing, PaymentMethod, PaymentStatus } from '../../../core/models/billing.models';
-import { ApiResponse, PagedResponse } from '../../../core/models/common.models';
+import { ApiResponse } from '../../../core/models/common.models';
 import { Patient } from '../../../core/models/patient.models';
 import { AppointmentService } from '../../../core/services/appointment.service';
 import { AuthService } from '../../../core/services/auth.service';
@@ -183,8 +183,8 @@ export class BillingListComponent implements OnInit {
 
     if (patientId) {
       this.appointmentService.getByPatientId(patientId).subscribe({
-        next: (res: ApiResponse<PagedResponse<Appointment>>) => {
-          this.patientAppointments = mapAppointmentOptions(res.data.content || []);
+        next: (res: ApiResponse<Appointment[]>) => {
+          this.patientAppointments = mapAppointmentOptions(res.data || []);
           this.cdr.markForCheck();
         },
       });
@@ -197,8 +197,8 @@ export class BillingListComponent implements OnInit {
 
     if (patientId) {
       this.appointmentService.getByPatientId(patientId).subscribe({
-        next: (res: ApiResponse<PagedResponse<Appointment>>) => {
-          this.manualPatientAppointments = mapAppointmentOptions(res.data.content || []);
+        next: (res: ApiResponse<Appointment[]>) => {
+          this.manualPatientAppointments = mapAppointmentOptions(res.data || []);
           this.cdr.markForCheck();
         },
       });
@@ -285,12 +285,6 @@ export class BillingListComponent implements OnInit {
     });
   }
 
-  onUpdateStatus(id: number, status: PaymentStatus): void {
-    this.billingService.updateStatus(id, status).subscribe({
-      next: () => this.loadBillings(),
-    });
-  }
-
   onExportPdf(billing: Billing): void {
     this.exportingId = billing.id;
     try {
@@ -301,6 +295,12 @@ export class BillingListComponent implements OnInit {
       this.statusModalService.showError('Export Failed', 'Could not generate PDF invoice.');
       this.exportingId = null;
     }
+  }
+
+  onUpdateStatus(id: number, status: PaymentStatus): void {
+    this.billingService.updateStatus(id, status).subscribe({
+      next: () => this.loadBillings(),
+    });
   }
 
   getStatusClass(status: PaymentStatus): string {

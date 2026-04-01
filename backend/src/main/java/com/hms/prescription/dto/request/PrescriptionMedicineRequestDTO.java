@@ -8,9 +8,6 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-/**
- * Data Transfer Object for medicine details within a prescription request.
- */
 @Data
 @Builder
 @NoArgsConstructor

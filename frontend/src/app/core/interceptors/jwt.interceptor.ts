@@ -1,28 +1,48 @@
 import { HttpErrorResponse, HttpInterceptorFn } from '@angular/common/http';
 import { inject } from '@angular/core';
-import { catchError, switchMap, throwError } from 'rxjs';
+import { catchError, from, switchMap, throwError } from 'rxjs';
 import { AuthService } from '../services/auth.service';
+
+const AUTH_REFRESH_URL_SEGMENT = '/auth/refresh';
+const AUTH_LOGIN_URL_SEGMENT = '/auth/login';
+const AUTH_RETRY_HEADER = 'X-Auth-Retry';
 
 export const jwtInterceptor: HttpInterceptorFn = (req, next) => {
   const authService = inject(AuthService);
+  const accessToken = authService.getAccessToken();
+  const isRefreshRequest = req.url.includes(AUTH_REFRESH_URL_SEGMENT);
+  const isLoginRequest = req.url.includes(AUTH_LOGIN_URL_SEGMENT);
+  const hasRetried = req.headers.has(AUTH_RETRY_HEADER);
 
-  // Enable cookies for all API requests
   const authReq = req.clone({
     withCredentials: true,
+    ...(accessToken ? { setHeaders: { Authorization: `Bearer ${accessToken}` } } : {}),
   });
 
   return next(authReq).pipe(
     catchError((error: HttpErrorResponse) => {
-      // If 401 Unauthorized, attempt to refresh the session automatically
-      if (error.status === 401 && !req.url.includes('/auth/refresh') && !req.url.includes('/auth/login')) {
-        return authService.refreshToken().pipe(
+      if (error.status === 401 && !isRefreshRequest && !isLoginRequest && !hasRetried) {
+        return from(authService.initializeSession()).pipe(
           switchMap(() => {
-            // After successful refresh, retry the original request
-            // withCredentials will still be true so the new cookie is used
-            return next(authReq);
+            const refreshedToken = authService.getAccessToken();
+
+            if (!refreshedToken) {
+              authService.logout(false).subscribe();
+              return throwError(() => error);
+            }
+
+            const retriedRequest = req.clone({
+              withCredentials: true,
+              setHeaders: {
+                Authorization: `Bearer ${refreshedToken}`,
+                [AUTH_RETRY_HEADER]: 'true',
+              },
+            });
+
+            return next(retriedRequest);
           }),
           catchError((refreshError) => {
-            authService.logout();
+            authService.logout(false).subscribe();
             return throwError(() => refreshError);
           }),
         );

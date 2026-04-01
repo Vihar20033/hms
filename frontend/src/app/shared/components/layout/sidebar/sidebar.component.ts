@@ -1,6 +1,6 @@
 import { CommonModule } from '@angular/common';
 import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
-import { RouterLink, RouterLinkActive } from '@angular/router';
+import { Router, RouterLink, RouterLinkActive } from '@angular/router';
 import { User } from '../../../../core/models/auth.models';
 import { AuthService } from '../../../../core/services/auth.service';
 import { LayoutService } from '../../../../core/services/layout.service';
@@ -24,6 +24,7 @@ interface SidebarMenuItem {
 export class SidebarComponent {
   private layoutService = inject(LayoutService);
   private authService = inject(AuthService);
+  private router = inject(Router);
 
   get isOpen() { return this.layoutService.isSidebarOpen(); }
   get currentUser() { return this.authService.currentUser; }
@@ -105,7 +106,11 @@ export class SidebarComponent {
   }
 
   logout(): void {
-    this.authService.logout();
-    window.location.reload();
+    this.closeSidebar();
+    this.authService.logout().subscribe({
+      complete: () => {
+        this.router.navigate(['/login'], { replaceUrl: true });
+      },
+    });
   }
 }
