@@ -47,7 +47,7 @@ public class AuditLog {
     private String details;
 
     @Column(name = "created_at", nullable = false, updatable = false)
-    private java.time.Instant createdAt;
+    private Instant createdAt;
 
     @PrePersist
     protected void onCreate() {

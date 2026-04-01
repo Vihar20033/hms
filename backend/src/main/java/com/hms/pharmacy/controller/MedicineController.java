@@ -1,6 +1,7 @@
 package com.hms.pharmacy.controller;
 
 import com.hms.common.response.ApiResponse;
+import com.hms.pharmacy.dto.request.DispenseMedicineRequestDTO;
 import com.hms.pharmacy.dto.request.MedicineRequestDTO;
 import com.hms.pharmacy.dto.request.RestockMedicineRequestDTO;
 import com.hms.pharmacy.dto.response.MedicineResponseDTO;
@@ -14,98 +15,81 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-
 @RestController
 @RequestMapping("/api/v1/medicines")
 @RequiredArgsConstructor
 @PreAuthorize("isAuthenticated()")
 public class MedicineController {
 
-    private final MedicineService medicineService;
+    private final MedicineService service;
 
     @PreAuthorize("hasAnyRole('ADMIN','PHARMACIST')")
     @PostMapping
-    public ResponseEntity<ApiResponse<MedicineResponseDTO>> createMedicine(
+    public ResponseEntity<ApiResponse<MedicineResponseDTO>> create(
             @Valid @RequestBody MedicineRequestDTO dto) {
-        MedicineResponseDTO created = medicineService.createMedicine(dto);
-        ApiResponse<MedicineResponseDTO> response = ApiResponse.success(created);
-        response.setMessage("Medicine created successfully");
-        response.setStatus(HttpStatus.CREATED.value());
-        return ResponseEntity.status(HttpStatus.CREATED).body(response);
+        return ResponseEntity.status(HttpStatus.CREATED)
+                .body(ApiResponse.success(service.createMedicine(dto), "Request successful", HttpStatus.CREATED));
     }
 
     @PreAuthorize("hasAnyRole('ADMIN','PHARMACIST')")
     @PutMapping("/{id}")
-    public ResponseEntity<ApiResponse<MedicineResponseDTO>> updateMedicine(
+    public ResponseEntity<ApiResponse<MedicineResponseDTO>> update(
             @PathVariable("id") Long id,
             @Valid @RequestBody MedicineRequestDTO dto) {
-        MedicineResponseDTO updated = medicineService.updateMedicine(id, dto);
-        ApiResponse<MedicineResponseDTO> response = ApiResponse.success(updated);
-        response.setMessage("Medicine updated successfully");
-        return ResponseEntity.ok(response);
+        return ResponseEntity.ok(ApiResponse.success(service.updateMedicine(id, dto)));
     }
 
     @PreAuthorize("hasAnyRole('ADMIN','PHARMACIST')")
     @DeleteMapping("/{id}")
-    public ResponseEntity<ApiResponse<Void>> deleteMedicine(@PathVariable("id") Long id) {
-        medicineService.deleteMedicine(id);
-        ApiResponse<Void> response = ApiResponse.success(null);
-        response.setMessage("Medicine deleted successfully");
-        return ResponseEntity.ok(response);
+    public ResponseEntity<ApiResponse<Void>> delete(@PathVariable("id") Long id) {
+        service.deleteMedicine(id);
+        return ResponseEntity.ok(ApiResponse.success(null));
     }
 
     @PreAuthorize("hasAnyRole('ADMIN','DOCTOR','PHARMACIST')")
     @GetMapping("/{id}")
-    public ResponseEntity<ApiResponse<MedicineResponseDTO>> getMedicineById(@PathVariable("id") Long id) {
-        MedicineResponseDTO medicine = medicineService.getMedicineById(id);
-        return ResponseEntity.ok(ApiResponse.success(medicine));
+    public ResponseEntity<ApiResponse<MedicineResponseDTO>> getById(@PathVariable("id") Long id) {
+        return ResponseEntity.ok(ApiResponse.success(service.getMedicineById(id)));
     }
 
     @PreAuthorize("hasAnyRole('PHARMACIST', 'DOCTOR', 'ADMIN', 'NURSE')")
     @GetMapping
-    public ResponseEntity<ApiResponse<List<MedicineResponseDTO>>> getAllMedicines() {
-        return ResponseEntity.ok(ApiResponse.success(medicineService.getAllMedicines()));
+    public ResponseEntity<ApiResponse<List<MedicineResponseDTO>>> getAll() {
+        return ResponseEntity.ok(ApiResponse.success(service.getAllMedicines()));
     }
 
     @PreAuthorize("hasAnyRole('ADMIN','DOCTOR','PHARMACIST')")
     @GetMapping("/active")
-    public ResponseEntity<ApiResponse<List<MedicineResponseDTO>>> getActiveMedicines() {
-        List<MedicineResponseDTO> medicines = medicineService.getActiveMedicines();
-        return ResponseEntity.ok(ApiResponse.success(medicines));
+    public ResponseEntity<ApiResponse<List<MedicineResponseDTO>>> getActive() {
+        return ResponseEntity.ok(ApiResponse.success(service.getActiveMedicines()));
     }
 
     @PreAuthorize("hasAnyRole('ADMIN','DOCTOR','PHARMACIST')")
     @GetMapping("/category/{category}")
-    public ResponseEntity<ApiResponse<List<MedicineResponseDTO>>> getMedicinesByCategory(
+    public ResponseEntity<ApiResponse<List<MedicineResponseDTO>>> getByCategory(
             @PathVariable("category") String category) {
-        List<MedicineResponseDTO> medicines = medicineService.getMedicinesByCategory(category);
-        return ResponseEntity.ok(ApiResponse.success(medicines));
+        return ResponseEntity.ok(ApiResponse.success(service.getMedicinesByCategory(category)));
     }
 
-
     @GetMapping("/check-code/{code}")
-    public ResponseEntity<ApiResponse<Boolean>> checkMedicineCodeExists(@PathVariable("code") String code) {
-        boolean exists = medicineService.existsByMedicineCode(code);
-        return ResponseEntity.ok(ApiResponse.success(exists));
+    public ResponseEntity<ApiResponse<Boolean>> checkCode(@PathVariable("code") String code) {
+        return ResponseEntity.ok(ApiResponse.success(service.existsByMedicineCode(code)));
     }
 
     @PreAuthorize("hasRole('PHARMACIST')")
     @PostMapping("/dispense")
-    public ResponseEntity<ApiResponse<Void>> dispenseMedicines(@Valid @RequestBody com.hms.pharmacy.dto.request.DispenseMedicineRequestDTO request) {
-        medicineService.dispenseMedicines(request);
+    public ResponseEntity<ApiResponse<Void>> dispense(
+            @Valid @RequestBody DispenseMedicineRequestDTO request) {
+        service.dispenseMedicines(request);
         return ResponseEntity.ok(ApiResponse.success(null));
     }
 
     @PreAuthorize("hasAnyRole('ADMIN','PHARMACIST')")
     @PatchMapping("/{id}/restock")
-    public ResponseEntity<ApiResponse<Void>> restockMedicine(
+    public ResponseEntity<ApiResponse<Void>> restock(
             @PathVariable("id") Long id,
             @Valid @RequestBody RestockMedicineRequestDTO request) {
-        medicineService.restockMedicine(id, request.getQuantity());
-        ApiResponse<Void> response = ApiResponse.success(null);
-        response.setMessage("Medicine restocked successfully");
-        return ResponseEntity.ok(response);
+        service.restockMedicine(id, request.getQuantity());
+        return ResponseEntity.ok(ApiResponse.success(null));
     }
-
 }
-

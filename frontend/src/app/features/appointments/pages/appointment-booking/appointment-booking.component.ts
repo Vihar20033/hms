@@ -80,6 +80,7 @@ export class AppointmentBookingComponent implements OnInit {
     this.processQueryParams();
   }
 
+  // Listens to changes in the form field and react automatically. For example, when department changes, doctor list is automatically filtered.
   private initializeFormListeners(): void {
     this.bookingForm.get('isEmergency')?.valueChanges.subscribe((isEmergency) => {
       updateAppointmentTimeValidators(this.bookingForm, isEmergency);
@@ -89,6 +90,7 @@ export class AppointmentBookingComponent implements OnInit {
     });
   }
 
+  // Initial data load for patients and doctors. In a real app, we might want to optimize this by loading only necessary data or implementing caching.
   private loadInitialData(): void {
     this.patientService.getAll().subscribe((res) => {
       this.patients = res.data;

@@ -240,3 +240,6 @@ Identify and stop the process that's listening on port 8080 or configure this ap
 2026-04-01 11:20:21.887 [main] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Starting...
 2026-04-01 11:20:22.771 [main] INFO  com.zaxxer.hikari.pool.HikariPool - HikariPool-1 - Added connection com.mysql.cj.jdbc.ConnectionImpl@565a6af
 2026-04-01 11:20:22.780 [main] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Start completed.
+2026-04-01 12:39:54.651 [main] INFO  com.hms.HospitalManagementSystemApplication - Starting HospitalManagementSystemApplication using Java 21.0.10 with PID 5292 (C:\Users\Piyush\Desktop\Project\backend\target\classes started by Piyush in C:\Users\Piyush\Desktop\Project)
+2026-04-01 12:39:54.672 [main] DEBUG com.hms.HospitalManagementSystemApplication - Running with Spring Boot v3.3.4, Spring v6.1.13
+2026-04-01 12:39:54.681 [main] INFO  com.hms.HospitalManagementSystemApplication - No active profile set, falling back to 1 default profile: "mysql"

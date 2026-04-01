@@ -95,3 +95,4 @@
 2026-04-01 11:39:00.394 [HikariPool-1 housekeeper] WARN  com.zaxxer.hikari.pool.HikariPool - HikariPool-1 - Thread starvation or clock leap detected (housekeeper delta=1m15s795ms93µs900ns).
 2026-04-01 11:47:03.338 [http-nio-8080-exec-6] INFO  com.hms.security.jwt.JwtAuthenticationFilter - Request authorized for user: recep with authorities: [ROLE_RECEPTIONIST]
 2026-04-01 11:47:03.338 [http-nio-8080-exec-4] INFO  com.hms.security.jwt.JwtAuthenticationFilter - Request authorized for user: recep with authorities: [ROLE_RECEPTIONIST]
+2026-04-01 14:27:16.818 [HikariPool-1 housekeeper] WARN  com.zaxxer.hikari.pool.HikariPool - HikariPool-1 - Thread starvation or clock leap detected (housekeeper delta=52m14s165ms512µs).

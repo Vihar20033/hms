@@ -118,7 +118,6 @@ public class DoctorServiceImpl implements DoctorService {
         Doctor doctor = getDoctorById(id);
         doctorRepository.delete(doctor);
         auditLogService.log(SecurityUtils.getCurrentUsername(), "DOCTOR_DELETE", "Doctor", id.toString(), "name=" + doctor.getFirstName() + " " + doctor.getLastName());
-
         userRepository.findById(doctor.getUserId()).ifPresent(user -> userService.deleteUser(user.getId()));
     }
 }

@@ -16,7 +16,7 @@ import org.springframework.stereotype.Component;
 /*
 @Generated(
     value = "org.mapstruct.ap.MappingProcessor",
-    date = "2026-03-31T19:03:18+0530",
+    date = "2026-04-01T12:39:31+0530",
     comments = "version: 1.5.5.Final, compiler: Eclipse JDT (IDE) 3.45.0.v20260224-0835, environment: Java 21.0.10 (Eclipse Adoptium)"
 )
 */
@@ -31,11 +31,11 @@ public class PrescriptionMapperImpl implements PrescriptionMapper {
 
         Prescription prescription = new Prescription();
 
-        prescription.setSymptoms( dto.getSymptoms() );
+        prescription.setAdvice( dto.getAdvice() );
         prescription.setDiagnosis( dto.getDiagnosis() );
         prescription.setMedicines( prescriptionMedicineRequestDTOListToPrescriptionMedicineList( dto.getMedicines() ) );
-        prescription.setAdvice( dto.getAdvice() );
         prescription.setNotes( dto.getNotes() );
+        prescription.setSymptoms( dto.getSymptoms() );
 
         return prescription;
     }
@@ -52,13 +52,13 @@ public class PrescriptionMapperImpl implements PrescriptionMapper {
         prescriptionResponseDTO.setPatientName( entityPatientName( entity ) );
         prescriptionResponseDTO.setDoctorId( entityDoctorId( entity ) );
         prescriptionResponseDTO.setAppointmentId( entityAppointmentId( entity ) );
-        prescriptionResponseDTO.setId( entity.getId() );
-        prescriptionResponseDTO.setSymptoms( entity.getSymptoms() );
-        prescriptionResponseDTO.setDiagnosis( entity.getDiagnosis() );
-        prescriptionResponseDTO.setMedicines( prescriptionMedicineListToPrescriptionMedicineResponseDTOList( entity.getMedicines() ) );
         prescriptionResponseDTO.setAdvice( entity.getAdvice() );
-        prescriptionResponseDTO.setNotes( entity.getNotes() );
         prescriptionResponseDTO.setCreatedAt( entity.getCreatedAt() );
+        prescriptionResponseDTO.setDiagnosis( entity.getDiagnosis() );
+        prescriptionResponseDTO.setId( entity.getId() );
+        prescriptionResponseDTO.setMedicines( prescriptionMedicineListToPrescriptionMedicineResponseDTOList( entity.getMedicines() ) );
+        prescriptionResponseDTO.setNotes( entity.getNotes() );
+        prescriptionResponseDTO.setSymptoms( entity.getSymptoms() );
 
         prescriptionResponseDTO.setDoctorName( entity.getDoctor() != null ? entity.getDoctor().getFirstName() + " " + entity.getDoctor().getLastName() : null );
 
@@ -87,12 +87,12 @@ public class PrescriptionMapperImpl implements PrescriptionMapper {
 
         PrescriptionMedicineResponseDTO prescriptionMedicineResponseDTO = new PrescriptionMedicineResponseDTO();
 
-        prescriptionMedicineResponseDTO.setId( entity.getId() );
-        prescriptionMedicineResponseDTO.setMedicineName( entity.getMedicineName() );
         prescriptionMedicineResponseDTO.setDosage( entity.getDosage() );
         prescriptionMedicineResponseDTO.setDuration( entity.getDuration() );
-        prescriptionMedicineResponseDTO.setQuantity( entity.getQuantity() );
+        prescriptionMedicineResponseDTO.setId( entity.getId() );
         prescriptionMedicineResponseDTO.setInstructions( entity.getInstructions() );
+        prescriptionMedicineResponseDTO.setMedicineName( entity.getMedicineName() );
+        prescriptionMedicineResponseDTO.setQuantity( entity.getQuantity() );
 
         return prescriptionMedicineResponseDTO;
     }
@@ -105,11 +105,11 @@ public class PrescriptionMapperImpl implements PrescriptionMapper {
 
         PrescriptionMedicine prescriptionMedicine = new PrescriptionMedicine();
 
-        prescriptionMedicine.setMedicineName( dto.getMedicineName() );
         prescriptionMedicine.setDosage( dto.getDosage() );
         prescriptionMedicine.setDuration( dto.getDuration() );
-        prescriptionMedicine.setQuantity( dto.getQuantity() );
         prescriptionMedicine.setInstructions( dto.getInstructions() );
+        prescriptionMedicine.setMedicineName( dto.getMedicineName() );
+        prescriptionMedicine.setQuantity( dto.getQuantity() );
 
         return prescriptionMedicine;
     }

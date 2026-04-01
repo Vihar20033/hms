@@ -35,7 +35,7 @@ export const jwtInterceptor: HttpInterceptorFn = (req, next) => {
               withCredentials: true,
               setHeaders: {
                 Authorization: `Bearer ${refreshedToken}`,
-                [AUTH_RETRY_HEADER]: 'true',
+                [AUTH_RETRY_HEADER]: 'true', // Mark the request as a retry to prevent infinite loops
               },
             });
 

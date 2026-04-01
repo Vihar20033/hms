@@ -179,20 +179,19 @@ public class PrescriptionServiceImpl implements PrescriptionService {
 
     private void checkOwnership(Prescription prescription) {
         User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        com.hms.common.enums.Role role = user.getRole();
+        Role role = user.getRole();
 
         // 1. Staff with Access
-        if (role == com.hms.common.enums.Role.ADMIN || role == com.hms.common.enums.Role.PHARMACIST) {
+        if (role == Role.ADMIN || role == Role.PHARMACIST) {
             return;
         }
 
         // 2. Doctor access (Assigned to the patient or wrote it)
-        if (role == com.hms.common.enums.Role.DOCTOR) {
+        if (role == Role.DOCTOR) {
             if (prescription.getDoctor().getUserId().equals(user.getId())) {
                 return;
             }
         }
-
 
         log.warn("Security Alert: User {} with role {} tried to access prescription {}.", 
                 user.getUsername(), role, prescription.getId());
