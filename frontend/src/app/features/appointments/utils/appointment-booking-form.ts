@@ -1,9 +1,6 @@
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import {
-  clinicHoursValidator,
-  futureOrTodayDateValidator,
-  trimRequired,
-} from '../../../../core/validators/app-validators';
+import { futureOrTodayDateValidator , clinicHoursValidator , trimRequired } from 'src/app/core/validators/app-validators';
+
 
 export function createAppointmentBookingForm(fb: FormBuilder): FormGroup {
   return fb.group({

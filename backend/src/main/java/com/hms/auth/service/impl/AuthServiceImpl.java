@@ -162,6 +162,9 @@ public class AuthServiceImpl implements AuthService {
         if (!passwordEncoder.matches(request.getCurrentPassword(), user.getPassword())) {
             throw new InvalidCredentialsException("Current password is incorrect");
         }
+        if (passwordEncoder.matches(request.getNewPassword(), user.getPassword())) {
+            throw new InvalidCredentialsException("New password must be different from current password");
+        }
 
         user.setPassword(passwordEncoder.encode(request.getNewPassword()));
         user.setPasswordChangeRequired(false);
@@ -181,6 +184,8 @@ public class AuthServiceImpl implements AuthService {
             return;
         }
 
+        user.setTokenVersion(user.getTokenVersion() + 1);
+        userRepository.save(user);
         revokeRefreshTokenIfPresent(refreshToken, username);
         auditLogService.log(username, "USER_LOGOUT", "User", user.getId().toString(), null);
     }
@@ -206,4 +211,3 @@ public class AuthServiceImpl implements AuthService {
                 .build());
     }
 }
-

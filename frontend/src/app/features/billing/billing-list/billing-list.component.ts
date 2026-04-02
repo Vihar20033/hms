@@ -2,9 +2,8 @@ import { CommonModule } from '@angular/common';
 import { HttpErrorResponse } from '@angular/common/http';
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnInit } from '@angular/core';
 import { FormArray, FormBuilder, FormGroup } from '@angular/forms';
-import { RouterLink } from '@angular/router';
 import { Appointment } from '../../../core/models/appointment.models';
-import { Billing, PaymentMethod, PaymentStatus } from '../../../core/models/billing.models';
+import { Billing, PaymentStatus } from '../../../core/models/billing.models';
 import { ApiResponse } from '../../../core/models/common.models';
 import { Patient } from '../../../core/models/patient.models';
 import { AppointmentService } from '../../../core/services/appointment.service';
@@ -22,9 +21,10 @@ import { createBillingForm, createBillingItemGroup, getBillingItems } from '../u
 import {
   buildBillingPayload,
   buildPreviewItemGroups,
+  getBillingSubtotal,
   mapAppointmentOptions,
 } from '../utils/billing-data.utils';
-import { getBillingItemTotal, getBillingNetTotal, getBillingSubtotal, getBillingStatusClass, buildPatientOptions, buildPaymentMethodOptions } from '../utils/billing-data.utils';
+import { getBillingStatusClass } from '../utils/billing-data.utils';
 
 @Component({
   selector: 'app-billing-list',
@@ -54,8 +54,6 @@ export class BillingListComponent implements OnInit {
   billingForm!: FormGroup;
   today: Date = new Date();
 
-  PaymentMethod = PaymentMethod;
-  paymentMethods = Object.values(PaymentMethod) as PaymentMethod[];
   PaymentStatus = PaymentStatus;
 
   showAutoGenerateModal = false;
@@ -119,18 +117,8 @@ export class BillingListComponent implements OnInit {
     if (this.items.length > 1) this.items.removeAt(i);
   }
 
-  getItemTotal(i: number): number {
-    return getBillingItemTotal(this.items, i);
-  }
-
-  getSubtotal(): number {
+  private getSubtotal(): number {
     return getBillingSubtotal(this.items);
-  }
-
-  getNetTotal(): number {
-    const tax = this.billingForm.get('taxAmount')?.value || 0;
-    const discount = this.billingForm.get('discountAmount')?.value || 0;
-    return getBillingNetTotal(this.items, tax, discount);
   }
 
   loadBillings(): void {
@@ -181,28 +169,18 @@ export class BillingListComponent implements OnInit {
     this.patientAppointments = [];
     this.selectedAppointmentId = null;
 
-    if (patientId) {
-      this.appointmentService.getByPatientId(patientId).subscribe({
-        next: (res: ApiResponse<Appointment[]>) => {
-          this.patientAppointments = mapAppointmentOptions(res.data || []);
-          this.cdr.markForCheck();
-        },
-      });
-    }
+    this.loadPatientAppointments(patientId, (appointments) => {
+      this.patientAppointments = appointments;
+    });
   }
 
   onPatientSelectedForManual(patientId: number): void {
     this.manualPatientAppointments = [];
     this.billingForm.get('appointment')?.setValue(null, { emitEvent: false });
 
-    if (patientId) {
-      this.appointmentService.getByPatientId(patientId).subscribe({
-        next: (res: ApiResponse<Appointment[]>) => {
-          this.manualPatientAppointments = mapAppointmentOptions(res.data || []);
-          this.cdr.markForCheck();
-        },
-      });
-    }
+    this.loadPatientAppointments(patientId, (appointments) => {
+      this.manualPatientAppointments = appointments;
+    });
   }
 
   onAppointmentSelectedForManual(appointment: any): void {
@@ -314,11 +292,20 @@ export class BillingListComponent implements OnInit {
     });
   }
 
-  getPatientOptions() {
-    return buildPatientOptions(this.patients);
-  }
+  private loadPatientAppointments(
+    patientId: number,
+    assignAppointments: (appointments: Appointment[]) => void,
+  ): void {
+    if (!patientId) {
+      this.cdr.markForCheck();
+      return;
+    }
 
-  getPaymentMethodOptions() {
-    return buildPaymentMethodOptions(this.paymentMethods);
+    this.appointmentService.getByPatientId(patientId).subscribe({
+      next: (res: ApiResponse<Appointment[]>) => {
+        assignAppointments(mapAppointmentOptions(res.data || []));
+        this.cdr.markForCheck();
+      },
+    });
   }
 }

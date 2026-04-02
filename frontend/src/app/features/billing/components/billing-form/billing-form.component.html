@@ -3,7 +3,7 @@
     <h3><i class="ri-bill-line"></i> New Invoice</h3>
     <button class="icon-btn" (click)="onClose()"><i class="ri-close-line"></i></button>
   </div>
-  <form [formGroup]="form" (ngSubmit)="onSubmit()">
+  <form [formGroup]="form()" (ngSubmit)="onSubmit()">
     <div class="form-shell">
       <div class="form-section section-wide">
         <div class="section-title">
@@ -39,19 +39,19 @@
               styleClass="w-full"
             ></p-dropdown>
           </div>
-          @if (manualPatientAppointments.length > 0) {
+          @if (manualPatientAppointments().length > 0) {
             <div class="form-group">
               <label class="form-label">Sync Appointment (Optional)</label>
               <p-dropdown
                 formControlName="appointment"
-                [options]="manualPatientAppointments"
+                [options]="manualPatientAppointments()"
                 optionLabel="label"
                 [filter]="true"
                 filterBy="label"
                 placeholder="Pull data from encounter..."
                 styleClass="w-full sync-dropdown"
                 (onChange)="onAppointmentSelected($event.value)"
-                [loading]="isSyncingItems"
+                [loading]="isSyncingItems()"
               >
                 <ng-template let-selectedItem pTemplate="selectedItem">
                   @if (selectedItem) {
@@ -96,7 +96,7 @@
               [showIcon]="true"
               styleClass="w-full"
               dateFormat="dd/mm/yy"
-              [minDate]="today"
+              [minDate]="today()"
             ></p-calendar>
           </div>
         </div>
@@ -194,9 +194,9 @@
             <button
               type="submit"
               class="btn-primary"
-              [disabled]="form.invalid || isSubmitting"
+              [disabled]="form().invalid || isSubmitting()"
             >
-              @if (isSubmitting) {
+              @if (isSubmitting()) {
                 <i class="ri-loader-4-line spin"></i> Processing...
               } @else {
                 <i class="ri-check-line"></i> Finalize Invoice

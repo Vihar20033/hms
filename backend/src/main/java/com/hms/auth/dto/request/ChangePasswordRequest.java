@@ -1,7 +1,6 @@
 package com.hms.auth.dto.request;
 
 import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.AssertTrue;
 import jakarta.validation.constraints.Size;
 import lombok.Getter;
 import lombok.Setter;
@@ -18,11 +17,4 @@ public class ChangePasswordRequest {
     @Size(min = 6, max = 128)
     private String newPassword;
 
-    @AssertTrue(message = "New password must be different from current password")
-    public boolean isNewPasswordDifferent() {
-        if (currentPassword == null || newPassword == null) {
-            return true;
-        }
-        return !currentPassword.equals(newPassword);
-    }
 }

@@ -1,12 +1,6 @@
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import {
-  LICENSE_NUMBER_PATTERN,
-  PERSON_NAME_PATTERN,
-  PHONE_PATTERN,
-  STRONG_PASSWORD_PATTERN,
-  USERNAME_PATTERN,
-  trimRequired,
-} from '../../../../core/validators/app-validators';
+import { LICENSE_NUMBER_PATTERN, PERSON_NAME_PATTERN, PHONE_PATTERN, STRONG_PASSWORD_PATTERN, trimRequired, USERNAME_PATTERN } from 'src/app/core/validators/app-validators';
+
 
 export function createDoctorRegistrationForm(fb: FormBuilder): FormGroup {
   return fb.group({

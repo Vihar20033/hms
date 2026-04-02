@@ -14,7 +14,7 @@ import { Doctor, DoctorOnboardingResponse, DoctorRegistrationRequest } from '../
 import { DoctorService } from '../../../../core/services/doctor.service';
 import { HeaderComponent } from '../../../../shared/components/layout/header/header.component';
 import { SidebarComponent } from '../../../../shared/components/layout/sidebar/sidebar.component';
-import { createDoctorRegistrationForm } from './doctor-registration-form';
+import { createDoctorRegistrationForm } from '../../utils/doctor-registration-form';
 import { buildDoctorDepartmentOptions, buildDoctorFormPatch } from '../../utils/doctor-registration.utils';
 
 @Component({

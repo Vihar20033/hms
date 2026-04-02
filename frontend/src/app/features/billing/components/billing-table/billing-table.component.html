@@ -1,7 +1,7 @@
 <div class="card p-0 table-card">
   <p-table
-    [value]="billings"
-    [loading]="isLoading"
+    [value]="billings()"
+    [loading]="isLoading()"
     [paginator]="true"
     [rows]="10"
     styleClass="data-table clinical-table"
@@ -52,17 +52,17 @@
             </button>
             <button
               class="btn-icon prescribe"
-              title="{{ exportingId === bill.id ? 'Generating...' : 'Download PDF' }}"
+              title="{{ exportingId() === bill.id ? 'Generating...' : 'Download PDF' }}"
               (click)="onExportPdf(bill)"
-              [disabled]="exportingId === bill.id"
+              [disabled]="exportingId() === bill.id"
             >
-              @if (exportingId !== bill.id) {
+              @if (exportingId() !== bill.id) {
                 <i class="ri-file-pdf-line"></i>
               } @else {
                 <i class="ri-loader-4-line spin"></i>
               }
             </button>
-            @if (bill.paymentStatus !== PaymentStatus.PAID && (userRole === 'ADMIN' || userRole === 'RECEPTIONIST')) {
+            @if (bill.paymentStatus !== PaymentStatus.PAID && (userRole() === 'ADMIN' || userRole() === 'RECEPTIONIST')) {
               <button
                 class="btn-icon complete"
                 title="Mark as Paid"
@@ -72,7 +72,7 @@
               </button>
             }
 
-            @if (userRole === 'ADMIN') {
+            @if (userRole() === 'ADMIN') {
               <button
                 class="btn-icon checkin"
                 title="Delete"

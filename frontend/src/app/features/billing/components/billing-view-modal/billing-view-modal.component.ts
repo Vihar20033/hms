@@ -1,5 +1,5 @@
 import { CommonModule, DecimalPipe } from '@angular/common';
-import { Component, EventEmitter, Input, Output } from '@angular/core';
+import { Component, input, output } from '@angular/core';
 import { Billing, PaymentStatus } from '../../../../core/models/billing.models';
 import { getBillingStatusClass } from '../../utils/billing-data.utils';
 
@@ -11,17 +11,18 @@ import { getBillingStatusClass } from '../../utils/billing-data.utils';
   styleUrl: './billing-view-modal.component.scss'
 })
 export class BillingViewModalComponent {
-  @Input() billing: Billing | null = null;
-  @Output() close = new EventEmitter<void>();
-  @Output() exportPdf = new EventEmitter<Billing>();
+  readonly billing = input<Billing | null>(null);
+  readonly close = output<void>();
+  readonly exportPdf = output<Billing>();
 
   onClose(): void {
     this.close.emit();
   }
 
   onExportPdf(): void {
-    if (this.billing) {
-      this.exportPdf.emit(this.billing);
+    const billing = this.billing();
+    if (billing) {
+      this.exportPdf.emit(billing);
     }
   }
 

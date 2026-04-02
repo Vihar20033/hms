@@ -1,5 +1,5 @@
 import { CommonModule, DatePipe } from '@angular/common';
-import { Component, EventEmitter, Input, Output } from '@angular/core';
+import { Component, input, output } from '@angular/core';
 import { FormArray, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { CalendarModule } from 'primeng/calendar';
 import { DropdownModule } from 'primeng/dropdown';
@@ -28,24 +28,24 @@ import { buildPatientOptions, buildPaymentMethodOptions, getBillingItemTotal, ge
   styleUrl: './billing-form.component.scss'
 })
 export class BillingFormComponent {
-  @Input() form!: FormGroup;
-  @Input() patients: Patient[] = [];
-  @Input() manualPatientAppointments: Appointment[] = [];
-  @Input() isSyncingItems = false;
-  @Input() isSubmitting = false;
-  @Input() today: Date = new Date();
+  readonly form = input.required<FormGroup>();
+  readonly patients = input<Patient[]>([]);
+  readonly manualPatientAppointments = input<Appointment[]>([]);
+  readonly isSyncingItems = input(false);
+  readonly isSubmitting = input(false);
+  readonly today = input(new Date());
 
-  @Output() close = new EventEmitter<void>();
-  @Output() submitForm = new EventEmitter<void>();
-  @Output() addItem = new EventEmitter<void>();
-  @Output() removeItem = new EventEmitter<number>();
-  @Output() appointmentSelected = new EventEmitter<any>();
+  readonly close = output<void>();
+  readonly submitForm = output<void>();
+  readonly addItem = output<void>();
+  readonly removeItem = output<number>();
+  readonly appointmentSelected = output<any>();
 
   PaymentMethod = PaymentMethod;
   paymentMethods = Object.values(PaymentMethod) as PaymentMethod[];
 
   get items(): FormArray {
-    return this.form.get('items') as FormArray;
+    return this.form().get('items') as FormArray;
   }
 
   onClose(): void {
@@ -77,13 +77,13 @@ export class BillingFormComponent {
   }
 
   getNetTotal(): number {
-    const tax = this.form.get('taxAmount')?.value || 0;
-    const discount = this.form.get('discountAmount')?.value || 0;
+    const tax = this.form().get('taxAmount')?.value || 0;
+    const discount = this.form().get('discountAmount')?.value || 0;
     return getBillingNetTotal(this.items, tax, discount);
   }
 
   getPatientOptions() {
-    return buildPatientOptions(this.patients);
+    return buildPatientOptions(this.patients());
   }
 
   getPaymentMethodOptions() {

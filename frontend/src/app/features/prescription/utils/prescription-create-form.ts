@@ -1,5 +1,5 @@
 import { FormArray, FormBuilder, FormGroup, ValidationErrors, Validators } from '@angular/forms';
-import { trimRequired } from '../../../../core/validators/app-validators';
+import { trimRequired } from '../../../core/validators/app-validators';
 
 export function createPrescriptionMedicineGroup(fb: FormBuilder): FormGroup {
   return fb.group(

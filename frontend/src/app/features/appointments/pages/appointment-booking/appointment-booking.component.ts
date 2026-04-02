@@ -19,7 +19,7 @@ import { DoctorService } from '../../../../core/services/doctor.service';
 import { PatientService } from '../../../../core/services/patient.service';
 import { HeaderComponent } from '../../../../shared/components/layout/header/header.component';
 import { SidebarComponent } from '../../../../shared/components/layout/sidebar/sidebar.component';
-import { createAppointmentBookingForm, updateAppointmentTimeValidators } from './appointment-booking-form';
+import { createAppointmentBookingForm, updateAppointmentTimeValidators } from '../../utils/appointment-booking-form';
 import {
   buildDepartmentOptions,
   buildDoctorOptions,
@@ -101,11 +101,12 @@ export class AppointmentBookingComponent implements OnInit {
     });
   }
 
+  // Processes query parameters to determine if we are in edit mode (if appointmentId is present) and to pre-select patient if patientId is provided. This allows for deep linking and better user experience when navigating from patient or appointment details.
   private processQueryParams(): void {
     this.route.queryParams.subscribe((params) => {
       if (params['patientId']) {
-        this.bookingForm.patchValue({ patientId: Number(params['patientId']) });
-      }
+        this.bookingForm.patchValue({ patientId: Number(params['patientId']) });  // Updates only specific field 
+      } 
       if (params['appointmentId']) {
         this.isEditMode = true;
         this.appointmentId = Number(params['appointmentId']);
@@ -118,16 +119,16 @@ export class AppointmentBookingComponent implements OnInit {
     this.isLoading = true;
     this.appointmentService.getById(id).subscribe({
       next: (res: ApiResponse<Appointment>) => {
-        const appt = res.data;
+        const a = res.data;
         this.bookingForm.patchValue({
-          patientId: appt.patientId,
-          department: appt.department,
-          doctorId: appt.doctorId ?? '',
-          appointmentDate: toDateOnly(appt.appointmentTime),
-          appointmentTime: toTimeOnly(appt.appointmentTime),
-          reason: appt.reason,
-          notes: appt.notes ?? '',
-          isEmergency: appt.isEmergency ?? false,
+          patientId: a.patientId,
+          department: a.department,
+          doctorId: a.doctorId ?? '',
+          appointmentDate: toDateOnly(a.appointmentTime),
+          appointmentTime: toTimeOnly(a.appointmentTime),
+          reason: a.reason,
+          notes: a.notes ?? '',
+          isEmergency: a.isEmergency ?? false,
         });
         this.isLoading = false;
       },

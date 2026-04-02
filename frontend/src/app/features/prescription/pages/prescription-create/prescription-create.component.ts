@@ -21,7 +21,7 @@ import {
   createPrescriptionForm,
   createPrescriptionMedicineGroup,
   getPrescriptionMedicines,
-} from './prescription-create-form';
+} from '../../utils/prescription-create-form';
 import { filterPrescriptionMedicines, findDoctorIdByUserEmail } from '../../utils/prescription-create.utils';
 
 @Component({
@@ -53,7 +53,7 @@ export class PrescriptionCreateComponent implements OnInit {
     private route: ActivatedRoute,
     private router: Router,
     private cdr: ChangeDetectorRef,
-  ) { }
+  ) {}
 
   ngOnInit(): void {
     const paramId = this.route.snapshot.params['appointmentId'];
