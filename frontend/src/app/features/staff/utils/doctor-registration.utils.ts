@@ -1,6 +1,7 @@
 import { formatDepartmentLabel } from '../../../core/constants/department.constants';
 import { Doctor } from '../../../core/models/doctor.models';
 
+// Build dropdown options for doctor department selection
 export function buildDoctorDepartmentOptions(departments: string[]): Array<{ label: string; value: string }> {
   return departments.map((department) => ({
     label: formatDepartmentLabel(department),
@@ -8,6 +9,7 @@ export function buildDoctorDepartmentOptions(departments: string[]): Array<{ lab
   }));
 }
 
+// Build a patch object for doctor update by comparing form values with existing doctor data
 export function buildDoctorFormPatch(doctor: Doctor): Record<string, unknown> {
   return {
     firstName: doctor.firstName,

@@ -13,8 +13,6 @@ public interface PrescriptionService {
 
     List<PrescriptionResponseDTO> getAllPrescriptions();
 
-
-
     List<PrescriptionResponseDTO> getPrescriptionsByPatientId(Long patientId);
 
     void deletePrescription(Long id);

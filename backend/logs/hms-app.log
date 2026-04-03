@@ -40,3 +40,12 @@
 2026-04-02 10:41:18.747 [main] INFO  com.hms.HospitalManagementSystemApplication - Started HospitalManagementSystemApplication in 25.955 seconds (process running for 27.101)
 2026-04-02 10:41:19.169 [main] INFO  com.hms.common.config.DataInitializer - Starting database column initialization...
 2026-04-02 10:41:19.265 [main] INFO  com.hms.common.config.DataInitializer - Database column initialization completed.
+2026-04-02 13:05:04.015 [http-nio-8080-exec-1] INFO  o.a.c.core.ContainerBase.[Tomcat].[localhost].[/] - Initializing Spring DispatcherServlet 'dispatcherServlet'
+2026-04-02 13:05:04.015 [http-nio-8080-exec-1] INFO  org.springframework.web.servlet.DispatcherServlet - Initializing Servlet 'dispatcherServlet'
+2026-04-02 13:05:04.065 [http-nio-8080-exec-1] INFO  org.springframework.web.servlet.DispatcherServlet - Completed initialization in 50 ms
+2026-04-02 13:05:05.495 [http-nio-8080-exec-2] INFO  com.hms.security.jwt.JwtAuthenticationFilter - Request authorized for user: recep with authorities: [ROLE_RECEPTIONIST]
+2026-04-02 13:05:05.499 [http-nio-8080-exec-9] INFO  com.hms.security.jwt.JwtAuthenticationFilter - Request authorized for user: recep with authorities: [ROLE_RECEPTIONIST]
+2026-04-02 13:06:50.224 [http-nio-8080-exec-4] INFO  com.hms.security.jwt.JwtAuthenticationFilter - Request authorized for user: recep with authorities: [ROLE_RECEPTIONIST]
+2026-04-02 13:06:50.236 [http-nio-8080-exec-5] INFO  com.hms.security.jwt.JwtAuthenticationFilter - Request authorized for user: recep with authorities: [ROLE_RECEPTIONIST]
+2026-04-02 14:48:17.395 [HikariPool-1 housekeeper] WARN  com.zaxxer.hikari.pool.HikariPool - HikariPool-1 - Thread starvation or clock leap detected (housekeeper delta=1h26m9s866ms666µs).
+2026-04-02 18:10:43.788 [HikariPool-1 housekeeper] WARN  com.zaxxer.hikari.pool.HikariPool - HikariPool-1 - Thread starvation or clock leap detected (housekeeper delta=46m23s880ms948µs500ns).

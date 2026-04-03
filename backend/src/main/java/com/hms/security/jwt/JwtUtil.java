@@ -27,6 +27,7 @@ public class JwtUtil {
 
     private final JwtProperties jwtProperties;
 
+    // Creates a secure secret key - For Signing the token and Verify the token
     private SecretKey getSigningKey() {
         byte[] keyBytes = Decoders.BASE64.decode(jwtProperties.getSecret());
         return Keys.hmacShaKeyFor(keyBytes);
@@ -80,6 +81,7 @@ public class JwtUtil {
         return extractClaim(token, Claims::getExpiration);
     }
 
+    // Securely has a token => Plain token into fixed length secure hash
     public String hashToken(String token) {
         try {
             MessageDigest digest = MessageDigest.getInstance("SHA-256");

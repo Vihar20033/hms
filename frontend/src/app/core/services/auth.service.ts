@@ -65,6 +65,8 @@ export class AuthService {
   }
 
   initializeSession(): Promise<void> {
+
+    // User data already present in the memory , session is active, no need to refresh token or make any API calls
     if (this.currentUserValue) {
       return Promise.resolve();
     }
@@ -72,11 +74,12 @@ export class AuthService {
     // Problem 5 Request coalescing: Ensure only one refresh token request is made when multiple components call initializeSession simultaneously
     if (!this.restorePromise) {
       this.restorePromise = firstValueFrom(
-        this.refreshToken().pipe(mapTo(void 0),catchError(() => {
+        this.refreshToken().pipe(mapTo(void 0),
+        catchError(() => {
             this.clearUserState();
             return of(void 0);
           }),
-          finalize(() => {
+        finalize(() => {
             this.restorePromise = null;
           }),
         ),

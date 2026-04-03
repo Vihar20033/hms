@@ -196,7 +196,8 @@ export class BillingListComponent implements OnInit {
           while (this.items.length) {
             this.items.removeAt(0);
           }
-          buildPreviewItemGroups(suggested, (item) => createBillingItemGroup(this.fb, item)).forEach((group) => {
+          buildPreviewItemGroups(suggested, (item) => 
+            createBillingItemGroup(this.fb, item)).forEach((group) => {
             this.items.push(group);
           });
         }
@@ -269,7 +270,6 @@ export class BillingListComponent implements OnInit {
       this.pdfExportService.exportInvoice(billing);
       this.exportingId = null;
     } catch (error) {
-      console.error('PDF Generation Error:', error);
       this.statusModalService.showError('Export Failed', 'Could not generate PDF invoice.');
       this.exportingId = null;
     }
