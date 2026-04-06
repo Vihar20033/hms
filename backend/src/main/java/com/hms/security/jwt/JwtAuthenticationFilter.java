@@ -79,7 +79,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
                 Integer tokenVersion = jwtUtil.extractTokenVersion(jwt);
                 if (!Objects.equals(user.getTokenVersion(), tokenVersion)) {
                     log.warn("Stale token detected for {}. Token version: {} | Expected: {}", username, tokenVersion, user.getTokenVersion());
-                    filterChain.doFilter(request, response);
+                    filterChain.doFilter(request, response);    
                     return;
                 }
 

@@ -1,5 +1,1 @@
-2026-04-01 10:16:32.710 | recep | PATIENT_CREATE | Patient | 2 | name=Krishna
-2026-04-01 10:17:00.931 | recep | APPOINTMENT_CREATE | Appointment | 2 | patient=Krishna
-2026-04-01 10:17:44.715 | recep | PATIENT_CREATE | Patient | 3 | name=dsx
-2026-04-01 11:10:37.214 | recep | BILLING_CREATE | Billing | 2 | invoice=INV-FE0111A2
-2026-04-01 11:21:44.344 | recep | BILLING_PAYMENT_UPDATE | Billing | 1 | status=PAID
+2026-04-04 10:03:17.767 | admin | USER_LOGOUT | User | 1 | 
