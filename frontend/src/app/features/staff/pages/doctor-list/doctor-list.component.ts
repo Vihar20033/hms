@@ -42,7 +42,8 @@ export class DoctorListComponent implements OnInit {
   }
 
   onEdit(doctor: Doctor): void {
-    this.router.navigate(['/staff/register'], { queryParams: { doctorId: doctor.id, mode: 'edit' } });
+    this.router.navigate(['/staff/register'], 
+      { queryParams: { doctorId: doctor.id, mode: 'edit' } });
   }
 
   onDelete(doctor: Doctor): void {

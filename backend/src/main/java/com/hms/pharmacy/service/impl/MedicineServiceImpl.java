@@ -41,8 +41,8 @@ public class MedicineServiceImpl implements MedicineService {
             throw new DuplicateMedicineException("Medicine code already exists: " + dto.getMedicineCode());
         }
 
-        Medicine medicine = medicineMapper.toEntity(dto);
-        Medicine savedMedicine = medicineRepository.save(medicine);
+        Medicine savedMedicine = medicineRepository
+                .save(medicineMapper.toEntity(dto));
 
         // Record initial inventory transaction
         InventoryTransaction transaction = InventoryTransaction.builder()

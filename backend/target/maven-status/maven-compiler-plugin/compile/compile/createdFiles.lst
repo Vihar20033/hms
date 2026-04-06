@@ -184,7 +184,6 @@ com\hms\user\exception\UserNotFoundException.class
 com\hms\user\service\UserService.class
 com\hms\doctor\dto\request\CreateDoctorRequest.class
 com\hms\dashboard\dto\DepartmentStatisticsDTO$DepartmentStatisticsDTOBuilder.class
-com\hms\common\enums\TestStatus.class
 com\hms\appointment\repository\AppointmentRepository.class
 com\hms\user\repository\UserRepository.class
 com\hms\common\response\ApiResponse$ApiResponseBuilder.class

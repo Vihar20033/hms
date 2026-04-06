@@ -21,7 +21,9 @@ public class InventoryController {
     private final MedicineService medicineService;
 
     @GetMapping
-    public ResponseEntity<ApiResponse<List<InventoryTransactionResponseDTO>>> getAllTransactions() {
-        return ResponseEntity.ok(ApiResponse.success(medicineService.getAllTransactions()));
+    public ResponseEntity<ApiResponse<List
+            <InventoryTransactionResponseDTO>>> getAllTransactions() {
+        return ResponseEntity.ok(ApiResponse
+                .success(medicineService.getAllTransactions()));
     }
 }

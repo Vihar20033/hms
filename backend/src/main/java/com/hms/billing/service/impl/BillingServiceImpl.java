@@ -194,7 +194,8 @@ public class BillingServiceImpl implements BillingService {
         billing.setPaymentStatus(PaymentStatus.UNPAID);
         billing.setItems(new ArrayList<>());
 
-        BigDecimal rate = (this.taxRate != null) ? this.taxRate : new BigDecimal("0.05");
+        BigDecimal rate = (this.taxRate != null) ?
+                this.taxRate : new BigDecimal("0.05");
 
         // 1. Registration Fee (entered during patient registration)
         if (patient.getFees() != null && patient.getFees().compareTo(BigDecimal.ZERO) > 0) {

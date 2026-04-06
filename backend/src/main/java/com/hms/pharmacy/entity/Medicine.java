@@ -33,7 +33,6 @@ public class Medicine extends Auditable {
     @Column(name = "manufacturer")
     private String manufacturer;
 
-
     @Column(name = "expiry_date")
     private LocalDate expiryDate;
 
@@ -46,10 +45,8 @@ public class Medicine extends Auditable {
     @Column(name = "reorder_level")
     private Integer reorderLevel;
 
-
     @Column(name = "dosage")
     private String dosage;
-
 
     @Builder.Default
     @Column(name = "is_active", nullable = false)

@@ -202,6 +202,7 @@ public class AuthServiceImpl implements AuthService {
             return;
         }
 
+        // Saving revoked refresh token in db => should never be used again
         revokedRefreshTokenRepository.save(RevokedRefreshToken.builder()
                 .tokenHash(tokenHash)
                 .username(username)

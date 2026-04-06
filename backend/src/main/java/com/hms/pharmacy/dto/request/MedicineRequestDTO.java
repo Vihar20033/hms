@@ -52,10 +52,8 @@ public class MedicineRequestDTO {
     @Min(value = 0, message = "Reorder level must be non-negative")
     private Integer reorderLevel;
 
-
     @Size(max = 200, message = "Dosage must not exceed 200 characters")
     private String dosage;
-
 
     @Builder.Default
     private Boolean isActive = true;

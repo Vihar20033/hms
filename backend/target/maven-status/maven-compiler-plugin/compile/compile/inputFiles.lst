@@ -30,7 +30,6 @@ C:\Users\Piyush\Desktop\Project\backend\src\main\java\com\hms\security\jwt\JwtUt
 C:\Users\Piyush\Desktop\Project\backend\src\main\java\com\hms\doctor\repository\DoctorRepository.java
 C:\Users\Piyush\Desktop\Project\backend\src\main\java\com\hms\common\enums\TokenType.java
 C:\Users\Piyush\Desktop\Project\backend\src\main\java\com\hms\auth\controller\AuthController.java
-C:\Users\Piyush\Desktop\Project\backend\src\main\java\com\hms\common\enums\TestStatus.java
 C:\Users\Piyush\Desktop\Project\backend\src\main\java\com\hms\appointment\exception\SlotAlreadyBookedException.java
 C:\Users\Piyush\Desktop\Project\backend\src\main\java\com\hms\auth\service\impl\AuthServiceImpl.java
 C:\Users\Piyush\Desktop\Project\backend\src\main\java\com\hms\common\entity\BaseEntity.java
