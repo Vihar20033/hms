@@ -15,6 +15,11 @@ export class PdfExportService {
   ) {}
 
   exportInvoice(billing: Billing): void {
+    if (billing.reportUrl) {
+      window.open(billing.reportUrl, '_blank');
+      return;
+    }
+
     const doc = new jsPDF();
     const primaryColor: [number, number, number] = [26, 115, 232]; // Artemis Blue
 

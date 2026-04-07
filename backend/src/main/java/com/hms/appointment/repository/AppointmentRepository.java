@@ -20,6 +20,8 @@ import java.util.Optional;
 @Repository
 public interface AppointmentRepository extends JpaRepository<Appointment, Long> {
 
+    List<Appointment> findByDoctorIdAndStatusIn(Long doctorId, Collection<AppointmentStatus> statuses);
+
     @Override
     @EntityGraph(attributePaths = {"patient", "doctor"})
     @NonNull
@@ -44,7 +46,14 @@ public interface AppointmentRepository extends JpaRepository<Appointment, Long> 
 
     long countByDoctorIdAndStatus(Long doctorId, AppointmentStatus status);
 
+    long countByDoctorIdAndStatusIn(Long doctorId, Collection<AppointmentStatus> statuses);
+
+    long countByPatientIdAndStatusIn(Long patientId, Collection<AppointmentStatus> statuses);
+
     long countByDepartment(Department department);
+
+    @EntityGraph(attributePaths = {"patient", "doctor"})
+    List<Appointment> findByPatientIdOrderByAppointmentTimeDesc(Long patientId);
 
     @Lock(LockModeType.PESSIMISTIC_WRITE)
     @Query("SELECT a FROM Appointment a WHERE a.doctor.id = :doctorId AND a.appointmentTime = :appointmentTime AND a.status IN :statuses")

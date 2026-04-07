@@ -16,6 +16,9 @@ import com.hms.pharmacy.mapper.MedicineMapper;
 import com.hms.pharmacy.repository.MedicineRepository;
 import com.hms.pharmacy.service.MedicineService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Slice;
+import org.springframework.data.domain.Sort;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
@@ -98,6 +101,13 @@ public class MedicineServiceImpl implements MedicineService {
     @Transactional(readOnly = true)
     public List<MedicineResponseDTO> getAllMedicines() {
         return medicineMapper.toDtoList(medicineRepository.findAll());
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public Slice<MedicineResponseDTO> getMedicineSlice(int page, int size) {
+        PageRequest request = PageRequest.of(page, size, Sort.by(Sort.Direction.ASC, "name"));
+        return medicineRepository.findAll(request).map(medicineMapper::toDto);
     }
 
     @Override

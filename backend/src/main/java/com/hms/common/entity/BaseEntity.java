@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import lombok.*;
 import lombok.experimental.SuperBuilder;
 import org.hibernate.annotations.SoftDelete;
+import org.hibernate.annotations.SoftDeleteType;
 
 @MappedSuperclass
 @Getter
@@ -11,7 +12,7 @@ import org.hibernate.annotations.SoftDelete;
 @SuperBuilder
 @NoArgsConstructor
 @AllArgsConstructor
-@SoftDelete
+@SoftDelete(columnName = "deleted", strategy = SoftDeleteType.DELETED)
 public abstract class BaseEntity {
 
     @Id

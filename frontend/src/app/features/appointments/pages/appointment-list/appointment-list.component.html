@@ -92,11 +92,11 @@
                   <th>Time</th>
                   <th>Status</th>
                   <th>Token</th>
-                  <th>Actions</th>
+                  <th *ngIf="userRole === 'DOCTOR' || userRole === 'ADMIN'">Actions</th>
                 </tr>
               </ng-template>
               <ng-template pTemplate="body" let-apt>
-                <tr>
+                <tr (click)="onRowSelect(apt)" class="clickable-row">
                   <td>
                     <div class="user-info">
                       <div class="avatar-small">{{ apt.patientName[0] }}</div>
@@ -135,52 +135,18 @@
                       <div class="emergency-badge">EMERGENCY</div>
                     }
                   </td>
-                  <td>
-                    <div class="action-buttons">
-                      @if (apt.status === statusEnum.SCHEDULED && (userRole === 'RECEPTIONIST')) {
-                        <button class="btn-icon btn-checkin" title="Check In Patient" (click)="onCheckIn(apt.id)">
-                          <i class="ri-user-received-line"></i>
+                  <td *ngIf="userRole === 'DOCTOR' || userRole === 'ADMIN'">
+                    <div class="table-actions" (click)="$event.stopPropagation()">
+                      @if (apt.status === statusEnum.IN_CONSULTATION && apt.hasPrescription) {
+                        <button class="btn-complete-sm" (click)="onComplete(apt.id)" title="Complete Consultation">
+                          <i class="ri-checkbox-circle-fill"></i> Complete
                         </button>
-                      }
-
-                      @if (apt.status === statusEnum.CHECKED_IN && (userRole === 'RECEPTIONIST' || userRole === 'DOCTOR')) {
-                        <button class="btn-icon btn-play" title="Start Consultation" (click)="onStart(apt.id)">
-                          <i class="ri-play-line"></i>
+                      } @else if (apt.status === statusEnum.CHECKED_IN) {
+                        <button class="btn-play-sm" (click)="onStart(apt.id)" title="Start Consultation">
+                          <i class="ri-play-fill"></i> Start
                         </button>
-                      }
-                      
-                      @if (userRole === 'DOCTOR' && apt.status === statusEnum.SCHEDULED) {
-                        <span class="action-hint">Waiting for check-in</span>
-                      }
-                      @if (userRole === 'DOCTOR' && apt.status === statusEnum.CHECKED_IN) {
-                        <span class="action-hint ready">Start from this row</span>
-                      }
-
-                      @if (apt.status === statusEnum.IN_CONSULTATION && (userRole === 'DOCTOR')) {
-                        <button class="btn-icon btn-start" title="New Prescription" [routerLink]="['/prescriptions/create', apt.id]">
-                          <i class="ri-capsule-line"></i>
-                        </button>
-                        <button class="btn-icon btn-complete" title="Complete Consultation" (click)="onComplete(apt.id)">
-                          <i class="ri-checkbox-circle-line"></i>
-                        </button>
-                      }
-                      
-                      @if (apt.status === statusEnum.COMPLETED && (userRole === 'ADMIN' || userRole === 'RECEPTIONIST')) {
-                        <button class="btn-icon btn-view" title="Generate Bill" (click)="onGenerateBill(apt.id)">
-                          <i class="ri-bill-line"></i>
-                        </button>
-                      }
-
-                      @if (canManageAppointment() && apt.status !== statusEnum.COMPLETED && apt.status !== statusEnum.CANCELLED) {
-                        <button class="btn-icon btn-edit" title="Edit Appointment" (click)="onEdit(apt.id)">
-                          <i class="ri-edit-line"></i>
-                        </button>
-                      }
-                      
-                      @if (canManageAppointment()) {
-                        <button class="btn-icon btn-delete" title="Delete Appointment" (click)="onDelete(apt.id)">
-                          <i class="ri-delete-bin-line"></i>
-                        </button>
+                      } @else {
+                        <span class="text-xs text-slate-400">---</span>
                       }
                     </div>
                   </td>
@@ -189,6 +155,124 @@
             </p-table>
           </div>
         }
+
+        <!-- Appointment Detail Modal -->
+        <p-dialog [(visible)]="detailModalVisible" 
+                  [header]="'Appointment Details - ' + selectedAppointment?.patientName" 
+                  [modal]="true" 
+                  [style]="{width: '600px', 'max-height': '90vh'}" 
+                  [closable]="true"
+                  appendTo="body">
+          
+          @if (selectedAppointment) {
+            <div class="appointment-detail-content">
+              <div class="detail-header">
+                <div class="patient-profile">
+                  <div class="avatar-large">{{ selectedAppointment.patientName[0] }}</div>
+                  <div class="profile-info">
+                    <h3>{{ selectedAppointment.patientName }}</h3>
+                    <div class="token-wrap">
+                      Token: <span class="token-val" [class.emergency]="selectedAppointment.isEmergency">{{ selectedAppointment.tokenNumber || '--' }}</span>
+                      @if (selectedAppointment.isEmergency) { <span class="emergency-label">EMERGENCY</span> }
+                    </div>
+                  </div>
+                </div>
+                <div class="status-wrap">
+                  <span class="status-badge" [ngClass]="getStatusClass(selectedAppointment.status)">
+                    {{ selectedAppointment.status }}
+                  </span>
+                </div>
+              </div>
+
+              <div class="detail-grid">
+                <div class="detail-item">
+                  <label>Department</label>
+                  <span>{{ selectedAppointment.department.replace('_', ' ') | titlecase }}</span>
+                </div>
+                <div class="detail-item">
+                  <label>Doctor</label>
+                  <span>Dr. {{ selectedAppointment.doctorName || 'Unassigned' }}</span>
+                </div>
+                <div class="detail-item">
+                  <label>Appointment Time</label>
+                  <span>{{ selectedAppointment.appointmentTime | date: 'medium' }}</span>
+                </div>
+                <div class="detail-item full">
+                  <label>Reason for Visit</label>
+                  <p class="reason-text">{{ selectedAppointment.reason || 'No reason provided.' }}</p>
+                </div>
+                @if (selectedAppointment.notes) {
+                  <div class="detail-item full">
+                    <label>Internal Notes</label>
+                    <p class="notes-text">{{ selectedAppointment.notes }}</p>
+                  </div>
+                }
+              </div>
+
+              <div class="modal-workflow-hint">
+                <i class="ri-information-line"></i>
+                {{ getWorkflowLabel(selectedAppointment) }}
+              </div>
+
+              <div class="detail-actions">
+                <!-- Receptionist Actions -->
+                @if (selectedAppointment.status === statusEnum.SCHEDULED && (userRole === 'RECEPTIONIST' || userRole === 'ADMIN')) {
+                  <button class="btn-action btn-checkin" (click)="onCheckIn(selectedAppointment.id); detailModalVisible = false">
+                    <i class="ri-user-received-line"></i> Check In Patient
+                  </button>
+                  <button class="btn-action btn-cancel" (click)="onCancel(selectedAppointment.id); detailModalVisible = false">
+                    <i class="ri-close-circle-line"></i> Cancel Visit
+                  </button>
+                }
+
+                <!-- Doctor Actions -->
+                @if (selectedAppointment.status === statusEnum.CHECKED_IN && (userRole === 'RECEPTIONIST' || userRole === 'DOCTOR' || userRole === 'ADMIN')) {
+                  <button class="btn-action btn-play" (click)="onStart(selectedAppointment.id); detailModalVisible = false">
+                    <i class="ri-play-line"></i> Start Consultation
+                  </button>
+                }
+
+                  @if (selectedAppointment.status === statusEnum.IN_CONSULTATION && (userRole === 'DOCTOR' || userRole === 'ADMIN')) {
+                    <button class="btn-action btn-start" [routerLink]="['/prescriptions/create', selectedAppointment.id]">
+                      <i class="ri-capsule-line"></i> {{ selectedAppointment.hasPrescription ? 'Update Prescription' : 'Prescribe Medicine' }}
+                    </button>
+
+                    @if (selectedAppointment.hasPrescription) {
+                      <button class="btn-action btn-complete" (click)="onComplete(selectedAppointment.id); detailModalVisible = false">
+                        <i class="ri-checkbox-circle-line"></i> Complete Consultation
+                      </button>
+                    } @else {
+                      <div class="workflow-info-msg" style="padding: 0.75rem 1rem; background: #fffcf0; border: 1.5px solid #fdf2bb; border-radius: 12px; color: #856404; font-size: 0.85rem; display: flex; align-items: center; gap: 0.6rem; margin-top: 0.5rem;">
+                        <i class="ri-error-warning-line"></i>
+                        <span>Issuing a prescription is required to complete this visit.</span>
+                      </div>
+                    }
+                  }
+
+                <!-- Billing Action -->
+                @if (selectedAppointment.status === statusEnum.COMPLETED && (userRole === 'RECEPTIONIST' || userRole === 'ADMIN')) {
+                  <button class="btn-action btn-view" (click)="onGenerateBill(selectedAppointment.id); detailModalVisible = false">
+                    <i class="ri-bill-line"></i> Generate Billing
+                  </button>
+                }
+
+                <!-- Generic Management -->
+                <div class="management-buttons">
+                  @if (canManageAppointment() && selectedAppointment.status !== statusEnum.COMPLETED && selectedAppointment.status !== statusEnum.CANCELLED) {
+                    <button class="btn-icon-alt" title="Edit" (click)="onEdit(selectedAppointment.id); detailModalVisible = false">
+                      <i class="ri-edit-line"></i>
+                    </button>
+                  }
+                  @if (canManageAppointment()) {
+                    <button class="btn-icon-alt delete" title="Delete" (click)="onDelete(selectedAppointment.id); detailModalVisible = false">
+                      <i class="ri-delete-bin-line"></i>
+                    </button>
+                  }
+                </div>
+              </div>
+            </div>
+          }
+        </p-dialog>
 
         <!-- Loading State -->
         @if (isLoading) {

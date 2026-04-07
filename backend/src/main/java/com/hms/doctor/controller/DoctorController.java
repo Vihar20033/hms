@@ -2,6 +2,7 @@ package com.hms.doctor.controller;
 
 import com.hms.common.enums.Department;
 import com.hms.common.response.ApiResponse;
+import com.hms.common.response.SliceResponse;
 import com.hms.doctor.dto.request.CreateDoctorRequest;
 import com.hms.doctor.dto.request.UpdateDoctorRequest;
 import com.hms.doctor.dto.response.DoctorOnboardingResponse;
@@ -26,10 +27,33 @@ public class DoctorController {
     private final DoctorService doctorService;
     private final DoctorMapper doctorMapper;
 
+    @GetMapping("/{id}/appointment-count")
+    @PreAuthorize("hasRole('ADMIN')")
+    public ResponseEntity<ApiResponse<Long>> getAppointmentCount(@PathVariable("id") Long id) {
+        return ResponseEntity.ok(ApiResponse.success(doctorService.getAppointmentCount(id)));
+    }
+
     @GetMapping
     public ResponseEntity<ApiResponse<List<DoctorResponseDTO>>> getAllDoctors() {
         return ResponseEntity.ok(ApiResponse.success
                 (doctorMapper.toDtoList(doctorService.getAllDoctors())));
+    }
+
+    @GetMapping("/slice")
+    public ResponseEntity<ApiResponse<SliceResponse<DoctorResponseDTO>>> getDoctorSlice(
+            @RequestParam(name = "page", defaultValue = "0") int page,
+            @RequestParam(name = "size", defaultValue = "25") int size) {
+        var slice = doctorService.getDoctorSlice(Math.max(page, 0), Math.min(Math.max(size, 1), 100))
+                .map(doctorMapper::toDto);
+        return ResponseEntity.ok(ApiResponse.success(SliceResponse.<DoctorResponseDTO>builder()
+                .content(slice.getContent())
+                .page(slice.getNumber())
+                .size(slice.getSize())
+                .first(slice.isFirst())
+                .last(slice.isLast())
+                .hasNext(slice.hasNext())
+                .numberOfElements(slice.getNumberOfElements())
+                .build()));
     }
 
     @GetMapping("/{id}")

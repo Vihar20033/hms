@@ -62,4 +62,66 @@
       </div>
     </div>
   </main>
+
+  <!-- Delete Confirmation Modal -->
+  <p-dialog [(visible)]="deleteModalVisible" 
+            header="Confirm Delete" 
+            [modal]="true" 
+            [style]="{width: '450px'}" 
+            [closable]="true">
+    <div class="delete-container" *ngIf="selectedDoctorForDelete">
+      <p>Are you sure you want to delete Dr. {{selectedDoctorForDelete.firstName}} {{selectedDoctorForDelete.lastName}}?</p>
+      <p class="instruction" style="color: #64748b; font-size: 0.9rem; margin-top: 0.5rem;">This action cannot be undone.</p>
+      
+      <div class="modal-footer" style="padding-top: 2rem; display: flex; justify-content: flex-end; gap: 1rem;">
+        <button class="btn-outline" (click)="deleteModalVisible = false; selectedDoctorForDelete = null">Cancel</button>
+        <button class="btn-delete-sm" (click)="confirmDelete()">Delete Anyway</button>
+      </div>
+    </div>
+  </p-dialog>
+
+  <!-- Reassignment Modal -->
+  <p-dialog [(visible)]="reassignModalVisible" 
+            header="Active Appointments Detected" 
+            [modal]="true" 
+            [style]="{width: '500px'}" 
+            [closable]="!isReassigning">
+    <div class="reassign-container" *ngIf="selectedDoctorForReassignment">
+      <div class="warning-box" style="background: #fff7ed; border: 1px solid #fdba74; padding: 1rem; border-radius: 12px; margin-bottom: 1.5rem; display: flex; gap: 0.75rem;">
+        <i class="ri-error-warning-line" style="color: #9a3412; font-size: 1.25rem;"></i>
+        <div>
+          <strong style="color: #9a3412; display: block; margin-bottom: 0.25rem;">Action Blocked</strong>
+          <p style="color: #7c2d12; font-size: 0.9rem; line-height: 1.4;">
+            Dr. {{selectedDoctorForReassignment.firstName}} {{selectedDoctorForReassignment.lastName}} has 
+            <strong>{{currentReassignCount}} active or checked-in appointments</strong> that must be handled before deletion.
+          </p>
+        </div>
+      </div>
+      <p class="instruction" style="font-weight: 600; color: #1e293b; margin-bottom: 1rem;">Choose a replacement doctor to take over these visits:</p>
+      
+      <div class="form-group margin-top">
+        <label>New Doctor</label>
+        <p-dropdown [options]="availableDoctorsForReassignment" 
+                   [(ngModel)]="targetDoctorId" 
+                   optionLabel="label" 
+                   optionValue="value"
+                   placeholder="Select a doctor"
+                   appendTo="body"
+                   [style]="{'width': '100%'}">
+        </p-dropdown>
+      </div>
+
+      <div class="error-msg" *ngIf="reassignErrorMessage">
+        <i class="ri-error-warning-line"></i> {{reassignErrorMessage}}
+      </div>
+
+      <div class="modal-footer" style="padding-top: 2rem; display: flex; justify-content: flex-end; gap: 1rem;">
+        <button class="btn-outline" (click)="reassignModalVisible = false" [disabled]="isReassigning">Cancel</button>
+        <button class="btn-primary" (click)="confirmReassignment()" [disabled]="isReassigning">
+          <i class="ri-loader-4-line spin" *ngIf="isReassigning"></i>
+          {{isReassigning ? 'Transferring...' : 'Reassign and Delete'}}
+        </button>
+      </div>
+    </div>
+  </p-dialog>
 </div>

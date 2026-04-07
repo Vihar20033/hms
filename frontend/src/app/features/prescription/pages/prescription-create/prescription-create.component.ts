@@ -152,7 +152,7 @@ export class PrescriptionCreateComponent implements OnInit {
     });
   }
 
-  onSubmit(): void {
+  onSubmit(completeConsultation = false): void {
     if (this.prescriptionForm.invalid || !this.patientId || !this.doctorId) return;
 
     this.isSubmitting = true;
@@ -165,7 +165,14 @@ export class PrescriptionCreateComponent implements OnInit {
 
     this.prescriptionService.create(request).subscribe({
       next: () => {
-        this.router.navigate(['/appointments']);
+        if (completeConsultation && this.appointmentId) {
+          this.appointmentService.completeConsultation(this.appointmentId).subscribe({
+            next: () => this.router.navigate(['/appointments']),
+            error: () => this.router.navigate(['/appointments'])
+          });
+        } else {
+          this.router.navigate(['/appointments']);
+        }
       },
       error: (err: HttpErrorResponse) => {
         this.isSubmitting = false;

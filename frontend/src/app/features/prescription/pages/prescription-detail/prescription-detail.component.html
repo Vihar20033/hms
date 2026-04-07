@@ -12,6 +12,9 @@
             <button class="btn-floating" (click)="onPrint()" title="Print to PDF">
               <i class="ri-printer-line"></i>
             </button>
+            <button class="btn-floating" *ngIf="prescription.reportUrl" (click)="onDownloadPdf()" title="Download PDF">
+              <i class="ri-file-pdf-line"></i>
+            </button>
             <button class="btn-floating" routerLink="/prescriptions" title="Back to List">
               <i class="ri-arrow-left-line"></i>
             </button>

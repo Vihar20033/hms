@@ -23,7 +23,7 @@ export function buildDashboardQuickActions(role: string): QuickAction[] {
     ];
   }
 
-  if (role === 'RECEPTIONIST' || role === 'ADMIN' || role === 'NURSE') {
+  if (role === 'RECEPTIONIST' || role === 'ADMIN') {
     return [
       { label: 'Register Patient', link: '/patients/register', icon: 'ri-user-add-line' },
       { label: 'Book Appointment', link: '/appointments/book', icon: 'ri-calendar-todo-line' },
@@ -86,28 +86,34 @@ export function createDashboardChart(ctx: CanvasRenderingContext2D, data: Dashbo
   const appointmentData = stats.map((s) => s.appointments || 0);
   const patientData = stats.map((s) => s.patients || 0);
 
-  const config: ChartConfiguration<'bar'> = {
-    type: 'bar',
+  const config: ChartConfiguration<'line'> = {
+    type: 'line',
     data: {
       labels,
       datasets: [
         {
           label: 'Appointments',
           data: appointmentData,
-          backgroundColor: '#2563ebcc',
-          borderColor: '#1d4ed8',
-          borderWidth: 1,
-          borderRadius: 8,
-          barThickness: 26,
+          backgroundColor: 'rgba(37, 99, 235, 0.1)',
+          borderColor: '#2563eb',
+          borderWidth: 3,
+          tension: 0.4,
+          fill: true,
+          pointRadius: 4,
+          pointBackgroundColor: '#fff',
+          pointBorderWidth: 2,
         },
         {
           label: 'New Patients',
           data: patientData,
-          backgroundColor: '#14b8a6cc',
-          borderColor: '#0f766e',
-          borderWidth: 1,
-          borderRadius: 8,
-          barThickness: 26,
+          backgroundColor: 'rgba(20, 184, 166, 0.1)',
+          borderColor: '#14b8a6',
+          borderWidth: 3,
+          tension: 0.4,
+          fill: true,
+          pointRadius: 4,
+          pointBackgroundColor: '#fff',
+          pointBorderWidth: 2,
         },
       ],
     },
@@ -115,7 +121,14 @@ export function createDashboardChart(ctx: CanvasRenderingContext2D, data: Dashbo
       responsive: true,
       maintainAspectRatio: false,
       plugins: {
-        legend: { position: 'top' },
+        legend: { 
+          position: 'top',
+          labels: {
+            usePointStyle: true,
+            padding: 20,
+            font: { weight: 'bold' }
+          }
+        },
         tooltip: { mode: 'index', intersect: false },
       },
       scales: {
@@ -125,10 +138,14 @@ export function createDashboardChart(ctx: CanvasRenderingContext2D, data: Dashbo
           ticks: {
             precision: 0,
             stepSize: 1,
+            padding: 10,
           },
-          grid: { color: '#f3f4f6' },
+          grid: { color: '#f1f5f9' },
         },
-        x: { grid: { display: false } },
+        x: { 
+          grid: { display: false },
+          ticks: { padding: 10 }
+        },
       },
     },
     plugins: [valueLabelPlugin],
@@ -152,47 +169,55 @@ export function createDepartmentChart(ctx: CanvasRenderingContext2D, data: Dashb
     '#0f766e', '#0369a1', '#b45309', '#0f766e', '#4338ca'
   ];
 
-  const config: ChartConfiguration<'bar'> = {
-    type: 'bar',
+  const config: ChartConfiguration<'doughnut'> = {
+    type: 'doughnut',
     data: {
       labels,
       datasets: [
         {
           label: 'Appointments',
           data: counts,
-          backgroundColor: colors.slice(0, stats.length),
-          borderRadius: 8,
-          borderWidth: 1,
+          backgroundColor: [
+            'rgba(37, 99, 235, 0.8)',
+            'rgba(20, 184, 166, 0.8)',
+            'rgba(245, 158, 11, 0.8)',
+            'rgba(239, 68, 68, 0.8)',
+            'rgba(139, 92, 246, 0.8)',
+            'rgba(236, 72, 153, 0.8)',
+            'rgba(59, 130, 246, 0.8)',
+            'rgba(16, 185, 129, 0.8)',
+          ],
+          borderColor: '#fff',
+          borderWidth: 2,
+          hoverOffset: 15,
         },
       ],
     },
     options: {
       responsive: true,
       maintainAspectRatio: false,
+      cutout: '70%',
       plugins: {
         legend: {
-          display: false,
+          display: true,
+          position: 'right',
+          labels: {
+            usePointStyle: true,
+            padding: 15,
+            font: { weight: 'bold', size: 11 }
+          }
         },
         tooltip: {
+          padding: 12,
+          backgroundColor: 'rgba(15, 23, 42, 0.9)',
+          titleFont: { size: 13 },
+          bodyFont: { size: 13 },
           callbacks: {
-            label: (item) => ` ${item.label}: ${item.raw} appointments`,
+            label: (item) => ` ${item.label}: ${item.raw} visits`,
           },
         },
-      },
-      scales: {
-        y: {
-          beginAtZero: true,
-          grace: 1,
-          ticks: {
-            precision: 0,
-            stepSize: 1,
-          },
-          grid: { color: '#f3f4f6' },
-        },
-        x: { grid: { display: false } },
       },
     },
-    plugins: [valueLabelPlugin],
   };
 
   return new Chart(ctx, config);

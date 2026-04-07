@@ -34,6 +34,7 @@ export interface Appointment {
   notes?: string;
   tokenNumber?: string;
   isEmergency: boolean;
+  hasPrescription: boolean;
 }
 
 export interface AppointmentRequest {

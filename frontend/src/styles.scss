@@ -1,7 +1,6 @@
 @import 'primeng/resources/themes/lara-light-blue/theme.css';
 @import 'primeng/resources/primeng.css';
 @import 'primeicons/primeicons.css';
-@import url('https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=Space+Grotesk:wght@500;700&display=swap');
 
 :root {
   --bg-main: #eef4f8;
@@ -37,8 +36,8 @@
   --radius-2xl: 1.5rem;
   --radius-full: 9999px;
 
-  --font-sans: 'Manrope', sans-serif;
-  --font-heading: 'Space Grotesk', sans-serif;
+  --font-sans: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  --font-heading: var(--font-sans);
 
   --transition-fast: 150ms cubic-bezier(0.4, 0, 0.2, 1);
   --transition-normal: 300ms cubic-bezier(0.4, 0, 0.2, 1);
@@ -70,6 +69,7 @@ html {
 }
 
 body {
+  font-family: var(--font-sans);
   height: 100%;
   width: 100%;
   display: flex;
@@ -92,8 +92,92 @@ app-root {
 .p-dropdown,
 .p-calendar,
 .p-inputnumber,
-.p-datatable {
+.p-datatable,
+.p-button,
+.p-menu,
+.p-dialog,
+.p-tooltip,
+.p-toast {
   font-family: var(--font-sans);
+}
+
+/* Global Dialog Overhaul */
+.p-dialog {
+  border-radius: var(--radius-2xl) !important;
+  box-shadow: 0 40px 100px -20px rgba(16, 50, 74, 0.25) !important;
+  border: none !important;
+  overflow: hidden;
+
+  .p-dialog-header {
+    background: #f8fafc !important;
+    border-bottom: 1px solid #edf2f7 !important;
+    padding: 1.5rem 2rem !important;
+    color: var(--text-main) !important;
+    
+    .p-dialog-title {
+      font-weight: 800 !important;
+      font-size: 1.35rem !important;
+      letter-spacing: -0.02em;
+    }
+
+    .p-dialog-header-icon {
+      width: 40px;
+      height: 40px;
+      border-radius: 12px;
+      transition: all var(--transition-fast);
+      
+      &:hover {
+        background: #fee2e2;
+        color: #ef4444;
+      }
+    }
+  }
+
+  .p-dialog-content {
+    padding: 2rem !important;
+    background: #ffffff !important;
+  }
+
+  .p-dialog-footer {
+    background: #fdfdfd !important;
+    border-top: 1px solid #f1f5f9 !important;
+    padding: 1.25rem 2rem !important;
+    display: flex;
+    justify-content: flex-end;
+    gap: 1rem;
+    
+    button {
+      margin: 0 !important;
+    }
+  }
+
+  /* Responsive Adjustments for Modals */
+  @media (max-width: 640px) {
+    width: 95vw !important;
+    margin: 0 1rem;
+    
+    .p-dialog-header {
+      padding: 1.25rem 1.5rem !important;
+    }
+    
+    .p-dialog-content {
+      padding: 1.5rem !important;
+    }
+    
+    .p-dialog-footer {
+       padding: 1rem 1.5rem !important;
+       flex-direction: column;
+       
+       button {
+         width: 100%;
+       }
+    }
+  }
+}
+
+.p-dialog-mask {
+  backdrop-filter: blur(8px) !important;
+  background-color: rgba(14, 34, 48, 0.4) !important;
 }
 
 h1,

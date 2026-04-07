@@ -2,7 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { environment } from '../../../environments/environment';
-import { ApiResponse } from '../models/common.models';
+import { ApiResponse, SliceResponse } from '../models/common.models';
 import { Doctor, DoctorOnboardingResponse, DoctorRegistrationRequest } from '../models/doctor.models';
 
 @Injectable({
@@ -15,6 +15,12 @@ export class DoctorService {
 
   getAll(): Observable<ApiResponse<Doctor[]>> {
     return this.http.get<ApiResponse<Doctor[]>>(this.apiUrl);
+  }
+
+  getSlice(page = 0, size = 25): Observable<ApiResponse<SliceResponse<Doctor>>> {
+    return this.http.get<ApiResponse<SliceResponse<Doctor>>>(`${this.apiUrl}/slice`, {
+      params: { page, size },
+    });
   }
 
   getById(id: number): Observable<ApiResponse<Doctor>> {
@@ -35,5 +41,9 @@ export class DoctorService {
 
   delete(id: number): Observable<ApiResponse<void>> {
     return this.http.delete<ApiResponse<void>>(`${this.apiUrl}/${id}`);
+  }
+
+  getAppointmentCount(id: number): Observable<ApiResponse<number>> {
+    return this.http.get<ApiResponse<number>>(`${this.apiUrl}/${id}/appointment-count`);
   }
 }

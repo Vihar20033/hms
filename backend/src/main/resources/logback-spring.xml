@@ -2,9 +2,11 @@
 <configuration>
     <include resource="org/springframework/boot/logging/logback/defaults.xml"/>
 
-    <property name="LOG_PATH" value="${LOG_PATH:-logs}"/>
-    <property name="APP_LOG_FILE" value="${LOG_FILE:-${LOG_PATH}/hms.log}"/>
-    <property name="AUDIT_LOG_FILE" value="${LOG_PATH}/audit.log"/>
+    <springProperty scope="context" name="LOG_PATH" source="hms.logging.path" defaultValue="${user.dir}/logs"/>
+    <springProperty scope="context" name="APP_LOG_NAME" source="hms.logging.app-file-name" defaultValue="artem-health-hms-app.log"/>
+    <springProperty scope="context" name="AUDIT_LOG_NAME" source="hms.logging.audit-file-name" defaultValue="artem-health-hms-audit.log"/>
+    <property name="APP_LOG_FILE" value="${LOG_FILE:-${LOG_PATH}/${APP_LOG_NAME}}"/>
+    <property name="AUDIT_LOG_FILE" value="${LOG_PATH}/${AUDIT_LOG_NAME}"/>
 
     <!-- Console -->
     <appender name="CONSOLE" class="ch.qos.logback.core.ConsoleAppender">
@@ -17,9 +19,11 @@
     <!-- Application log file (all application logs) -->
     <appender name="FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
         <file>${APP_LOG_FILE}</file>
-        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
-            <fileNamePattern>${APP_LOG_FILE}.%d{yyyy-MM-dd}.gz</fileNamePattern>
+        <rollingPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedRollingPolicy">
+            <fileNamePattern>${LOG_PATH}/archive/artem-health-hms-app.%d{yyyy-MM-dd}.%i.log.gz</fileNamePattern>
+            <maxFileSize>10MB</maxFileSize>
             <maxHistory>30</maxHistory>
+            <totalSizeCap>1GB</totalSizeCap>
         </rollingPolicy>
         <encoder>
             <pattern>%d{yyyy-MM-dd HH:mm:ss.SSS} [%thread] %-5level %logger{50} - %msg%n</pattern>
@@ -30,9 +34,11 @@
     <!-- Audit log file (AUDIT logger only; one line per event) -->
     <appender name="AUDIT_FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
         <file>${AUDIT_LOG_FILE}</file>
-        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
-            <fileNamePattern>${AUDIT_LOG_FILE}.%d{yyyy-MM-dd}.gz</fileNamePattern>
+        <rollingPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedRollingPolicy">
+            <fileNamePattern>${LOG_PATH}/archive/artem-health-hms-audit.%d{yyyy-MM-dd}.%i.log.gz</fileNamePattern>
+            <maxFileSize>10MB</maxFileSize>
             <maxHistory>90</maxHistory>
+            <totalSizeCap>1GB</totalSizeCap>
         </rollingPolicy>
         <encoder>
             <pattern>%d{yyyy-MM-dd HH:mm:ss.SSS} | %msg%n</pattern>

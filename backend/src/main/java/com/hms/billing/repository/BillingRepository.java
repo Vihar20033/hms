@@ -13,6 +13,8 @@ public interface BillingRepository extends JpaRepository<Billing, Long> {
 
     List<Billing> findByPatientId(Long patientId);
 
+    boolean existsByAppointmentId(Long appointmentId);
+
     @Query("SELECT SUM(b.netAmount) FROM Billing b WHERE " +
             "b.paymentStatus = com.hms.common.enums.PaymentStatus.PAID")
     BigDecimal sumTotalRevenue();

@@ -3,6 +3,7 @@ import { HttpErrorResponse } from '@angular/common/http';
 import { Component } from '@angular/core';
 import { FormBuilder, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
+import { canRoleAccessPath, homeRouteForRole } from '../../../../core/constants/role-route-map';
 import { AuthService } from '../../../../core/services/auth.service';
 import { createLoginForm, markFormControlsTouched } from '../../auth-form.utils';
 
@@ -39,7 +40,11 @@ export class LoginComponent {
             this.router.navigate(['/change-password'], { replaceUrl: true });
             return;
           }
-          const returnUrl = this.route.snapshot.queryParamMap.get('returnUrl') || '/dashboard';
+          const defaultUrl = homeRouteForRole(response.data.role);
+          const requestedReturnUrl = this.route.snapshot.queryParamMap.get('returnUrl');
+          const returnUrl = requestedReturnUrl
+            ? (canRoleAccessPath(response.data.role, requestedReturnUrl) ? requestedReturnUrl : defaultUrl)
+            : (requestedReturnUrl || defaultUrl);
           this.router.navigateByUrl(returnUrl, { replaceUrl: true });
         },
         error: (err: HttpErrorResponse) => {

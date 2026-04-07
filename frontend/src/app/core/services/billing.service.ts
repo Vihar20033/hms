@@ -23,6 +23,10 @@ export class BillingService {
     return this.http.get<ApiResponse<Billing[]>>(`${this.apiUrl}/patient/${patientId}`);
   }
 
+  getMine(): Observable<ApiResponse<Billing[]>> {
+    return this.http.get<ApiResponse<Billing[]>>(`${this.apiUrl}/me`);
+  }
+
   create(billing: BillingRequest): Observable<ApiResponse<Billing>> {
     return this.http.post<ApiResponse<Billing>>(this.apiUrl, billing);
   }
@@ -31,6 +35,10 @@ export class BillingService {
     return this.http.patch<ApiResponse<Billing>>(`${this.apiUrl}/${id}/status`, null, {
       params: { status },
     });
+  }
+
+  payMine(id: number): Observable<ApiResponse<Billing>> {
+    return this.http.patch<ApiResponse<Billing>>(`${this.apiUrl}/${id}/pay`, null);
   }
 
 

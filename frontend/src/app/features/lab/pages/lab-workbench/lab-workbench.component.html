@@ -1,0 +1,77 @@
+<div class="dashboard-layout">
+  <app-sidebar></app-sidebar>
+
+  <div class="main-content">
+    <app-header></app-header>
+
+    <main class="page-body">
+      <section class="page-hero">
+        <div>
+          <span class="eyebrow">Laboratory</span>
+          <h1>Specimen and results workbench</h1>
+          <p>Track incoming test work, prioritize ordered samples, and keep doctor review moving.</p>
+        </div>
+        <button class="btn-primary" type="button" (click)="loadOrders()">Refresh Orders</button>
+      </section>
+
+      <section class="stats-grid">
+        <article class="stat-card">
+          <strong>{{ queue.length }}</strong>
+          <span>Open orders</span>
+        </article>
+        <article class="stat-card urgent">
+          <strong>{{ urgentCount }}</strong>
+          <span>Awaiting sample</span>
+        </article>
+        <article class="stat-card">
+          <strong>{{ readyCount }}</strong>
+          <span>Completed results</span>
+        </article>
+      </section>
+
+      <section class="content-grid">
+        <article class="content-card">
+          <div class="card-header">
+            <h2>Lab Queue</h2>
+            <p>Live orders from the backend lab module.</p>
+          </div>
+
+          @if (isLoading) {
+            <div class="empty-state">Loading lab orders...</div>
+          } @else if (queue.length === 0) {
+            <div class="empty-state">No lab orders are open.</div>
+          } @else {
+            <div class="queue-list">
+              @for (item of queue; track item.id) {
+                <div class="queue-card" [class.urgent]="item.status === 'ORDERED'">
+                  <div>
+                    <strong>LAB-{{ item.id }}</strong>
+                    <span>{{ item.patientName }}</span>
+                  </div>
+                  <div>
+                    <strong>{{ item.testName }}</strong>
+                    <span>{{ item.createdAt | date: 'short' }}</span>
+                  </div>
+                  <span class="status">{{ item.status.replace('_', ' ') | titlecase }}</span>
+                </div>
+              }
+            </div>
+          }
+        </article>
+
+        <article class="content-card">
+          <div class="card-header">
+            <h2>Standard Workflow</h2>
+            <p>Use this sequence for every sample to reduce result errors.</p>
+          </div>
+
+          <ol class="workflow-list">
+            @for (step of workflow; track step) {
+              <li>{{ step }}</li>
+            }
+          </ol>
+        </article>
+      </section>
+    </main>
+  </div>
+</div>

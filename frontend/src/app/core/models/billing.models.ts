@@ -44,6 +44,7 @@ export interface Billing {
   insuranceAmount?: number;
   insuranceStatus?: string;
   items: BillingItem[];
+  reportUrl?: string;
   createdAt: string;
 }
 

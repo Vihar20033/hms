@@ -15,7 +15,15 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Entity
-@Table(name = "billings")
+@Table(
+        name = "billings",
+        indexes = {
+                @Index(name = "idx_billing_invoice", columnList = "invoiceNumber"),
+                @Index(name = "idx_billing_patient", columnList = "patient_id"),
+                @Index(name = "idx_billing_appointment", columnList = "appointment_id"),
+                @Index(name = "idx_billing_status_date", columnList = "paymentStatus, billingDate")
+        }
+)
 @Getter
 @Setter
 @NoArgsConstructor
@@ -60,6 +68,9 @@ public class Billing extends Auditable {
     private LocalDateTime dueDate;
 
     private String notes;
+
+    @Column(length = 500)
+    private String reportUrl;
 
     private String insuranceProvider;
     private String insuranceClaimNumber;

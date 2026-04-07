@@ -21,7 +21,11 @@ public interface AppointmentService {
 
     List<Appointment> getAppointments(Long patientId, AppointmentStatus status);
 
+    List<Appointment> getCurrentPatientAppointments(AppointmentStatus status);
+
     List<Appointment> getTodayAppointments();
+
+    void reassignAppointments(Long fromDoctorId, Long toDoctorId);
 
     void deleteAppointment(Long id);
 }

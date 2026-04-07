@@ -19,6 +19,13 @@ import com.hms.user.exception.UsernameAlreadyExistsException;
 import com.hms.user.repository.UserRepository;
 import com.hms.user.service.UserService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Slice;
+import org.springframework.data.domain.Sort;
+import com.hms.common.enums.AppointmentStatus;
+import com.hms.common.exception.BadRequestException;
+import com.hms.common.exception.ConflictException;
+import com.hms.appointment.repository.AppointmentRepository;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -36,6 +43,7 @@ public class DoctorServiceImpl implements DoctorService {
     private final PasswordEncoder passwordEncoder;
     private final DoctorMapper doctorMapper;
     private final AuditLogService auditLogService;
+    private final AppointmentRepository appointmentRepository;
 
     @Override
     @Transactional
@@ -108,6 +116,13 @@ public class DoctorServiceImpl implements DoctorService {
 
     @Override
     @Transactional(readOnly = true)
+    public Slice<Doctor> getDoctorSlice(int page, int size) {
+        PageRequest request = PageRequest.of(page, size, Sort.by(Sort.Direction.ASC, "lastName", "firstName"));
+        return doctorRepository.findAll(request);
+    }
+
+    @Override
+    @Transactional(readOnly = true)
     public List<Doctor> getDoctorsByDepartment(Department department) {
         return doctorRepository.findByDepartment(department);
     }
@@ -116,8 +131,22 @@ public class DoctorServiceImpl implements DoctorService {
     @Transactional
     public void deleteDoctor(Long id) {
         Doctor doctor = getDoctorById(id);
+
+        long activeAppointments = getAppointmentCount(id);
+
+        if (activeAppointments > 0) {
+            throw new ConflictException("Cannot delete doctor with active or upcoming appointments. Please reassign or cancel them first.");
+        }
+
         doctorRepository.delete(doctor);
         auditLogService.log(SecurityUtils.getCurrentUsername(), "DOCTOR_DELETE", "Doctor", id.toString(), "name=" + doctor.getFirstName() + " " + doctor.getLastName());
         userRepository.findById(doctor.getUserId()).ifPresent(user -> userService.deleteUser(user.getId()));
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public long getAppointmentCount(Long id) {
+        return appointmentRepository.countByDoctorIdAndStatusIn(id,
+                java.util.List.of(AppointmentStatus.SCHEDULED, AppointmentStatus.CONFIRMED, AppointmentStatus.CHECKED_IN, AppointmentStatus.IN_CONSULTATION));
     }
 }

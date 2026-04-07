@@ -7,6 +7,9 @@ import com.hms.user.mapper.UserMapper;
 import com.hms.user.repository.UserRepository;
 import com.hms.user.service.UserService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Slice;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -26,6 +29,13 @@ public class UserServiceImpl implements UserService {
         return userRepository.findAll().stream()
                 .map(userMapper::toResponseDTO)
                 .collect(Collectors.toList());
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public Slice<UserResponseDTO> getSlice(int page, int size) {
+        PageRequest request = PageRequest.of(page, size, Sort.by(Sort.Direction.ASC, "username"));
+        return userRepository.findAll(request).map(userMapper::toResponseDTO);
     }
 
     @Override

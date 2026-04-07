@@ -2,7 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { environment } from '../../../environments/environment';
-import { ApiResponse } from '../models/common.models';
+import { ApiResponse, SliceResponse } from '../models/common.models';
 import { InventoryTransaction, Medicine, MedicineRequest } from '../models/pharmacy.models';
 
 @Injectable({ providedIn: 'root' })
@@ -18,6 +18,12 @@ export class PharmacyService {
 
   getAll(): Observable<ApiResponse<Medicine[]>> {
     return this.http.get<ApiResponse<Medicine[]>>(this.apiUrl);
+  }
+
+  getSlice(page = 0, size = 25): Observable<ApiResponse<SliceResponse<Medicine>>> {
+    return this.http.get<ApiResponse<SliceResponse<Medicine>>>(`${this.apiUrl}/slice`, {
+      params: { page, size },
+    });
   }
 
   getActive(): Observable<ApiResponse<Medicine[]>> {

@@ -6,8 +6,6 @@ export function getRoleBadgeClass(role: Role): string {
       return 'badge-admin';
     case Role.DOCTOR:
       return 'badge-doctor';
-    case Role.NURSE:
-      return 'badge-nurse';
     case Role.PHARMACIST:
       return 'badge-pharmacy';
     case Role.RECEPTIONIST:

@@ -7,7 +7,14 @@ import lombok.*;
 
 
 @Entity
-@Table(name = "inventory_transactions")
+@Table(
+        name = "inventory_transactions",
+        indexes = {
+                @Index(name = "idx_inventory_medicine", columnList = "medicine_id"),
+                @Index(name = "idx_inventory_reference", columnList = "reference_id"),
+                @Index(name = "idx_inventory_created_at", columnList = "created_at")
+        }
+)
 @Getter
 @Setter
 @NoArgsConstructor

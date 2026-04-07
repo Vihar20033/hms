@@ -13,7 +13,7 @@ export class AccessFeedbackService {
   private readonly modalSubject = new BehaviorSubject<AccessFeedbackState | null>(null);
   readonly modal$ = this.modalSubject.asObservable();
 
-  showUnauthorized(message = 'You do not have permission to open that page. Redirecting you to the dashboard.'): void {
+  showUnauthorized(message = 'You do not have permission to open that page. Redirecting you to your workspace.'): void {
     this.modalSubject.next({
       title: 'Unauthorized Access',
       message,

@@ -18,6 +18,11 @@ import java.math.BigDecimal;
         uniqueConstraints = {
                 @UniqueConstraint(name = "uk_patient_contact", columnNames = {"contactNumber"}),
                 @UniqueConstraint(name = "uk_patient_email", columnNames = {"email"})
+        },
+        indexes = {
+                @Index(name = "idx_patient_name", columnList = "name"),
+                @Index(name = "idx_patient_urgency", columnList = "urgency_level"),
+                @Index(name = "idx_patient_created_at", columnList = "created_at")
         }
 )
 @Getter

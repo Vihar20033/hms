@@ -10,7 +10,14 @@ import java.math.BigDecimal;
 
 
 @Entity
-@Table(name = "doctors")
+@Table(
+        name = "doctors",
+        indexes = {
+                @Index(name = "idx_doctor_user_id", columnList = "userId"),
+                @Index(name = "idx_doctor_department", columnList = "department"),
+                @Index(name = "idx_doctor_registration", columnList = "registrationNumber")
+        }
+)
 @Getter
 @Setter
 @NoArgsConstructor

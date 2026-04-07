@@ -48,4 +48,10 @@ export class PrescriptionDetailComponent implements OnInit {
   onPrint(): void {
     window.print();
   }
+
+  onDownloadPdf(): void {
+    if (this.prescription?.reportUrl) {
+      window.open(this.prescription.reportUrl, '_blank');
+    }
+  }
 }

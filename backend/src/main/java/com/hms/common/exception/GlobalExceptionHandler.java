@@ -26,6 +26,8 @@ import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.http.converter.HttpMessageNotReadableException;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -182,6 +184,18 @@ public class GlobalExceptionHandler {
         public ResponseEntity<ApiError> handleAuthenticationException(AuthenticationException ex, HttpServletRequest request) {
                 log.warn("Authentication failed: {}", ex.getMessage());
                 return buildResponse(HmsErrorCode.INVALID_CREDENTIALS, HttpStatus.UNAUTHORIZED, ex.getMessage(), request);
+        }
+
+        @ExceptionHandler(DataIntegrityViolationException.class)
+        public ResponseEntity<ApiError> handleDataIntegrityViolation(DataIntegrityViolationException ex, HttpServletRequest request) {
+                log.warn("Data integrity violation: {}", ex.getMessage());
+                return buildResponse(HmsErrorCode.BAD_REQUEST, HttpStatus.CONFLICT, "Database constraint violation occurred. Please check for duplicate entries.", request);
+        }
+
+        @ExceptionHandler(HttpMessageNotReadableException.class)
+        public ResponseEntity<ApiError> handleMessageNotReadable(HttpMessageNotReadableException ex, HttpServletRequest request) {
+                log.warn("HTTP message not readable: {}", ex.getMessage());
+                return buildResponse(HmsErrorCode.BAD_REQUEST, HttpStatus.BAD_REQUEST, "Malformed request or invalid data format.", request);
         }
 
         @ExceptionHandler(Exception.class)

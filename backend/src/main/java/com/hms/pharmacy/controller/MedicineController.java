@@ -1,6 +1,7 @@
 package com.hms.pharmacy.controller;
 
 import com.hms.common.response.ApiResponse;
+import com.hms.common.response.SliceResponse;
 import com.hms.pharmacy.dto.request.DispenseMedicineRequestDTO;
 import com.hms.pharmacy.dto.request.MedicineRequestDTO;
 import com.hms.pharmacy.dto.request.RestockMedicineRequestDTO;
@@ -52,10 +53,27 @@ public class MedicineController {
         return ResponseEntity.ok(ApiResponse.success(service.getMedicineById(id)));
     }
 
-    @PreAuthorize("hasAnyRole('PHARMACIST', 'DOCTOR', 'ADMIN', 'NURSE')")
+    @PreAuthorize("hasAnyRole('PHARMACIST', 'DOCTOR', 'ADMIN')")
     @GetMapping
     public ResponseEntity<ApiResponse<List<MedicineResponseDTO>>> getAll() {
         return ResponseEntity.ok(ApiResponse.success(service.getAllMedicines()));
+    }
+
+    @PreAuthorize("hasAnyRole('PHARMACIST', 'DOCTOR', 'ADMIN')")
+    @GetMapping("/slice")
+    public ResponseEntity<ApiResponse<SliceResponse<MedicineResponseDTO>>> getSlice(
+            @RequestParam(name = "page", defaultValue = "0") int page,
+            @RequestParam(name = "size", defaultValue = "25") int size) {
+        var slice = service.getMedicineSlice(Math.max(page, 0), Math.min(Math.max(size, 1), 100));
+        return ResponseEntity.ok(ApiResponse.success(SliceResponse.<MedicineResponseDTO>builder()
+                .content(slice.getContent())
+                .page(slice.getNumber())
+                .size(slice.getSize())
+                .first(slice.isFirst())
+                .last(slice.isLast())
+                .hasNext(slice.hasNext())
+                .numberOfElements(slice.getNumberOfElements())
+                .build()));
     }
 
     @PreAuthorize("hasAnyRole('ADMIN','DOCTOR','PHARMACIST')")

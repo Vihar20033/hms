@@ -14,6 +14,7 @@ import com.hms.billing.mapper.BillingMapper;
 import com.hms.billing.repository.BillingRepository;
 import com.hms.billing.service.BillingService;
 import com.hms.common.audit.AuditLogService;
+import com.hms.common.service.PdfGenerationService;
 import com.hms.common.enums.PaymentMethod;
 import com.hms.common.enums.PaymentStatus;
 import com.hms.common.enums.Role;
@@ -52,6 +53,7 @@ public class BillingServiceImpl implements BillingService {
     private final PrescriptionRepository prescriptionRepository;
     private final MedicineRepository medicineRepository;
     private final AuditLogService auditLogService;
+    private final PdfGenerationService pdfGenerationService;
 
     @Value("${hospital.billing.tax-rate:0.05}")
     private BigDecimal taxRate;
@@ -81,6 +83,9 @@ public class BillingServiceImpl implements BillingService {
         billing.setInsuranceStatus(dto.getInsuranceStatus() != null ? dto.getInsuranceStatus() : "NONE");
 
         if (dto.getAppointmentId() != null) {
+            if (billingRepository.existsByAppointmentId(dto.getAppointmentId())) {
+                throw new BadRequestException("Billing invoice already exists for this appointment.");
+            }
             Appointment appointment = appointmentRepository.findById(dto.getAppointmentId())
                     .orElseThrow(
                             () -> new AppointmentNotFoundException("Appointment not found: " + dto.getAppointmentId()));
@@ -103,6 +108,13 @@ public class BillingServiceImpl implements BillingService {
             billing.setTaxAmount(billing.getTotalAmount().multiply(taxRate != null ? taxRate : new BigDecimal("0.05")));
             billing.setNetAmount(
                     billing.getTotalAmount().add(billing.getTaxAmount()).subtract(billing.getDiscountAmount()));
+        }
+
+        try {
+            byte[] pdfBytes = pdfGenerationService.generateBillingPdf(billing);
+            // Storage removed - transient generation only
+        } catch (Exception e) {
+            log.error("Failed to generate Billing PDF for invoice: {}", billing.getInvoiceNumber(), e);
         }
 
         Billing savedBilling = billingRepository.save(billing);
@@ -139,6 +151,15 @@ public class BillingServiceImpl implements BillingService {
     }
 
     @Override
+    @Transactional(readOnly = true)
+    public List<BillingResponseDTO> getCurrentPatientBillings() {
+        User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        Patient patient = patientRepository.findByEmail(user.getEmail())
+                .orElseThrow(() -> new PatientNotFoundException("Patient profile not found for current user"));
+        return billingMapper.toDtoList(billingRepository.findByPatientId(patient.getId()));
+    }
+
+    @Override
     @Transactional
     public BillingResponseDTO updatePaymentStatus(Long id, PaymentStatus status) {
         Billing billing = billingRepository.findById(id)
@@ -147,6 +168,24 @@ public class BillingServiceImpl implements BillingService {
         Billing saved = billingRepository.save(billing);
         auditLogService.log(getCurrentUsername(), "BILLING_PAYMENT_UPDATE", "Billing", id.toString(),
                 "status=" + status);
+        return billingMapper.toDto(saved);
+    }
+
+    @Override
+    @Transactional
+    public BillingResponseDTO payCurrentPatientBill(Long id) {
+        Billing billing = billingRepository.findById(id)
+                .orElseThrow(() -> new BillingNotFoundException("Billing not found: " + id, id.toString()));
+        checkOwnership(billing);
+
+        if (billing.getPaymentStatus() == PaymentStatus.PAID) {
+            return billingMapper.toDto(billing);
+        }
+
+        billing.setPaymentStatus(PaymentStatus.PAID);
+        billing.setPaymentMethod(PaymentMethod.ONLINE);
+        Billing saved = billingRepository.save(billing);
+        auditLogService.log(getCurrentUsername(), "PATIENT_BILL_PAYMENT", "Billing", id.toString(), "status=PAID");
         return billingMapper.toDto(saved);
     }
 
@@ -162,7 +201,18 @@ public class BillingServiceImpl implements BillingService {
     @Override
     @Transactional
     public BillingResponseDTO generateBillingFromAppointment(Long appointmentId) {
+        if (billingRepository.existsByAppointmentId(appointmentId)) {
+            throw new BadRequestException("Billing invoice already exists for this appointment.");
+        }
         Billing billing = prepareBillingFromAppointment(appointmentId);
+        
+        try {
+            byte[] pdfBytes = pdfGenerationService.generateBillingPdf(billing);
+            // Storage removed - transient generation only
+        } catch (Exception e) {
+            log.error("Failed to generate Billing PDF for invoice: {}", billing.getInvoiceNumber(), e);
+        }
+        
         Billing saved = billingRepository.save(billing);
         return billingMapper.toDto(saved);
     }
@@ -258,6 +308,13 @@ public class BillingServiceImpl implements BillingService {
 
         // 1. Staff with Global Access
         if (role == Role.ADMIN || role == Role.RECEPTIONIST) {
+            return;
+        }
+
+        if (role == Role.PATIENT
+                && billing.getPatient() != null
+                && user.getEmail() != null
+                && user.getEmail().equalsIgnoreCase(billing.getPatient().getEmail())) {
             return;
         }
 

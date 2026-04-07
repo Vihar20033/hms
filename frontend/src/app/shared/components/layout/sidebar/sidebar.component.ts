@@ -4,12 +4,13 @@ import { Router, RouterLink, RouterLinkActive } from '@angular/router';
 import { User } from '../../../../core/models/auth.models';
 import { AuthService } from '../../../../core/services/auth.service';
 import { LayoutService } from '../../../../core/services/layout.service';
+import { ROUTE_ROLES } from '../../../../core/constants/role-route-map';
 
 interface SidebarMenuItem {
   title: string;
   icon: string;
   link: string;
-  roles?: string[];
+  roles?: readonly string[];
   summary?: string;
 }
 
@@ -34,27 +35,49 @@ export class SidebarComponent {
       title: 'Dashboard',
       icon: 'ri-dashboard-line',
       link: '/dashboard',
+      roles: ROUTE_ROLES.dashboard,
       summary: 'Ops command center',
+    },
+    {
+      title: 'Laboratory',
+      icon: 'ri-test-tube-line',
+      link: '/lab',
+      roles: ROUTE_ROLES.lab,
+      summary: 'Samples and results',
+    },
+    {
+      title: 'My Portal',
+      icon: 'ri-user-smile-line',
+      link: '/patient-portal',
+      roles: ROUTE_ROLES.patientPortal,
+      summary: 'Visit and care guidance',
     },
     {
       title: 'User Management',
       icon: 'ri-user-settings-line',
       link: '/users',
-      roles: ['ADMIN'],
+      roles: ROUTE_ROLES.users,
       summary: 'Staff identity control',
+    },
+    {
+      title: 'Audit Trail',
+      icon: 'ri-shield-check-line',
+      link: '/audit-logs',
+      roles: ROUTE_ROLES.audit,
+      summary: 'Security and activity logs',
     },
     {
       title: 'Patients',
       icon: 'ri-user-heart-line',
       link: '/patients',
-      roles: ['ADMIN', 'DOCTOR', 'NURSE', 'RECEPTIONIST'],
+      roles: ROUTE_ROLES.patients,
       summary: 'Registration and records',
     },
     {
       title: 'Appointments',
       icon: 'ri-calendar-event-line',
       link: '/appointments',
-      roles: ['ADMIN', 'DOCTOR', 'NURSE', 'RECEPTIONIST'],
+      roles: ROUTE_ROLES.appointments,
       summary: 'Queue and consultations',
     },
 
@@ -62,35 +85,35 @@ export class SidebarComponent {
       title: 'Staff',
       icon: 'ri-stethoscope-line',
       link: '/staff',
-      roles: ['ADMIN'],
+      roles: ROUTE_ROLES.staff,
       summary: 'Doctor roster and setup',
     },
     {
       title: 'Prescriptions',
       icon: 'ri-file-text-line',
       link: '/prescriptions',
-      roles: ['ADMIN', 'DOCTOR', 'PHARMACIST'],
+      roles: ROUTE_ROLES.prescriptions,
       summary: 'Clinical orders',
     },
     {
       title: 'Pharmacy',
       icon: 'ri-capsule-line',
       link: '/pharmacy',
-      roles: ['ADMIN', 'PHARMACIST'],
+      roles: ROUTE_ROLES.pharmacy,
       summary: 'Inventory and stock',
     },
     {
       title: 'Inventory Log',
       icon: 'ri-history-line',
       link: '/pharmacy/inventory-log',
-      roles: ['ADMIN', 'PHARMACIST'],
+      roles: ROUTE_ROLES.pharmacy,
       summary: 'Stock movement history',
     },
     {
       title: 'Billing',
       icon: 'ri-bill-line',
       link: '/billing',
-      roles: ['ADMIN', 'RECEPTIONIST'],
+      roles: ROUTE_ROLES.billing,
       summary: 'Invoices and payments',
     },
   ];

@@ -1,0 +1,112 @@
+.page-hero,
+.portal-card,
+.content-card {
+  border: 1px solid var(--border-color);
+  background: var(--bg-card);
+  box-shadow: var(--shadow-md);
+  border-radius: 8px;
+}
+
+.page-hero {
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: 1.5rem;
+  margin-bottom: 1rem;
+}
+
+.eyebrow {
+  color: var(--brand-primary);
+  font-size: 0.78rem;
+  font-weight: 900;
+  text-transform: uppercase;
+}
+
+.portal-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 1rem;
+  margin-bottom: 1rem;
+}
+
+.portal-card,
+.content-card {
+  padding: 1.25rem;
+}
+
+.portal-card i {
+  color: var(--brand-primary);
+  font-size: 1.9rem;
+}
+
+.portal-card p,
+.card-header p {
+  color: var(--text-muted);
+}
+
+ul {
+  display: grid;
+  gap: 0.75rem;
+  padding-left: 1.2rem;
+}
+
+.bill-list {
+  display: grid;
+  gap: 0.85rem;
+}
+
+.bill-card {
+  display: grid;
+  grid-template-columns: 1fr auto auto;
+  align-items: center;
+  gap: 1rem;
+  padding: 1rem;
+  border: 1px solid var(--border-color);
+  border-radius: 8px;
+
+  span {
+    display: block;
+    color: var(--text-muted);
+    margin-top: 0.25rem;
+  }
+}
+
+.bill-amount {
+  font-weight: 900;
+  color: var(--text-primary);
+}
+
+.paid-chip {
+  display: inline-flex !important;
+  align-items: center;
+  justify-content: center;
+  min-height: 36px;
+  padding: 0 0.85rem;
+  border-radius: 8px;
+  color: var(--status-success) !important;
+  background: rgba(16, 152, 104, 0.1);
+  font-weight: 900;
+}
+
+.btn-primary {
+  min-height: 40px;
+  border-radius: 8px;
+  padding: 0 1rem;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  text-decoration: none;
+  font-weight: 800;
+  background: var(--brand-primary);
+  color: white;
+}
+
+@media (max-width: 760px) {
+  .page-hero {
+    flex-direction: column;
+  }
+
+  .bill-card {
+    grid-template-columns: 1fr;
+  }
+}

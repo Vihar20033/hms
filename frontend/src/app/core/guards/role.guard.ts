@@ -3,6 +3,7 @@ import { CanActivateFn, Router } from '@angular/router';
 import { Role } from '../models/auth.models';
 import { AccessFeedbackService } from '../services/access-feedback.service';
 import { AuthService } from '../services/auth.service';
+import { homeRouteForRole } from '../constants/role-route-map';
 
 export const roleGuard: CanActivateFn = (route, state) => {
   const router = inject(Router);
@@ -21,8 +22,9 @@ export const roleGuard: CanActivateFn = (route, state) => {
   }
 
   if (authService.isAuthenticated()) {
-    accessFeedbackService.showUnauthorized();
-    return router.createUrlTree(['/dashboard']);
+    const fallbackRoute = homeRouteForRole(user?.role);
+    accessFeedbackService.showUnauthorized(`You do not have access to ${state.url}. Redirecting you to your workspace.`);
+    return router.createUrlTree([fallbackRoute]);
   }
 
   return router.createUrlTree(['/login'], { queryParams: { returnUrl: state.url } });

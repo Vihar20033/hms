@@ -18,6 +18,7 @@ export interface Prescription {
   medicines: PrescriptionMedicine[];
   advice: string;
   notes: string;
+  reportUrl?: string;
   createdAt: string;
 }
 

@@ -14,6 +14,9 @@ import { PdfExportService } from '../../../core/services/pdf-export.service';
 import { StatusModalService } from '../../../core/services/status-modal.service';
 import { HeaderComponent } from '../../../shared/components/layout/header/header.component';
 import { SidebarComponent } from '../../../shared/components/layout/sidebar/sidebar.component';
+import { DialogModule } from 'primeng/dialog';
+import { DropdownModule } from 'primeng/dropdown';
+import { FormsModule } from '@angular/forms';
 import { BillingFormComponent } from '../components/billing-form/billing-form.component';
 import { BillingTableComponent } from '../components/billing-table/billing-table.component';
 import { BillingViewModalComponent } from '../components/billing-view-modal/billing-view-modal.component';
@@ -36,6 +39,9 @@ import { getBillingStatusClass } from '../utils/billing-data.utils';
     BillingFormComponent,
     BillingTableComponent,
     BillingViewModalComponent,
+    DialogModule,
+    DropdownModule,
+    FormsModule
   ],
   templateUrl: './billing-list.component.html',
   styleUrl: './billing-list.component.scss',

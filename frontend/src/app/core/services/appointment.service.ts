@@ -75,4 +75,10 @@ export class AppointmentService {
   getTodayAppointments(): Observable<ApiResponse<Appointment[]>> {
     return this.http.get<ApiResponse<Appointment[]>>(`${this.apiUrl}/today`);
   }
+
+  reassign(fromDoctorId: number, toDoctorId: number): Observable<ApiResponse<void>> {
+    return this.http.patch<ApiResponse<void>>(`${this.apiUrl}/reassign`, null, {
+      params: { fromDoctorId, toDoctorId }
+    });
+  }
 }

@@ -25,4 +25,5 @@ public class AppointmentResponseDTO {
     private AppointmentStatus status;
     private String reason;
     private String tokenNumber;
+    private boolean hasPrescription;
 }

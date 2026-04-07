@@ -4,6 +4,7 @@ import com.hms.pharmacy.dto.request.DispenseMedicineRequestDTO;
 import com.hms.pharmacy.dto.request.MedicineRequestDTO;
 import com.hms.pharmacy.dto.response.InventoryTransactionResponseDTO;
 import com.hms.pharmacy.dto.response.MedicineResponseDTO;
+import org.springframework.data.domain.Slice;
 
 import java.util.List;
 
@@ -19,6 +20,8 @@ public interface MedicineService {
     MedicineResponseDTO getMedicineById(Long id);
 
     List<MedicineResponseDTO> getAllMedicines();
+
+    Slice<MedicineResponseDTO> getMedicineSlice(int page, int size);
 
     List<MedicineResponseDTO> getActiveMedicines();
 

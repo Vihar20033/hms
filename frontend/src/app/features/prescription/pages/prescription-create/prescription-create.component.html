@@ -211,11 +211,22 @@
             <!-- Form Actions -->
             <div class="form-actions">
               <button type="button" class="btn-ghost" routerLink="/appointments">Discard</button>
-              <button type="submit" class="btn-primary-lg" [disabled]="prescriptionForm.invalid || isSubmitting">
-                <i class="ri-save-line" *ngIf="!isSubmitting"></i>
-                <span class="spinner" *ngIf="isSubmitting"></span>
-                {{ isSubmitting ? 'Finalizing...' : 'Finalize & Save Prescription' }}
-              </button>
+              
+              <div class="primary-actions">
+                <button type="submit" class="btn-outline-lg" [disabled]="prescriptionForm.invalid || isSubmitting">
+                  <i class="ri-save-line" *ngIf="!isSubmitting"></i>
+                  <span class="spinner" *ngIf="isSubmitting"></span>
+                  {{ isSubmitting ? 'Saving...' : 'Save Prescription Only' }}
+                </button>
+
+                <button type="button" class="btn-primary-lg shadow-glow" 
+                        (click)="onSubmit(true)" 
+                        [disabled]="prescriptionForm.invalid || isSubmitting">
+                  <i class="ri-checkbox-circle-line" *ngIf="!isSubmitting"></i>
+                  <span class="spinner" *ngIf="isSubmitting"></span>
+                  {{ isSubmitting ? 'Finalizing Visit...' : 'Save & Complete Consultation' }}
+                </button>
+              </div>
             </div>
           </div>
         </form>

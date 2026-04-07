@@ -31,6 +31,7 @@ public class BillingResponseDTO {
     private LocalDateTime billingDate;
     private LocalDateTime dueDate;
     private String notes;
+    private String reportUrl;
     private List<BillingItemResponseDTO> items;
     private LocalDateTime createdAt;
 

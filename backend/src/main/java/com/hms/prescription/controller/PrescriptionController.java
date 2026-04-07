@@ -47,7 +47,14 @@ public class PrescriptionController {
                 prescriptionService.getPrescriptionsByPatientId(patientId)));
     }
 
-    @PreAuthorize("hasAnyRole('ADMIN','DOCTOR','PHARMACIST')")
+    @PreAuthorize("hasRole('PATIENT')")
+    @GetMapping("/me")
+    public ResponseEntity<ApiResponse<List<PrescriptionResponseDTO>>> getCurrentPatientPrescriptions() {
+        return ResponseEntity.ok(ApiResponse.success(
+                prescriptionService.getCurrentPatientPrescriptions()));
+    }
+
+    @PreAuthorize("hasAnyRole('ADMIN','DOCTOR','PHARMACIST','PATIENT')")
     @GetMapping("/{id}")
     public ResponseEntity<ApiResponse<PrescriptionResponseDTO>> getPrescriptionById(
             @PathVariable("id") Long id) {

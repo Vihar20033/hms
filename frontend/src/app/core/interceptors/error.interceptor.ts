@@ -1,8 +1,9 @@
 import { HttpErrorResponse, HttpInterceptorFn } from '@angular/common/http';
 import { inject } from '@angular/core';
 import { Router } from '@angular/router';
-import { catchError, switchMap, throwError } from 'rxjs';
+import { catchError, throwError } from 'rxjs';
 import { AuthService } from '../services/auth.service';
+import { homeRouteForRole } from '../constants/role-route-map';
 
 export const errorInterceptor: HttpInterceptorFn = (req, next) => {
   const router = inject(Router);
@@ -20,9 +21,10 @@ export const errorInterceptor: HttpInterceptorFn = (req, next) => {
             router.navigate(['/login']);
           },
         });
-        return throwError(() => 'Session expired. Please log in again.');
+        return throwError(() => err);
       }
 
+      // Log a human-readable message to the console for debugging
       let errorMessage = 'An unknown error occurred';
 
       if (err.error instanceof ErrorEvent) {
@@ -37,7 +39,7 @@ export const errorInterceptor: HttpInterceptorFn = (req, next) => {
             errorMessage = 'Please log in again.';
             break;
           case 403:
-            router.navigate(['/unauthorized']);
+            router.navigate([homeRouteForRole(authService.currentUser?.role)]);
             errorMessage = 'You do not have permission to perform this action.';
             break;
           case 404:
@@ -46,6 +48,9 @@ export const errorInterceptor: HttpInterceptorFn = (req, next) => {
           case 422:
             errorMessage = err.error?.message || 'Please check your input.';
             break;
+          case 429:
+            errorMessage = err.error?.message || 'Too many requests. Please wait a moment and try again.';
+            break;
           case 500:
             errorMessage = 'Internal server error. Please try again later.';
             break;
@@ -53,8 +58,14 @@ export const errorInterceptor: HttpInterceptorFn = (req, next) => {
             errorMessage = err.error?.message || err.statusText || `HTTP error ${err.status}`;
         }
       }
-      
-      return throwError(() => err.error?.message || errorMessage);
+
+      console.error(`[HMS Error ${err.status}]:`, errorMessage);
+
+      // IMPORTANT: Re-throw the original HttpErrorResponse — NOT a plain string.
+      // Throwing a string destroys err.status and err.error, which breaks any
+      // component-level error handler that needs to inspect those fields
+      // (e.g., the doctor reassignment modal checks err.status === 400).
+      return throwError(() => err);
     }),
   );
 };

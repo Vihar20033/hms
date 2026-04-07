@@ -218,16 +218,22 @@ public class AppointmentServiceImpl implements AppointmentService {
         User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         Role role = user.getRole();
 
-        // 1. Staff with Global Access (Management & Triage)
         if (role == Role.ADMIN ||
-                role == Role.RECEPTIONIST ||
-                role == Role.NURSE) {
+                role == Role.RECEPTIONIST) {
             return;
         }
 
         // 2. Doctor specific access
         if (role == Role.DOCTOR) {
             if (appointment.getDoctor() != null && appointment.getDoctor().getUserId().equals(user.getId())) {
+                return;
+            }
+        }
+
+        if (role == Role.PATIENT) {
+            if (appointment.getPatient() != null
+                    && user.getEmail() != null
+                    && user.getEmail().equalsIgnoreCase(appointment.getPatient().getEmail())) {
                 return;
             }
         }
@@ -243,6 +249,14 @@ public class AppointmentServiceImpl implements AppointmentService {
         User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         Long doctorUserId = (user.getRole() == Role.DOCTOR) ? user.getId() : null;
 
+        if (user.getRole() == Role.PATIENT) {
+            Long currentPatientId = resolveCurrentPatientId(user);
+            if (patientId != null && !patientId.equals(currentPatientId)) {
+                throw new AccessDeniedException("You can only access your own appointments.");
+            }
+            patientId = currentPatientId;
+        }
+
         return appointmentRepository.findAppointments(
                 doctorUserId,
                 patientId,
@@ -250,6 +264,13 @@ public class AppointmentServiceImpl implements AppointmentService {
                 null,
                 null
         );
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public List<Appointment> getCurrentPatientAppointments(AppointmentStatus status) {
+        User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        return getAppointments(resolveCurrentPatientId(user), status);
     }
 
     @Override
@@ -271,6 +292,26 @@ public class AppointmentServiceImpl implements AppointmentService {
 
     @Override
     @Transactional
+    public void reassignAppointments(Long fromDoctorId, Long toDoctorId) {
+        Doctor toDoctor = doctorRepository.findById(toDoctorId)
+                .orElseThrow(() -> new BadRequestException("Target doctor not found for reassignment."));
+
+        List<Appointment> activeStatusList = appointmentRepository.findByDoctorIdAndStatusIn(fromDoctorId,
+                Arrays.asList(AppointmentStatus.SCHEDULED, AppointmentStatus.CONFIRMED, AppointmentStatus.CHECKED_IN, AppointmentStatus.IN_CONSULTATION));
+
+        for (Appointment appointment : activeStatusList) {
+            appointment.setDoctor(toDoctor);
+            // Ensure the new doctor is in the correct department
+            appointment.setDepartment(toDoctor.getDepartment());
+            appointmentRepository.save(appointment);
+        }
+
+        auditLogService.log(getCurrentUsername(), "APPOINTMENT_REASSIGN_BULK", "Doctor", fromDoctorId.toString(),
+                "toDoctor=" + toDoctorId + ", count=" + activeStatusList.size());
+    }
+
+    @Override
+    @Transactional
     public void deleteAppointment(Long id) {
         Appointment appointment = appointmentRepository.findById(id)
                 .orElseThrow(() -> new AppointmentNotFoundException("Appointment not found with ID: " + id));
@@ -281,5 +322,11 @@ public class AppointmentServiceImpl implements AppointmentService {
     private String getCurrentUsername() {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         return (auth != null && auth.isAuthenticated()) ? auth.getName() : "system";
+    }
+
+    private Long resolveCurrentPatientId(User user) {
+        return patientRepository.findByEmail(user.getEmail())
+                .orElseThrow(() -> new BadRequestException("Your patient profile is not linked yet."))
+                .getId();
     }
 }

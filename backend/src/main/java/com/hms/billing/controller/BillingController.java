@@ -48,6 +48,13 @@ public class BillingController {
                 billingService.getBillingsByPatientId(patientId)));
     }
 
+    @PreAuthorize("hasRole('PATIENT')")
+    @GetMapping("/me")
+    public ResponseEntity<ApiResponse<List<BillingResponseDTO>>> getCurrentPatientBillings() {
+        return ResponseEntity.ok(ApiResponse.success(
+                billingService.getCurrentPatientBillings()));
+    }
+
     @PreAuthorize("hasAnyRole('ADMIN','RECEPTIONIST')")
     @GetMapping("/preview-appointment/{appointmentId}")
     public ResponseEntity<ApiResponse<BillingResponseDTO>> previewBillingJson(
@@ -70,6 +77,13 @@ public class BillingController {
             @PathVariable("id") Long id, @RequestParam("status") PaymentStatus status) {
         return ResponseEntity.ok(ApiResponse.success(
                 billingService.updatePaymentStatus(id, status)));
+    }
+
+    @PreAuthorize("hasRole('PATIENT')")
+    @PatchMapping("/{id}/pay")
+    public ResponseEntity<ApiResponse<BillingResponseDTO>> payCurrentPatientBill(@PathVariable("id") Long id) {
+        return ResponseEntity.ok(ApiResponse.success(
+                billingService.payCurrentPatientBill(id), "Payment recorded"));
     }
 
 

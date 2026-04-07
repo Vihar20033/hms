@@ -16,7 +16,11 @@ public interface BillingService {
 
     List<BillingResponseDTO> getBillingsByPatientId(Long patientId);
 
+    List<BillingResponseDTO> getCurrentPatientBillings();
+
     BillingResponseDTO updatePaymentStatus(Long id, PaymentStatus status);
+
+    BillingResponseDTO payCurrentPatientBill(Long id);
 
     void deleteBilling(Long id);
 

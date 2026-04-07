@@ -2,6 +2,7 @@ import { CommonModule } from '@angular/common';
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnInit } from '@angular/core';
 import { Router, RouterLink } from '@angular/router';
 import { TableModule } from 'primeng/table';
+import { DialogModule } from 'primeng/dialog';
 import { Appointment, AppointmentStatus, AppointmentSummary } from '../../../../core/models/appointment.models';
 import { ApiResponse } from '../../../../core/models/common.models';
 import { AppointmentService } from '../../../../core/services/appointment.service';
@@ -20,7 +21,7 @@ import {
 @Component({
   selector: 'app-appointment-list',
   standalone: true,
-  imports: [CommonModule, SidebarComponent, HeaderComponent, RouterLink, TableModule],
+  imports: [CommonModule, SidebarComponent, HeaderComponent, RouterLink, TableModule, DialogModule],
   templateUrl: './appointment-list.component.html',
   styleUrl: './appointment-list.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -29,6 +30,10 @@ export class AppointmentListComponent implements OnInit {
   appointments: Appointment[] = [];
   summary: AppointmentSummary | null = null;
   isLoading = true;
+  
+  // Detail Modal State
+  detailModalVisible = false;
+  selectedAppointment: Appointment | null = null;
 
   selectedStatusFilter: 'ALL' | AppointmentStatus = 'ALL';
 
@@ -86,6 +91,26 @@ export class AppointmentListComponent implements OnInit {
     });
   }
 
+  onRowSelect(appointment: Appointment): void {
+    // Optimization: Pre-fill with current data while fetching fresh state
+    this.selectedAppointment = {...appointment};
+    this.detailModalVisible = true;
+    this.cdr.markForCheck();
+
+    // Fetch fresh data to ensure hasPrescription is accurate after prescription flow
+    this.appointmentService.getById(appointment.id).subscribe({
+      next: (res: ApiResponse<Appointment>) => {
+        this.selectedAppointment = res.data;
+        // Also update in the list to maintain consistency
+        const idx = this.appointments.findIndex(a => a.id === appointment.id);
+        if (idx !== -1) {
+          this.appointments[idx] = res.data;
+        }
+        this.cdr.markForCheck();
+      }
+    });
+  }
+
   onCheckIn(id: number): void {
     this.appointmentService.checkIn(id).subscribe(() => {
       this.loadSummary();
@@ -109,6 +134,14 @@ export class AppointmentListComponent implements OnInit {
 
   onEdit(id: number): void {
     this.router.navigate(['/appointments/book'], { queryParams: { appointmentId: id } });
+  }
+
+  onCancel(id: number): void {
+    if (!confirm('Cancel this appointment?')) return;
+    this.appointmentService.updateStatus(id, AppointmentStatus.CANCELLED).subscribe(() => {
+      this.loadSummary();
+      this.loadAppointments();
+    });
   }
 
   onDelete(id: number): void {

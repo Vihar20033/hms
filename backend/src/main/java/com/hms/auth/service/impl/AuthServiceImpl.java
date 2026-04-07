@@ -142,6 +142,10 @@ public class AuthServiceImpl implements AuthService {
             throw new InvalidCredentialsException("Token version mismatch. Please log in again.");
         }
 
+        revokeRefreshTokenIfPresent(refreshToken, username);
+        user.setTokenVersion(user.getTokenVersion() + 1);
+        userRepository.save(user);
+
         return AuthResponse.builder()
                 .token(jwtUtil.generateAccessToken(user.getUsername(), user.getRole().name(), user.getTokenVersion()))
                 .refreshToken(jwtUtil.generateRefreshToken(user.getUsername(), user.getTokenVersion()))

@@ -28,5 +28,6 @@ public class PrescriptionResponseDTO {
     private List<PrescriptionMedicineResponseDTO> medicines;
     private String advice;
     private String notes;
+    private String reportUrl;
     private LocalDateTime createdAt;
 }

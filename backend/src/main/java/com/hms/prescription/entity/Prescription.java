@@ -12,7 +12,14 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Entity
-@Table(name = "prescriptions")
+@Table(
+        name = "prescriptions",
+        indexes = {
+                @Index(name = "idx_prescription_patient", columnList = "patient_id"),
+                @Index(name = "idx_prescription_doctor", columnList = "doctor_id"),
+                @Index(name = "idx_prescription_appointment", columnList = "appointment_id")
+        }
+)
 @Getter
 @Setter
 @NoArgsConstructor
@@ -47,6 +54,9 @@ public class Prescription extends Auditable {
 
     @Column(columnDefinition = "TEXT")
     private String notes;
+
+    @Column(length = 500)
+    private String reportUrl;
 
     public void addMedicine(PrescriptionMedicine medicine) {
         medicines.add(medicine);

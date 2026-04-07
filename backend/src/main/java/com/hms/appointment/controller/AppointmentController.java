@@ -25,7 +25,7 @@ public class AppointmentController {
     private final AppointmentService appointmentService;
     private final AppointmentMapper appointmentMapper;
 
-    @PreAuthorize("hasAnyRole('ADMIN','RECEPTIONIST','DOCTOR','NURSE')")
+    @PreAuthorize("hasAnyRole('ADMIN','RECEPTIONIST','DOCTOR')")
     @GetMapping("/summary")
     public ResponseEntity<ApiResponse<AppointmentSummaryDTO>> getSummary() {
         return ResponseEntity.ok(ApiResponse.success(
@@ -40,7 +40,7 @@ public class AppointmentController {
                         appointmentMapper.toDto(appointmentService.createAppointment(dto)), "Appointment scheduled successfully", org.springframework.http.HttpStatus.CREATED));
     }
 
-    @PreAuthorize("hasAnyRole('ADMIN','RECEPTIONIST','DOCTOR','NURSE')")
+    @PreAuthorize("hasAnyRole('ADMIN','RECEPTIONIST','DOCTOR')")
     @GetMapping
     public ResponseEntity<ApiResponse<List<AppointmentResponseDTO>>> getAppointments(
             @RequestParam(name = "patientId", required = false) Long patientId,
@@ -49,14 +49,22 @@ public class AppointmentController {
                 appointmentMapper.toDtoList(appointmentService.getAppointments(patientId, status))));
     }
 
-    @PreAuthorize("hasAnyRole('ADMIN','RECEPTIONIST','DOCTOR','NURSE')")
+    @PreAuthorize("hasRole('PATIENT')")
+    @GetMapping("/me")
+    public ResponseEntity<ApiResponse<List<AppointmentResponseDTO>>> getCurrentPatientAppointments(
+            @RequestParam(name = "status", required = false) AppointmentStatus status) {
+        return ResponseEntity.ok(ApiResponse.success(
+                appointmentMapper.toDtoList(appointmentService.getCurrentPatientAppointments(status))));
+    }
+
+    @PreAuthorize("hasAnyRole('ADMIN','RECEPTIONIST','DOCTOR')")
     @GetMapping("/today")
     public ResponseEntity<ApiResponse<List<AppointmentResponseDTO>>> getTodayAppointments() {
         return ResponseEntity.ok(ApiResponse.success(
                 appointmentMapper.toDtoList(appointmentService.getTodayAppointments())));
     }
 
-    @PreAuthorize("hasAnyRole('ADMIN','DOCTOR','NURSE','RECEPTIONIST')")
+    @PreAuthorize("hasAnyRole('ADMIN','DOCTOR','RECEPTIONIST','PATIENT')")
     @GetMapping("/{id}")
     public ResponseEntity<ApiResponse<AppointmentResponseDTO>> getAppointmentById(
             @PathVariable("id") Long id) {
@@ -82,7 +90,7 @@ public class AppointmentController {
         return ResponseEntity.ok(ApiResponse.success(null));
     }
 
-    @PreAuthorize("hasAnyRole('ADMIN','NURSE','RECEPTIONIST')")
+    @PreAuthorize("hasAnyRole('ADMIN','RECEPTIONIST')")
     @PatchMapping("/{id}/check-in")
     public ResponseEntity<ApiResponse<AppointmentResponseDTO>> checkInAppointment(
             @PathVariable("id") Long id) {
@@ -104,5 +112,13 @@ public class AppointmentController {
             @PathVariable("id") Long id) {
         return ResponseEntity.ok(ApiResponse.success(
                 appointmentMapper.toDto(appointmentService.updateStatus(id, AppointmentStatus.COMPLETED))));
+    }
+    @PreAuthorize("hasAnyRole('ADMIN','RECEPTIONIST')")
+    @PatchMapping("/reassign")
+    public ResponseEntity<ApiResponse<Void>> reassignAppointments(
+            @RequestParam("fromDoctorId") Long fromDoctorId,
+            @RequestParam("toDoctorId") Long toDoctorId) {
+        appointmentService.reassignAppointments(fromDoctorId, toDoctorId);
+        return ResponseEntity.ok(ApiResponse.success(null, "Appointments reassigned successfully", org.springframework.http.HttpStatus.OK));
     }
 }

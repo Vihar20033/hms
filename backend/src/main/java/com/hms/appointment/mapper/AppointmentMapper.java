@@ -12,18 +12,22 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 @Mapper(componentModel = "spring", builder = @Builder(disableBuilder = true), unmappedTargetPolicy = ReportingPolicy.IGNORE, imports = {LocalDateTime.class})
-public interface AppointmentMapper {
+public abstract class AppointmentMapper {
+
+    @org.springframework.beans.factory.annotation.Autowired
+    protected com.hms.prescription.repository.PrescriptionRepository prescriptionRepository;
 
     @Mapping(source = "patient.id", target = "patientId")
     @Mapping(source = "patient.name", target = "patientName")
     @Mapping(source = "doctor.id", target = "doctorId")
     @Mapping(target = "doctorName", expression = "java(entity.getDoctor() != null ? entity.getDoctor().getFirstName() + \" \" + entity.getDoctor().getLastName() : null)")
-    AppointmentResponseDTO toDto(Appointment entity);
+    @Mapping(target = "hasPrescription", expression = "java(prescriptionRepository.findByAppointmentId(entity.getId()).isPresent())")
+    public abstract AppointmentResponseDTO toDto(Appointment entity);
 
     @Mapping(target = "appointmentTime", expression = "java(LocalDateTime.of(dto.getAppointmentDate(), dto.getAppointmentTime()))")
     @Mapping(target = "patient", ignore = true)
     @Mapping(target = "doctor", ignore = true)
-    Appointment toEntity(AppointmentRequestDTO dto);
+    public abstract Appointment toEntity(AppointmentRequestDTO dto);
 
-    List<AppointmentResponseDTO> toDtoList(List<Appointment> entities);
+    public abstract List<AppointmentResponseDTO> toDtoList(List<Appointment> entities);
 }

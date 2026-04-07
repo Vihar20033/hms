@@ -14,8 +14,18 @@ import com.hms.user.repository.UserRepository;
 import com.hms.user.service.UserService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Slice;
+import org.springframework.data.domain.Sort;
+import org.springframework.security.access.AccessDeniedException;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import com.hms.common.enums.Role;
+import com.hms.user.entity.User;
+import com.hms.common.enums.AppointmentStatus;
+import com.hms.common.exception.BadRequestException;
+import com.hms.appointment.repository.AppointmentRepository;
 
 import java.util.List;
 
@@ -30,6 +40,7 @@ public class PatientServiceImpl implements PatientService {
     private final UserService userService;
     private final AuditLogService auditLogService;
     private final PatientMapper mapper;
+    private final AppointmentRepository appointmentRepository;
 
     @Override
     public PatientResponseDTO create(PatientRequestDTO dto) {
@@ -50,6 +61,16 @@ public class PatientServiceImpl implements PatientService {
     public PatientResponseDTO getById(Long id) {
         Patient patient = repository.findById(id)
                 .orElseThrow(() -> new PatientNotFoundException("Patient not found"));
+        checkPatientOwnership(patient);
+        return mapper.toResponse(patient);
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public PatientResponseDTO getCurrentPatientProfile() {
+        User user = currentUser();
+        Patient patient = repository.findByEmail(user.getEmail())
+                .orElseThrow(() -> new PatientNotFoundException("Your patient profile is not linked yet."));
         return mapper.toResponse(patient);
     }
 
@@ -57,6 +78,7 @@ public class PatientServiceImpl implements PatientService {
     public PatientResponseDTO update(Long id, PatientRequestDTO dto) {
         Patient patient = repository.findById(id)
                 .orElseThrow(() -> new PatientNotFoundException("Patient not found"));
+        checkPatientOwnership(patient);
 
         if (!patient.getContactNumber().equals(dto.getContactNumber())
                 && repository.existsByContactNumber(dto.getContactNumber())) {
@@ -77,6 +99,13 @@ public class PatientServiceImpl implements PatientService {
         Patient patient = repository.findById(id)
                 .orElseThrow(() -> new PatientNotFoundException("Patient not found"));
 
+        long activeAppointments = appointmentRepository.countByPatientIdAndStatusIn(id,
+                java.util.List.of(AppointmentStatus.SCHEDULED, AppointmentStatus.CONFIRMED, AppointmentStatus.CHECKED_IN, AppointmentStatus.IN_CONSULTATION));
+
+        if (activeAppointments > 0) {
+            throw new BadRequestException("Cannot delete patient with active or upcoming appointments. Please transition or cancel them first.");
+        }
+
         repository.delete(patient);
         log.info("Patient deleted with ID: {}", id);
         auditLogService.log(SecurityUtils.getCurrentUsername(), "PATIENT_DELETE", "Patient", id.toString(),
@@ -92,5 +121,29 @@ public class PatientServiceImpl implements PatientService {
         return repository.findAll().stream()
                 .map(mapper::toResponse)
                 .toList();
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public Slice<PatientResponseDTO> getSlice(int page, int size) {
+        PageRequest request = PageRequest.of(page, size, Sort.by(Sort.Direction.DESC, "createdAt"));
+        return repository.findAll(request).map(mapper::toResponse);
+    }
+
+    private void checkPatientOwnership(Patient patient) {
+        User user = currentUser();
+        if (user.getRole() != Role.PATIENT) {
+            return;
+        }
+
+        if (user.getEmail() != null && user.getEmail().equalsIgnoreCase(patient.getEmail())) {
+            return;
+        }
+
+        throw new AccessDeniedException("You can only access your own patient profile.");
+    }
+
+    private User currentUser() {
+        return (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
     }
 }

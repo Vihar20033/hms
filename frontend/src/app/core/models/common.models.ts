@@ -8,6 +8,16 @@ export interface ApiResponse<T> {
   path?: string;
 }
 
+export interface SliceResponse<T> {
+  content: T[];
+  page: number;
+  size: number;
+  first: boolean;
+  last: boolean;
+  hasNext: boolean;
+  numberOfElements: number;
+}
+
 export interface WeeklyStatistics {
   day: string;
   appointments: number;

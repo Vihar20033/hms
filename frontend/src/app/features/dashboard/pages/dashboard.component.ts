@@ -73,7 +73,11 @@ export class DashboardComponent implements OnInit, AfterViewInit, OnDestroy {
     });
 
     this.loadSummary();
-    this.loadTodayAppointments();
+    if (this.role !== 'PATIENT') {
+      this.loadTodayAppointments();
+    } else {
+      this.isAppointmentsLoading = false;
+    }
   }
 
   loadSummary(): void {
