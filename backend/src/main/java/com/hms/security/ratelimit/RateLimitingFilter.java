@@ -1,12 +1,14 @@
 package com.hms.security.ratelimit;
 
+import io.github.bucket4j.Bucket;
+import io.github.bucket4j.BucketConfiguration;
+import io.github.bucket4j.ConsumptionProbe;
+import io.github.bucket4j.distributed.proxy.ProxyManager;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.hms.common.exception.HmsErrorCode;
 import com.hms.common.response.ApiError;
 import com.hms.security.config.RateLimitProperties;
 import io.github.bucket4j.Bandwidth;
-import io.github.bucket4j.Bucket;
-import io.github.bucket4j.ConsumptionProbe;
 import io.github.bucket4j.Refill;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
@@ -21,8 +23,7 @@ import org.springframework.web.filter.OncePerRequestFilter;
 
 import java.io.IOException;
 import java.time.Duration;
-import java.util.Map;
-import java.util.concurrent.ConcurrentHashMap;
+import java.util.function.Supplier;
 
 @Component
 @RequiredArgsConstructor
@@ -30,7 +31,7 @@ public class RateLimitingFilter extends OncePerRequestFilter {
 
     private final RateLimitProperties properties;
     private final ObjectMapper objectMapper;
-    private final Map<String, Bucket> buckets = new ConcurrentHashMap<>();
+    private final ProxyManager<String> proxyManager;
 
     @Override
     protected boolean shouldNotFilter(@NonNull HttpServletRequest request) {
@@ -45,7 +46,9 @@ public class RateLimitingFilter extends OncePerRequestFilter {
             @NonNull HttpServletResponse response,
             @NonNull FilterChain filterChain
     ) throws ServletException, IOException {
-        Bucket bucket = buckets.computeIfAbsent(resolveClientKey(request), ignored -> newBucket());
+        String key = resolveClientKey(request);
+        Bucket bucket = proxyManager.builder().build(key, getBucketConfigurationSupplier());
+        
         ConsumptionProbe probe = bucket.tryConsumeAndReturnRemaining(1);
 
         response.setHeader("X-Rate-Limit-Remaining", String.valueOf(Math.max(0, probe.getRemainingTokens())));
@@ -69,13 +72,17 @@ public class RateLimitingFilter extends OncePerRequestFilter {
         objectMapper.writeValue(response.getOutputStream(), error);
     }
 
-    private Bucket newBucket() {
-        Refill refill = Refill.intervally(
-                properties.getRefillTokens(),
-                Duration.ofMinutes(properties.getRefillMinutes())
-        );
-        Bandwidth limit = Bandwidth.classic(properties.getCapacity(), refill);
-        return Bucket.builder().addLimit(limit).build();
+    private Supplier<BucketConfiguration> getBucketConfigurationSupplier() {
+        return () -> {
+            Refill refill = Refill.intervally(
+                    properties.getRefillTokens(),
+                    Duration.ofMinutes(properties.getRefillMinutes())
+            );
+            Bandwidth limit = Bandwidth.classic(properties.getCapacity(), refill);
+            return BucketConfiguration.builder()
+                    .addLimit(limit)
+                    .build();
+        };
     }
 
     private String resolveClientKey(HttpServletRequest request) {

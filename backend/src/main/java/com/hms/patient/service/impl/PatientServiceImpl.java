@@ -23,6 +23,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import com.hms.common.enums.Role;
 import com.hms.user.entity.User;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
 import com.hms.common.enums.AppointmentStatus;
 import com.hms.common.exception.BadRequestException;
 import com.hms.appointment.repository.AppointmentRepository;
@@ -43,6 +45,7 @@ public class PatientServiceImpl implements PatientService {
     private final AppointmentRepository appointmentRepository;
 
     @Override
+    @CacheEvict(value = "patients", allEntries = true)
     public PatientResponseDTO create(PatientRequestDTO dto) {
         log.info("Creating patient with contact number: {}", dto.getContactNumber());
         if (repository.existsByContactNumber(dto.getContactNumber())) {
@@ -67,6 +70,7 @@ public class PatientServiceImpl implements PatientService {
 
     @Override
     @Transactional(readOnly = true)
+    @Cacheable(value = "patients", key = "'profile_' + T(com.hms.common.util.SecurityUtils).getCurrentUsername()")
     public PatientResponseDTO getCurrentPatientProfile() {
         User user = currentUser();
         Patient patient = repository.findByEmail(user.getEmail())
@@ -75,6 +79,7 @@ public class PatientServiceImpl implements PatientService {
     }
 
     @Override
+    @CacheEvict(value = "patients", allEntries = true)
     public PatientResponseDTO update(Long id, PatientRequestDTO dto) {
         Patient patient = repository.findById(id)
                 .orElseThrow(() -> new PatientNotFoundException("Patient not found"));
@@ -95,6 +100,7 @@ public class PatientServiceImpl implements PatientService {
 
     @Transactional
     @Override
+    @CacheEvict(value = "patients", allEntries = true)
     public void delete(Long id) {
         Patient patient = repository.findById(id)
                 .orElseThrow(() -> new PatientNotFoundException("Patient not found"));
@@ -117,6 +123,7 @@ public class PatientServiceImpl implements PatientService {
 
     @Override
     @Transactional(readOnly = true)
+    @Cacheable(value = "patients", key = "'all'")
     public List<PatientResponseDTO> getAll() {
         return repository.findAll().stream()
                 .map(mapper::toResponse)
@@ -125,6 +132,7 @@ public class PatientServiceImpl implements PatientService {
 
     @Override
     @Transactional(readOnly = true)
+    @Cacheable(value = "patients", key = "'slice_' + #page + '_' + #size")
     public Slice<PatientResponseDTO> getSlice(int page, int size) {
         PageRequest request = PageRequest.of(page, size, Sort.by(Sort.Direction.DESC, "createdAt"));
         return repository.findAll(request).map(mapper::toResponse);

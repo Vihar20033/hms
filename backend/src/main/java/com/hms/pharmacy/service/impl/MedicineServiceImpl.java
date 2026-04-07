@@ -19,6 +19,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Slice;
 import org.springframework.data.domain.Sort;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
@@ -38,6 +40,7 @@ public class MedicineServiceImpl implements MedicineService {
 
     @Override
     @Transactional
+    @CacheEvict(value = "medicines", allEntries = true)
     public MedicineResponseDTO createMedicine(MedicineRequestDTO dto) {
 
         if (medicineRepository.existsByMedicineCode(dto.getMedicineCode())) {
@@ -63,6 +66,7 @@ public class MedicineServiceImpl implements MedicineService {
 
     @Override
     @Transactional
+    @CacheEvict(value = "medicines", allEntries = true)
     public MedicineResponseDTO updateMedicine(Long id, MedicineRequestDTO dto) {
         Medicine existingMedicine = medicineRepository.findById(id)
                 .orElseThrow(() -> new MedicineNotFoundException("Medicine not found with ID: " + id));
@@ -80,6 +84,7 @@ public class MedicineServiceImpl implements MedicineService {
 
     @Override
     @Transactional
+    @CacheEvict(value = "medicines", allEntries = true)
     public void deleteMedicine(Long id) {
         Medicine medicine = medicineRepository.findById(id)
                 .orElseThrow(() -> new MedicineNotFoundException("Medicine not found with ID: " + id));
@@ -90,6 +95,7 @@ public class MedicineServiceImpl implements MedicineService {
 
     @Override
     @Transactional(readOnly = true)
+    @Cacheable(value = "medicines", key = "#id")
     public MedicineResponseDTO getMedicineById(Long id) {
         Medicine medicine = medicineRepository.findById(id)
                 .orElseThrow(() -> new MedicineNotFoundException("Medicine not found with ID: " + id));
@@ -99,12 +105,14 @@ public class MedicineServiceImpl implements MedicineService {
 
     @Override
     @Transactional(readOnly = true)
+    @Cacheable(value = "medicines", key = "'all'")
     public List<MedicineResponseDTO> getAllMedicines() {
         return medicineMapper.toDtoList(medicineRepository.findAll());
     }
 
     @Override
     @Transactional(readOnly = true)
+    @Cacheable(value = "medicines", key = "'slice_' + #page + '_' + #size")
     public Slice<MedicineResponseDTO> getMedicineSlice(int page, int size) {
         PageRequest request = PageRequest.of(page, size, Sort.by(Sort.Direction.ASC, "name"));
         return medicineRepository.findAll(request).map(medicineMapper::toDto);
@@ -112,12 +120,14 @@ public class MedicineServiceImpl implements MedicineService {
 
     @Override
     @Transactional(readOnly = true)
+    @Cacheable(value = "medicines", key = "'active'")
     public List<MedicineResponseDTO> getActiveMedicines() {
         return medicineMapper.toDtoList(medicineRepository.findByIsActiveTrue());
     }
 
     @Override
     @Transactional(readOnly = true)
+    @Cacheable(value = "medicines", key = "'cat_' + #category")
     public List<MedicineResponseDTO> getMedicinesByCategory(String category) {
         return medicineMapper.toDtoList(medicineRepository.findByCategory(MedicineCategory.valueOf(category)));
     }
@@ -131,6 +141,7 @@ public class MedicineServiceImpl implements MedicineService {
 
     @Override
     @Transactional(rollbackFor = Exception.class)
+    @CacheEvict(value = "medicines", allEntries = true)
     public void dispenseMedicines(DispenseMedicineRequestDTO request) {
         for (DispenseMedicineRequestDTO.DispenseItemDTO item : request.getItems()) {
             Medicine medicine = medicineRepository.findById(item.getMedicineId())
@@ -156,6 +167,7 @@ public class MedicineServiceImpl implements MedicineService {
 
     @Override
     @Transactional(rollbackFor = Exception.class)
+    @CacheEvict(value = "medicines", allEntries = true)
     public void restockMedicine(Long id, Integer quantity) {
         Medicine medicine = medicineRepository.findById(id)
                 .orElseThrow(() -> new MedicineNotFoundException("Medicine not found with ID: " + id));

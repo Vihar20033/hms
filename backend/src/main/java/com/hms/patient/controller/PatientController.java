@@ -42,7 +42,7 @@ public class PatientController {
     public ResponseEntity<ApiResponse<SliceResponse<PatientResponseDTO>>> getSlice(
             @RequestParam(name = "page", defaultValue = "0") int page,
             @RequestParam(name = "size", defaultValue = "25") int size) {
-        var slice = service.getSlice(Math.max(page, 0), Math.min(Math.max(size, 1), 100));
+        org.springframework.data.domain.Slice<PatientResponseDTO> slice = service.getSlice(Math.max(page, 0), Math.min(Math.max(size, 1), 100));
         return ResponseEntity.ok(ApiResponse.success(SliceResponse.<PatientResponseDTO>builder()
                 .content(slice.getContent())
                 .page(slice.getNumber())

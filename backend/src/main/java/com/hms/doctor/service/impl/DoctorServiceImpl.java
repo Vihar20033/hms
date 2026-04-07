@@ -26,6 +26,8 @@ import com.hms.common.enums.AppointmentStatus;
 import com.hms.common.exception.BadRequestException;
 import com.hms.common.exception.ConflictException;
 import com.hms.appointment.repository.AppointmentRepository;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -47,6 +49,7 @@ public class DoctorServiceImpl implements DoctorService {
 
     @Override
     @Transactional
+    @CacheEvict(value = "doctors", allEntries = true)
     public DoctorOnboardingResponse createDoctor(CreateDoctorRequest request) {
         
         Long userId = request.getUserId();
@@ -93,6 +96,7 @@ public class DoctorServiceImpl implements DoctorService {
 
     @Override
     @Transactional
+    @CacheEvict(value = "doctors", allEntries = true)
     public Doctor updateDoctor(Long id, UpdateDoctorRequest request) {
         Doctor doctor = getDoctorById(id);
         doctorMapper.updateEntity(request, doctor);
@@ -103,6 +107,7 @@ public class DoctorServiceImpl implements DoctorService {
 
     @Override
     @Transactional(readOnly = true)
+    @Cacheable(value = "doctors", key = "#id")
     public Doctor getDoctorById(Long id) {
         return doctorRepository.findById(id)
                 .orElseThrow(() -> new DoctorNotFoundException(id));
@@ -110,12 +115,14 @@ public class DoctorServiceImpl implements DoctorService {
 
     @Override
     @Transactional(readOnly = true)
+    @Cacheable(value = "doctors", key = "'all'")
     public List<Doctor> getAllDoctors() {
         return doctorRepository.findAll();
     }
 
     @Override
     @Transactional(readOnly = true)
+    @Cacheable(value = "doctors", key = "'slice_' + #page + '_' + #size")
     public Slice<Doctor> getDoctorSlice(int page, int size) {
         PageRequest request = PageRequest.of(page, size, Sort.by(Sort.Direction.ASC, "lastName", "firstName"));
         return doctorRepository.findAll(request);
@@ -123,12 +130,14 @@ public class DoctorServiceImpl implements DoctorService {
 
     @Override
     @Transactional(readOnly = true)
+    @Cacheable(value = "doctors", key = "'dept_' + #department")
     public List<Doctor> getDoctorsByDepartment(Department department) {
         return doctorRepository.findByDepartment(department);
     }
 
     @Override
     @Transactional
+    @CacheEvict(value = "doctors", allEntries = true)
     public void deleteDoctor(Long id) {
         Doctor doctor = getDoctorById(id);
 

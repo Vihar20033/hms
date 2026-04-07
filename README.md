@@ -4,16 +4,16 @@ Production-oriented Hospital Management System built as a modular monolith with 
 
 ## Architecture
 
-- Backend: Spring Boot 3.3, Spring Security 6, Spring Data JPA, Hibernate, MapStruct, Lombok, Bucket4j.
+- Backend: Spring Boot 3.3, Spring Security 6, Spring Data JPA, Hibernate, MapStruct, Lombok, Bucket4j, Redis.
 - Frontend: Angular 17 standalone components, PrimeNG, RxJS, route guards, HTTP interceptors.
-- Database: MySQL 8 for normal runtime, with environment-driven connection settings.
-- Security: JWT access tokens, refresh-token rotation/revocation, BCrypt password hashing, method-level authorization, security headers, and in-memory rate limiting.
-- Persistence: Audited entities use created/updated metadata and Hibernate soft delete through a `deleted` column.
+- Database: MySQL 8 and Redis 7 (caching & rate limiting) for normal runtime.
+- Security: JWT access tokens, refresh-token rotation/revocation, BCrypt password hashing, method-level authorization, security headers, and distributed Redis-backed rate limiting.
+- Caching: Multi-level caching for Doctor, Patient, and Medicine entities to reduce DB load and improve response times.
 
 ## Production Hardening Included
 
 - Soft delete is enabled at the base entity layer so repository deletes keep medical and operational records recoverable.
-- Bucket4j rate limiting is wired into the Spring Security filter chain without Redis. Quotas are local to each backend instance until a shared cache is introduced.
+- Bucket4j rate limiting is wired into the Spring Security filter chain with Redis-backed persistence. Quotas are shared across all backend instances for consistent traffic management.
 - `@PreAuthorize` rules are active through method security.
 - High-traffic database access paths have entity-level indexes for users, patients, doctors, appointments, prescriptions, medicines, inventory transactions, and billing.
 - Large directory-style resources expose slice endpoints as a non-breaking alternative to full-list reads:
@@ -55,6 +55,7 @@ Production-oriented Hospital Management System built as a modular monolith with 
 - Node.js 18+
 - Maven wrapper included in `backend/`
 - MySQL 8+
+- Redis 7+ (for caching and rate limiting)
 
 ### Backend
 
@@ -63,6 +64,8 @@ cd backend
 set HMS_DB_URL=jdbc:mysql://localhost:1234/data?createDatabaseIfNotExist=true&useSSL=false&allowPublicKeyRetrieval=true
 set HMS_DB_USERNAME=root
 set HMS_DB_PASSWORD=your_password
+set REDIS_HOST=localhost
+set REDIS_PORT=6379
 set JWT_SECRET_KEY=replace_with_a_strong_hex_secret
 .\mvnw.cmd spring-boot:run
 ```
@@ -88,13 +91,14 @@ Important backend settings live in `backend/src/main/resources/application.prope
 - `SERVER_PORT`: backend HTTP port. Defaults to `8080` and must match Angular `environment.apiUrl`.
 - `HMS_FRONTEND_API_URL`: API URL logged during startup to prevent copied-project confusion. Defaults to `http://localhost:8080/api/v1`.
 - `HMS_ALLOWED_ORIGINS`: comma-separated CORS origins. Dev default is `http://localhost:4200,http://127.0.0.1:4200`.
-- `hms.rate-limit.enabled`: enable or disable in-memory Bucket4j rate limiting.
+- `hms.rate-limit.enabled`: enable or disable distributed Bucket4j rate limiting.
 - `hms.rate-limit.capacity`: maximum tokens per bucket.
 - `hms.rate-limit.refill-tokens`: tokens restored per interval.
 - `hms.rate-limit.refill-minutes`: refill interval in minutes.
+- `REDIS_HOST`, `REDIS_PORT`: Redis connection for shared rate limiting and cache.
 - `HMS_LOG_PATH` or `hms.logging.path`: canonical backend log directory. Defaults to `backend/logs` when the backend is launched from the backend directory.
 
-Redis is intentionally not required for rate limiting in this version.
+Redis is required for consistent distributed rate limiting and optimized caching in this version.
 
 ## Production Safety
 
