@@ -2,6 +2,7 @@ package com.hms;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.boot.autoconfigure.data.redis.RedisRepositoriesAutoConfiguration;
 import org.springframework.boot.autoconfigure.domain.EntityScan;
 import org.springframework.boot.context.properties.ConfigurationPropertiesScan;
 import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
@@ -19,7 +20,7 @@ import org.springframework.security.config.annotation.method.configuration.Enabl
 @EntityScan(basePackages = "com.hms")
 @EnableJpaRepositories(basePackages = "com.hms")
 @ConfigurationPropertiesScan(basePackages = "com.hms")
-@SpringBootApplication
+@SpringBootApplication(exclude = {RedisRepositoriesAutoConfiguration.class})
 public class HospitalManagementSystemApplication {
 	public static void main(String[] args) {
 		SpringApplication.run(HospitalManagementSystemApplication.class, args);

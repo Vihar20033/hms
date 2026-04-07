@@ -2,16 +2,15 @@ package com.hms.common.enums;
 
 public enum Department {
     GENERAL_MEDICINE,
+    PEDIATRICS,
     CARDIOLOGY,
     DERMATOLOGY,
-    PEDIATRICS,
     ORTHOPEDICS,
     NEUROLOGY,
-    GYNECOLOGY,
     OPHTHALMOLOGY,
     ENT,
-    PSYCHIATRY,
-    RADIOLOGY,
+    GYNECOLOGY,
     ONCOLOGY,
-    EMERGENCY
+    DENTAL,
+    EMERGENCY,
 }

@@ -29,6 +29,9 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
 
 
+import com.hms.common.exception.ConflictException;
+import org.springframework.dao.DataIntegrityViolationException;
+
 @Service
 @RequiredArgsConstructor
 public class MedicineServiceImpl implements MedicineService {
@@ -47,21 +50,25 @@ public class MedicineServiceImpl implements MedicineService {
             throw new DuplicateMedicineException("Medicine code already exists: " + dto.getMedicineCode());
         }
 
-        Medicine savedMedicine = medicineRepository
-                .save(medicineMapper.toEntity(dto));
+        try {
+            Medicine savedMedicine = medicineRepository.save(medicineMapper.toEntity(dto));
 
-        // Record initial inventory transaction
-        InventoryTransaction transaction = InventoryTransaction.builder()
-                .medicine(savedMedicine)
-                .transactionType("IN")
-                .quantity(savedMedicine.getQuantityInStock())
-                .referenceId(savedMedicine.getId())
-                .notes("Initial stock at creation")
-                .build();
-        inventoryTransactionRepository.save(transaction);
+            // Record initial inventory transaction
+            InventoryTransaction transaction = InventoryTransaction.builder()
+                    .medicine(savedMedicine)
+                    .transactionType("IN")
+                    .quantity(savedMedicine.getQuantityInStock())
+                    .referenceId(savedMedicine.getId())
+                    .notes("Initial stock at creation")
+                    .build();
+            inventoryTransactionRepository.save(transaction);
 
-        auditLogService.log(getCurrentUsername(), "MEDICINE_CREATE", "Medicine", savedMedicine.getId().toString(), "name=" + savedMedicine.getName());
-        return medicineMapper.toDto(savedMedicine);
+            auditLogService.log(getCurrentUsername(), "MEDICINE_CREATE", "Medicine", savedMedicine.getId().toString(),
+                    "name=" + savedMedicine.getName());
+            return medicineMapper.toDto(savedMedicine);
+        } catch (DataIntegrityViolationException e) {
+            throw new ConflictException("Medicine with code " + dto.getMedicineCode() + " already exists (database constraint).");
+        }
     }
 
     @Override

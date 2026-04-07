@@ -51,6 +51,9 @@ export const errorInterceptor: HttpInterceptorFn = (req, next) => {
           case 429:
             errorMessage = err.error?.message || 'Too many requests. Please wait a moment and try again.';
             break;
+          case 409:
+            errorMessage = err.error?.message || 'This record has been modified by another user. Please refresh and try again.';
+            break;
           case 500:
             errorMessage = 'Internal server error. Please try again later.';
             break;

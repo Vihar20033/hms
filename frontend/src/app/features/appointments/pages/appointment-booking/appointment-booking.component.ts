@@ -58,6 +58,7 @@ export class AppointmentBookingComponent implements OnInit {
   errorMessage = '';
   isEditMode = false;
   appointmentId: number | null = null;
+  currentVersion: number | null = null;
   formSubmitted = false;
   readonly minDate = new Date();
   readonly departments = BOOKABLE_DEPARTMENTS;
@@ -120,6 +121,7 @@ export class AppointmentBookingComponent implements OnInit {
     this.appointmentService.getById(id).subscribe({
       next: (res: ApiResponse<Appointment>) => {
         const a = res.data;
+        this.currentVersion = a.version ?? null;
         this.bookingForm.patchValue({
           patientId: a.patientId,
           department: a.department,
@@ -169,6 +171,7 @@ export class AppointmentBookingComponent implements OnInit {
       ...this.bookingForm.value,
       appointmentDate: formatDateOnly(this.bookingForm.get('appointmentDate')?.value),
       appointmentTime: formatTimeOnly(this.bookingForm.get('appointmentTime')?.value),
+      version: this.currentVersion,
     };
 
     const request$ =

@@ -30,4 +30,5 @@ public class MedicineResponseDTO {
     private Boolean isActive;
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
+    private Long version;
 }

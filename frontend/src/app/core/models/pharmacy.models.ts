@@ -21,6 +21,7 @@ export interface Medicine {
   expiryDate?: string;
   isActive: boolean;
   createdAt?: string;
+  version?: number;
 }
 
 export interface MedicineRequest {
@@ -33,6 +34,7 @@ export interface MedicineRequest {
   quantityInStock: number;
   reorderLevel: number;
   expiryDate?: string;
+  version?: number;
 }
 
 export interface DispenseMedicineRequest {

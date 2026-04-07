@@ -18,4 +18,7 @@ public interface BillingRepository extends JpaRepository<Billing, Long> {
     @Query("SELECT SUM(b.netAmount) FROM Billing b WHERE " +
             "b.paymentStatus = com.hms.common.enums.PaymentStatus.PAID")
     BigDecimal sumTotalRevenue();
+
+    @Query(value = "SELECT fn_calculate_net_amount(:base, :tax, :discount)", nativeQuery = true)
+    BigDecimal calculateNetWithFunction(BigDecimal base, BigDecimal tax, BigDecimal discount);
 }

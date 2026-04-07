@@ -6,7 +6,6 @@ import com.hms.patient.dto.response.PatientResponseDTO;
 import org.mapstruct.Builder;
 import org.mapstruct.Mapper;
 import org.mapstruct.MappingTarget;
-import org.mapstruct.ReportingPolicy;
 
 @Mapper(componentModel = "spring",
         builder = @Builder(disableBuilder = true))

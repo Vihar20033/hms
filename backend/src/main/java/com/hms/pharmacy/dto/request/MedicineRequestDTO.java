@@ -58,4 +58,6 @@ public class MedicineRequestDTO {
     @Builder.Default
     private Boolean isActive = true;
 
+    private Long version;
+
 }

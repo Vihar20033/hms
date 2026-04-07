@@ -5,6 +5,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 @Service
@@ -16,7 +17,7 @@ public class AuditLogService {
     private final AuditLogRepository repository;
 
     @Async
-    @Transactional
+    @Transactional(propagation = Propagation.REQUIRES_NEW)
     public void log(String username, String action, String entityType, String entityId, String details) {
         AuditLog entry = AuditLog.builder()
                 .username(username != null ? username : "system")

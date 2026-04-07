@@ -43,4 +43,6 @@ public class AppointmentRequestDTO {
 
     private boolean isEmergency;
 
+    private Long version;
+
 }

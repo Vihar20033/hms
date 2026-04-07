@@ -26,4 +26,6 @@ public class AppointmentResponseDTO {
     private String reason;
     private String tokenNumber;
     private boolean hasPrescription;
+
+    private Long version;
 }

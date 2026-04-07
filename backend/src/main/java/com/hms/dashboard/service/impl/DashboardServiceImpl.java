@@ -10,8 +10,10 @@ import com.hms.dashboard.dto.WeeklyStatisticsDTO;
 import com.hms.dashboard.service.DashboardService;
 import com.hms.patient.repository.PatientRepository;
 import com.hms.pharmacy.repository.MedicineRepository;
+import com.hms.dashboard.repository.DashboardRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
@@ -23,23 +25,27 @@ import java.util.List;
 import java.util.Locale;
 
 @Service
+@Transactional(readOnly = true)
 public class DashboardServiceImpl implements DashboardService {
 
         private final PatientRepository patientRepository;
         private final AppointmentRepository appointmentRepository;
         private final MedicineRepository medicineRepository;
         private final BillingRepository billingRepository;
+        private final DashboardRepository dashboardRepository;
 
         @Autowired
         public DashboardServiceImpl(
                         PatientRepository patientRepository,
                         AppointmentRepository appointmentRepository,
                         MedicineRepository medicineRepository,
-                        BillingRepository billingRepository) {
+                        BillingRepository billingRepository,
+                        DashboardRepository dashboardRepository) {
                 this.patientRepository = patientRepository;
                 this.appointmentRepository = appointmentRepository;
                 this.medicineRepository = medicineRepository;
                 this.billingRepository = billingRepository;
+                this.dashboardRepository = dashboardRepository;
         }
 
         @Override
@@ -47,18 +53,17 @@ public class DashboardServiceImpl implements DashboardService {
                 LocalDateTime startOfDay = LocalDateTime.of(LocalDate.now(), LocalTime.MIN);
                 LocalDateTime endOfDay = LocalDateTime.of(LocalDate.now(), LocalTime.MAX);
 
-                long totalPatients = patientRepository.count();
-                long todayAppointments = appointmentRepository.countByAppointmentTimeBetween(startOfDay, endOfDay);
-                long lowStock = medicineRepository.countLowStock();
+                // Use stored procedure for optimized counts
+                List<Object[]> statsResult = dashboardRepository.getDashboardSummary();
+                Object[] data = statsResult.get(0);
 
-                BigDecimal totalRevenue = billingRepository.sumTotalRevenue();
-                if (totalRevenue == null)
-                        totalRevenue = BigDecimal.ZERO;
+                long totalPatients = ((Number) data[0]).longValue();
+                long todayAppointments = ((Number) data[1]).longValue();
+                long lowStock = ((Number) data[2]).longValue();
+                BigDecimal totalRevenue = (data[3] != null) ? (BigDecimal) data[3] : BigDecimal.ZERO;
+                long inQueue = ((Number) data[4]).longValue();
 
-                long inQueue = appointmentRepository.countByStatusInAndAppointmentTimeBetween(
-                                List.of(AppointmentStatus.CHECKED_IN, AppointmentStatus.IN_CONSULTATION),
-                                startOfDay, endOfDay);
-
+                // Consultations (can be added to procedure later if needed, currently kept for compatibility)
                 long consultations = appointmentRepository.countByStatusAndUpdatedAtBetween(
                                 AppointmentStatus.COMPLETED,
                                 startOfDay, endOfDay);

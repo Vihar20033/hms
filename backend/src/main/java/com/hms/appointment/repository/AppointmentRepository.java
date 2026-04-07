@@ -8,6 +8,7 @@ import org.springframework.data.jpa.repository.EntityGraph;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Lock;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
@@ -19,6 +20,15 @@ import java.util.Optional;
 
 @Repository
 public interface AppointmentRepository extends JpaRepository<Appointment, Long> {
+
+    @Modifying
+    @Query("UPDATE Appointment a SET a.doctor.id = :toDoctorId, a.department = :department WHERE a.doctor.id = :fromDoctorId AND a.status IN :statuses")
+    int reassignDoctorBulk(
+            @Param("fromDoctorId") Long fromDoctorId,
+            @Param("toDoctorId") Long toDoctorId,
+            @Param("department") Department department,
+            @Param("statuses") Collection<AppointmentStatus> statuses
+    );
 
     List<Appointment> findByDoctorIdAndStatusIn(Long doctorId, Collection<AppointmentStatus> statuses);
 
