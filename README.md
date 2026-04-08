@@ -29,6 +29,8 @@ Production-oriented Hospital Management System built as a modular monolith with 
 
 ## System Diagram
 
+### High-Level Architecture
+
 ```mermaid
 flowchart LR
     subgraph Actors["Hospital Actors"]
@@ -45,53 +47,129 @@ flowchart LR
         Angular["Angular 17 SPA"]
         Guards["Auth Guard<br/>Role Guard"]
         Interceptors["JWT Interceptor<br/>Error Interceptor"]
-        FeaturePages["Feature Pages<br/>Dashboard, Patients, Appointments,<br/>Staff, Prescriptions, Pharmacy,<br/>Billing, Audit Logs"]
     end
 
-    subgraph Backend["Backend Layer - Spring Boot 3 Modular Monolith"]
-        Controllers["REST Controllers<br/>/api/v1"]
-        Security["Security Filters<br/>JWT, CORS, security headers"]
-        Authorization["Method Authorization<br/>@PreAuthorize and ownership checks"]
-        Services["Domain Services"]
-        Mappers["MapStruct Mappers<br/>DTO conversion"]
-        Repositories["Spring Data JPA Repositories"]
-        Audit["Audit Logging"]
-    end
-
-    subgraph Domains["Domain Modules"]
-        Auth["Auth and Users"]
-        Patient["Patients"]
-        Appointment["Appointments"]
-        DoctorModule["Doctors and Staff"]
-        Prescription["Prescriptions"]
-        Pharmacy["Pharmacy and Inventory"]
-        Billing["Billing"]
-        Dashboard["Dashboard"]
-        LabNursing["Lab and Nursing APIs"]
+    subgraph Backend["Backend Layer"]
+        API["Spring Boot 3 REST API"]
+        Security["Spring Security<br/>JWT, CORS, rate limits"]
+        Modules["Domain Modules"]
     end
 
     subgraph Data["Data and Infrastructure"]
-        MySQL[("MySQL 8<br/>hospital records")]
-        Redis[("Redis 7<br/>cache and rate-limit buckets")]
-        Logs[("Logs<br/>startup verification and operations")]
+        MySQL[("MySQL 8")]
+        Redis[("Redis 7")]
+        Logs[("Application Logs")]
     end
 
     Actors --> Angular
     Angular --> Guards
-    Guards --> FeaturePages
-    FeaturePages --> Interceptors
-    Interceptors -->|"HTTP JSON /api/v1"| Controllers
-    Controllers --> Security
-    Security --> Authorization
-    Authorization --> Services
-    Services --> Mappers
-    Services --> Domains
-    Domains --> Repositories
-    Repositories --> MySQL
-    Services --> Redis
+    Guards --> Interceptors
+    Interceptors -->|"HTTP JSON /api/v1"| API
+    API --> Security
+    Security --> Modules
+    Modules --> MySQL
+    Modules --> Redis
     Security --> Redis
+    Modules --> Logs
+```
+
+### Frontend Design
+
+```mermaid
+flowchart TB
+    App["Angular Application"]
+    Routes["App Routes"]
+    Guards["Auth Guard<br/>Guest Guard<br/>Role Guard"]
+    Layout["Header and Sidebar"]
+    Interceptors["JWT Interceptor<br/>Error Interceptor"]
+    Services["Feature Services"]
+    Pages["Feature Pages"]
+
+    Dashboard["Dashboard"]
+    Patients["Patients"]
+    Appointments["Appointments"]
+    Staff["Staff and Doctors"]
+    Prescriptions["Prescriptions"]
+    Pharmacy["Pharmacy and Inventory"]
+    Billing["Billing"]
+    Audit["Audit Logs"]
+
+    App --> Routes
+    Routes --> Guards
+    Guards --> Layout
+    Layout --> Pages
+    Pages --> Dashboard
+    Pages --> Patients
+    Pages --> Appointments
+    Pages --> Staff
+    Pages --> Prescriptions
+    Pages --> Pharmacy
+    Pages --> Billing
+    Pages --> Audit
+    Pages --> Services
+    Services --> Interceptors
+    Interceptors -->|"API calls"| BackendAPI["Spring Boot /api/v1"]
+```
+
+### Backend Module Design
+
+```mermaid
+flowchart TB
+    Controllers["REST Controllers"]
+    Security["Security Layer<br/>JWT filter, method security,<br/>ownership checks"]
+    Services["Service Layer<br/>business rules and validation"]
+    Mappers["MapStruct Mappers"]
+    Repositories["JPA Repositories"]
+
+    Auth["Auth and Users"]
+    Patient["Patients"]
+    Appointment["Appointments"]
+    DoctorModule["Doctors and Staff"]
+    Prescription["Prescriptions"]
+    Pharmacy["Pharmacy and Inventory"]
+    Billing["Billing"]
+    Dashboard["Dashboard"]
+    Audit["Audit Logging"]
+    LabNursing["Lab and Nursing APIs"]
+
+    Controllers --> Security
+    Security --> Services
+    Services --> Mappers
+    Services --> Repositories
+    Services --> Auth
+    Services --> Patient
+    Services --> Appointment
+    Services --> DoctorModule
+    Services --> Prescription
+    Services --> Pharmacy
+    Services --> Billing
+    Services --> Dashboard
     Services --> Audit
-    Audit --> Logs
+    Services --> LabNursing
+```
+
+### Data and Security Design
+
+```mermaid
+flowchart LR
+    Request["Authenticated Request"]
+    Jwt["JWT Validation"]
+    RateLimit["Bucket4j Rate Limit"]
+    Ownership["Role and Ownership Checks"]
+    Service["Domain Service"]
+    Cache["Redis Cache"]
+    Buckets["Redis Rate-Limit Buckets"]
+    Database[("MySQL 8<br/>hospital records")]
+    Audit[("Audit Logs")]
+
+    Request --> Jwt
+    Jwt --> RateLimit
+    RateLimit --> Buckets
+    RateLimit --> Ownership
+    Ownership --> Service
+    Service --> Cache
+    Service --> Database
+    Service --> Audit
 ```
 
 ## Sequence Diagram
