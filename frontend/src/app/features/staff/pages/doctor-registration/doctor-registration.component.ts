@@ -1,21 +1,22 @@
-import { CommonModule } from '@angular/common';
-import { HttpErrorResponse } from '@angular/common/http';
-import { Component, ElementRef, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
-import { DropdownModule } from 'primeng/dropdown';
-import { InputNumberModule } from 'primeng/inputnumber';
-import { InputTextModule } from 'primeng/inputtext';
-import { InputTextareaModule } from 'primeng/inputtextarea';
-import { Observable } from 'rxjs';
-import { BOOKABLE_DEPARTMENTS, formatDepartmentLabel } from '../../../../core/constants/department.constants';
 import { ApiResponse } from '../../../../core/models/common.models';
-import { Doctor, DoctorOnboardingResponse, DoctorRegistrationRequest } from '../../../../core/models/doctor.models';
-import { DoctorService } from '../../../../core/services/doctor.service';
-import { HeaderComponent } from '../../../../shared/components/layout/header/header.component';
-import { SidebarComponent } from '../../../../shared/components/layout/sidebar/sidebar.component';
-import { createDoctorRegistrationForm } from '../../utils/doctor-registration-form';
+import { BOOKABLE_DEPARTMENTS, formatDepartmentLabel } from '../../../../core/constants/department.constants';
 import { buildDoctorDepartmentOptions, buildDoctorFormPatch } from '../../utils/doctor-registration.utils';
+import { CommonModule } from '@angular/common';
+import { Component, ElementRef, OnInit } from '@angular/core';
+import { createDoctorRegistrationForm } from '../../utils/doctor-registration-form';
+import { Department } from '../../../appointments/models/appointment.models';
+import { Doctor, DoctorOnboardingResponse, DoctorRegistrationRequest } from '../../models/doctor.models';
+import { DoctorService } from '../../services/doctor.service';
+import { DropdownModule } from 'primeng/dropdown';
+import { FormBuilder, FormGroup, ReactiveFormsModule } from '@angular/forms';
+import { HeaderComponent } from '../../../../layout/header/header.component';
+import { HttpErrorResponse } from '@angular/common/http';
+import { InputNumberModule } from 'primeng/inputnumber';
+import { InputTextareaModule } from 'primeng/inputtextarea';
+import { InputTextModule } from 'primeng/inputtext';
+import { Observable } from 'rxjs';
+import { SidebarComponent } from '../../../../layout/sidebar/sidebar.component';
 
 @Component({
   selector: 'app-doctor-registration',
@@ -156,3 +157,5 @@ export class DoctorRegistrationComponent implements OnInit {
     });
   }
 }
+
+

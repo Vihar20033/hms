@@ -1,6 +1,8 @@
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { BloodGroup, Patient, UrgencyLevel } from '../../../core/models/patient.models';
 import { FULL_NAME_PATTERN, PHONE_PATTERN, trimRequired } from '../../../core/validators/app-validators';
+import { map } from 'rxjs/operators';
+import { BloodGroup, Patient, UrgencyLevel } from '../models/patient.models';
+import { Prescription } from '../../prescription/models/prescription.models';
 
 export function createPatientRegistrationForm(fb: FormBuilder): FormGroup {
   return fb.group({
@@ -47,3 +49,11 @@ export function buildPatientRegistrationSuccessRoute(isEditMode: boolean,patient
     queryParams: { registered: 'true' },
   };
 }
+
+
+
+
+
+
+
+

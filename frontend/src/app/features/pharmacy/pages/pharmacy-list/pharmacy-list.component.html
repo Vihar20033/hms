@@ -11,6 +11,16 @@
           <p>Manage medicines, stock levels and dispensing</p>
         </div>
         <div class="header-actions">
+          <div class="search-container p-input-icon-left">
+            <i class="ri-search-line"></i>
+            <input 
+              type="text" 
+              pInputText 
+              placeholder="Search inventory..." 
+              (input)="onSearch($event)"
+              class="search-input"
+            />
+          </div>
           <button class="btn-outline" [class.active]="showLowStockOnly" (click)="toggleLowStock()">
             <i class="ri-alarm-warning-line"></i>
             {{ showLowStockOnly ? 'All Medicines' : 'Low Stock' }}
@@ -25,8 +35,6 @@
         <i class="ri-checkbox-circle-line"></i> {{ successMessage }}
       </div>
       <div class="error-alert" *ngIf="errorMessage"><i class="ri-error-warning-line"></i> {{ errorMessage }}</div>
-
-
 
       <div class="form-card form-card-elevated" *ngIf="showAddForm || showEditForm">
         <div class="form-card-header">
@@ -183,6 +191,16 @@
                 <th>Status</th>
                 <th *ngIf="userRole === 'ADMIN' || userRole === 'PHARMACIST'">Actions</th>
               </tr>
+              <tr class="search-row">
+                <th><input pInputText type="text" (input)="onSearch($event)" placeholder="Filter name" class="p-inputtext-sm w-full" /></th>
+                <th><input pInputText type="text" (input)="onSearch($event)" placeholder="Code" class="p-inputtext-sm w-full" /></th>
+                <th></th>
+                <th></th>
+                <th></th>
+                <th></th>
+                <th></th>
+                <th *ngIf="userRole === 'ADMIN' || userRole === 'PHARMACIST'"></th>
+              </tr>
             </ng-template>
             <ng-template pTemplate="body" let-med>
               <tr [class.low-stock-row]="isLowStock(med)">
@@ -221,7 +239,6 @@
                       class="btn-icon checkin"
                       title="Delete"
                       (click)="onDelete(med.id)"
-                      *ngIf="userRole === 'ADMIN' || userRole === 'PHARMACIST'"
                     >
                       <i class="ri-delete-bin-line"></i>
                     </button>
@@ -241,6 +258,18 @@
           <i class="ri-capsule-line"></i>
           <h3>No medicines found</h3>
           <p>{{ showLowStockOnly ? 'No low stock items.' : 'Add medicines to build your inventory.' }}</p>
+        </div>
+
+        <!-- Load More Button -->
+        <div class="load-more-container" *ngIf="!isLastPage && medicines.length > 0 && !showLowStockOnly">
+          <button class="btn-load-more" (click)="loadMedicines(true)" [disabled]="isMoreLoading">
+            <ng-container *ngIf="!isMoreLoading">
+              <i class="ri-arrow-down-s-line"></i> Load More Medicines
+            </ng-container>
+            <ng-container *ngIf="isMoreLoading">
+              <i class="ri-loader-4-line spin"></i> Loading Catalog...
+            </ng-container>
+          </button>
         </div>
       </div>
     </div>

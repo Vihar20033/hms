@@ -1,22 +1,19 @@
-import { CommonModule } from '@angular/common';
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnInit } from '@angular/core';
-import { Router, RouterLink } from '@angular/router';
-import { TableModule } from 'primeng/table';
-import { DialogModule } from 'primeng/dialog';
-import { Appointment, AppointmentStatus, AppointmentSummary } from '../../../../core/models/appointment.models';
 import { ApiResponse } from '../../../../core/models/common.models';
-import { AppointmentService } from '../../../../core/services/appointment.service';
-import { AuthService } from '../../../../core/services/auth.service';
-import { BillingService } from '../../../../core/services/billing.service';
-import { HeaderComponent } from '../../../../shared/components/layout/header/header.component';
-import { SidebarComponent } from '../../../../shared/components/layout/sidebar/sidebar.component';
-import {
-  canDoctorStartAppointment,
-  canManageAppointmentForRole,
-  getAppointmentPageLead,
-  getAppointmentStatusClass,
-  getAppointmentWorkflowLabel,
-} from '../../utils/appointment-list.utils';
+import { Appointment, AppointmentStatus, AppointmentSummary } from '../../models/appointment.models';
+import { AppointmentService } from '../../services/appointment.service';
+import { AuthService } from '../../../auth/services/auth.service';
+import { Billing } from '../../../billing/models/billing.models';
+import { BillingService } from '../../../billing/services/billing.service';
+import { canDoctorStartAppointment, canManageAppointmentForRole, getAppointmentPageLead, getAppointmentStatusClass, getAppointmentWorkflowLabel } from '../../utils/appointment-list.utils';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnInit } from '@angular/core';
+import { CommonModule } from '@angular/common';
+import { DialogModule } from 'primeng/dialog';
+import { filter } from 'rxjs/operators';
+import { HeaderComponent } from '../../../../layout/header/header.component';
+import { Prescription } from '../../../prescription/models/prescription.models';
+import { Router, RouterLink } from '@angular/router';
+import { SidebarComponent } from '../../../../layout/sidebar/sidebar.component';
+import { TableModule } from 'primeng/table';
 
 @Component({
   selector: 'app-appointment-list',
@@ -188,3 +185,15 @@ export class AppointmentListComponent implements OnInit {
     return canDoctorStartAppointment(appointment, this.userRole);
   }
 }
+
+
+
+
+
+
+
+
+
+
+
+

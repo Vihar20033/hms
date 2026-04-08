@@ -1,4 +1,4 @@
-import { Department } from '../models/appointment.models';
+import { Department } from '../../features/appointments/models/appointment.models';
 
 export const BOOKABLE_DEPARTMENTS: Department[] = [
   Department.GENERAL_MEDICINE,
@@ -18,3 +18,9 @@ export function formatDepartmentLabel(department: string): string {
     .toLowerCase()
     .replace(/\b\w/g, (char) => char.toUpperCase());
 }
+
+
+
+
+
+

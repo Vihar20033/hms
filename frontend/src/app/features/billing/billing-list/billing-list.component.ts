@@ -1,33 +1,33 @@
-import { CommonModule } from '@angular/common';
-import { HttpErrorResponse } from '@angular/common/http';
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnInit } from '@angular/core';
-import { FormArray, FormBuilder, FormGroup } from '@angular/forms';
-import { Appointment } from '../../../core/models/appointment.models';
-import { Billing, PaymentStatus } from '../../../core/models/billing.models';
 import { ApiResponse } from '../../../core/models/common.models';
-import { Patient } from '../../../core/models/patient.models';
-import { AppointmentService } from '../../../core/services/appointment.service';
-import { AuthService } from '../../../core/services/auth.service';
-import { BillingService } from '../../../core/services/billing.service';
-import { PatientService } from '../../../core/services/patient.service';
-import { PdfExportService } from '../../../core/services/pdf-export.service';
-import { StatusModalService } from '../../../core/services/status-modal.service';
-import { HeaderComponent } from '../../../shared/components/layout/header/header.component';
-import { SidebarComponent } from '../../../shared/components/layout/sidebar/sidebar.component';
-import { DialogModule } from 'primeng/dialog';
-import { DropdownModule } from 'primeng/dropdown';
-import { FormsModule } from '@angular/forms';
+import { Appointment } from '../../appointments/models/appointment.models';
+import { AppointmentService } from '../../appointments/services/appointment.service';
+import { AuthService } from '../../auth/services/auth.service';
+import { Billing, PaymentStatus } from '../models/billing.models';
+import { BillingService } from '../services/billing.service';
 import { BillingFormComponent } from '../components/billing-form/billing-form.component';
 import { BillingTableComponent } from '../components/billing-table/billing-table.component';
 import { BillingViewModalComponent } from '../components/billing-view-modal/billing-view-modal.component';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnInit } from '@angular/core';
+import { CommonModule } from '@angular/common';
+import { DialogModule } from 'primeng/dialog';
+import { DropdownModule } from 'primeng/dropdown';
+import { FormArray, FormBuilder, FormGroup, FormsModule } from '@angular/forms';
+import { from } from 'rxjs';
+import { HeaderComponent } from '../../../layout/header/header.component';
+import { HttpErrorResponse } from '@angular/common/http';
+import { Patient } from '../../patients/models/patient.models';
+import { PatientService } from '../../patients/services/patient.service';
+import { PdfExportService } from '../../../shared/services/pdf-export.service';
+import { SidebarComponent } from '../../../layout/sidebar/sidebar.component';
+import { StatusModalService } from '../../../shared/services/status-modal.service';
 import { createBillingForm, createBillingItemGroup, getBillingItems } from '../utils/billing-form.utils';
 import {
   buildBillingPayload,
   buildPreviewItemGroups,
+  getBillingStatusClass,
   getBillingSubtotal,
   mapAppointmentOptions,
 } from '../utils/billing-data.utils';
-import { getBillingStatusClass } from '../utils/billing-data.utils';
 
 @Component({
   selector: 'app-billing-list',
@@ -56,6 +56,12 @@ export class BillingListComponent implements OnInit {
   exportingId: number | null = null;
   selectedBilling: Billing | null = null;
   showViewModal = false;
+
+  // Pagination
+  currentPage = 0;
+  pageSize = 15;
+  isLastPage = false;
+  isMoreLoading = false;
 
   billingForm!: FormGroup;
   today: Date = new Date();
@@ -127,17 +133,30 @@ export class BillingListComponent implements OnInit {
     return getBillingSubtotal(this.items);
   }
 
-  loadBillings(): void {
-    this.isLoading = true;
-    this.billingService.getAll().subscribe({
-      next: (res: ApiResponse<Billing[]>) => {
-        this.billings = res.data;
+  loadBillings(isLoadMore = false): void {
+    if (isLoadMore) {
+      this.isMoreLoading = true;
+      this.currentPage++;
+    } else {
+      this.isLoading = true;
+      this.currentPage = 0;
+      this.billings = [];
+    }
+
+    this.billingService.getSlice(this.currentPage, this.pageSize).subscribe({
+      next: (res) => {
+        if (res.data) {
+          this.billings = [...this.billings, ...res.data.content];
+          this.isLastPage = res.data.last;
+        }
         this.isLoading = false;
+        this.isMoreLoading = false;
         this.cdr.markForCheck();
       },
       error: (error) => {
         console.error('Error loading billings:', error);
         this.isLoading = false;
+        this.isMoreLoading = false;
         this.cdr.markForCheck();
       },
     });
@@ -202,7 +221,7 @@ export class BillingListComponent implements OnInit {
           while (this.items.length) {
             this.items.removeAt(0);
           }
-          buildPreviewItemGroups(suggested, (item) => 
+          buildPreviewItemGroups(suggested, (item) =>
             createBillingItemGroup(this.fb, item)).forEach((group) => {
             this.items.push(group);
           });
@@ -281,6 +300,12 @@ export class BillingListComponent implements OnInit {
     }
   }
 
+  onViewCloudReport(reportUrl: string): void {
+    if (reportUrl) {
+      window.open(reportUrl, '_blank');
+    }
+  }
+
   onUpdateStatus(id: number, status: PaymentStatus): void {
     this.billingService.updateStatus(id, status).subscribe({
       next: () => this.loadBillings(),
@@ -315,3 +340,15 @@ export class BillingListComponent implements OnInit {
     });
   }
 }
+
+
+
+
+
+
+
+
+
+
+
+

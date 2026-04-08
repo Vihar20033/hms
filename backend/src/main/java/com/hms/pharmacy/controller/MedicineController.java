@@ -63,8 +63,16 @@ public class MedicineController {
     @GetMapping("/slice")
     public ResponseEntity<ApiResponse<SliceResponse<MedicineResponseDTO>>> getSlice(
             @RequestParam(name = "page", defaultValue = "0") int page,
-            @RequestParam(name = "size", defaultValue = "25") int size) {
-        var slice = service.getMedicineSlice(Math.max(page, 0), Math.min(Math.max(size, 1), 100));
+            @RequestParam(name = "size", defaultValue = "25") int size,
+            @RequestParam(name = "query", required = false) String query) {
+        
+        org.springframework.data.domain.Slice<MedicineResponseDTO> slice;
+        if (query != null && !query.isEmpty()) {
+            slice = service.getSearchableMedicineSlice(Math.max(page, 0), Math.min(Math.max(size, 1), 100), query);
+        } else {
+            slice = service.getMedicineSlice(Math.max(page, 0), Math.min(Math.max(size, 1), 100));
+        }
+
         return ResponseEntity.ok(ApiResponse.success(SliceResponse.<MedicineResponseDTO>builder()
                 .content(slice.getContent())
                 .page(slice.getNumber())

@@ -45,8 +45,16 @@
           (view)="onView($event)"
           (updateStatus)="onUpdateStatus($event.id, $event.status)"
           (exportPdf)="onExportPdf($event)"
+          (viewCloudReport)="onViewCloudReport($event)"
           (delete)="onDelete($event)"
         ></app-billing-table>
+
+        <div class="load-more-section mt-4 mb-4" *ngIf="!isLastPage && billings.length > 0" style="display: flex; justify-content: center;">
+          <button class="btn-primary" (click)="loadBillings(true)" [disabled]="isMoreLoading">
+            <i class="ri-loader-4-line spin" *ngIf="isMoreLoading"></i>
+            {{ isMoreLoading ? 'Fetching...' : 'Load More Invoices' }}
+          </button>
+        </div>
       }
 
       <!-- Quick Generate Modal -->

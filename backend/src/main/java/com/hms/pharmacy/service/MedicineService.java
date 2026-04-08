@@ -23,6 +23,8 @@ public interface MedicineService {
 
     Slice<MedicineResponseDTO> getMedicineSlice(int page, int size);
 
+    Slice<MedicineResponseDTO> getSearchableMedicineSlice(int page, int size, String query);
+
     List<MedicineResponseDTO> getActiveMedicines();
 
     List<MedicineResponseDTO> getMedicinesByCategory(String category);

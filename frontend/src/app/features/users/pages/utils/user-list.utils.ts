@@ -1,4 +1,5 @@
-import { Role } from '../../../../core/models/auth.models';
+import { Doctor } from '../../../staff/models/doctor.models';
+import { Role } from '../../../auth/models/auth.models';
 
 export function getRoleBadgeClass(role: Role): string {
   switch (role) {
@@ -14,3 +15,10 @@ export function getRoleBadgeClass(role: Role): string {
       return 'badge-default';
   }
 }
+
+
+
+
+
+
+

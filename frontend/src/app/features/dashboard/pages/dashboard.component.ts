@@ -1,33 +1,27 @@
-import { CommonModule, CurrencyPipe, DecimalPipe } from '@angular/common';
-import {
-  AfterViewInit,
-  ChangeDetectionStrategy,
-  ChangeDetectorRef,
-  Component,
-  ElementRef,
-  OnDestroy,
-  OnInit,
-  ViewChild,
-} from '@angular/core';
-import { RouterLink } from '@angular/router';
-import { Chart, registerables } from 'chart.js';
-import { TableModule } from 'primeng/table';
-import { Appointment, AppointmentStatus } from '../../../core/models/appointment.models';
-import { User } from '../../../core/models/auth.models';
+import { AfterViewInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, ElementRef, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { ApiResponse, DashboardSummary } from '../../../core/models/common.models';
-import { AppointmentService } from '../../../core/services/appointment.service';
-import { AuthService } from '../../../core/services/auth.service';
-import { DashboardService } from '../../../core/services/dashboard.service';
-import { StatusModalService } from '../../../core/services/status-modal.service';
-import { HeaderComponent } from '../../../shared/components/layout/header/header.component';
-import { SidebarComponent } from '../../../shared/components/layout/sidebar/sidebar.component';
+import { Appointment, AppointmentStatus, Department } from '../../appointments/models/appointment.models';
+import { AppointmentService } from '../../appointments/services/appointment.service';
+import { AuthService } from '../../auth/services/auth.service';
+import { CommonModule, CurrencyPipe, DecimalPipe } from '@angular/common';
+import { DashboardService } from '../services/dashboard.service';
 import {
-  QuickAction,
   buildDashboardQuickActions,
   createDashboardChart,
   createDepartmentChart,
   getDashboardStatusClass,
+  QuickAction,
 } from '../utils/dashboard.utils';
+import { delay } from 'rxjs/operators';
+import { Doctor } from '../../staff/models/doctor.models';
+import { HeaderComponent } from '../../../layout/header/header.component';
+import { Patient } from '../../patients/models/patient.models';
+import { Role, User } from '../../auth/models/auth.models';
+import { RouterLink } from '@angular/router';
+import { SidebarComponent } from '../../../layout/sidebar/sidebar.component';
+import { StatusModalService } from '../../../shared/services/status-modal.service';
+import { Chart, registerables } from 'chart.js';
+import { TableModule } from 'primeng/table';
 
 Chart.register(...registerables);
 
@@ -192,3 +186,15 @@ export class DashboardComponent implements OnInit, AfterViewInit, OnDestroy {
     return getDashboardStatusClass(status);
   }
 }
+
+
+
+
+
+
+
+
+
+
+
+

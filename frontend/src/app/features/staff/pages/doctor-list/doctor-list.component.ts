@@ -1,16 +1,17 @@
+import { ApiResponse } from '../../../../core/models/common.models';
+import { Appointment, Department } from '../../../appointments/models/appointment.models';
+import { AppointmentService } from '../../../appointments/services/appointment.service';
 import { CommonModule } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
-import { Router, RouterLink } from '@angular/router';
 import { DialogModule } from 'primeng/dialog';
+import { Doctor } from '../../models/doctor.models';
+import { DoctorService } from '../../services/doctor.service';
 import { DropdownModule } from 'primeng/dropdown';
+import { filter, map } from 'rxjs/operators';
 import { FormsModule } from '@angular/forms';
-import { AppointmentService } from '../../../../core/services/appointment.service';
-import { ApiResponse } from '../../../../core/models/common.models';
-import { Doctor } from '../../../../core/models/doctor.models';
-import { DoctorService } from '../../../../core/services/doctor.service';
-import { HeaderComponent } from '../../../../shared/components/layout/header/header.component';
-import { SidebarComponent } from '../../../../shared/components/layout/sidebar/sidebar.component';
-import { getDoctorDeleteMessage } from '../../utils/doctor-list.utils';
+import { HeaderComponent } from '../../../../layout/header/header.component';
+import { Router, RouterLink } from '@angular/router';
+import { SidebarComponent } from '../../../../layout/sidebar/sidebar.component';
 
 @Component({
   selector: 'app-doctor-list',
@@ -22,6 +23,12 @@ import { getDoctorDeleteMessage } from '../../utils/doctor-list.utils';
 export class DoctorListComponent implements OnInit {
   doctors: Doctor[] = [];
   isLoading = true;
+
+  // Pagination
+  currentPage = 0;
+  pageSize = 12;
+  isLastPage = false;
+  isMoreLoading = false;
 
   // Delete Modal State
   deleteModalVisible = false;
@@ -45,15 +52,28 @@ export class DoctorListComponent implements OnInit {
     this.loadDoctors();
   }
 
-  loadDoctors(): void {
-    this.isLoading = true;
-    this.doctorService.getAll().subscribe({
-      next: (res: ApiResponse<Doctor[]>) => {
-        this.doctors = res.data;
+  loadDoctors(isLoadMore = false): void {
+    if (isLoadMore) {
+      this.isMoreLoading = true;
+      this.currentPage++;
+    } else {
+      this.isLoading = true;
+      this.currentPage = 0;
+      this.doctors = [];
+    }
+
+    this.doctorService.getSlice(this.currentPage, this.pageSize).subscribe({
+      next: (res) => {
+        if (res.data) {
+          this.doctors = [...this.doctors, ...res.data.content];
+          this.isLastPage = res.data.last;
+        }
         this.isLoading = false;
+        this.isMoreLoading = false;
       },
       error: () => {
         this.isLoading = false;
+        this.isMoreLoading = false;
       },
     });
   }
@@ -153,3 +173,15 @@ export class DoctorListComponent implements OnInit {
       .map(d => ({ label: `Dr. ${d.firstName} ${d.lastName} (${d.department})`, value: d.id }));
   }
 }
+
+
+
+
+
+
+
+
+
+
+
+

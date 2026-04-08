@@ -31,6 +31,9 @@ import com.hms.appointment.repository.AppointmentRepository;
 
 import java.util.List;
 
+import com.hms.common.specification.SearchSpecification;
+import org.springframework.data.jpa.domain.Specification;
+
 @Service
 @RequiredArgsConstructor
 @Slf4j
@@ -43,6 +46,8 @@ public class PatientServiceImpl implements PatientService {
     private final AuditLogService auditLogService;
     private final PatientMapper mapper;
     private final AppointmentRepository appointmentRepository;
+
+    private static final List<String> SEARCHABLE_FIELDS = List.of("name", "contactNumber", "email");
 
     @Override
     @CacheEvict(value = "patients", allEntries = true)
@@ -64,26 +69,15 @@ public class PatientServiceImpl implements PatientService {
     public PatientResponseDTO getById(Long id) {
         Patient patient = repository.findById(id)
                 .orElseThrow(() -> new PatientNotFoundException("Patient not found"));
-        checkPatientOwnership(patient);
         return mapper.toResponse(patient);
     }
 
-    @Override
-    @Transactional(readOnly = true)
-    @Cacheable(value = "patients", key = "'profile_' + T(com.hms.common.util.SecurityUtils).getCurrentUsername()")
-    public PatientResponseDTO getCurrentPatientProfile() {
-        User user = currentUser();
-        Patient patient = repository.findByEmail(user.getEmail())
-                .orElseThrow(() -> new PatientNotFoundException("Your patient profile is not linked yet."));
-        return mapper.toResponse(patient);
-    }
 
     @Override
     @CacheEvict(value = "patients", allEntries = true)
     public PatientResponseDTO update(Long id, PatientRequestDTO dto) {
         Patient patient = repository.findById(id)
                 .orElseThrow(() -> new PatientNotFoundException("Patient not found"));
-        checkPatientOwnership(patient);
 
         if (!patient.getContactNumber().equals(dto.getContactNumber())
                 && repository.existsByContactNumber(dto.getContactNumber())) {
@@ -138,20 +132,13 @@ public class PatientServiceImpl implements PatientService {
         return repository.findAll(request).map(mapper::toResponse);
     }
 
-    private void checkPatientOwnership(Patient patient) {
-        User user = currentUser();
-        if (user.getRole() != Role.PATIENT) {
-            return;
-        }
-
-        if (user.getEmail() != null && user.getEmail().equalsIgnoreCase(patient.getEmail())) {
-            return;
-        }
-
-        throw new AccessDeniedException("You can only access your own patient profile.");
+    @Override
+    @Transactional(readOnly = true)
+    public Slice<PatientResponseDTO> getSearchableSlice(int page, int size, String query) {
+        PageRequest request = PageRequest.of(page, size, Sort.by(Sort.Direction.DESC, "createdAt"));
+        Specification<Patient> spec = SearchSpecification.fuzzySearch(query, SEARCHABLE_FIELDS);
+        return repository.findAll(spec, request).map(mapper::toResponse);
     }
 
-    private User currentUser() {
-        return (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-    }
+
 }

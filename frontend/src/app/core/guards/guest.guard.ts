@@ -1,6 +1,6 @@
-import { inject } from '@angular/core';
+import { AuthService } from '../../features/auth/services/auth.service';
 import { CanActivateFn, Router } from '@angular/router';
-import { AuthService } from '../services/auth.service';
+import { inject } from '@angular/core';
 
 export const guestGuard: CanActivateFn = () => {
   const router = inject(Router);
@@ -12,3 +12,9 @@ export const guestGuard: CanActivateFn = () => {
 
   return true;
 };
+
+
+
+
+
+

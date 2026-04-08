@@ -1,4 +1,4 @@
-import { AuthResponse, User } from '../models/auth.models';
+import { AuthResponse, Role, User } from '../../features/auth/models/auth.models';
 
 export function buildSessionUser(auth: AuthResponse): User {
   return {
@@ -8,3 +8,9 @@ export function buildSessionUser(auth: AuthResponse): User {
     passwordChangeRequired: auth.passwordChangeRequired,
   };
 }
+
+
+
+
+
+

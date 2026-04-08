@@ -1,13 +1,12 @@
+import { AuthService } from '../../../auth/services/auth.service';
 import { CommonModule } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
+import { HeaderComponent } from '../../../../layout/header/header.component';
+import { Prescription } from '../../models/prescription.models';
+import { PrescriptionService } from '../../services/prescription.service';
 import { RouterLink } from '@angular/router';
+import { SidebarComponent } from '../../../../layout/sidebar/sidebar.component';
 import { TableModule } from 'primeng/table';
-import { ApiResponse } from '../../../../core/models/common.models';
-import { Prescription } from '../../../../core/models/prescription.models';
-import { AuthService } from '../../../../core/services/auth.service';
-import { PrescriptionService } from '../../../../core/services/prescription.service';
-import { HeaderComponent } from '../../../../shared/components/layout/header/header.component';
-import { SidebarComponent } from '../../../../shared/components/layout/sidebar/sidebar.component';
 import { canManagePrescriptions } from '../../utils/prescription-list.utils';
 
 @Component({
@@ -21,6 +20,12 @@ export class PrescriptionListComponent implements OnInit {
   prescriptions: Prescription[] = [];
   isLoading = true;
 
+  // Pagination
+  currentPage = 0;
+  pageSize = 15;
+  isLastPage = false;
+  isMoreLoading = false;
+
   constructor(
     private prescriptionService: PrescriptionService,
     private authService: AuthService,
@@ -30,22 +35,41 @@ export class PrescriptionListComponent implements OnInit {
     this.loadPrescriptions();
   }
 
-  loadPrescriptions(): void {
-    this.isLoading = true;
-    this.prescriptionService.getAll().subscribe({
-      next: (res: ApiResponse<Prescription[]>) => {
-        this.prescriptions = res.data;
+  loadPrescriptions(isLoadMore = false): void {
+    if (isLoadMore) {
+      this.isMoreLoading = true;
+      this.currentPage++;
+    } else {
+      this.isLoading = true;
+      this.currentPage = 0;
+      this.prescriptions = [];
+    }
+
+    this.prescriptionService.getSlice(this.currentPage, this.pageSize).subscribe({
+      next: (res) => {
+        if (res.data) {
+          this.prescriptions = [...this.prescriptions, ...res.data.content];
+          this.isLastPage = res.data.last;
+        }
         this.isLoading = false;
+        this.isMoreLoading = false;
       },
       error: (error) => {
         console.error('Error loading prescriptions:', error);
         this.isLoading = false;
+        this.isMoreLoading = false;
       },
     });
   }
 
   onPrint(id: number): void {
     window.open(`/prescriptions/${id}`, '_blank');
+  }
+
+  onViewCloudReport(reportUrl: string): void {
+    if (reportUrl) {
+      window.open(reportUrl, '_blank');
+    }
   }
 
   onDelete(id: number): void {
@@ -65,3 +89,15 @@ export class PrescriptionListComponent implements OnInit {
     return canManagePrescriptions(this.authService.getUserRole());
   }
 }
+
+
+
+
+
+
+
+
+
+
+
+

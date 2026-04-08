@@ -1,4 +1,5 @@
-import { Medicine } from '../../../core/models/pharmacy.models';
+import { filter, map } from 'rxjs/operators';
+import { Medicine } from '../models/pharmacy.models';
 
 export function filterMedicinesByLowStock(medicines: Medicine[], showLowStockOnly: boolean): Medicine[] {
   if (!showLowStockOnly) {
@@ -30,3 +31,9 @@ export function formatMedicineDate(value: Date | string | null): string | null {
   const day = String(value.getDate()).padStart(2, '0');
   return `${year}-${month}-${day}`;
 }
+
+
+
+
+
+

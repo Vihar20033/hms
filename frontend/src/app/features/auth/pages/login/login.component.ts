@@ -1,10 +1,11 @@
+import { ActivatedRoute, Router, RouterLink } from '@angular/router';
+import { AuthService } from '../../services/auth.service';
 import { CommonModule } from '@angular/common';
-import { HttpErrorResponse } from '@angular/common/http';
 import { Component } from '@angular/core';
 import { FormBuilder, FormGroup, ReactiveFormsModule } from '@angular/forms';
-import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { canRoleAccessPath, homeRouteForRole } from '../../../../core/constants/role-route-map';
-import { AuthService } from '../../../../core/services/auth.service';
+import { HttpErrorResponse } from '@angular/common/http';
+import { Role } from '../../models/auth.models';
 import { createLoginForm, markFormControlsTouched } from '../../auth-form.utils';
 
 @Component({
@@ -57,3 +58,12 @@ export class LoginComponent {
     }
   }
 }
+
+
+
+
+
+
+
+
+

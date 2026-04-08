@@ -1,6 +1,11 @@
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { Role } from '../../core/models/auth.models';
-import { USERNAME_PATTERN, differentFieldsValidator, matchFieldsValidator } from '../../core/validators/app-validators';
+import {
+  differentFieldsValidator,
+  matchFieldsValidator,
+  USERNAME_PATTERN,
+} from '../../core/validators/app-validators';
+import { map } from 'rxjs/operators';
+import { Role } from './models/auth.models';
 
 export const PASSWORD_POLICY_PATTERN = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[^A-Za-z0-9]).+$/;
 const PASSWORD_VALIDATORS = [
@@ -60,3 +65,11 @@ export function buildRoleOptions(roles: Role[]): Array<{ label: string; value: R
     value: role,
   }));
 }
+
+
+
+
+
+
+
+

@@ -1,11 +1,11 @@
+import { AuthService } from '../../services/auth.service';
 import { CommonModule } from '@angular/common';
-import { HttpErrorResponse } from '@angular/common/http';
 import { Component } from '@angular/core';
-import { FormBuilder, FormGroup, ReactiveFormsModule } from '@angular/forms';
-import { Router, RouterLink } from '@angular/router';
 import { DropdownModule } from 'primeng/dropdown';
-import { Role } from '../../../../core/models/auth.models';
-import { AuthService } from '../../../../core/services/auth.service';
+import { FormBuilder, FormGroup, ReactiveFormsModule } from '@angular/forms';
+import { HttpErrorResponse } from '@angular/common/http';
+import { Role } from '../../models/auth.models';
+import { Router, RouterLink } from '@angular/router';
 import { buildRoleOptions, createRegisterForm, markFormControlsTouched } from '../../auth-form.utils';
 
 @Component({
@@ -54,3 +54,12 @@ export class RegisterComponent {
     }
   }
 }
+
+
+
+
+
+
+
+
+

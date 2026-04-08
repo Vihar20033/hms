@@ -1,15 +1,16 @@
+import { AuthService } from '../../../auth/services/auth.service';
+import { canDeletePatient, canEditPatient, canRegisterPatient } from '../../utils/patient-list.utils';
 import { CommonModule } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
-import { Router, RouterLink } from '@angular/router';
-import { TableModule } from 'primeng/table';
-import { ApiResponse } from '../../../../core/models/common.models';
-import { Patient } from '../../../../core/models/patient.models';
-import { AuthService } from '../../../../core/services/auth.service';
-import { PatientService } from '../../../../core/services/patient.service';
-import { HeaderComponent } from '../../../../shared/components/layout/header/header.component';
-import { SidebarComponent } from '../../../../shared/components/layout/sidebar/sidebar.component';
 import { getUrgencyClass } from '../../utils/patient-form.utils';
-import { canDeletePatient, canEditPatient, canRegisterPatient } from '../../utils/patient-list.utils';
+import { HeaderComponent } from '../../../../layout/header/header.component';
+import { Patient } from '../../models/patient.models';
+import { PatientService } from '../../services/patient.service';
+import { Router, RouterLink } from '@angular/router';
+import { SidebarComponent } from '../../../../layout/sidebar/sidebar.component';
+import { TableModule } from 'primeng/table';
+import { Subject, debounceTime, distinctUntilChanged } from 'rxjs';
+import { InputTextModule } from 'primeng/inputtext';
 
 @Component({
   selector: 'app-patient-list',
@@ -20,6 +21,7 @@ import { canDeletePatient, canEditPatient, canRegisterPatient } from '../../util
     HeaderComponent,
     RouterLink,
     TableModule,
+    InputTextModule,
   ],
   templateUrl: './patient-list.component.html',
   styleUrl: './patient-list.component.scss',
@@ -28,27 +30,62 @@ export class PatientListComponent implements OnInit {
   patients: Patient[] = [];
   isLoading = true;
   errorMessage = '';
+  
+  // Search & Pagination
+  searchQuery = '';
+  searchSubject = new Subject<string>();
+  currentPage = 0;
+  pageSize = 15;
+  isLastPage = false;
+  isMoreLoading = false;
 
   constructor(
     private patientService: PatientService,
     private authService: AuthService,
     private router: Router,
-  ) {}
+  ) {
+    this.searchSubject.pipe(
+      debounceTime(400),
+      distinctUntilChanged()
+    ).subscribe(query => {
+      this.searchQuery = query;
+      this.loadPatients();
+    });
+  }
 
   ngOnInit(): void {
     this.loadPatients();
   }
 
-  loadPatients(): void {
-    this.isLoading = true;
-    this.patientService.getAll().subscribe({
-      next: (res: ApiResponse<Patient[]>) => {
-        this.patients = res.data;
+  onSearch(event: Event): void {
+    const query = (event.target as HTMLInputElement).value;
+    this.searchSubject.next(query);
+  }
+
+  loadPatients(isLoadMore = false): void {
+    if (isLoadMore) {
+      this.isMoreLoading = true;
+      this.currentPage++;
+    } else {
+      this.isLoading = true;
+      this.currentPage = 0;
+      this.patients = [];
+    }
+
+    this.patientService.getSlice(this.currentPage, this.pageSize, this.searchQuery).subscribe({
+      next: (res) => {
+        if (res.data) {
+          const newPatients = res.data.content;
+          this.patients = isLoadMore ? [...this.patients, ...newPatients] : newPatients;
+          this.isLastPage = res.data.last;
+        }
         this.isLoading = false;
+        this.isMoreLoading = false;
       },
       error: () => {
         this.errorMessage = 'Failed to load patients.';
         this.isLoading = false;
+        this.isMoreLoading = false;
       },
     });
   }
@@ -82,3 +119,15 @@ export class PatientListComponent implements OnInit {
     });
   }
 }
+
+
+
+
+
+
+
+
+
+
+
+

@@ -1,20 +1,19 @@
-import { Role } from '../models/auth.models';
+import { Billing } from '../../features/billing/models/billing.models';
+import { Doctor } from '../../features/staff/models/doctor.models';
+import { Patient } from '../../features/patients/models/patient.models';
+import { Role } from '../../features/auth/models/auth.models';
 
 export const ROLE_HOME_ROUTE: Record<Role, string> = {
   [Role.ADMIN]: '/dashboard',
   [Role.DOCTOR]: '/appointments',
   [Role.RECEPTIONIST]: '/appointments',
   [Role.PHARMACIST]: '/pharmacy',
-  [Role.LABORATORY_STAFF]: '/lab',
-  [Role.PATIENT]: '/patient-portal',
 };
 
 export const ROUTE_ROLES = {
-  dashboard: [Role.ADMIN, Role.DOCTOR, Role.RECEPTIONIST, Role.PHARMACIST, Role.LABORATORY_STAFF],
+  dashboard: [Role.ADMIN, Role.DOCTOR, Role.RECEPTIONIST, Role.PHARMACIST],
   users: [Role.ADMIN],
   audit: [Role.ADMIN],
-  lab: [Role.ADMIN, Role.LABORATORY_STAFF],
-  patientPortal: [Role.PATIENT],
   patients: [Role.ADMIN, Role.DOCTOR, Role.RECEPTIONIST, Role.PHARMACIST],
   patientRegister: [Role.ADMIN, Role.RECEPTIONIST],
   appointments: [Role.ADMIN, Role.DOCTOR, Role.RECEPTIONIST],
@@ -41,5 +40,11 @@ export function canRoleAccessPath(role: Role | string | null | undefined, path: 
     return true;
   }
 
-  return role !== Role.PATIENT;
+  return true;
 }
+
+
+
+
+
+

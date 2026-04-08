@@ -3,6 +3,7 @@ package com.hms.pharmacy.repository;
 import com.hms.common.enums.MedicineCategory;
 import com.hms.pharmacy.entity.Medicine;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -12,7 +13,7 @@ import java.util.List;
 import java.util.Optional;
 
 @Repository
-public interface MedicineRepository extends JpaRepository<Medicine, Long> {
+public interface MedicineRepository extends JpaRepository<Medicine, Long>, JpaSpecificationExecutor<Medicine> {
 
     boolean existsByMedicineCode(String medicineCode);
 
@@ -34,4 +35,8 @@ public interface MedicineRepository extends JpaRepository<Medicine, Long> {
 
     @Query("SELECT COUNT(m) FROM Medicine m WHERE m.quantityInStock <= m.reorderLevel OR (m.reorderLevel IS NULL AND m.quantityInStock <= 10)")
     long countLowStock();
+
+    @Modifying
+    @Query(value = "UPDATE medicines SET deleted = false WHERE id = :id", nativeQuery = true)
+    void restore(@Param("id") Long id);
 }

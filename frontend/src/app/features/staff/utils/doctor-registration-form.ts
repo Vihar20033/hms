@@ -1,6 +1,13 @@
+import { Department } from '../../appointments/models/appointment.models';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { LICENSE_NUMBER_PATTERN, PERSON_NAME_PATTERN, PHONE_PATTERN, STRONG_PASSWORD_PATTERN, trimRequired, USERNAME_PATTERN } from 'src/app/core/validators/app-validators';
-
+import {
+  LICENSE_NUMBER_PATTERN,
+  PERSON_NAME_PATTERN,
+  PHONE_PATTERN,
+  STRONG_PASSWORD_PATTERN,
+  trimRequired,
+  USERNAME_PATTERN,
+} from '../../../core/validators/app-validators';
 
 export function createDoctorRegistrationForm(fb: FormBuilder): FormGroup {
   return fb.group({
@@ -31,3 +38,7 @@ export function createDoctorRegistrationForm(fb: FormBuilder): FormGroup {
     bio: ['', [Validators.maxLength(1000)]],
   });
 }
+
+
+
+

@@ -1,5 +1,7 @@
+import { Department } from '../../appointments/models/appointment.models';
+import { Doctor } from '../models/doctor.models';
 import { formatDepartmentLabel } from '../../../core/constants/department.constants';
-import { Doctor } from '../../../core/models/doctor.models';
+import { map } from 'rxjs/operators';
 
 // Build dropdown options for doctor department selection
 export function buildDoctorDepartmentOptions(departments: string[]): Array<{ label: string; value: string }> {
@@ -28,3 +30,10 @@ export function buildDoctorFormPatch(doctor: Doctor): Record<string, unknown> {
     temporaryPassword: '********',
   };
 }
+
+
+
+
+
+
+

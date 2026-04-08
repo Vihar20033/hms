@@ -19,7 +19,7 @@ public class DashboardController {
     private final DashboardService dashboardService;
 
     @GetMapping("/summary")
-    @PreAuthorize("hasAnyRole('ADMIN','DOCTOR','RECEPTIONIST','PHARMACIST','LABORATORY_STAFF','PATIENT')")
+    @PreAuthorize("hasAnyRole('ADMIN','DOCTOR','RECEPTIONIST','PHARMACIST')")
     public ResponseEntity<ApiResponse<DashboardSummaryDTO>> getSummary() {
         return ResponseEntity.ok(ApiResponse.success(dashboardService.getSummary()));
     }

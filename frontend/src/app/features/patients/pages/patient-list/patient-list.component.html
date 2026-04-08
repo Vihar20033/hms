@@ -12,6 +12,16 @@
           <p>Standardized clinical database management</p>
         </div>
         <div class="header-actions">
+          <div class="search-container p-input-icon-left">
+            <i class="ri-search-line"></i>
+            <input 
+              type="text" 
+              pInputText 
+              placeholder="Fuzzy search patients..." 
+              (input)="onSearch($event)"
+              class="search-input"
+            />
+          </div>
           @if (canRegister()) {
             <button class="btn-primary" routerLink="/patients/register">
               <i class="ri-user-add-line"></i> Register Patient
@@ -37,6 +47,20 @@
               <th style="width: 15%">Contact</th>
               <th style="width: 10%">Joined</th>
               <th style="width: 10%" style="text-align: center">Actions</th>
+            </tr>
+            <!-- Row level searching (Common search) -->
+            <tr class="search-row">
+              <th>
+                <input pInputText type="text" (input)="onSearch($event)" placeholder="Search Name..." class="p-inputtext-sm w-full" />
+              </th>
+              <th></th>
+              <th></th>
+              <th></th>
+              <th>
+                <input pInputText type="text" (input)="onSearch($event)" placeholder="Search Contact..." class="p-inputtext-sm w-full" />
+              </th>
+              <th></th>
+              <th></th>
             </tr>
           </ng-template>
 
@@ -96,6 +120,23 @@
             </tr>
           </ng-template>
         </p-table>
+
+        @if (!isLastPage && patients.length > 0) {
+          <div class="load-more-container">
+            <button 
+              class="btn-secondary load-more-btn" 
+              (click)="loadPatients(true)" 
+              [disabled]="isMoreLoading"
+            >
+              @if (isMoreLoading) {
+                <span class="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span>
+                Loading...
+              } @else {
+                <i class="ri-arrow-down-s-line"></i> Load More Patients
+              }
+            </button>
+          </div>
+        }
       </div>
     </div>
   </main>

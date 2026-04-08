@@ -1,0 +1,50 @@
+import { Prescription } from '../../prescription/models/prescription.models';
+
+export enum BloodGroup {
+  A_POSITIVE = 'A_POSITIVE',
+  A_NEGATIVE = 'A_NEGATIVE',
+  B_POSITIVE = 'B_POSITIVE',
+  B_NEGATIVE = 'B_NEGATIVE',
+  AB_POSITIVE = 'AB_POSITIVE',
+  AB_NEGATIVE = 'AB_NEGATIVE',
+  O_POSITIVE = 'O_POSITIVE',
+  O_NEGATIVE = 'O_NEGATIVE',
+}
+
+export enum UrgencyLevel {
+  LOW = 'LOW',
+  MEDIUM = 'MEDIUM',
+  HIGH = 'HIGH',
+  EMERGENCY = 'EMERGENCY',
+}
+
+export interface Patient {
+  id: number;
+  name: string;
+  email?: string;
+  age: number;
+  bloodGroup: BloodGroup;
+  prescription: string;
+  dose: string;
+  fees: number;
+  contactNumber: string;
+  urgencyLevel: UrgencyLevel;
+  createdAt: string;
+}
+
+export interface PatientRequest {
+  name: string;
+  email?: string;
+  age: number;
+  bloodGroup: BloodGroup;
+  prescription: string;
+  dose: string;
+  fees: number;
+  contactNumber: string;
+  urgencyLevel: UrgencyLevel;
+}
+
+
+
+
+

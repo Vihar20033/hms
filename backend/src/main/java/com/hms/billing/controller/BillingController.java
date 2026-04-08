@@ -7,13 +7,13 @@ import com.hms.common.enums.PaymentStatus;
 import com.hms.billing.service.BillingService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Slice;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-
 
 @RestController
 @RequestMapping("/api/v1/billings")
@@ -39,6 +39,14 @@ public class BillingController {
                 billingService.getAllBillings()));
     }
 
+    @PreAuthorize("hasAnyRole('ADMIN','RECEPTIONIST')")
+    @GetMapping("/paged")
+    public ResponseEntity<ApiResponse<Slice<BillingResponseDTO>>> getPagedBillings(
+            @RequestParam(name = "page", defaultValue = "0") int page,
+            @RequestParam(name = "size", defaultValue = "10") int size) {
+        return ResponseEntity.ok(ApiResponse.success(
+                billingService.getBillingSlice(page, size)));
+    }
 
     @PreAuthorize("hasAnyRole('ADMIN','RECEPTIONIST')")
     @GetMapping("/patient/{patientId}")
@@ -85,8 +93,6 @@ public class BillingController {
         return ResponseEntity.ok(ApiResponse.success(
                 billingService.payCurrentPatientBill(id), "Payment recorded"));
     }
-
-
 
     @PreAuthorize("hasAnyRole('ADMIN','RECEPTIONIST')")
     @PostMapping("/generate/appointment/{appointmentId}")

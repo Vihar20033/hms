@@ -1,35 +1,28 @@
-import { CommonModule } from '@angular/common';
-import { HttpErrorResponse } from '@angular/common/http';
-import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
-import { CalendarModule } from 'primeng/calendar';
-import { DropdownModule } from 'primeng/dropdown';
-import { InputSwitchModule } from 'primeng/inputswitch';
-import { InputTextModule } from 'primeng/inputtext';
-import { InputTextareaModule } from 'primeng/inputtextarea';
-import { BOOKABLE_DEPARTMENTS, formatDepartmentLabel } from '../../../../core/constants/department.constants';
-import { Appointment } from '../../../../core/models/appointment.models';
 import { ApiResponse } from '../../../../core/models/common.models';
-import { Doctor } from '../../../../core/models/doctor.models';
-import { Patient } from '../../../../core/models/patient.models';
-import { AppointmentService } from '../../../../core/services/appointment.service';
-import { AuthService } from '../../../../core/services/auth.service';
-import { DoctorService } from '../../../../core/services/doctor.service';
-import { PatientService } from '../../../../core/services/patient.service';
-import { HeaderComponent } from '../../../../shared/components/layout/header/header.component';
-import { SidebarComponent } from '../../../../shared/components/layout/sidebar/sidebar.component';
+import { Appointment, Department } from '../../models/appointment.models';
+import { AppointmentService } from '../../services/appointment.service';
+import { AuthService } from '../../../auth/services/auth.service';
+import { BOOKABLE_DEPARTMENTS, formatDepartmentLabel } from '../../../../core/constants/department.constants';
+import { buildDepartmentOptions, buildDoctorOptions, buildPatientOptions, filterAvailableDoctors, formatDateOnly, formatTimeOnly, toDateOnly, toTimeOnly } from '../../utils/appointment-booking.utils';
+import { CalendarModule } from 'primeng/calendar';
+import { CommonModule } from '@angular/common';
+import { Component, OnInit } from '@angular/core';
 import { createAppointmentBookingForm, updateAppointmentTimeValidators } from '../../utils/appointment-booking-form';
-import {
-  buildDepartmentOptions,
-  buildDoctorOptions,
-  buildPatientOptions,
-  filterAvailableDoctors,
-  formatDateOnly,
-  formatTimeOnly,
-  toDateOnly,
-  toTimeOnly,
-} from '../../utils/appointment-booking.utils';
+import { Doctor } from '../../../staff/models/doctor.models';
+import { DoctorService } from '../../../staff/services/doctor.service';
+import { DropdownModule } from 'primeng/dropdown';
+import { FormBuilder, FormGroup, ReactiveFormsModule } from '@angular/forms';
+import { from } from 'rxjs';
+import { HeaderComponent } from '../../../../layout/header/header.component';
+import { HttpErrorResponse } from '@angular/common/http';
+import { InputSwitchModule } from 'primeng/inputswitch';
+import { InputTextareaModule } from 'primeng/inputtextarea';
+import { InputTextModule } from 'primeng/inputtext';
+import { Patient } from '../../../patients/models/patient.models';
+import { PatientService } from '../../../patients/services/patient.service';
+import { SidebarComponent } from '../../../../layout/sidebar/sidebar.component';
+import { User } from '../../../auth/models/auth.models';
 
 @Component({
   selector: 'app-appointment-booking',
@@ -200,3 +193,15 @@ export class AppointmentBookingComponent implements OnInit {
 
   getDepartmentLabel = (dept: string) => formatDepartmentLabel(dept);
 }
+
+
+
+
+
+
+
+
+
+
+
+

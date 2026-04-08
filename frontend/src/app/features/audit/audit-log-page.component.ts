@@ -1,10 +1,11 @@
+import { AuditLog } from './models/audit.models';
+import { AuditLogService } from './services/audit-log.service';
 import { CommonModule } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
+import { HeaderComponent } from '../../layout/header/header.component';
+import { SidebarComponent } from '../../layout/sidebar/sidebar.component';
 import { TableModule } from 'primeng/table';
-import { AuditLog } from '../../core/models/audit.models';
-import { AuditLogService } from '../../core/services/audit-log.service';
-import { HeaderComponent } from '../../shared/components/layout/header/header.component';
-import { SidebarComponent } from '../../shared/components/layout/sidebar/sidebar.component';
+import { User } from '../auth/models/auth.models';
 
 @Component({
   selector: 'app-audit-log-page',
@@ -139,3 +140,12 @@ export class AuditLogPageComponent implements OnInit {
     });
   }
 }
+
+
+
+
+
+
+
+
+

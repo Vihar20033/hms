@@ -1,9 +1,12 @@
-import { HttpErrorResponse, HttpInterceptorFn } from '@angular/common/http';
-import { inject } from '@angular/core';
-import { Router } from '@angular/router';
-import { catchError, throwError } from 'rxjs';
-import { AuthService } from '../services/auth.service';
+import { AuthService } from '../../features/auth/services/auth.service';
+import { catchError } from 'rxjs/operators';
+import { Component, inject, Input, Pipe } from '@angular/core';
+import { Doctor } from '../../features/staff/models/doctor.models';
 import { homeRouteForRole } from '../constants/role-route-map';
+import { HttpErrorResponse, HttpInterceptorFn } from '@angular/common/http';
+import { Role, User } from '../../features/auth/models/auth.models';
+import { Router } from '@angular/router';
+import { throwError } from 'rxjs';
 
 export const errorInterceptor: HttpInterceptorFn = (req, next) => {
   const router = inject(Router);
@@ -72,3 +75,9 @@ export const errorInterceptor: HttpInterceptorFn = (req, next) => {
     }),
   );
 };
+
+
+
+
+
+

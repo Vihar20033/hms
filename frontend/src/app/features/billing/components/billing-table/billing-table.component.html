@@ -62,6 +62,16 @@
                 <i class="ri-loader-4-line spin"></i>
               }
             </button>
+            @if (bill.reportUrl) {
+              <button
+                class="btn-icon prescribe"
+                title="View Cloud Invoice"
+                style="color: var(--brand-primary)"
+                (click)="viewCloudReport.emit(bill.reportUrl)"
+              >
+                <i class="ri-external-link-line"></i>
+              </button>
+            }
             @if (bill.paymentStatus !== PaymentStatus.PAID && (userRole() === 'ADMIN' || userRole() === 'RECEPTIONIST')) {
               <button
                 class="btn-icon complete"

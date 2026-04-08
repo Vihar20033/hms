@@ -1,6 +1,6 @@
+import { Department } from '../models/appointment.models';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { futureOrTodayDateValidator , clinicHoursValidator , trimRequired } from 'src/app/core/validators/app-validators';
-
+import { clinicHoursValidator, futureOrTodayDateValidator, trimRequired } from '../../../core/validators/app-validators';
 
 export function createAppointmentBookingForm(fb: FormBuilder): FormGroup {
   return fb.group({
@@ -25,3 +25,7 @@ export function updateAppointmentTimeValidators(form: FormGroup, isEmergency: bo
   }
   timeControl?.updateValueAndValidity();
 }
+
+
+
+

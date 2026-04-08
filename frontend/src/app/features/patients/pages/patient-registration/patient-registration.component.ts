@@ -1,26 +1,27 @@
-import { CommonModule } from '@angular/common';
-import { HttpErrorResponse } from '@angular/common/http';
-import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
-import { DropdownModule } from 'primeng/dropdown';
-import { InputNumberModule } from 'primeng/inputnumber';
-import { InputTextModule } from 'primeng/inputtext';
-import { InputTextareaModule } from 'primeng/inputtextarea';
-import { KeyFilterModule } from 'primeng/keyfilter';
-import { Observable } from 'rxjs';
 import { ApiResponse } from '../../../../core/models/common.models';
-import { BloodGroup, Patient, UrgencyLevel } from '../../../../core/models/patient.models';
-import { PatientService } from '../../../../core/services/patient.service';
-import { HeaderComponent } from '../../../../shared/components/layout/header/header.component';
-import { SidebarComponent } from '../../../../shared/components/layout/sidebar/sidebar.component';
 import {
   buildBloodGroupOptions,
   buildPatientRegistrationSuccessRoute,
   buildUrgencyOptions,
-  createPatientRegistrationForm,
   getUrgencyClass,
+  createPatientRegistrationForm,
 } from '../../utils/patient-form.utils';
+import { CommonModule } from '@angular/common';
+import { Component, OnInit } from '@angular/core';
+import { DropdownModule } from 'primeng/dropdown';
+import { FormBuilder, FormGroup, ReactiveFormsModule } from '@angular/forms';
+import { HeaderComponent } from '../../../../layout/header/header.component';
+import { HttpErrorResponse } from '@angular/common/http';
+import { InputNumberModule } from 'primeng/inputnumber';
+import { InputTextareaModule } from 'primeng/inputtextarea';
+import { InputTextModule } from 'primeng/inputtext';
+import { KeyFilterModule } from 'primeng/keyfilter';
+import { Observable } from 'rxjs';
+import { BloodGroup, Patient, UrgencyLevel } from '../../models/patient.models';
+import { PatientService } from '../../services/patient.service';
+import { Prescription } from '../../../prescription/models/prescription.models';
+import { SidebarComponent } from '../../../../layout/sidebar/sidebar.component';
 
 @Component({
   selector: 'app-patient-registration',
@@ -142,3 +143,15 @@ export class PatientRegistrationComponent implements OnInit {
     return getUrgencyClass(level);
   }
 }
+
+
+
+
+
+
+
+
+
+
+
+

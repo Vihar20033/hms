@@ -1,10 +1,11 @@
+import { AuthService } from '../../services/auth.service';
 import { CommonModule } from '@angular/common';
-import { HttpErrorResponse } from '@angular/common/http';
 import { Component } from '@angular/core';
 import { FormBuilder, FormGroup, ReactiveFormsModule } from '@angular/forms';
-import { Router } from '@angular/router';
 import { homeRouteForRole } from '../../../../core/constants/role-route-map';
-import { AuthService } from '../../../../core/services/auth.service';
+import { HttpErrorResponse } from '@angular/common/http';
+import { Role } from '../../models/auth.models';
+import { Router } from '@angular/router';
 import { createChangePasswordForm } from '../../auth-form.utils';
 
 @Component({
@@ -55,3 +56,12 @@ export class ChangePasswordComponent {
     });
   }
 }
+
+
+
+
+
+
+
+
+

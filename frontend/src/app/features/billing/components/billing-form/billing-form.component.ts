@@ -1,15 +1,21 @@
+import { Appointment } from '../../../appointments/models/appointment.models';
+import { Billing, PaymentMethod } from '../../models/billing.models';
+import { buildPatientOptions } from '../../../appointments/utils/appointment-booking.utils';
+import { CalendarModule } from 'primeng/calendar';
 import { CommonModule, DatePipe } from '@angular/common';
 import { Component, input, output } from '@angular/core';
-import { FormArray, FormGroup, ReactiveFormsModule } from '@angular/forms';
-import { CalendarModule } from 'primeng/calendar';
 import { DropdownModule } from 'primeng/dropdown';
+import { FormArray, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { InputNumberModule } from 'primeng/inputnumber';
-import { InputTextModule } from 'primeng/inputtext';
 import { InputTextareaModule } from 'primeng/inputtextarea';
-import { Appointment } from '../../../../core/models/appointment.models';
-import { PaymentMethod } from '../../../../core/models/billing.models';
-import { Patient } from '../../../../core/models/patient.models';
-import { buildPatientOptions, buildPaymentMethodOptions, getBillingItemTotal, getBillingNetTotal, getBillingSubtotal } from '../../utils/billing-data.utils';
+import { InputTextModule } from 'primeng/inputtext';
+import { Patient } from '../../../patients/models/patient.models';
+import {
+  buildPaymentMethodOptions,
+  getBillingItemTotal,
+  getBillingNetTotal,
+  getBillingSubtotal,
+} from '../../utils/billing-data.utils';
 
 @Component({
   selector: 'app-billing-form',
@@ -90,3 +96,12 @@ export class BillingFormComponent {
     return buildPaymentMethodOptions(this.paymentMethods);
   }
 }
+
+
+
+
+
+
+
+
+

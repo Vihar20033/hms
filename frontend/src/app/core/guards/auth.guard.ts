@@ -1,6 +1,8 @@
+import { AuthService } from '../../features/auth/services/auth.service';
+import { CanActivateFn, Router, Routes } from '@angular/router';
 import { inject } from '@angular/core';
-import { CanActivateFn, Router } from '@angular/router';
-import { AuthService } from '../services/auth.service';
+import { of } from 'rxjs';
+import { User } from '../../features/auth/models/auth.models';
 
 export const authGuard: CanActivateFn = (route, state) => {
 
@@ -26,3 +28,9 @@ export const authGuard: CanActivateFn = (route, state) => {
 
   return true;
 };
+
+
+
+
+
+

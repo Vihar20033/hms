@@ -1,8 +1,9 @@
-import { FormArray } from '@angular/forms';
-import { Appointment } from '../../../core/models/appointment.models';
-import { Billing, PaymentMethod, PaymentStatus } from '../../../core/models/billing.models';
-import { Patient } from '../../../core/models/patient.models';
+import { Appointment, Department } from '../../appointments/models/appointment.models';
+import { Billing, PaymentMethod, PaymentStatus } from '../models/billing.models';
 import { DateUtils } from '../../../core/utils/date.utils';
+import { filter, map } from 'rxjs/operators';
+import { FormArray } from '@angular/forms';
+import { Patient } from '../../patients/models/patient.models';
 
 export function getBillingItemTotal(items: FormArray, index: number): number {
   const item = items.at(index).value;
@@ -62,7 +63,7 @@ export function getBillingStatusClass(status: PaymentStatus): string {
   return map[status] || 'status-scheduled';
 }
 
-export function buildPatientOptions(patients: Patient[]): Array<{ label: string; value: number }> {
+export function buildBillingPatientOptions(patients: Patient[]): Array<{ label: string; value: number }> {
   return patients.map((patient) => ({ label: patient.name, value: patient.id }));
 }
 
@@ -84,3 +85,11 @@ export function buildPreviewItemGroups(
     }),
   );
 }
+
+
+
+
+
+
+
+

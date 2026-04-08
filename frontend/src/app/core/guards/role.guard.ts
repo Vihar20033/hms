@@ -1,9 +1,9 @@
-import { inject } from '@angular/core';
+import { AccessFeedbackService } from '../../shared/services/access-feedback.service';
+import { AuthService } from '../../features/auth/services/auth.service';
 import { CanActivateFn, Router } from '@angular/router';
-import { Role } from '../models/auth.models';
-import { AccessFeedbackService } from '../services/access-feedback.service';
-import { AuthService } from '../services/auth.service';
 import { homeRouteForRole } from '../constants/role-route-map';
+import { inject } from '@angular/core';
+import { Role, User } from '../../features/auth/models/auth.models';
 
 export const roleGuard: CanActivateFn = (route, state) => {
   const router = inject(Router);
@@ -29,3 +29,9 @@ export const roleGuard: CanActivateFn = (route, state) => {
 
   return router.createUrlTree(['/login'], { queryParams: { returnUrl: state.url } });
 };
+
+
+
+
+
+

@@ -1,3 +1,5 @@
+import { Department } from '../../features/appointments/models/appointment.models';
+
 export interface ApiResponse<T> {
   success: boolean;
   message: string;
@@ -40,3 +42,8 @@ export interface DashboardSummary {
   weeklyStats: WeeklyStatistics[];
   departmentStats: DepartmentStatistics[];
 }
+
+
+
+
+

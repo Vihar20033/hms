@@ -1,7 +1,7 @@
+import { Billing, PaymentStatus } from '../../models/billing.models';
 import { CommonModule, DatePipe, DecimalPipe } from '@angular/common';
 import { Component, input, output } from '@angular/core';
 import { TableModule } from 'primeng/table';
-import { Billing, PaymentStatus } from '../../../../core/models/billing.models';
 import { getBillingStatusClass } from '../../utils/billing-data.utils';
 
 @Component({
@@ -20,6 +20,7 @@ export class BillingTableComponent {
   readonly view = output<Billing>();
   readonly updateStatus = output<{ id: number; status: PaymentStatus }>();
   readonly exportPdf = output<Billing>();
+  readonly viewCloudReport = output<string>();
   readonly delete = output<number>();
 
   PaymentStatus = PaymentStatus;
@@ -44,3 +45,12 @@ export class BillingTableComponent {
     return getBillingStatusClass(status);
   }
 }
+
+
+
+
+
+
+
+
+

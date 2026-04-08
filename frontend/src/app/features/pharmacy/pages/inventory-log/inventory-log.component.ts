@@ -1,12 +1,13 @@
+import { ApiResponse } from '../../../../core/models/common.models';
 import { CommonModule } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
+import { filter } from 'rxjs/operators';
+import { HeaderComponent } from '../../../../layout/header/header.component';
 import { InputTextModule } from 'primeng/inputtext';
+import { InventoryTransaction } from '../../models/pharmacy.models';
+import { PharmacyService } from '../../services/pharmacy.service';
+import { SidebarComponent } from '../../../../layout/sidebar/sidebar.component';
 import { TableModule } from 'primeng/table';
-import { ApiResponse } from '../../../../core/models/common.models';
-import { InventoryTransaction } from '../../../../core/models/pharmacy.models';
-import { PharmacyService } from '../../../../core/services/pharmacy.service';
-import { HeaderComponent } from '../../../../shared/components/layout/header/header.component';
-import { SidebarComponent } from '../../../../shared/components/layout/sidebar/sidebar.component';
 
 @Component({
   selector: 'app-inventory-log',
@@ -46,3 +47,15 @@ export class InventoryLogComponent implements OnInit {
     this.filteredTransactions = this.transactions;
   }
 }
+
+
+
+
+
+
+
+
+
+
+
+

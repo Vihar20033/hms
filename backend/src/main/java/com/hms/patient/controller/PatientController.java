@@ -41,8 +41,16 @@ public class PatientController {
     @GetMapping("/slice")
     public ResponseEntity<ApiResponse<SliceResponse<PatientResponseDTO>>> getSlice(
             @RequestParam(name = "page", defaultValue = "0") int page,
-            @RequestParam(name = "size", defaultValue = "25") int size) {
-        org.springframework.data.domain.Slice<PatientResponseDTO> slice = service.getSlice(Math.max(page, 0), Math.min(Math.max(size, 1), 100));
+            @RequestParam(name = "size", defaultValue = "25") int size,
+            @RequestParam(name = "query", required = false) String query) {
+        
+        org.springframework.data.domain.Slice<PatientResponseDTO> slice;
+        if (query != null && !query.isEmpty()) {
+            slice = service.getSearchableSlice(Math.max(page, 0), Math.min(Math.max(size, 1), 100), query);
+        } else {
+            slice = service.getSlice(Math.max(page, 0), Math.min(Math.max(size, 1), 100));
+        }
+
         return ResponseEntity.ok(ApiResponse.success(SliceResponse.<PatientResponseDTO>builder()
                 .content(slice.getContent())
                 .page(slice.getNumber())
@@ -58,12 +66,6 @@ public class PatientController {
     @GetMapping("/{id}")
     public ResponseEntity<ApiResponse<PatientResponseDTO>> getById(@PathVariable("id") Long id) {
         return ResponseEntity.ok(ApiResponse.success(service.getById(id)));
-    }
-
-    @PreAuthorize("hasRole('PATIENT')")
-    @GetMapping("/me")
-    public ResponseEntity<ApiResponse<PatientResponseDTO>> getCurrentPatientProfile() {
-        return ResponseEntity.ok(ApiResponse.success(service.getCurrentPatientProfile()));
     }
 
     @PreAuthorize("hasAnyRole('ADMIN','DOCTOR','RECEPTIONIST')")

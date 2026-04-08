@@ -1,6 +1,8 @@
+import { Department } from '../models/appointment.models';
+import { Doctor } from '../../staff/models/doctor.models';
+import { filter, map } from 'rxjs/operators';
 import { formatDepartmentLabel } from '../../../core/constants/department.constants';
-import { Doctor } from '../../../core/models/doctor.models';
-import { Patient } from '../../../core/models/patient.models';
+import { Patient } from '../../patients/models/patient.models';
 
 export interface SelectOption<T> {
   label: string;
@@ -82,3 +84,10 @@ export function toTimeOnly(value: string | null | undefined): Date | null {
   time.setHours(parsed.getHours(), parsed.getMinutes(), 0, 0);
   return time;
 }
+
+
+
+
+
+
+

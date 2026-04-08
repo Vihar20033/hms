@@ -13,8 +13,6 @@ public interface PatientService {
 
     PatientResponseDTO getById(Long id);
 
-    PatientResponseDTO getCurrentPatientProfile();
-
     PatientResponseDTO update(Long id, PatientRequestDTO dto);
 
     void delete(Long id);
@@ -22,4 +20,6 @@ public interface PatientService {
     List<PatientResponseDTO> getAll();
 
     Slice<PatientResponseDTO> getSlice(int page, int size);
+
+    Slice<PatientResponseDTO> getSearchableSlice(int page, int size, String query);
 }

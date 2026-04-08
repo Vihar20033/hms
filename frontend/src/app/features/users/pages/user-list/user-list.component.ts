@@ -1,12 +1,12 @@
+import { ApiResponse } from '../../../../core/models/common.models';
 import { CommonModule } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
-import { TableModule } from 'primeng/table';
-import { Role, User } from '../../../../core/models/auth.models';
-import { ApiResponse } from '../../../../core/models/common.models';
-import { UserService } from '../../../../core/services/user.service';
-import { HeaderComponent } from '../../../../shared/components/layout/header/header.component';
-import { SidebarComponent } from '../../../../shared/components/layout/sidebar/sidebar.component';
 import { getRoleBadgeClass } from '../utils/user-list.utils';
+import { HeaderComponent } from '../../../../layout/header/header.component';
+import { Role, User } from '../../../auth/models/auth.models';
+import { SidebarComponent } from '../../../../layout/sidebar/sidebar.component';
+import { TableModule } from 'primeng/table';
+import { UserService } from '../../services/user.service';
 
 @Component({
   selector: 'app-user-list',
@@ -59,3 +59,16 @@ export class UserListComponent implements OnInit {
     return getRoleBadgeClass(role);
   }
 }
+
+
+
+
+
+
+
+
+
+
+
+
+

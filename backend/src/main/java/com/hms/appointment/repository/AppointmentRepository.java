@@ -90,10 +90,11 @@ public interface AppointmentRepository extends JpaRepository<Appointment, Long> 
            "(:endTime IS NULL OR a.appointmentTime <= :endTime) " +
            "ORDER BY a.appointmentTime DESC")
     List<Appointment> findAppointments(
-            @Param("doctorUserId") Long doctorUserId,
-            @Param("patientId") Long patientId,
-            @Param("status") AppointmentStatus status,
             @Param("startTime") LocalDateTime startTime,
             @Param("endTime") LocalDateTime endTime
     );
+
+    @Modifying
+    @Query(value = "UPDATE appointments SET deleted = false WHERE id = :id", nativeQuery = true)
+    void restore(@Param("id") Long id);
 }

@@ -1,8 +1,15 @@
-import { Routes } from '@angular/router';
+import { Appointment } from './features/appointments/models/appointment.models';
 import { authGuard } from './core/guards/auth.guard';
+import { Billing } from './features/billing/models/billing.models';
+import { Component } from '@angular/core';
+import { Doctor } from './features/staff/models/doctor.models';
 import { guestGuard } from './core/guards/guest.guard';
+import { Patient } from './features/patients/models/patient.models';
+import { Prescription } from './features/prescription/models/prescription.models';
 import { roleGuard } from './core/guards/role.guard';
 import { ROUTE_ROLES } from './core/constants/role-route-map';
+import { Routes } from '@angular/router';
+import { User } from './features/auth/models/auth.models';
 
 export const routes: Routes = [
   { path: '', redirectTo: 'login', pathMatch: 'full' },
@@ -50,20 +57,6 @@ export const routes: Routes = [
     loadComponent: () => import('./features/audit/audit-log-page.component').then(m => m.AuditLogPageComponent),
     canActivate: [authGuard, roleGuard],
     data: { roles: ROUTE_ROLES.audit },
-  },
-  {
-    path: 'lab',
-    loadComponent: () => import('./features/lab/pages/lab-workbench/lab-workbench.component')
-      .then(m => m.LabWorkbenchComponent),
-    canActivate: [authGuard, roleGuard],
-    data: { roles: ROUTE_ROLES.lab },
-  },
-  {
-    path: 'patient-portal',
-    loadComponent: () => import('./features/patient-portal/pages/patient-home/patient-home.component')
-      .then(m => m.PatientHomeComponent),
-    canActivate: [authGuard, roleGuard],
-    data: { roles: ROUTE_ROLES.patientPortal },
   },
 
   // Patient Routes
@@ -187,4 +180,9 @@ export const routes: Routes = [
 
   { path: '**', redirectTo: 'login' },
 ];
+
+
+
+
+
 

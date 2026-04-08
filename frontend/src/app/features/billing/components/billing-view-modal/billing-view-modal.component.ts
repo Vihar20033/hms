@@ -1,6 +1,6 @@
+import { Billing, PaymentStatus } from '../../models/billing.models';
 import { CommonModule, DecimalPipe } from '@angular/common';
 import { Component, input, output } from '@angular/core';
-import { Billing, PaymentStatus } from '../../../../core/models/billing.models';
 import { getBillingStatusClass } from '../../utils/billing-data.utils';
 
 @Component({
@@ -30,3 +30,12 @@ export class BillingViewModalComponent {
     return getBillingStatusClass(status);
   }
 }
+
+
+
+
+
+
+
+
+

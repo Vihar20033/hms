@@ -22,9 +22,9 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import com.hms.common.util.SecurityUtils;
 
 import java.time.LocalDateTime;
 import java.time.LocalTime;
@@ -53,7 +53,10 @@ public class AppointmentServiceImpl implements AppointmentService {
     @Override
     @Transactional(readOnly = true)
     public AppointmentSummaryDTO getAppointmentSummary() {
-        User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        User user = SecurityUtils.getCurrentUser();
+        if (user == null) {
+             throw new BadRequestException("No authenticated user found.");
+        }
         AppointmentSummaryDTO.AppointmentSummaryDTOBuilder builder = AppointmentSummaryDTO.builder();
 
         if (user.getRole() == Role.DOCTOR) {
@@ -121,7 +124,7 @@ public class AppointmentServiceImpl implements AppointmentService {
         appointment.setStatus(AppointmentStatus.SCHEDULED);
 
         Appointment saved = appointmentRepository.save(appointment);
-        auditLogService.log(getCurrentUsername(), "APPOINTMENT_CREATE", "Appointment", saved.getId().toString(),
+        auditLogService.log(SecurityUtils.getCurrentUsername(), "APPOINTMENT_CREATE", "Appointment", saved.getId().toString(),
                 "patient=" + saved.getPatient().getName());
         return saved;
     }
@@ -165,7 +168,7 @@ public class AppointmentServiceImpl implements AppointmentService {
         appointment.setEmergency(dto.isEmergency());
 
         Appointment saved = appointmentRepository.save(appointment);
-        auditLogService.log(getCurrentUsername(), "APPOINTMENT_UPDATE", "Appointment", id.toString(),
+        auditLogService.log(SecurityUtils.getCurrentUsername(), "APPOINTMENT_UPDATE", "Appointment", id.toString(),
                 "patient=" + saved.getPatient().getName());
         return saved;
     }
@@ -202,13 +205,16 @@ public class AppointmentServiceImpl implements AppointmentService {
 
         appointment.setStatus(status);
         Appointment saved = appointmentRepository.save(appointment);
-        auditLogService.log(getCurrentUsername(), "APPOINTMENT_STATUS_UPDATE", "Appointment", id.toString(),
+        auditLogService.log(SecurityUtils.getCurrentUsername(), "APPOINTMENT_STATUS_UPDATE", "Appointment", id.toString(),
                 "status=" + status);
         return saved;
     }
 
     private void checkOwnership(Appointment appointment) {
-        User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        User user = SecurityUtils.getCurrentUser();
+        if (user == null) {
+            throw new AccessDeniedException("No authenticated user found.");
+        }
         Role role = user.getRole();
 
         if (role == Role.ADMIN || role == Role.RECEPTIONIST) {
@@ -236,7 +242,10 @@ public class AppointmentServiceImpl implements AppointmentService {
     @Override
     @Transactional(readOnly = true)
     public List<Appointment> getAppointments(Long patientId, AppointmentStatus status) {
-        User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        User user = SecurityUtils.getCurrentUser();
+        if (user == null) {
+             throw new AccessDeniedException("No authenticated user found.");
+        }
         Long doctorUserId = (user.getRole() == Role.DOCTOR) ? user.getId() : null;
 
         if (user.getRole() == Role.PATIENT) {
@@ -253,14 +262,20 @@ public class AppointmentServiceImpl implements AppointmentService {
     @Override
     @Transactional(readOnly = true)
     public List<Appointment> getCurrentPatientAppointments(AppointmentStatus status) {
-        User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        User user = SecurityUtils.getCurrentUser();
+        if (user == null) {
+             throw new AccessDeniedException("No authenticated user found.");
+        }
         return getAppointments(resolveCurrentPatientId(user), status);
     }
 
     @Override
     @Transactional(readOnly = true)
     public List<Appointment> getTodayAppointments() {
-        User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        User user = SecurityUtils.getCurrentUser();
+        if (user == null) {
+             throw new AccessDeniedException("No authenticated user found.");
+        }
         Long doctorUserId = (user.getRole() == Role.DOCTOR) ? user.getId() : null;
         LocalDateTime startOfDay = LocalDateTime.now().with(LocalTime.MIN);
         LocalDateTime endOfDay = LocalDateTime.now().with(LocalTime.MAX);
@@ -278,7 +293,7 @@ public class AppointmentServiceImpl implements AppointmentService {
         int updatedCount = appointmentRepository.reassignDoctorBulk(fromDoctorId, toDoctorId, toDoctor.getDepartment(),
                 Arrays.asList(AppointmentStatus.SCHEDULED, AppointmentStatus.CONFIRMED, AppointmentStatus.CHECKED_IN, AppointmentStatus.IN_CONSULTATION));
 
-        auditLogService.log(getCurrentUsername(), "APPOINTMENT_REASSIGN_BULK", "Doctor", fromDoctorId.toString(),
+        auditLogService.log(SecurityUtils.getCurrentUsername(), "APPOINTMENT_REASSIGN_BULK", "Doctor", fromDoctorId.toString(),
                 "toDoctor=" + toDoctorId + ", count=" + updatedCount);
     }
 
@@ -288,13 +303,10 @@ public class AppointmentServiceImpl implements AppointmentService {
         Appointment appointment = appointmentRepository.findById(id)
                 .orElseThrow(() -> new AppointmentNotFoundException("Appointment not found with ID: " + id));
         appointmentRepository.delete(appointment);
-        auditLogService.log(getCurrentUsername(), "APPOINTMENT_DELETE", "Appointment", id.toString(), "deleted=true");
+        auditLogService.log(SecurityUtils.getCurrentUsername(), "APPOINTMENT_DELETE", "Appointment", id.toString(), "deleted=true");
     }
 
-    private String getCurrentUsername() {
-        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-        return (auth != null && auth.isAuthenticated()) ? auth.getName() : "system";
-    }
+
 
     private Long resolveCurrentPatientId(User user) {
         return patientRepository.findByEmail(user.getEmail())

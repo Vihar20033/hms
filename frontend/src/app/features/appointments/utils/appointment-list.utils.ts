@@ -1,4 +1,6 @@
-import { Appointment, AppointmentStatus } from '../../../core/models/appointment.models';
+import { Appointment, AppointmentStatus } from '../models/appointment.models';
+import { Doctor } from '../../staff/models/doctor.models';
+import { from } from 'rxjs';
 
 export function getAppointmentPageLead(userRole: string | null): string {
   if (userRole === 'DOCTOR') {
@@ -40,3 +42,10 @@ export function canManageAppointmentForRole(userRole: string | null): boolean {
 export function canDoctorStartAppointment(appointment: Appointment, userRole: string | null): boolean {
   return appointment.status === AppointmentStatus.CHECKED_IN && (userRole === 'DOCTOR' || userRole === 'ADMIN');
 }
+
+
+
+
+
+
+

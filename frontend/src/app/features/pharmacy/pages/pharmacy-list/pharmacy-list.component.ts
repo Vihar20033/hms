@@ -1,19 +1,19 @@
-import { CommonModule } from '@angular/common';
-import { HttpErrorResponse } from '@angular/common/http';
-import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup, ReactiveFormsModule } from '@angular/forms';
+import { AuthService } from '../../../auth/services/auth.service';
 import { CalendarModule } from 'primeng/calendar';
+import { CommonModule } from '@angular/common';
+import { Component, OnInit } from '@angular/core';
 import { DropdownModule } from 'primeng/dropdown';
+import { FormBuilder, FormGroup, ReactiveFormsModule } from '@angular/forms';
+import { HeaderComponent } from '../../../../layout/header/header.component';
+import { HttpErrorResponse } from '@angular/common/http';
 import { InputNumberModule } from 'primeng/inputnumber';
-import { InputTextModule } from 'primeng/inputtext';
 import { InputTextareaModule } from 'primeng/inputtextarea';
+import { InputTextModule } from 'primeng/inputtext';
+import { Medicine, MedicineCategory } from '../../models/pharmacy.models';
+import { PharmacyService } from '../../services/pharmacy.service';
+import { SidebarComponent } from '../../../../layout/sidebar/sidebar.component';
 import { TableModule } from 'primeng/table';
-import { ApiResponse } from '../../../../core/models/common.models';
-import { Medicine, MedicineCategory } from '../../../../core/models/pharmacy.models';
-import { AuthService } from '../../../../core/services/auth.service';
-import { PharmacyService } from '../../../../core/services/pharmacy.service';
-import { HeaderComponent } from '../../../../shared/components/layout/header/header.component';
-import { SidebarComponent } from '../../../../shared/components/layout/sidebar/sidebar.component';
+import { Subject, debounceTime, distinctUntilChanged } from 'rxjs';
 import { createMedicineForm, createRestockForm } from '../../utils/pharmacy-list-form';
 import {
   buildCategoryOptions,
@@ -44,6 +44,15 @@ export class PharmacyListComponent implements OnInit {
   medicines: Medicine[] = [];
   filteredMedicines: Medicine[] = [];
   isLoading = true;
+
+  // Search & Pagination
+  searchQuery = '';
+  searchSubject = new Subject<string>();
+  currentPage = 0;
+  pageSize = 20;
+  isLastPage = false;
+  isMoreLoading = false;
+
   userRole: string | null = null;
   showAddForm = false;
   showEditForm = false;
@@ -64,7 +73,15 @@ export class PharmacyListComponent implements OnInit {
     private pharmacyService: PharmacyService,
     private authService: AuthService,
     private fb: FormBuilder,
-  ) {}
+  ) {
+    this.searchSubject.pipe(
+      debounceTime(400),
+      distinctUntilChanged()
+    ).subscribe(query => {
+      this.searchQuery = query;
+      this.loadMedicines();
+    });
+  }
 
   ngOnInit(): void {
     this.userRole = this.authService.getUserRole();
@@ -83,16 +100,35 @@ export class PharmacyListComponent implements OnInit {
     this.restockForm = createRestockForm(this.fb);
   }
 
-  loadMedicines(): void {
-    this.isLoading = true;
-    this.pharmacyService.getAll().subscribe({
-      next: (res: ApiResponse<Medicine[]>) => {
-        this.medicines = res.data || [];
-        this.applyFilter();
+  onSearch(event: Event): void {
+    const query = (event.target as HTMLInputElement).value;
+    this.searchSubject.next(query);
+  }
+
+  loadMedicines(isLoadMore = false): void {
+    if (isLoadMore) {
+      this.isMoreLoading = true;
+      this.currentPage++;
+    } else {
+      this.isLoading = true;
+      this.currentPage = 0;
+      this.medicines = [];
+    }
+
+    this.pharmacyService.getSlice(this.currentPage, this.pageSize, this.searchQuery).subscribe({
+      next: (res) => {
+        if (res.data) {
+          const newMeds = res.data.content;
+          this.medicines = isLoadMore ? [...this.medicines, ...newMeds] : newMeds;
+          this.isLastPage = res.data.last;
+          this.applyFilter();
+        }
         this.isLoading = false;
+        this.isMoreLoading = false;
       },
       error: () => {
         this.isLoading = false;
+        this.isMoreLoading = false;
       },
     });
   }
@@ -238,3 +274,15 @@ export class PharmacyListComponent implements OnInit {
     return buildCategoryOptions(this.categories);
   }
 }
+
+
+
+
+
+
+
+
+
+
+
+

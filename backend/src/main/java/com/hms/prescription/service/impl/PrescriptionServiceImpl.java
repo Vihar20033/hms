@@ -27,9 +27,14 @@ import com.hms.prescription.mapper.PrescriptionMapper;
 import com.hms.prescription.repository.PrescriptionRepository;
 import com.hms.prescription.service.PrescriptionService;
 import com.hms.common.service.PdfGenerationService;
+import com.hms.common.service.CloudinaryService;
 import com.hms.user.entity.User;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Slice;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Sort;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
@@ -54,6 +59,7 @@ public class PrescriptionServiceImpl implements PrescriptionService {
     private final InventoryTransactionRepository inventoryTransactionRepository;
     private final AuditLogService auditLogService;
     private final PdfGenerationService pdfGenerationService;
+    private final CloudinaryService cloudinaryService;
 
     @Override
     @Transactional(rollbackFor = Exception.class)
@@ -113,11 +119,14 @@ public class PrescriptionServiceImpl implements PrescriptionService {
             }
         }
 
+        // Generate and Upload PDF
         try {
             byte[] pdfBytes = pdfGenerationService.generatePrescriptionPdf(savedPrescription);
-            // Storage removed - transient generation only
+            String reportUrl = cloudinaryService.uploadBytes(pdfBytes, "rx_" + savedPrescription.getId(), "prescriptions");
+            savedPrescription.setReportUrl(reportUrl);
+            savedPrescription = prescriptionRepository.save(savedPrescription);
         } catch (Exception e) {
-            log.error("Failed to generate Prescription PDF for ID: {}", savedPrescription.getId(), e);
+            log.error("Failed to generate/upload prescription PDF", e);
         }
 
         return prescriptionMapper.toDto(savedPrescription);
@@ -149,26 +158,33 @@ public class PrescriptionServiceImpl implements PrescriptionService {
         return Collections.emptyList();
     }
 
+    @Override
+    @Transactional(readOnly = true)
+    public Slice<PrescriptionResponseDTO> getPrescriptionSlice(int page, int size) {
+        PageRequest request = PageRequest.of(page, size, Sort.by(Sort.Direction.DESC, "createdAt"));
+        User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        Role role = user.getRole();
+
+        if (role == Role.ADMIN || role == Role.PHARMACIST) {
+            return prescriptionRepository.findAll(request).map(prescriptionMapper::toDto);
+        }
+
+        if (role == Role.DOCTOR) {
+            return prescriptionRepository.findByDoctorUserId(user.getId(), request).map(prescriptionMapper::toDto);
+        }
+
+        return Slice.empty();
+    }
+
 
     @Override
     @Transactional(readOnly = true)
     public List<PrescriptionResponseDTO> getPrescriptionsByPatientId(Long patientId) {
-        User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        if (user.getRole() == Role.PATIENT && !patientId.equals(resolveCurrentPatientId(user))) {
-            throw new AccessDeniedException("You can only access your own prescriptions.");
-        }
         List<Prescription> prescriptions = prescriptionRepository.findByPatientId(patientId);
         if (!prescriptions.isEmpty()) {
             checkOwnership(prescriptions.get(0));
         }
         return prescriptionMapper.toDtoList(prescriptions);
-    }
-
-    @Override
-    @Transactional(readOnly = true)
-    public List<PrescriptionResponseDTO> getCurrentPatientPrescriptions() {
-        User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        return prescriptionMapper.toDtoList(prescriptionRepository.findByPatientId(resolveCurrentPatientId(user)));
     }
 
     @Override
@@ -196,6 +212,7 @@ public class PrescriptionServiceImpl implements PrescriptionService {
         }
 
         prescriptionRepository.delete(prescription);
+        auditLogService.log(com.hms.common.util.SecurityUtils.getCurrentUsername(), "PRESCRIPTION_DELETE", "Prescription", id.toString(), "deleted=true");
     }
 
     private void checkOwnership(Prescription prescription) {
@@ -214,21 +231,8 @@ public class PrescriptionServiceImpl implements PrescriptionService {
             }
         }
 
-        if (role == Role.PATIENT
-                && prescription.getPatient() != null
-                && user.getEmail() != null
-                && user.getEmail().equalsIgnoreCase(prescription.getPatient().getEmail())) {
-            return;
-        }
-
         log.warn("Security Alert: User {} with role {} tried to access prescription {}.", 
                 user.getUsername(), role, prescription.getId());
         throw new AccessDeniedException("You do not have permission to access this prescription.");
-    }
-
-    private Long resolveCurrentPatientId(User user) {
-        return patientRepository.findByEmail(user.getEmail())
-                .orElseThrow(() -> new BadRequestException("Your patient profile is not linked yet."))
-                .getId();
     }
 }

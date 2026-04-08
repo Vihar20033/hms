@@ -60,6 +60,18 @@
         <h3>No doctors found</h3>
         <p>Try adding a new doctor to the system.</p>
       </div>
+
+      <!-- Load More Button -->
+      <div class="load-more-container" *ngIf="!isLastPage && doctors.length > 0">
+        <button class="btn-load-more" (click)="loadDoctors(true)" [disabled]="isMoreLoading">
+          <ng-container *ngIf="!isMoreLoading">
+            <i class="ri-arrow-down-s-line"></i> Load More Staff
+          </ng-container>
+          <ng-container *ngIf="isMoreLoading">
+            <i class="ri-loader-4-line spin"></i> Loading...
+          </ng-container>
+        </button>
+      </div>
     </div>
   </main>
 

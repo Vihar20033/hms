@@ -1,7 +1,7 @@
+import { AccessFeedbackModalComponent } from './shared/components/access-feedback-modal/access-feedback-modal.component';
 import { Component } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
-import { AccessFeedbackModalComponent } from './shared/components/feedback/access-feedback-modal/access-feedback-modal.component';
-import { StatusModalComponent } from './shared/components/feedback/status-modal/status-modal.component';
+import { StatusModalComponent } from './shared/components/status-modal/status-modal.component';
 
 @Component({
   selector: 'app-root',
@@ -13,3 +13,10 @@ import { StatusModalComponent } from './shared/components/feedback/status-modal/
 export class AppComponent {
   title = 'frontend';
 }
+
+
+
+
+
+
+

@@ -1,11 +1,11 @@
-import { CommonModule } from '@angular/common';
-import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { ApiResponse } from '../../../../core/models/common.models';
-import { Prescription } from '../../../../core/models/prescription.models';
-import { PrescriptionService } from '../../../../core/services/prescription.service';
-import { HeaderComponent } from '../../../../shared/components/layout/header/header.component';
-import { SidebarComponent } from '../../../../shared/components/layout/sidebar/sidebar.component';
+import { CommonModule } from '@angular/common';
+import { Component, OnInit } from '@angular/core';
+import { HeaderComponent } from '../../../../layout/header/header.component';
+import { Prescription } from '../../models/prescription.models';
+import { PrescriptionService } from '../../services/prescription.service';
+import { SidebarComponent } from '../../../../layout/sidebar/sidebar.component';
 
 @Component({
   selector: 'app-prescription-detail',
@@ -55,3 +55,15 @@ export class PrescriptionDetailComponent implements OnInit {
     }
   }
 }
+
+
+
+
+
+
+
+
+
+
+
+

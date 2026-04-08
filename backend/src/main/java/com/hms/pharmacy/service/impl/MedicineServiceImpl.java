@@ -2,6 +2,7 @@ package com.hms.pharmacy.service.impl;
 
 import com.hms.common.audit.AuditLogService;
 import com.hms.common.enums.MedicineCategory;
+import com.hms.common.util.SecurityUtils;
 import com.hms.pharmacy.dto.request.MedicineRequestDTO;
 import com.hms.pharmacy.dto.response.InventoryTransactionResponseDTO;
 import com.hms.pharmacy.dto.response.MedicineResponseDTO;
@@ -21,16 +22,16 @@ import org.springframework.data.domain.Slice;
 import org.springframework.data.domain.Sort;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
-
 import com.hms.common.exception.ConflictException;
 import org.springframework.dao.DataIntegrityViolationException;
+
+import com.hms.common.specification.SearchSpecification;
+import org.springframework.data.jpa.domain.Specification;
 
 @Service
 @RequiredArgsConstructor
@@ -40,6 +41,8 @@ public class MedicineServiceImpl implements MedicineService {
     private final MedicineMapper medicineMapper;
     private final InventoryTransactionRepository inventoryTransactionRepository;
     private final AuditLogService auditLogService;
+
+    private static final List<String> SEARCHABLE_FIELDS = List.of("name", "medicineCode", "manufacturer", "description");
 
     @Override
     @Transactional
@@ -63,7 +66,7 @@ public class MedicineServiceImpl implements MedicineService {
                     .build();
             inventoryTransactionRepository.save(transaction);
 
-            auditLogService.log(getCurrentUsername(), "MEDICINE_CREATE", "Medicine", savedMedicine.getId().toString(),
+            auditLogService.log(SecurityUtils.getCurrentUsername(), "MEDICINE_CREATE", "Medicine", savedMedicine.getId().toString(),
                     "name=" + savedMedicine.getName());
             return medicineMapper.toDto(savedMedicine);
         } catch (DataIntegrityViolationException e) {
@@ -85,7 +88,7 @@ public class MedicineServiceImpl implements MedicineService {
 
         medicineMapper.updateEntityFromDto(dto, existingMedicine);
         Medicine updatedMedicine = medicineRepository.save(existingMedicine);
-        auditLogService.log(getCurrentUsername(), "MEDICINE_UPDATE", "Medicine", id.toString(), "name=" + updatedMedicine.getName());
+        auditLogService.log(SecurityUtils.getCurrentUsername(), "MEDICINE_UPDATE", "Medicine", id.toString(), "name=" + updatedMedicine.getName());
         return medicineMapper.toDto(updatedMedicine);
     }
 
@@ -97,7 +100,7 @@ public class MedicineServiceImpl implements MedicineService {
                 .orElseThrow(() -> new MedicineNotFoundException("Medicine not found with ID: " + id));
 
         medicineRepository.delete(medicine);
-        auditLogService.log(getCurrentUsername(), "MEDICINE_DELETE", "Medicine", id.toString(), "name=" + medicine.getName());
+        auditLogService.log(SecurityUtils.getCurrentUsername(), "MEDICINE_DELETE", "Medicine", id.toString(), "name=" + medicine.getName());
     }
 
     @Override
@@ -168,7 +171,7 @@ public class MedicineServiceImpl implements MedicineService {
                     .build();
 
             inventoryTransactionRepository.save(transaction);
-            auditLogService.log(getCurrentUsername(), "MEDICINE_DISPENSE", "Medicine", item.getMedicineId().toString(), "qty=" + item.getQuantity());
+            auditLogService.log(SecurityUtils.getCurrentUsername(), "MEDICINE_DISPENSE", "Medicine", item.getMedicineId().toString(), "qty=" + item.getQuantity());
         }
     }
 
@@ -190,10 +193,8 @@ public class MedicineServiceImpl implements MedicineService {
                 .build();
 
         inventoryTransactionRepository.save(transaction);
-        auditLogService.log(getCurrentUsername(), "MEDICINE_RESTOCK", "Medicine", id.toString(), "qty=" + quantity);
+        auditLogService.log(SecurityUtils.getCurrentUsername(), "MEDICINE_RESTOCK", "Medicine", id.toString(), "qty=" + quantity);
     }
-
-
 
     @Override
     @Transactional(readOnly = true)
@@ -215,8 +216,11 @@ public class MedicineServiceImpl implements MedicineService {
                 .toList();
     }
 
-    private String getCurrentUsername() {
-        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-        return (auth != null && auth.isAuthenticated()) ? auth.getName() : "system";
+    @Override
+    @Transactional(readOnly = true)
+    public Slice<MedicineResponseDTO> getSearchableMedicineSlice(int page, int size, String query) {
+        PageRequest request = PageRequest.of(page, size, Sort.by(Sort.Direction.ASC, "name"));
+        Specification<Medicine> spec = SearchSpecification.fuzzySearch(query, SEARCHABLE_FIELDS);
+        return medicineRepository.findAll(spec, request).map(medicineMapper::toDto);
     }
 }

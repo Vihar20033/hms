@@ -1,26 +1,29 @@
-import { CommonModule } from '@angular/common';
-import { HttpErrorResponse } from '@angular/common/http';
-import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
-import { FormArray, FormBuilder, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
-import { AutoCompleteModule } from 'primeng/autocomplete';
-import { Appointment } from '../../../../core/models/appointment.models';
 import { ApiResponse } from '../../../../core/models/common.models';
-import { Doctor } from '../../../../core/models/doctor.models';
-import { Medicine } from '../../../../core/models/pharmacy.models';
-import { PrescriptionRequest } from '../../../../core/models/prescription.models';
-import { AppointmentService } from '../../../../core/services/appointment.service';
-import { AuthService } from '../../../../core/services/auth.service';
-import { DoctorService } from '../../../../core/services/doctor.service';
-import { PharmacyService } from '../../../../core/services/pharmacy.service';
-import { PrescriptionService } from '../../../../core/services/prescription.service';
-import { HeaderComponent } from '../../../../shared/components/layout/header/header.component';
-import { SidebarComponent } from '../../../../shared/components/layout/sidebar/sidebar.component';
+import { Appointment } from '../../../appointments/models/appointment.models';
+import { AppointmentService } from '../../../appointments/services/appointment.service';
+import { AuthService } from '../../../auth/services/auth.service';
+import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
+import { CommonModule } from '@angular/common';
+import { Doctor } from '../../../staff/models/doctor.models';
+import { DoctorService } from '../../../staff/services/doctor.service';
+import { FormArray, FormBuilder, FormGroup, ReactiveFormsModule } from '@angular/forms';
+import { from } from 'rxjs';
+import { HeaderComponent } from '../../../../layout/header/header.component';
+import { HttpErrorResponse } from '@angular/common/http';
+import { Medicine } from '../../../pharmacy/models/pharmacy.models';
+import { PharmacyService } from '../../../pharmacy/services/pharmacy.service';
+import { Prescription, PrescriptionRequest } from '../../models/prescription.models';
+import { PrescriptionService } from '../../services/prescription.service';
+import { Role, User } from '../../../auth/models/auth.models';
+import { SidebarComponent } from '../../../../layout/sidebar/sidebar.component';
+import { AutoCompleteModule } from 'primeng/autocomplete';
 import {
   calculatePrescriptionQuantity,
   createPrescriptionForm,
   createPrescriptionMedicineGroup,
   getPrescriptionMedicines,
+  stockValidator,
 } from '../../utils/prescription-create-form';
 import { filterPrescriptionMedicines, findDoctorIdByUserEmail } from '../../utils/prescription-create.utils';
 
@@ -181,3 +184,15 @@ export class PrescriptionCreateComponent implements OnInit {
     });
   }
 }
+
+
+
+
+
+
+
+
+
+
+
+

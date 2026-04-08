@@ -1,6 +1,10 @@
-import { Chart, ChartConfiguration } from 'chart.js';
-import { Appointment, AppointmentStatus } from '../../../core/models/appointment.models';
+import { Appointment, AppointmentStatus, Department } from '../../appointments/models/appointment.models';
+import { Chart, ChartConfiguration, TooltipItem } from 'chart.js';
 import { DashboardSummary, WeeklyStatistics } from '../../../core/models/common.models';
+import { Doctor } from '../../staff/models/doctor.models';
+import { map } from 'rxjs/operators';
+import { Patient } from '../../patients/models/patient.models';
+import { Role, User } from '../../auth/models/auth.models';
 
 export interface QuickAction {
   label: string;
@@ -213,7 +217,7 @@ export function createDepartmentChart(ctx: CanvasRenderingContext2D, data: Dashb
           titleFont: { size: 13 },
           bodyFont: { size: 13 },
           callbacks: {
-            label: (item) => ` ${item.label}: ${item.raw} visits`,
+            label: (item: TooltipItem<'doughnut'>) => ` ${item.label}: ${item.raw} visits`,
           },
         },
       },
@@ -222,3 +226,13 @@ export function createDepartmentChart(ctx: CanvasRenderingContext2D, data: Dashb
 
   return new Chart(ctx, config);
 }
+
+
+
+
+
+
+
+
+
+
