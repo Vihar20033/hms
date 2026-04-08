@@ -17,7 +17,7 @@ export class PrinterService {
   }
   
   generateMedicalRecordTitle(recordType: string, id: string, patientName: string): string {
-    const cleanId = id.split('-')[0].toUpperCase();
+    const cleanId = id.replace(/\D/g, '') || id;
     return `${recordType}_${cleanId}_${patientName.replace(/\s+/g, '_')}`;
   }
 }

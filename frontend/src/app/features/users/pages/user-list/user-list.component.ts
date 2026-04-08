@@ -5,6 +5,7 @@ import { getRoleBadgeClass } from '../utils/user-list.utils';
 import { HeaderComponent } from '../../../../layout/header/header.component';
 import { Role, User } from '../../../auth/models/auth.models';
 import { SidebarComponent } from '../../../../layout/sidebar/sidebar.component';
+import { StatusModalService } from '../../../../shared/services/status-modal.service';
 import { TableModule } from 'primeng/table';
 import { UserService } from '../../services/user.service';
 
@@ -20,7 +21,10 @@ export class UserListComponent implements OnInit {
   isLoading = true;
   Role = Role;
 
-  constructor(private userService: UserService) {}
+  constructor(
+    private userService: UserService,
+    private statusModalService: StatusModalService,
+  ) {}
 
   ngOnInit(): void {
     this.loadUsers();
@@ -39,17 +43,22 @@ export class UserListComponent implements OnInit {
     });
   }
 
-  onDelete(user: User): void {
+  async onDelete(user: User): Promise<void> {
     if (!user.id) return;
 
-    const confirmed = confirm(`Are you sure you want to delete user ${user.username}? This cannot be undone.`);
+    const confirmed = await this.statusModalService.confirm(
+      'Delete User',
+      `Delete user ${user.username}? This cannot be undone.`,
+      'Delete',
+    );
     if (confirmed) {
       this.userService.delete(user.id!).subscribe({
         next: () => {
+          this.statusModalService.showSuccess('User Deleted', 'The user account was removed.');
           this.loadUsers();
         },
         error: (err) => {
-          console.error('Error deleting user', err);
+          this.statusModalService.showError('Delete Failed', err.error?.message || 'Could not delete this user.');
         },
       });
     }

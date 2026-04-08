@@ -27,16 +27,30 @@ public class RateLimitConfig {
     @Value("${spring.data.redis.password:}")
     private String redisPassword;
 
+    @Value("${spring.data.redis.username:}")
+    private String redisUsername;
+
+    @Value("${spring.data.redis.ssl.enabled:false}")
+    private boolean redisSslEnabled;
+
     @Bean
     public RedisClient redisClient() {
         RedisURI.Builder builder = RedisURI.builder()
                 .withHost(redisHost)
                 .withPort(redisPort);
-        
-        if (redisPassword != null && !redisPassword.isBlank()) {
-            builder.withPassword(redisPassword.toCharArray());
+
+        if (redisSslEnabled) {
+            builder.withSsl(true);
         }
-        
+
+        if (redisPassword != null && !redisPassword.isBlank()) {
+            if (redisUsername != null && !redisUsername.isBlank()) {
+                builder.withAuthentication(redisUsername, redisPassword);
+            } else {
+                builder.withPassword(redisPassword.toCharArray());
+            }
+        }
+
         return RedisClient.create(builder.build());
     }
 

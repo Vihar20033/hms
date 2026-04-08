@@ -153,8 +153,7 @@ export class BillingListComponent implements OnInit {
         this.isMoreLoading = false;
         this.cdr.markForCheck();
       },
-      error: (error) => {
-        console.error('Error loading billings:', error);
+      error: () => {
         this.isLoading = false;
         this.isMoreLoading = false;
         this.cdr.markForCheck();
@@ -316,10 +315,17 @@ export class BillingListComponent implements OnInit {
     return getBillingStatusClass(status);
   }
 
-  onDelete(id: number): void {
-    if (!confirm('Delete this billing record?')) return;
+  async onDelete(id: number): Promise<void> {
+    const confirmed = await this.statusModalService.confirm('Delete Invoice', 'Delete this billing record?', 'Delete');
+    if (!confirmed) return;
+
     this.billingService.delete(id).subscribe({
-      next: () => this.loadBillings(),
+      next: () => {
+        this.statusModalService.showSuccess('Invoice Deleted', 'The billing record was removed.');
+        this.loadBillings();
+      },
+      error: (err: HttpErrorResponse) =>
+        this.statusModalService.showError('Delete Failed', err.error?.message || 'Could not delete this invoice.'),
     });
   }
 

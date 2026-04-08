@@ -8,6 +8,7 @@ import { Patient } from '../../models/patient.models';
 import { PatientService } from '../../services/patient.service';
 import { Router, RouterLink } from '@angular/router';
 import { SidebarComponent } from '../../../../layout/sidebar/sidebar.component';
+import { StatusModalService } from '../../../../shared/services/status-modal.service';
 import { TableModule } from 'primeng/table';
 import { Subject, debounceTime, distinctUntilChanged } from 'rxjs';
 import { InputTextModule } from 'primeng/inputtext';
@@ -43,6 +44,7 @@ export class PatientListComponent implements OnInit {
     private patientService: PatientService,
     private authService: AuthService,
     private router: Router,
+    private statusModalService: StatusModalService,
   ) {
     this.searchSubject.pipe(
       debounceTime(400),
@@ -110,12 +112,20 @@ export class PatientListComponent implements OnInit {
     this.router.navigate(['/patients/register'], { queryParams: { patientId } });
   }
 
-  deletePatient(patientId: number): void {
-    if (!confirm('Are you sure you want to delete this patient record?')) return;
+  async deletePatient(patientId: number): Promise<void> {
+    const confirmed = await this.statusModalService.confirm(
+      'Delete Patient',
+      'Delete this patient record?',
+      'Delete',
+    );
+    if (!confirmed) return;
 
     this.patientService.delete(patientId).subscribe({
-      next: () => this.loadPatients(),
-      error: () => {},
+      next: () => {
+        this.statusModalService.showSuccess('Patient Deleted', 'The patient record was removed.');
+        this.loadPatients();
+      },
+      error: (err) => this.statusModalService.showError('Delete Failed', err.error?.message || 'Could not delete this patient.'),
     });
   }
 }

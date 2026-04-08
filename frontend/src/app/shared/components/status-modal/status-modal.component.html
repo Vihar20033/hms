@@ -16,11 +16,18 @@
     <h2>{{ state.title }}</h2>
     <p>{{ state.message }}</p>
 
-    <button
-      pButton
-      [label]="state.type === 'error' ? 'Dismiss' : 'Got it'"
-      (click)="onHide()"
-      class="status-btn"
-    ></button>
+    <div class="status-actions" *ngIf="state.confirmMode; else defaultAction">
+      <button pButton [label]="state.cancelLabel || 'Cancel'" (click)="onConfirm(false)" class="status-btn secondary"></button>
+      <button pButton [label]="state.confirmLabel || 'Confirm'" (click)="onConfirm(true)" class="status-btn"></button>
+    </div>
+
+    <ng-template #defaultAction>
+      <button
+        pButton
+        [label]="state.type === 'error' ? 'Dismiss' : 'Got it'"
+        (click)="onHide()"
+        class="status-btn"
+      ></button>
+    </ng-template>
   </div>
 </p-dialog>

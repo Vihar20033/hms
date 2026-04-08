@@ -33,6 +33,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Slice;
+import org.springframework.data.domain.SliceImpl;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Sort;
 import org.springframework.security.access.AccessDeniedException;
@@ -173,7 +174,7 @@ public class PrescriptionServiceImpl implements PrescriptionService {
             return prescriptionRepository.findByDoctorUserId(user.getId(), request).map(prescriptionMapper::toDto);
         }
 
-        return Slice.empty();
+        return new SliceImpl<>(Collections.emptyList(), request, false);
     }
 
 

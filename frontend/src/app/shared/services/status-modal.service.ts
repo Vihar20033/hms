@@ -8,6 +8,9 @@ export interface StatusModalState {
   type: StatusType;
   title: string;
   message: string;
+  confirmMode?: boolean;
+  confirmLabel?: string;
+  cancelLabel?: string;
 }
 
 @Injectable({
@@ -16,6 +19,7 @@ export interface StatusModalState {
 
 // Service to manage the state of a status modal (success, error, info, warning)
 export class StatusModalService {
+  private confirmResolver?: (confirmed: boolean) => void;
   private state = new BehaviorSubject<StatusModalState>({
     visible: false,
     type: 'success',
@@ -41,7 +45,31 @@ export class StatusModalService {
     this.state.next({ visible: true, type: 'warning', title, message });
   }
 
+  confirm(title: string, message: string, confirmLabel = 'Confirm', cancelLabel = 'Cancel'): Promise<boolean> {
+    this.confirmResolver?.(false);
+    return new Promise<boolean>((resolve) => {
+      this.confirmResolver = resolve;
+      this.state.next({
+        visible: true,
+        type: 'warning',
+        title,
+        message,
+        confirmMode: true,
+        confirmLabel,
+        cancelLabel,
+      });
+    });
+  }
+
+  resolveConfirm(confirmed: boolean): void {
+    this.confirmResolver?.(confirmed);
+    this.confirmResolver = undefined;
+    this.hide();
+  }
+
   hide(): void {
+    this.confirmResolver?.(false);
+    this.confirmResolver = undefined;
     this.state.next({ ...this.state.value, visible: false });
   }
 }

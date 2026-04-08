@@ -28,6 +28,7 @@ import com.hms.common.util.SecurityUtils;
 
 import java.time.LocalDateTime;
 import java.time.LocalTime;
+import java.time.Duration;
 import java.time.format.DateTimeFormatter;
 import java.util.Arrays;
 import java.util.List;
@@ -118,6 +119,7 @@ public class AppointmentServiceImpl implements AppointmentService {
         String dateKey = appointment.getAppointmentTime().toLocalDate().format(DateTimeFormatter.ISO_DATE);
         String tokenRedisKey = "tokens:" + appointment.getDoctor().getId() + ":" + dateKey;
         Long nextToken = redisTemplate.opsForValue().increment(tokenRedisKey);
+        redisTemplate.expire(tokenRedisKey, Duration.ofDays(2));
         
         String prefix = appointment.isEmergency() ? "EM" : "P";
         appointment.setTokenNumber(String.format("%s-%03d", prefix, nextToken));

@@ -12,6 +12,7 @@ import { FormsModule } from '@angular/forms';
 import { HeaderComponent } from '../../../../layout/header/header.component';
 import { Router, RouterLink } from '@angular/router';
 import { SidebarComponent } from '../../../../layout/sidebar/sidebar.component';
+import { StatusModalService } from '../../../../shared/services/status-modal.service';
 
 @Component({
   selector: 'app-doctor-list',
@@ -46,6 +47,7 @@ export class DoctorListComponent implements OnInit {
     private doctorService: DoctorService,
     private appointmentService: AppointmentService,
     private router: Router,
+    private statusModalService: StatusModalService,
   ) { }
 
   ngOnInit(): void {
@@ -131,8 +133,7 @@ export class DoctorListComponent implements OnInit {
           this.reassignErrorMessage = '';
           this.targetDoctorId = null;
         } else {
-          // General error handling
-          alert(err.error?.message || 'Failed to delete doctor. Please try again.');
+          this.statusModalService.showError('Delete Failed', err.error?.message || 'Could not delete this doctor.');
         }
       },
     });

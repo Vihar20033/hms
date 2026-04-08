@@ -119,7 +119,6 @@ export class PatientRegistrationComponent implements OnInit {
         },
         error: (err: HttpErrorResponse) => {
           this.isLoading = false;
-          console.error('Registration failed:', err);
           this.errorMessage =
             err.error?.message || err.message || 'Failed to register patient. Please check your data.';
         },

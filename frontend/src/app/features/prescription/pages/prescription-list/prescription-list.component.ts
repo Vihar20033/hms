@@ -6,6 +6,7 @@ import { Prescription } from '../../models/prescription.models';
 import { PrescriptionService } from '../../services/prescription.service';
 import { RouterLink } from '@angular/router';
 import { SidebarComponent } from '../../../../layout/sidebar/sidebar.component';
+import { StatusModalService } from '../../../../shared/services/status-modal.service';
 import { TableModule } from 'primeng/table';
 import { canManagePrescriptions } from '../../utils/prescription-list.utils';
 
@@ -29,6 +30,7 @@ export class PrescriptionListComponent implements OnInit {
   constructor(
     private prescriptionService: PrescriptionService,
     private authService: AuthService,
+    private statusModalService: StatusModalService,
   ) { }
 
   ngOnInit(): void {
@@ -54,8 +56,7 @@ export class PrescriptionListComponent implements OnInit {
         this.isLoading = false;
         this.isMoreLoading = false;
       },
-      error: (error) => {
-        console.error('Error loading prescriptions:', error);
+      error: () => {
         this.isLoading = false;
         this.isMoreLoading = false;
       },
@@ -72,17 +73,22 @@ export class PrescriptionListComponent implements OnInit {
     }
   }
 
-  onDelete(id: number): void {
-    if (confirm('Are you sure you want to delete this clinical record? This action cannot be undone.')) {
-      this.prescriptionService.delete(id).subscribe({
-        next: () => {
-          this.loadPrescriptions();
-        },
-        error: () => {
-          alert('Error deleting prescription');
-        },
-      });
-    }
+  async onDelete(id: number): Promise<void> {
+    const confirmed = await this.statusModalService.confirm(
+      'Delete Prescription',
+      'Delete this clinical record? This action cannot be undone.',
+      'Delete',
+    );
+    if (!confirmed) return;
+
+    this.prescriptionService.delete(id).subscribe({
+      next: () => {
+        this.statusModalService.showSuccess('Prescription Deleted', 'The clinical record was removed.');
+        this.loadPrescriptions();
+      },
+      error: (err) =>
+        this.statusModalService.showError('Delete Failed', err.error?.message || 'Could not delete this prescription.'),
+    });
   }
 
   get canManage(): boolean {

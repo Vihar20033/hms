@@ -13,6 +13,7 @@ import { HeaderComponent } from '../../../../layout/header/header.component';
 import { Prescription } from '../../../prescription/models/prescription.models';
 import { Router, RouterLink } from '@angular/router';
 import { SidebarComponent } from '../../../../layout/sidebar/sidebar.component';
+import { StatusModalService } from '../../../../shared/services/status-modal.service';
 import { TableModule } from 'primeng/table';
 
 @Component({
@@ -44,6 +45,7 @@ export class AppointmentListComponent implements OnInit {
     private router: Router,
     private billingService: BillingService,
     private cdr: ChangeDetectorRef,
+    private statusModalService: StatusModalService,
   ) {}
 
   ngOnInit(): void {
@@ -133,17 +135,23 @@ export class AppointmentListComponent implements OnInit {
     this.router.navigate(['/appointments/book'], { queryParams: { appointmentId: id } });
   }
 
-  onCancel(id: number): void {
-    if (!confirm('Cancel this appointment?')) return;
+  async onCancel(id: number): Promise<void> {
+    const confirmed = await this.statusModalService.confirm('Cancel Appointment', 'Cancel this appointment?', 'Cancel Appointment');
+    if (!confirmed) return;
+
     this.appointmentService.updateStatus(id, AppointmentStatus.CANCELLED).subscribe(() => {
+      this.statusModalService.showSuccess('Appointment Cancelled', 'The appointment status was updated.');
       this.loadSummary();
       this.loadAppointments();
     });
   }
 
-  onDelete(id: number): void {
-    if (!confirm('Delete this appointment?')) return;
+  async onDelete(id: number): Promise<void> {
+    const confirmed = await this.statusModalService.confirm('Delete Appointment', 'Delete this appointment?', 'Delete');
+    if (!confirmed) return;
+
     this.appointmentService.delete(id).subscribe(() => {
+      this.statusModalService.showSuccess('Appointment Deleted', 'The appointment was removed.');
       this.loadSummary();
       this.loadAppointments();
     });

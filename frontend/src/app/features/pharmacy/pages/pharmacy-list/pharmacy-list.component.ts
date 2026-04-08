@@ -12,6 +12,7 @@ import { InputTextModule } from 'primeng/inputtext';
 import { Medicine, MedicineCategory } from '../../models/pharmacy.models';
 import { PharmacyService } from '../../services/pharmacy.service';
 import { SidebarComponent } from '../../../../layout/sidebar/sidebar.component';
+import { StatusModalService } from '../../../../shared/services/status-modal.service';
 import { TableModule } from 'primeng/table';
 import { Subject, debounceTime, distinctUntilChanged } from 'rxjs';
 import { createMedicineForm, createRestockForm } from '../../utils/pharmacy-list-form';
@@ -73,6 +74,7 @@ export class PharmacyListComponent implements OnInit {
     private pharmacyService: PharmacyService,
     private authService: AuthService,
     private fb: FormBuilder,
+    private statusModalService: StatusModalService,
   ) {
     this.searchSubject.pipe(
       debounceTime(400),
@@ -256,13 +258,17 @@ export class PharmacyListComponent implements OnInit {
     });
   }
 
-  onDelete(id: number): void {
-    if (!confirm('Delete this medicine?')) return;
+  async onDelete(id: number): Promise<void> {
+    const confirmed = await this.statusModalService.confirm('Delete Medicine', 'Delete this medicine?', 'Delete');
+    if (!confirmed) return;
+
     this.pharmacyService.delete(id).subscribe({
       next: () => {
+        this.statusModalService.showSuccess('Medicine Deleted', 'The medicine was removed from inventory.');
         this.loadMedicines();
       },
-      error: () => {},
+      error: (err: HttpErrorResponse) =>
+        this.statusModalService.showError('Delete Failed', err.error?.message || 'Could not delete this medicine.'),
     });
   }
 

@@ -42,6 +42,11 @@ export class StatusModalComponent implements OnInit {
     this.visible = false;
     this.statusModalService.hide();
   }
+
+  onConfirm(confirmed: boolean): void {
+    this.visible = false;
+    this.statusModalService.resolveConfirm(confirmed);
+  }
 }
 
 
