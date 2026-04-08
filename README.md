@@ -2,6 +2,22 @@
 
 Production-oriented Hospital Management System built as a modular monolith with a Spring Boot 3 backend and Angular 17 frontend. The application covers patient registration, appointments, doctor onboarding, prescriptions, pharmacy inventory, billing, audit logging, and role-based access control.
 
+## Table of Contents
+
+- [Architecture](#architecture)
+- [System Diagram](#system-diagram)
+- [Implemented Features](#implemented-features)
+- [Application Flow](#application-flow)
+- [Production Hardening Included](#production-hardening-included)
+- [Role Workspaces](#role-workspaces)
+- [Role Module APIs](#role-module-apis)
+- [Local Setup](#local-setup)
+- [Configuration](#configuration)
+- [Production Safety](#production-safety)
+- [Security Notes](#security-notes)
+- [Troubleshooting](#troubleshooting)
+- [Verification](#verification)
+
 ## Architecture
 
 - Backend: Spring Boot 3.3, Spring Security 6, Spring Data JPA, Hibernate, MapStruct, Lombok, Bucket4j, Redis.
@@ -9,6 +25,52 @@ Production-oriented Hospital Management System built as a modular monolith with 
 - Database: MySQL 8 and Redis 7 (caching & rate limiting) for normal runtime.
 - Security: JWT access tokens, refresh-token rotation/revocation, BCrypt password hashing, method-level authorization, security headers, and distributed Redis-backed rate limiting.
 - Caching: Multi-level caching for Doctor, Patient, and Medicine entities to reduce DB load and improve response times.
+
+## System Diagram
+
+```mermaid
+flowchart LR
+    Users[Hospital users\nAdmin, Doctor, Nurse, Receptionist,\nPharmacist, Lab Staff, Patient]
+    Browser[Angular 17 SPA\nPrimeNG UI, route guards,\nJWT interceptor, error interceptor]
+    API[Spring Boot 3 REST API\nModular monolith]
+    Security[Security layer\nSpring Security, JWT,\nmethod authorization,\nrate limiting]
+    Modules[Domain modules\nAuth, Users, Patients,\nDoctors, Appointments,\nPrescriptions, Pharmacy,\nBilling, Dashboard, Audit]
+    MySQL[(MySQL 8\ntransactional data)]
+    Redis[(Redis 7\ncache and Bucket4j buckets)]
+    Logs[(Application logs\nstartup verification and audit trail)]
+
+    Users --> Browser
+    Browser -->|HTTP /api/v1| API
+    API --> Security
+    Security --> Modules
+    Modules -->|JPA / Hibernate| MySQL
+    Modules -->|cache reads and writes| Redis
+    Security -->|distributed quotas| Redis
+    Modules --> Logs
+```
+
+## Implemented Features
+
+- Authentication and session management with login, registration, change password, JWT access tokens, refresh-token rotation, logout revocation, and BCrypt password hashing.
+- Role-based access for ADMIN, DOCTOR, NURSE, RECEPTIONIST, PHARMACIST, LABORATORY_STAFF, and PATIENT across backend method security and Angular route/sidebar visibility.
+- Dashboard workflows for operational summaries, weekly statistics, department statistics, and appointment views.
+- Patient management with registration, patient directory, patient-owned `/me` access, duplicate-patient handling, and slice-based list loading.
+- Appointment management with booking, appointment list views, doctor availability checks, slot conflict prevention, status tracking, and patient-owned appointment access.
+- Staff and doctor onboarding with doctor registration, doctor directory, department mapping, and indexed doctor lookup paths.
+- Prescription workflows with prescription creation from appointments, prescription details, patient prescription access, and prescription medicine line items.
+- Pharmacy workflows with medicine catalog management, restock and dispense operations, inventory transaction logging, stock validation, and medicine slice endpoints.
+- Billing workflows with bill creation, bill items, payment status and method handling, patient billing access, and patient payment action support.
+- Audit logging for administrative visibility through `GET /api/v1/audit-logs/slice?page=0&size=25` and the Angular `/audit-logs` page.
+- Production-oriented platform behavior including soft delete, centralized exception responses, validation errors, CORS configuration, startup database verification, logging configuration, caching, and distributed rate limiting.
+
+## Application Flow
+
+1. A user signs in from the Angular application on `http://localhost:4200`.
+2. The frontend stores the authenticated session through the auth service and sends API requests through the JWT interceptor.
+3. Spring Security validates the token, applies role and method authorization, and enforces Redis-backed rate limits before requests reach domain modules.
+4. Domain services perform validation, ownership checks, soft-delete-aware data access, audit logging, caching, and persistence through Spring Data JPA.
+5. MySQL stores hospital records while Redis supports shared rate-limit buckets and cache entries for high-traffic entities.
+6. Angular route guards, role-route maps, sidebar visibility, modals, and interceptors keep the user experience aligned with backend access rules.
 
 ## Production Hardening Included
 
