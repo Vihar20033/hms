@@ -10,6 +10,17 @@
           <h1>Clinical Prescriptions</h1>
           <p>Review and manage all clinical orders and medication histories.</p>
         </div>
+        <div class="header-actions">
+          <div class="search-container">
+            <i class="ri-search-line"></i>
+            <input
+              type="text"
+              class="search-input"
+              placeholder="Search patient, doctor, diagnosis..."
+              (input)="onSearch($event)"
+            />
+          </div>
+        </div>
       </div>
 
       <div class="card p-0">
@@ -26,7 +37,7 @@
                 <th>Prescribed By</th>
                 <th>Diagnostic Summary</th>
                 <th>Medication Plan</th>
-                <th>Action Center</th>
+                <th>Actions</th>
               </tr>
             </ng-template>
             <ng-template pTemplate="body" let-p>
@@ -40,21 +51,35 @@
                 <td>
                   <span class="med-count">{{ p.medicines.length }} Rx Items</span>
                 </td>
-                <td class="actions">
-                   @if (p.reportUrl) {
-                    <button class="btn-sm-outline" style="border-color: var(--brand-primary); color: var(--brand-primary);" (click)="onViewCloudReport(p.reportUrl)" title="View Cloud Report">
-                      <i class="ri-file-pdf-line"></i> Report
+                <td class="actions" (click)="$event.stopPropagation()">
+                  <button class="btn-view" [routerLink]="['/prescriptions', p.id]" title="View Full Details">
+                    View
+                  </button>
+                  <div class="action-menu">
+                    <button class="btn-more" type="button" (click)="toggleMenu(p.id)" title="More actions">
+                      <i class="ri-more-2-fill"></i>
                     </button>
-                  }
-                  <button class="btn-sm-outline" (click)="onPrint(p.id)" title="Print Prescription">
-                    <i class="ri-printer-line"></i> Print
-                  </button>
-                  <button class="btn-sm-primary" [routerLink]="['/prescriptions', p.id]" title="View Full Details">
-                    <i class="ri-eye-line"></i> View
-                  </button>
-                  <button class="btn-sm-danger" *ngIf="canManage" (click)="onDelete(p.id)" title="Delete Record">
-                    <i class="ri-delete-bin-line"></i> Delete
-                  </button>
+                    @if (openMenuId === p.id) {
+                      <div class="menu-panel">
+                        <button class="menu-item" type="button" (click)="onPrint(p.id)">
+                          <i class="ri-printer-line"></i>
+                          Print prescription
+                        </button>
+                        @if (p.reportUrl) {
+                          <button class="menu-item" type="button" (click)="onViewCloudReport(p.reportUrl)">
+                            <i class="ri-file-pdf-line"></i>
+                            Cloud report
+                          </button>
+                        }
+                        @if (canManage) {
+                          <button class="menu-item danger" type="button" (click)="onDelete(p.id)">
+                            <i class="ri-delete-bin-line"></i>
+                            Delete record
+                          </button>
+                        }
+                      </div>
+                    }
+                  </div>
                 </td>
               </tr>
             </ng-template>

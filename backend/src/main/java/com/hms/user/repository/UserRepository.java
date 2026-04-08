@@ -1,6 +1,8 @@
 package com.hms.user.repository;
 
 import com.hms.user.entity.User;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Slice;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
@@ -14,6 +16,13 @@ public interface UserRepository extends JpaRepository<User, Long> {
     Optional<User> findByUsername(String username);
 
     Optional<User> findByEmail(String email);
+
+    @Query("""
+            SELECT u FROM User u
+            WHERE LOWER(u.username) LIKE LOWER(CONCAT('%', :query, '%'))
+               OR LOWER(u.email) LIKE LOWER(CONCAT('%', :query, '%'))
+            """)
+    Slice<User> searchUsers(@Param("query") String query, Pageable pageable);
 
     boolean existsByUsername(String username);
 

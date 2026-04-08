@@ -53,6 +53,7 @@ export class PharmacyListComponent implements OnInit {
   pageSize = 20;
   isLastPage = false;
   isMoreLoading = false;
+  openMenuId: number | null = null;
 
   userRole: string | null = null;
   showAddForm = false;
@@ -156,6 +157,7 @@ export class PharmacyListComponent implements OnInit {
   }
 
   openEditForm(med: Medicine): void {
+    this.openMenuId = null;
     this.editingMedicine = med;
     this.showEditForm = true;
     this.showAddForm = false;
@@ -177,6 +179,7 @@ export class PharmacyListComponent implements OnInit {
   }
 
   openRestockForm(med: Medicine): void {
+    this.openMenuId = null;
     this.restockingMedicine = med;
     this.showRestockForm = true;
     this.showAddForm = false;
@@ -259,6 +262,7 @@ export class PharmacyListComponent implements OnInit {
   }
 
   async onDelete(id: number): Promise<void> {
+    this.openMenuId = null;
     const confirmed = await this.statusModalService.confirm('Delete Medicine', 'Delete this medicine?', 'Delete');
     if (!confirmed) return;
 
@@ -270,6 +274,10 @@ export class PharmacyListComponent implements OnInit {
       error: (err: HttpErrorResponse) =>
         this.statusModalService.showError('Delete Failed', err.error?.message || 'Could not delete this medicine.'),
     });
+  }
+
+  toggleMenu(id: number): void {
+    this.openMenuId = this.openMenuId === id ? null : id;
   }
 
   isLowStock(med: Medicine): boolean {

@@ -1,9 +1,6 @@
 package com.hms.auth.service.impl;
 
-import com.hms.common.enums.Department;
 import com.hms.common.enums.Role;
-import com.hms.doctor.repository.DoctorRepository;
-import com.hms.doctor.entity.Doctor;
 import com.hms.auth.dto.request.ChangePasswordRequest;
 import com.hms.auth.dto.request.LoginRequest;
 import com.hms.auth.dto.request.RegisterRequest;
@@ -13,6 +10,7 @@ import com.hms.auth.entity.RevokedRefreshToken;
 import com.hms.auth.repository.RevokedRefreshTokenRepository;
 import com.hms.auth.service.AuthService;
 import com.hms.common.audit.AuditLogService;
+import com.hms.common.exception.BadRequestException;
 import com.hms.user.exception.EmailAlreadyExistsException;
 import com.hms.user.exception.InvalidCredentialsException;
 import com.hms.user.exception.UserNotFoundException;
@@ -27,7 +25,6 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 
@@ -41,7 +38,6 @@ public class AuthServiceImpl implements AuthService {
     private final AuthenticationManager authenticationManager;
     private final JwtUtil jwtUtil;
     private final AuditLogService auditLogService;
-    private final DoctorRepository doctorRepository;
     private final RevokedRefreshTokenRepository revokedRefreshTokenRepository;
 
     @Override
@@ -55,6 +51,10 @@ public class AuthServiceImpl implements AuthService {
             throw new EmailAlreadyExistsException("Email already exists");
         }
 
+        if (request.getRole() == Role.DOCTOR) {
+            throw new BadRequestException("Doctors must be created from Staff > Register Doctor so clinical details are complete.");
+        }
+
         User user = new User();
         user.setUsername(request.getUsername());
         user.setEmail(request.getEmail());
@@ -64,22 +64,7 @@ public class AuthServiceImpl implements AuthService {
         user.setEnabled(true);
         user.setPasswordChangeRequired(false);
 
-        User savedUser = userRepository.save(user);
-
-        // Auto-create Doctor profile if role is DOCTOR
-        if (request.getRole() == Role.DOCTOR) {
-            doctorRepository.save(Doctor.builder()
-                    .userId(savedUser.getId())
-                    .firstName(savedUser.getUsername())
-                    .consultationFee(new BigDecimal("50.00"))
-                    .lastName("(Auto-Generated)")
-                    .specialization("General Medicine")
-                    .department(Department.GENERAL_MEDICINE)
-                    .registrationNumber("REG-" + savedUser.getId())
-                    .email(savedUser.getEmail())
-                    .isAvailable(true)
-                    .build());
-        }
+        userRepository.save(user);
     }
 
     @Override
@@ -125,6 +110,9 @@ public class AuthServiceImpl implements AuthService {
     public AuthResponse refreshToken(TokenRefreshRequest request) {
 
         String refreshToken = request.getRefreshToken();
+        if (refreshToken == null || refreshToken.isBlank()) {
+            throw new InvalidCredentialsException("Refresh token is missing. Please log in again.");
+        }
 
         if (!jwtUtil.validateToken(refreshToken)) {
             throw new InvalidCredentialsException("Invalid refresh token");

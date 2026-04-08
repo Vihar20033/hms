@@ -1,6 +1,8 @@
 package com.hms.billing.repository;
 
 import com.hms.billing.entity.Billing;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Slice;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
@@ -15,6 +17,18 @@ import java.util.List;
 public interface BillingRepository extends JpaRepository<Billing, Long> {
 
     List<Billing> findByPatientId(Long patientId);
+
+    @Query("""
+            SELECT b FROM Billing b
+            JOIN b.patient p
+            WHERE LOWER(b.invoiceNumber) LIKE LOWER(CONCAT('%', :query, '%'))
+               OR LOWER(p.name) LIKE LOWER(CONCAT('%', :query, '%'))
+               OR LOWER(p.contactNumber) LIKE LOWER(CONCAT('%', :query, '%'))
+               OR LOWER(COALESCE(p.email, '')) LIKE LOWER(CONCAT('%', :query, '%'))
+               OR LOWER(COALESCE(b.insuranceProvider, '')) LIKE LOWER(CONCAT('%', :query, '%'))
+               OR LOWER(COALESCE(b.insuranceClaimNumber, '')) LIKE LOWER(CONCAT('%', :query, '%'))
+            """)
+    Slice<Billing> searchBillings(@Param("query") String query, Pageable pageable);
 
     boolean existsByAppointmentId(Long appointmentId);
 

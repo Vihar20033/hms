@@ -16,6 +16,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import org.jspecify.annotations.NonNull;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Component;
@@ -27,6 +28,7 @@ import java.util.function.Supplier;
 
 @Component
 @RequiredArgsConstructor
+@ConditionalOnProperty(prefix = "hms.rate-limit", name = "enabled", havingValue = "true", matchIfMissing = true)
 public class RateLimitingFilter extends OncePerRequestFilter {
 
     private final RateLimitProperties properties;

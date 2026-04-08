@@ -204,7 +204,7 @@
             <div class="card-header">
               <div>
                 <h3>Hospital Activity Analysis</h3>
-                <span class="subtitle">Weekly patient and appointment trends</span>
+                <span class="subtitle">Side-by-side weekly patient and appointment counts</span>
               </div>
             </div>
             <div class="card-body">
@@ -215,7 +215,7 @@
           </div>
 
           <!-- Department Distribution Chart -->
-          <div class="grid-card full-width">
+          <div class="grid-card half-width">
             <div class="card-header">
               <div>
                 <h3>Department Distribution</h3>
@@ -223,8 +223,49 @@
               </div>
             </div>
             <div class="card-body">
+              <div class="department-insight-layout">
+                <div class="chart-stage">
+                  <canvas #deptChart></canvas>
+                </div>
+                <div class="department-insights">
+                  <div class="insight-summary">
+                    <span>Total Department Visits</span>
+                    <strong>{{ getDepartmentTotal(data) | number }}</strong>
+                  </div>
+
+                  @if (data.departmentStats.length > 0) {
+                    <div class="insight-list">
+                      @for (dept of getTopDepartments(data); track dept.department) {
+                        <div class="insight-row">
+                          <div>
+                            <strong>{{ formatDepartmentName(dept.department) }}</strong>
+                            <span>{{ getDepartmentPercent(dept.appointmentCount, data) }}% of visits</span>
+                          </div>
+                          <b>{{ dept.appointmentCount | number }}</b>
+                        </div>
+                      }
+                    </div>
+                  } @else {
+                    <div class="empty-insight">
+                      No department visits yet.
+                    </div>
+                  }
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Daily Visit Flow Chart -->
+          <div class="grid-card half-width">
+            <div class="card-header">
+              <div>
+                <h3>Daily Visit Flow</h3>
+                <span class="subtitle">Scheduled, waiting, and completed visits</span>
+              </div>
+            </div>
+            <div class="card-body">
               <div class="chart-stage">
-                <canvas #deptChart></canvas>
+                <canvas #visitFlowChart></canvas>
               </div>
             </div>
           </div>

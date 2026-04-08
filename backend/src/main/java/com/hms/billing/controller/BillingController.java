@@ -1,6 +1,7 @@
 package com.hms.billing.controller;
 
 import com.hms.common.response.ApiResponse;
+import com.hms.common.response.SliceResponse;
 import com.hms.billing.dto.request.BillingRequestDTO;
 import com.hms.billing.dto.response.BillingResponseDTO;
 import com.hms.common.enums.PaymentStatus;
@@ -46,6 +47,28 @@ public class BillingController {
             @RequestParam(name = "size", defaultValue = "10") int size) {
         return ResponseEntity.ok(ApiResponse.success(
                 billingService.getBillingSlice(page, size)));
+    }
+
+    @PreAuthorize("hasAnyRole('ADMIN','RECEPTIONIST')")
+    @GetMapping("/slice")
+    public ResponseEntity<ApiResponse<SliceResponse<BillingResponseDTO>>> getBillingSlice(
+            @RequestParam(name = "page", defaultValue = "0") int page,
+            @RequestParam(name = "size", defaultValue = "15") int size,
+            @RequestParam(name = "query", required = false) String query) {
+        Slice<BillingResponseDTO> slice = billingService.getBillingSlice(
+                Math.max(page, 0),
+                Math.min(Math.max(size, 1), 100),
+                query);
+
+        return ResponseEntity.ok(ApiResponse.success(SliceResponse.<BillingResponseDTO>builder()
+                .content(slice.getContent())
+                .page(slice.getNumber())
+                .size(slice.getSize())
+                .first(slice.isFirst())
+                .last(slice.isLast())
+                .hasNext(slice.hasNext())
+                .numberOfElements(slice.getNumberOfElements())
+                .build()));
     }
 
     @PreAuthorize("hasAnyRole('ADMIN','RECEPTIONIST')")

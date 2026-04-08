@@ -7,12 +7,12 @@ import { BillingService } from '../services/billing.service';
 import { BillingFormComponent } from '../components/billing-form/billing-form.component';
 import { BillingTableComponent } from '../components/billing-table/billing-table.component';
 import { BillingViewModalComponent } from '../components/billing-view-modal/billing-view-modal.component';
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnDestroy, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { DialogModule } from 'primeng/dialog';
 import { DropdownModule } from 'primeng/dropdown';
 import { FormArray, FormBuilder, FormGroup, FormsModule } from '@angular/forms';
-import { from } from 'rxjs';
+import { Subject, debounceTime, distinctUntilChanged, takeUntil } from 'rxjs';
 import { HeaderComponent } from '../../../layout/header/header.component';
 import { HttpErrorResponse } from '@angular/common/http';
 import { Patient } from '../../patients/models/patient.models';
@@ -47,7 +47,7 @@ import {
   styleUrl: './billing-list.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class BillingListComponent implements OnInit {
+export class BillingListComponent implements OnInit, OnDestroy {
   billings: Billing[] = [];
   patients: Patient[] = [];
   isLoading = true;
@@ -62,6 +62,9 @@ export class BillingListComponent implements OnInit {
   pageSize = 15;
   isLastPage = false;
   isMoreLoading = false;
+  searchQuery = '';
+  private searchSubject = new Subject<string>();
+  private destroy$ = new Subject<void>();
 
   billingForm!: FormGroup;
   today: Date = new Date();
@@ -93,11 +96,24 @@ export class BillingListComponent implements OnInit {
   ngOnInit(): void {
     this.userRole = this.authService.getUserRole();
     this.initForm();
+    this.searchSubject.pipe(
+      debounceTime(350),
+      distinctUntilChanged(),
+      takeUntil(this.destroy$),
+    ).subscribe((query) => {
+      this.searchQuery = query;
+      this.loadBillings();
+    });
     this.loadBillings();
     this.patientService.getAll().subscribe((res: ApiResponse<Patient[]>) => {
       this.patients = res.data;
       this.cdr.markForCheck();
     });
+  }
+
+  ngOnDestroy(): void {
+    this.destroy$.next();
+    this.destroy$.complete();
   }
 
   initForm(): void {
@@ -143,7 +159,7 @@ export class BillingListComponent implements OnInit {
       this.billings = [];
     }
 
-    this.billingService.getSlice(this.currentPage, this.pageSize).subscribe({
+    this.billingService.getSlice(this.currentPage, this.pageSize, this.searchQuery).subscribe({
       next: (res) => {
         if (res.data) {
           this.billings = [...this.billings, ...res.data.content];
@@ -159,6 +175,10 @@ export class BillingListComponent implements OnInit {
         this.cdr.markForCheck();
       },
     });
+  }
+
+  onSearch(event: Event): void {
+    this.searchSubject.next((event.target as HTMLInputElement).value);
   }
 
   openCreateForm(): void {

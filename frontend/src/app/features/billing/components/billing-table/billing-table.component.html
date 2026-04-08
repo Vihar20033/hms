@@ -42,54 +42,53 @@
           </span>
         </td>
         <td class="action-cell">
-          <div class="action-buttons" (click)="$event.stopPropagation()" role="group">
-            <button
-              class="btn-icon view"
-              title="View Invoice"
-              (click)="onView(bill)"
-            >
+          <div class="action-menu" (click)="$event.stopPropagation()">
+            <button class="btn-view" title="View Invoice" (click)="onView(bill)">
               <i class="ri-eye-line"></i>
+              View
             </button>
             <button
-              class="btn-icon prescribe"
-              title="{{ exportingId() === bill.id ? 'Generating...' : 'Download PDF' }}"
-              (click)="onExportPdf(bill)"
-              [disabled]="exportingId() === bill.id"
+              class="btn-more"
+              title="More actions"
+              aria-label="More invoice actions"
+              [class.active]="openMenuId === bill.id"
+              (click)="toggleMenu(bill.id)"
             >
-              @if (exportingId() !== bill.id) {
-                <i class="ri-file-pdf-line"></i>
-              } @else {
-                <i class="ri-loader-4-line spin"></i>
-              }
+              <i class="ri-more-2-fill"></i>
             </button>
-            @if (bill.reportUrl) {
-              <button
-                class="btn-icon prescribe"
-                title="View Cloud Invoice"
-                style="color: var(--brand-primary)"
-                (click)="viewCloudReport.emit(bill.reportUrl)"
-              >
-                <i class="ri-external-link-line"></i>
-              </button>
-            }
-            @if (bill.paymentStatus !== PaymentStatus.PAID && (userRole() === 'ADMIN' || userRole() === 'RECEPTIONIST')) {
-              <button
-                class="btn-icon complete"
-                title="Mark as Paid"
-                (click)="onUpdateStatus(bill.id, PaymentStatus.PAID)"
-              >
-                <i class="ri-checkbox-circle-line"></i>
-              </button>
-            }
 
-            @if (userRole() === 'ADMIN') {
-              <button
-                class="btn-icon checkin"
-                title="Delete"
-                (click)="onDelete(bill.id)"
-              >
-                <i class="ri-delete-bin-line"></i>
-              </button>
+            @if (openMenuId === bill.id) {
+              <div class="menu-panel">
+                <button class="menu-item" (click)="onExportPdf(bill)" [disabled]="exportingId() === bill.id">
+                  @if (exportingId() !== bill.id) {
+                    <i class="ri-file-pdf-line"></i>
+                  } @else {
+                    <i class="ri-loader-4-line spin"></i>
+                  }
+                  Download PDF
+                </button>
+
+                @if (bill.reportUrl) {
+                  <button class="menu-item" (click)="onViewCloudReport(bill.reportUrl)">
+                    <i class="ri-external-link-line"></i>
+                    Cloud invoice
+                  </button>
+                }
+
+                @if (bill.paymentStatus !== PaymentStatus.PAID && (userRole() === 'ADMIN' || userRole() === 'RECEPTIONIST')) {
+                  <button class="menu-item" (click)="onUpdateStatus(bill.id, PaymentStatus.PAID)">
+                    <i class="ri-checkbox-circle-line"></i>
+                    Mark as paid
+                  </button>
+                }
+
+                @if (userRole() === 'ADMIN') {
+                  <button class="menu-item danger" (click)="onDelete(bill.id)">
+                    <i class="ri-delete-bin-line"></i>
+                    Delete invoice
+                  </button>
+                }
+              </div>
             }
           </div>
         </td>

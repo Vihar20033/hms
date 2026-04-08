@@ -24,21 +24,35 @@ export class BillingTableComponent {
   readonly delete = output<number>();
 
   PaymentStatus = PaymentStatus;
+  openMenuId: number | null = null;
 
   onView(bill: Billing): void {
     this.view.emit(bill);
+    this.openMenuId = null;
   }
 
   onUpdateStatus(id: number, status: PaymentStatus): void {
     this.updateStatus.emit({ id, status });
+    this.openMenuId = null;
   }
 
   onExportPdf(bill: Billing): void {
     this.exportPdf.emit(bill);
+    this.openMenuId = null;
   }
 
   onDelete(id: number): void {
     this.delete.emit(id);
+    this.openMenuId = null;
+  }
+
+  onViewCloudReport(reportUrl: string): void {
+    this.viewCloudReport.emit(reportUrl);
+    this.openMenuId = null;
+  }
+
+  toggleMenu(id: number): void {
+    this.openMenuId = this.openMenuId === id ? null : id;
   }
 
   getStatusClass(status: PaymentStatus): string {

@@ -20,6 +20,14 @@ public abstract class BaseEntity {
     private Long id;
 
     @Version
-    private Long version;
+    @Builder.Default
+    private Long version = 0L;
+
+    @PrePersist
+    protected void initializeVersion() {
+        if (version == null) {
+            version = 0L;
+        }
+    }
 
 }

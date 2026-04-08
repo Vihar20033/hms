@@ -8,6 +8,7 @@ import { DashboardService } from '../services/dashboard.service';
 import {
   buildDashboardQuickActions,
   createDashboardChart,
+  createDailyVisitFlowChart,
   createDepartmentChart,
   getDashboardStatusClass,
   QuickAction,
@@ -36,6 +37,7 @@ Chart.register(...registerables);
 export class DashboardComponent implements OnInit, AfterViewInit, OnDestroy {
   @ViewChild('patientChart') patientChartCanvas!: ElementRef<HTMLCanvasElement>;
   @ViewChild('deptChart') deptChartCanvas!: ElementRef<HTMLCanvasElement>;
+  @ViewChild('visitFlowChart') visitFlowChartCanvas!: ElementRef<HTMLCanvasElement>;
 
   summary: DashboardSummary | null = null;
   isLoading = true;
@@ -45,6 +47,7 @@ export class DashboardComponent implements OnInit, AfterViewInit, OnDestroy {
 
   chart: Chart | null = null;
   deptChart: Chart | null = null;
+  visitFlowChart: Chart | null = null;
   quickActions: QuickAction[] = [];
 
   todayAppointments: Appointment[] = [];
@@ -108,6 +111,9 @@ export class DashboardComponent implements OnInit, AfterViewInit, OnDestroy {
     if (this.deptChart) {
       this.deptChart.destroy();
     }
+    if (this.visitFlowChart) {
+      this.visitFlowChart.destroy();
+    }
   }
 
   private initCharts(data: DashboardSummary): void {
@@ -128,6 +134,16 @@ export class DashboardComponent implements OnInit, AfterViewInit, OnDestroy {
       if (ctx) {
         if (this.deptChart) this.deptChart.destroy();
         this.deptChart = createDepartmentChart(ctx, data);
+      }
+    }
+
+    // 3. Daily Visit Flow Chart
+    const visitFlowCanvas = this.visitFlowChartCanvas?.nativeElement;
+    if (visitFlowCanvas) {
+      const ctx = visitFlowCanvas.getContext('2d');
+      if (ctx) {
+        if (this.visitFlowChart) this.visitFlowChart.destroy();
+        this.visitFlowChart = createDailyVisitFlowChart(ctx, data);
       }
     }
   }
@@ -184,6 +200,26 @@ export class DashboardComponent implements OnInit, AfterViewInit, OnDestroy {
 
   getStatusClass(status: AppointmentStatus): string {
     return getDashboardStatusClass(status);
+  }
+
+  formatDepartmentName(department: string): string {
+    return department
+      .replace(/_/g, ' ')
+      .toLowerCase()
+      .replace(/\b\w/g, (char) => char.toUpperCase());
+  }
+
+  getDepartmentTotal(data: DashboardSummary): number {
+    return data.departmentStats.reduce((total, item) => total + item.appointmentCount, 0);
+  }
+
+  getTopDepartments(data: DashboardSummary) {
+    return [...data.departmentStats].sort((a, b) => b.appointmentCount - a.appointmentCount).slice(0, 5);
+  }
+
+  getDepartmentPercent(count: number, data: DashboardSummary): number {
+    const total = this.getDepartmentTotal(data);
+    return total > 0 ? Math.round((count / total) * 100) : 0;
   }
 }
 

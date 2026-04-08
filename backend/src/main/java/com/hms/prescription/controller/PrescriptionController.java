@@ -1,10 +1,12 @@
 package com.hms.prescription.controller;
 
 import com.hms.common.response.ApiResponse;
+import com.hms.common.response.SliceResponse;
 import com.hms.prescription.dto.request.PrescriptionRequestDTO;
 import com.hms.prescription.dto.response.PrescriptionResponseDTO;
 import com.hms.prescription.service.PrescriptionService;
 import jakarta.validation.Valid;
+import org.springframework.data.domain.Slice;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -38,6 +40,27 @@ public class PrescriptionController {
                 ApiResponse.success(prescriptionService.getAllPrescriptions()));
     }
 
+    @PreAuthorize("hasAnyRole('ADMIN','DOCTOR','PHARMACIST')")
+    @GetMapping("/slice")
+    public ResponseEntity<ApiResponse<SliceResponse<PrescriptionResponseDTO>>> getPrescriptionSlice(
+            @RequestParam(name = "page", defaultValue = "0") int page,
+            @RequestParam(name = "size", defaultValue = "15") int size,
+            @RequestParam(name = "query", required = false) String query) {
+        Slice<PrescriptionResponseDTO> slice = prescriptionService.getPrescriptionSlice(
+                Math.max(page, 0),
+                Math.min(Math.max(size, 1), 100),
+                query);
+
+        return ResponseEntity.ok(ApiResponse.success(SliceResponse.<PrescriptionResponseDTO>builder()
+                .content(slice.getContent())
+                .page(slice.getNumber())
+                .size(slice.getSize())
+                .first(slice.isFirst())
+                .last(slice.isLast())
+                .hasNext(slice.hasNext())
+                .numberOfElements(slice.getNumberOfElements())
+                .build()));
+    }
 
     @PreAuthorize("hasAnyRole('ADMIN','DOCTOR','PHARMACIST')")
     @GetMapping("/patient/{patientId}")

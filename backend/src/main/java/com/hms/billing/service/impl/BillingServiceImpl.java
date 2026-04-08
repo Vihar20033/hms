@@ -96,7 +96,16 @@ public class BillingServiceImpl implements BillingService {
     @Override
     @Transactional(readOnly = true)
     public Slice<BillingResponseDTO> getBillingSlice(int page, int size) {
+        return getBillingSlice(page, size, null);
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public Slice<BillingResponseDTO> getBillingSlice(int page, int size, String query) {
         PageRequest request = PageRequest.of(page, size, Sort.by(Sort.Direction.DESC, "createdAt"));
+        if (query != null && !query.isBlank()) {
+            return billingRepository.searchBillings(query.trim(), request).map(billingMapper::toDto);
+        }
         return billingRepository.findAll(request).map(billingMapper::toDto);
     }
 

@@ -34,7 +34,16 @@ public class UserServiceImpl implements UserService {
     @Override
     @Transactional(readOnly = true)
     public Slice<UserResponseDTO> getSlice(int page, int size) {
+        return getSlice(page, size, null);
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public Slice<UserResponseDTO> getSlice(int page, int size, String query) {
         PageRequest request = PageRequest.of(page, size, Sort.by(Sort.Direction.ASC, "username"));
+        if (query != null && !query.isBlank()) {
+            return userRepository.searchUsers(query.trim(), request).map(userMapper::toResponseDTO);
+        }
         return userRepository.findAll(request).map(userMapper::toResponseDTO);
     }
 

@@ -60,7 +60,7 @@ export function markFormControlsTouched(form: FormGroup): void {
 }
 
 export function buildRoleOptions(roles: Role[]): Array<{ label: string; value: Role }> {
-  return roles.map((role) => ({
+  return roles.filter((role) => role !== Role.DOCTOR).map((role) => ({
     label: role.replace(/_/g, ' '),
     value: role,
   }));

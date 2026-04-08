@@ -5,6 +5,7 @@ import com.hms.common.enums.Role;
 import com.hms.security.jwt.JwtAuthenticationFilter;
 import com.hms.security.ratelimit.RateLimitingFilter;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.ObjectProvider;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -27,17 +28,17 @@ import org.springframework.web.servlet.HandlerExceptionResolver;
 public class SecurityConfig {
 
     private final JwtAuthenticationFilter jwtFilter;
-    private final RateLimitingFilter rateLimitingFilter;
+    private final ObjectProvider<RateLimitingFilter> rateLimitingFilterProvider;
     private final CorsConfig corsConfig;
     private final HandlerExceptionResolver resolver;
 
     public SecurityConfig(
             JwtAuthenticationFilter jwtFilter,
-            RateLimitingFilter rateLimitingFilter,
+            ObjectProvider<RateLimitingFilter> rateLimitingFilterProvider,
             CorsConfig corsConfig,
             @Qualifier("handlerExceptionResolver") HandlerExceptionResolver resolver) {
         this.jwtFilter = jwtFilter;
-        this.rateLimitingFilter = rateLimitingFilter;
+        this.rateLimitingFilterProvider = rateLimitingFilterProvider;
         this.corsConfig = corsConfig;
         this.resolver = resolver;
     }
@@ -100,7 +101,9 @@ public class SecurityConfig {
                         }));
 
         // Insert custom filters
-        http.addFilterBefore(rateLimitingFilter, UsernamePasswordAuthenticationFilter.class);
+        rateLimitingFilterProvider.ifAvailable(filter ->
+                http.addFilterBefore(filter, UsernamePasswordAuthenticationFilter.class)
+        );
         http.addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class);
 
         log.info("Production Security configuration successfully initialized.");

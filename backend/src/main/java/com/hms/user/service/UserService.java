@@ -8,5 +8,6 @@ import java.util.List;
 public interface UserService {
     List<UserResponseDTO> getAll();
     Slice<UserResponseDTO> getSlice(int page, int size);
+    Slice<UserResponseDTO> getSlice(int page, int size, String query);
     void deleteUser(Long id);
 }

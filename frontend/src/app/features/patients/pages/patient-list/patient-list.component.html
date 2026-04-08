@@ -87,27 +87,24 @@
               <td class="contact-cell">{{ patient.contactNumber }}</td>
               <td class="date-cell">{{ patient.createdAt | date: 'shortDate' }}</td>
               <td class="action-cell">
-                <div class="action-buttons" (click)="$event.stopPropagation()" (keydown.enter)="$event.stopPropagation()" role="group" aria-label="Patient actions">
-                  <!-- Edit Patient -->
+                <div class="action-menu" (click)="$event.stopPropagation()" (keydown.enter)="$event.stopPropagation()" role="group" aria-label="Patient actions">
                   @if (canEdit()) {
-                    <button
-                      class="btn-icon btn-edit"
-                      (click)="editPatient(patient.id)"
-                      title="Modify Data"
-                    >
-                      <i class="ri-edit-line"></i>
+                    <button class="btn-view" type="button" (click)="editPatient(patient.id)">
+                      Edit
                     </button>
                   }
-
-                  <!-- Delete Record -->
                   @if (canDelete()) {
-                    <button
-                      class="btn-icon btn-delete"
-                      (click)="deletePatient(patient.id)"
-                      title="Remove Patient"
-                    >
-                      <i class="ri-delete-bin-line"></i>
+                    <button class="btn-more" type="button" (click)="toggleMenu(patient.id)" title="More actions">
+                      <i class="ri-more-2-fill"></i>
                     </button>
+                    @if (openMenuId === patient.id) {
+                      <div class="menu-panel">
+                        <button class="menu-item danger" type="button" (click)="deletePatient(patient.id)">
+                          <i class="ri-delete-bin-line"></i>
+                          Delete patient
+                        </button>
+                      </div>
+                    }
                   }
                 </div>
               </td>

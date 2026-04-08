@@ -17,9 +17,12 @@ export class UserService {
     return this.http.get<ApiResponse<User[]>>(this.apiUrl);
   }
 
-  getSlice(page = 0, size = 25): Observable<ApiResponse<SliceResponse<User>>> {
+  getSlice(page = 0, size = 25, query = ''): Observable<ApiResponse<SliceResponse<User>>> {
+    const params: Record<string, string | number> = { page, size };
+    if (query.trim()) params['query'] = query.trim();
+
     return this.http.get<ApiResponse<SliceResponse<User>>>(`${this.apiUrl}/slice`, {
-      params: { page, size },
+      params,
     });
   }
 

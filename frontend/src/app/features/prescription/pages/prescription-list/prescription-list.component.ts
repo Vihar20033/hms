@@ -1,6 +1,6 @@
 import { AuthService } from '../../../auth/services/auth.service';
 import { CommonModule } from '@angular/common';
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { HeaderComponent } from '../../../../layout/header/header.component';
 import { Prescription } from '../../models/prescription.models';
 import { PrescriptionService } from '../../services/prescription.service';
@@ -9,6 +9,7 @@ import { SidebarComponent } from '../../../../layout/sidebar/sidebar.component';
 import { StatusModalService } from '../../../../shared/services/status-modal.service';
 import { TableModule } from 'primeng/table';
 import { canManagePrescriptions } from '../../utils/prescription-list.utils';
+import { Subject, debounceTime, distinctUntilChanged, takeUntil } from 'rxjs';
 
 @Component({
   selector: 'app-prescription-list',
@@ -17,15 +18,19 @@ import { canManagePrescriptions } from '../../utils/prescription-list.utils';
   templateUrl: './prescription-list.component.html',
   styleUrl: './prescription-list.component.scss',
 })
-export class PrescriptionListComponent implements OnInit {
+export class PrescriptionListComponent implements OnInit, OnDestroy {
   prescriptions: Prescription[] = [];
   isLoading = true;
+  openMenuId: number | null = null;
 
   // Pagination
   currentPage = 0;
   pageSize = 15;
   isLastPage = false;
   isMoreLoading = false;
+  searchQuery = '';
+  private searchSubject = new Subject<string>();
+  private destroy$ = new Subject<void>();
 
   constructor(
     private prescriptionService: PrescriptionService,
@@ -34,7 +39,20 @@ export class PrescriptionListComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
+    this.searchSubject.pipe(
+      debounceTime(350),
+      distinctUntilChanged(),
+      takeUntil(this.destroy$),
+    ).subscribe((query) => {
+      this.searchQuery = query;
+      this.loadPrescriptions();
+    });
     this.loadPrescriptions();
+  }
+
+  ngOnDestroy(): void {
+    this.destroy$.next();
+    this.destroy$.complete();
   }
 
   loadPrescriptions(isLoadMore = false): void {
@@ -47,7 +65,7 @@ export class PrescriptionListComponent implements OnInit {
       this.prescriptions = [];
     }
 
-    this.prescriptionService.getSlice(this.currentPage, this.pageSize).subscribe({
+    this.prescriptionService.getSlice(this.currentPage, this.pageSize, this.searchQuery).subscribe({
       next: (res) => {
         if (res.data) {
           this.prescriptions = [...this.prescriptions, ...res.data.content];
@@ -63,17 +81,28 @@ export class PrescriptionListComponent implements OnInit {
     });
   }
 
+  onSearch(event: Event): void {
+    this.searchSubject.next((event.target as HTMLInputElement).value);
+  }
+
+  toggleMenu(id: number): void {
+    this.openMenuId = this.openMenuId === id ? null : id;
+  }
+
   onPrint(id: number): void {
+    this.openMenuId = null;
     window.open(`/prescriptions/${id}`, '_blank');
   }
 
   onViewCloudReport(reportUrl: string): void {
+    this.openMenuId = null;
     if (reportUrl) {
       window.open(reportUrl, '_blank');
     }
   }
 
   async onDelete(id: number): Promise<void> {
+    this.openMenuId = null;
     const confirmed = await this.statusModalService.confirm(
       'Delete Prescription',
       'Delete this clinical record? This action cannot be undone.',

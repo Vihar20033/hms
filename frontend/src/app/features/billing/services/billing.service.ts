@@ -17,9 +17,12 @@ export class BillingService {
     return this.http.get<ApiResponse<Billing[]>>(this.apiUrl);
   }
 
-  getSlice(page = 0, size = 15): Observable<ApiResponse<SliceResponse<Billing>>> {
+  getSlice(page = 0, size = 15, query = ''): Observable<ApiResponse<SliceResponse<Billing>>> {
+    const params: Record<string, string | number> = { page, size };
+    if (query.trim()) params['query'] = query.trim();
+
     return this.http.get<ApiResponse<SliceResponse<Billing>>>(`${this.apiUrl}/slice`, {
-      params: { page, size },
+      params,
     });
   }
 

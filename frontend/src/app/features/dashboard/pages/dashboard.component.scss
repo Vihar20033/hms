@@ -187,7 +187,7 @@
 
 .dashboard-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(360px, 1fr));
+  grid-template-columns: repeat(2, minmax(0, 1fr));
   gap: 1.15rem;
 }
 
@@ -206,6 +206,10 @@
       min-height: 458px;
       max-height: 458px;
     }
+  }
+
+  &.half-width {
+    grid-column: span 1;
   }
 }
 
@@ -257,6 +261,100 @@
   height: 100% !important;
 }
 
+.department-insight-layout {
+  display: grid;
+  grid-template-columns: minmax(0, 1.1fr) minmax(180px, 0.9fr);
+  gap: 1rem;
+  align-items: stretch;
+
+  .chart-stage {
+    height: 300px;
+    min-height: 300px;
+    max-height: 300px;
+  }
+}
+
+.department-insights {
+  display: flex;
+  flex-direction: column;
+  gap: 0.85rem;
+  min-width: 0;
+}
+
+.insight-summary {
+  padding: 0.95rem;
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-xl);
+  background: rgba(15, 108, 189, 0.06);
+
+  span {
+    display: block;
+    margin-bottom: 0.35rem;
+    color: var(--text-muted);
+    font-size: 0.78rem;
+    font-weight: 800;
+  }
+
+  strong {
+    font-family: var(--font-heading);
+    font-size: 1.5rem;
+    line-height: 1;
+  }
+}
+
+.insight-list {
+  display: grid;
+  gap: 0.65rem;
+}
+
+.insight-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+  padding: 0.75rem 0.85rem;
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-xl);
+  background: white;
+
+  div {
+    min-width: 0;
+  }
+
+  strong,
+  span {
+    display: block;
+  }
+
+  strong {
+    font-size: 0.86rem;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  span {
+    color: var(--text-muted);
+    font-size: 0.76rem;
+    font-weight: 700;
+  }
+
+  b {
+    color: var(--brand-primary);
+    font-family: var(--font-heading);
+    font-size: 1rem;
+  }
+}
+
+.empty-insight {
+  padding: 1rem;
+  border: 1px dashed var(--border-color);
+  border-radius: var(--radius-xl);
+  color: var(--text-muted);
+  font-size: 0.88rem;
+  font-weight: 700;
+}
+
 @media (max-width: 1024px) {
   .hero-panel {
     grid-template-columns: 1fr;
@@ -270,6 +368,10 @@
   }
   
   .grid-card.full-width {
+    grid-column: auto;
+  }
+
+  .grid-card.half-width {
     grid-column: auto;
   }
 }
@@ -287,6 +389,10 @@
   .chart-stage {
     height: 280px;
     min-height: 280px;
+  }
+
+  .department-insight-layout {
+    grid-template-columns: 1fr;
   }
 }
 
@@ -410,4 +516,3 @@
     padding: 1rem 0.75rem;
   }
 }
-

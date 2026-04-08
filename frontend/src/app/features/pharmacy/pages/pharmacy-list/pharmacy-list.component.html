@@ -228,20 +228,25 @@
                   </span>
                 </td>
                 <td *ngIf="userRole === 'ADMIN' || userRole === 'PHARMACIST'">
-                  <div class="action-buttons">
-                    <button class="btn-icon" title="Restock" (click)="openRestockForm(med)">
-                      <i class="ri-add-circle-line"></i>
+                  <div class="action-menu">
+                    <button class="btn-view" type="button" (click)="openRestockForm(med)">
+                      Restock
                     </button>
-                    <button class="btn-icon start" title="Edit" (click)="openEditForm(med)">
-                      <i class="ri-edit-line"></i>
+                    <button class="btn-more" type="button" title="More actions" (click)="toggleMenu(med.id)">
+                      <i class="ri-more-2-fill"></i>
                     </button>
-                    <button
-                      class="btn-icon checkin"
-                      title="Delete"
-                      (click)="onDelete(med.id)"
-                    >
-                      <i class="ri-delete-bin-line"></i>
-                    </button>
+                    @if (openMenuId === med.id) {
+                      <div class="menu-panel">
+                        <button class="menu-item" type="button" (click)="openEditForm(med)">
+                          <i class="ri-edit-line"></i>
+                          Edit medicine
+                        </button>
+                        <button class="menu-item danger" type="button" (click)="onDelete(med.id)">
+                          <i class="ri-delete-bin-line"></i>
+                          Delete medicine
+                        </button>
+                      </div>
+                    }
                   </div>
                 </td>
               </tr>

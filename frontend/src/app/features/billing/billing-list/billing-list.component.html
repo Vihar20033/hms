@@ -12,6 +12,15 @@
         </div>
         @if (userRole === 'ADMIN' || userRole === 'RECEPTIONIST') {
           <div class="header-actions">
+            <div class="search-container">
+              <i class="ri-search-line"></i>
+              <input
+                type="text"
+                class="search-input"
+                placeholder="Search invoices, patients, phone..."
+                (input)="onSearch($event)"
+              />
+            </div>
             <button class="btn-outline" (click)="openAutoGenerateModal()">
               <i class="ri-magic-line"></i> Bill by Appointment
             </button>

@@ -1,4 +1,3 @@
-import { ApiResponse } from '../../../../core/models/common.models';
 import { CommonModule } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { getRoleBadgeClass } from '../utils/user-list.utils';
@@ -8,6 +7,7 @@ import { SidebarComponent } from '../../../../layout/sidebar/sidebar.component';
 import { StatusModalService } from '../../../../shared/services/status-modal.service';
 import { TableModule } from 'primeng/table';
 import { UserService } from '../../services/user.service';
+import { Subject, debounceTime, distinctUntilChanged } from 'rxjs';
 
 @Component({
   selector: 'app-user-list',
@@ -20,6 +20,12 @@ export class UserListComponent implements OnInit {
   users: User[] = [];
   isLoading = true;
   Role = Role;
+  searchQuery = '';
+  searchSubject = new Subject<string>();
+  currentPage = 0;
+  pageSize = 25;
+  isLastPage = false;
+  isMoreLoading = false;
 
   constructor(
     private userService: UserService,
@@ -27,20 +33,44 @@ export class UserListComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
+    this.searchSubject.pipe(
+      debounceTime(350),
+      distinctUntilChanged()
+    ).subscribe((query) => {
+      this.searchQuery = query;
+      this.loadUsers();
+    });
     this.loadUsers();
   }
 
-  loadUsers(): void {
-    this.isLoading = true;
-    this.userService.getAll().subscribe({
-      next: (res: ApiResponse<User[]>) => {
-        this.users = res.data;
+  loadUsers(isLoadMore = false): void {
+    if (isLoadMore) {
+      this.isMoreLoading = true;
+      this.currentPage++;
+    } else {
+      this.isLoading = true;
+      this.currentPage = 0;
+      this.users = [];
+    }
+
+    this.userService.getSlice(this.currentPage, this.pageSize, this.searchQuery).subscribe({
+      next: (res) => {
+        if (res.data) {
+          this.users = isLoadMore ? [...this.users, ...res.data.content] : res.data.content;
+          this.isLastPage = res.data.last;
+        }
         this.isLoading = false;
+        this.isMoreLoading = false;
       },
       error: () => {
         this.isLoading = false;
+        this.isMoreLoading = false;
       },
     });
+  }
+
+  onSearch(event: Event): void {
+    this.searchSubject.next((event.target as HTMLInputElement).value);
   }
 
   async onDelete(user: User): Promise<void> {

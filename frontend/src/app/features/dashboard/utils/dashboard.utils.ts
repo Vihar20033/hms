@@ -90,34 +90,28 @@ export function createDashboardChart(ctx: CanvasRenderingContext2D, data: Dashbo
   const appointmentData = stats.map((s) => s.appointments || 0);
   const patientData = stats.map((s) => s.patients || 0);
 
-  const config: ChartConfiguration<'line'> = {
-    type: 'line',
+  const config: ChartConfiguration<'bar'> = {
+    type: 'bar',
     data: {
       labels,
       datasets: [
         {
           label: 'Appointments',
           data: appointmentData,
-          backgroundColor: 'rgba(37, 99, 235, 0.1)',
+          backgroundColor: 'rgba(37, 99, 235, 0.78)',
           borderColor: '#2563eb',
-          borderWidth: 3,
-          tension: 0.4,
-          fill: true,
-          pointRadius: 4,
-          pointBackgroundColor: '#fff',
-          pointBorderWidth: 2,
+          borderWidth: 1,
+          borderRadius: 8,
+          maxBarThickness: 42,
         },
         {
           label: 'New Patients',
           data: patientData,
-          backgroundColor: 'rgba(20, 184, 166, 0.1)',
+          backgroundColor: 'rgba(20, 184, 166, 0.78)',
           borderColor: '#14b8a6',
-          borderWidth: 3,
-          tension: 0.4,
-          fill: true,
-          pointRadius: 4,
-          pointBackgroundColor: '#fff',
-          pointBorderWidth: 2,
+          borderWidth: 1,
+          borderRadius: 8,
+          maxBarThickness: 42,
         },
       ],
     },
@@ -133,7 +127,12 @@ export function createDashboardChart(ctx: CanvasRenderingContext2D, data: Dashbo
             font: { weight: 'bold' }
           }
         },
-        tooltip: { mode: 'index', intersect: false },
+        tooltip: {
+          mode: 'index',
+          intersect: false,
+          padding: 12,
+          backgroundColor: 'rgba(15, 23, 42, 0.9)',
+        },
       },
       scales: {
         y: {
@@ -148,7 +147,10 @@ export function createDashboardChart(ctx: CanvasRenderingContext2D, data: Dashbo
         },
         x: { 
           grid: { display: false },
-          ticks: { padding: 10 }
+          ticks: {
+            padding: 10,
+            font: { weight: 'bold' },
+          }
         },
       },
     },
@@ -167,11 +169,6 @@ export function createDepartmentChart(ctx: CanvasRenderingContext2D, data: Dashb
       .replace(/\b\w/g, (char) => char.toUpperCase()),
   );
   const counts = stats.map((s) => s.appointmentCount);
-
-  const colors = [
-    '#1d4ed8', '#0f766e', '#c2410c', '#be123c', '#6d28d9',
-    '#0f766e', '#0369a1', '#b45309', '#0f766e', '#4338ca'
-  ];
 
   const config: ChartConfiguration<'doughnut'> = {
     type: 'doughnut',
@@ -222,6 +219,67 @@ export function createDepartmentChart(ctx: CanvasRenderingContext2D, data: Dashb
         },
       },
     },
+  };
+
+  return new Chart(ctx, config);
+}
+
+export function createDailyVisitFlowChart(ctx: CanvasRenderingContext2D, data: DashboardSummary): Chart {
+  const completed = data.completedConsultations || 0;
+  const waiting = data.patientsInQueue || 0;
+  const today = data.todayAppointments || 0;
+  const scheduled = Math.max(today - completed - waiting, 0);
+
+  const config: ChartConfiguration<'bar'> = {
+    type: 'bar',
+    data: {
+      labels: ['Scheduled', 'Waiting', 'Completed'],
+      datasets: [
+        {
+          label: 'Visits',
+          data: [scheduled, waiting, completed],
+          backgroundColor: ['rgba(37, 99, 235, 0.78)', 'rgba(245, 158, 11, 0.78)', 'rgba(16, 185, 129, 0.78)'],
+          borderColor: ['#2563eb', '#d97706', '#059669'],
+          borderWidth: 1,
+          borderRadius: 8,
+          maxBarThickness: 56,
+        },
+      ],
+    },
+    options: {
+      responsive: true,
+      maintainAspectRatio: false,
+      plugins: {
+        legend: { display: false },
+        tooltip: {
+          padding: 12,
+          backgroundColor: 'rgba(15, 23, 42, 0.9)',
+          callbacks: {
+            label: (item: TooltipItem<'bar'>) => ` ${item.raw} visits`,
+          },
+        },
+      },
+      scales: {
+        y: {
+          beginAtZero: true,
+          grace: 1,
+          ticks: {
+            precision: 0,
+            stepSize: 1,
+            padding: 10,
+          },
+          grid: { color: '#f1f5f9' },
+        },
+        x: {
+          grid: { display: false },
+          ticks: {
+            padding: 10,
+            font: { weight: 'bold' },
+          },
+        },
+      },
+    },
+    plugins: [valueLabelPlugin],
   };
 
   return new Chart(ctx, config);

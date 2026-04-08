@@ -28,8 +28,9 @@ public class UserController {
     @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<ApiResponse<SliceResponse<UserResponseDTO>>> getUserSlice(
             @RequestParam(name = "page", defaultValue = "0") int page,
-            @RequestParam(name = "size", defaultValue = "25") int size) {
-        var slice = userService.getSlice(Math.max(page, 0), Math.min(Math.max(size, 1), 100));
+            @RequestParam(name = "size", defaultValue = "25") int size,
+            @RequestParam(name = "query", required = false) String query) {
+        var slice = userService.getSlice(Math.max(page, 0), Math.min(Math.max(size, 1), 100), query);
         return ResponseEntity.ok(ApiResponse.success(SliceResponse.<UserResponseDTO>builder()
                 .content(slice.getContent())
                 .page(slice.getNumber())

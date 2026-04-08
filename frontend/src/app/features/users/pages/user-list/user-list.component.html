@@ -12,6 +12,15 @@
           <p class="text-muted">Overview of all system users and roles.</p>
         </div>
         <div class="d-flex gap-2">
+          <div class="search-container">
+            <i class="ri-search-line"></i>
+            <input
+              type="text"
+              class="search-input"
+              placeholder="Search username or email..."
+              (input)="onSearch($event)"
+            />
+          </div>
           <button class="btn btn-outline-primary" (click)="loadUsers()">
             <i class="ri-refresh-line me-1"></i> Refresh
           </button>
@@ -38,8 +47,8 @@
         <p-table 
           [value]="users" 
           [loading]="isLoading" 
-          [rows]="10" 
-          [paginator]="true" 
+          [rows]="pageSize" 
+          [paginator]="false" 
           responsiveLayout="stack"
           styleClass="p-datatable-sm"
           class="custom-p-table"
@@ -96,6 +105,18 @@
             </tr>
           </ng-template>
         </p-table>
+
+        @if (!isLastPage && users.length > 0) {
+          <div class="load-more-container">
+            <button class="btn btn-outline-primary" type="button" (click)="loadUsers(true)" [disabled]="isMoreLoading">
+              @if (isMoreLoading) {
+                <i class="ri-loader-4-line me-1"></i> Loading...
+              } @else {
+                <i class="ri-arrow-down-s-line me-1"></i> Load More Users
+              }
+            </button>
+          </div>
+        }
       </div>
     </div>
   </div>

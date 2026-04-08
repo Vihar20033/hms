@@ -162,15 +162,31 @@ public class PrescriptionServiceImpl implements PrescriptionService {
     @Override
     @Transactional(readOnly = true)
     public Slice<PrescriptionResponseDTO> getPrescriptionSlice(int page, int size) {
+        return getPrescriptionSlice(page, size, null);
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public Slice<PrescriptionResponseDTO> getPrescriptionSlice(int page, int size, String query) {
         PageRequest request = PageRequest.of(page, size, Sort.by(Sort.Direction.DESC, "createdAt"));
         User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         Role role = user.getRole();
+        String normalizedQuery = query == null ? "" : query.trim();
 
         if (role == Role.ADMIN || role == Role.PHARMACIST) {
+            if (!normalizedQuery.isBlank()) {
+                return prescriptionRepository.searchPrescriptions(normalizedQuery, request).map(prescriptionMapper::toDto);
+            }
             return prescriptionRepository.findAll(request).map(prescriptionMapper::toDto);
         }
 
         if (role == Role.DOCTOR) {
+            if (!normalizedQuery.isBlank()) {
+                return prescriptionRepository.searchPrescriptionsForDoctor(
+                        user.getId(),
+                        normalizedQuery,
+                        request).map(prescriptionMapper::toDto);
+            }
             return prescriptionRepository.findByDoctorUserId(user.getId(), request).map(prescriptionMapper::toDto);
         }
 

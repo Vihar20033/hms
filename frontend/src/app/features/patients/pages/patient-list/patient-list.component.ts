@@ -31,6 +31,7 @@ export class PatientListComponent implements OnInit {
   patients: Patient[] = [];
   isLoading = true;
   errorMessage = '';
+  openMenuId: number | null = null;
   
   // Search & Pagination
   searchQuery = '';
@@ -109,10 +110,12 @@ export class PatientListComponent implements OnInit {
   }
 
   editPatient(patientId: number): void {
+    this.openMenuId = null;
     this.router.navigate(['/patients/register'], { queryParams: { patientId } });
   }
 
   async deletePatient(patientId: number): Promise<void> {
+    this.openMenuId = null;
     const confirmed = await this.statusModalService.confirm(
       'Delete Patient',
       'Delete this patient record?',
@@ -127,6 +130,10 @@ export class PatientListComponent implements OnInit {
       },
       error: (err) => this.statusModalService.showError('Delete Failed', err.error?.message || 'Could not delete this patient.'),
     });
+  }
+
+  toggleMenu(id: number): void {
+    this.openMenuId = this.openMenuId === id ? null : id;
   }
 }
 

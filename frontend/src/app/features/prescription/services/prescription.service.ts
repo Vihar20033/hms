@@ -18,9 +18,12 @@ export class PrescriptionService {
     return this.http.get<ApiResponse<Prescription[]>>(this.apiUrl);
   }
 
-  getSlice(page = 0, size = 15): Observable<ApiResponse<SliceResponse<Prescription>>> {
+  getSlice(page = 0, size = 15, query = ''): Observable<ApiResponse<SliceResponse<Prescription>>> {
+    const params: Record<string, string | number> = { page, size };
+    if (query.trim()) params['query'] = query.trim();
+
     return this.http.get<ApiResponse<SliceResponse<Prescription>>>(`${this.apiUrl}/slice`, {
-      params: { page, size },
+      params,
     });
   }
 
