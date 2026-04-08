@@ -6,6 +6,7 @@ Production-oriented Hospital Management System built as a modular monolith with 
 
 - [Architecture](#architecture)
 - [System Diagram](#system-diagram)
+- [Sequence Diagram](#sequence-diagram)
 - [Implemented Features](#implemented-features)
 - [Application Flow](#application-flow)
 - [Production Hardening Included](#production-hardening-included)
@@ -30,23 +31,67 @@ Production-oriented Hospital Management System built as a modular monolith with 
 
 ```mermaid
 flowchart LR
-    Users[Hospital users\nAdmin, Doctor, Nurse, Receptionist,\nPharmacist, Lab Staff, Patient]
-    Browser[Angular 17 SPA\nPrimeNG UI, route guards,\nJWT interceptor, error interceptor]
-    API[Spring Boot 3 REST API\nModular monolith]
-    Security[Security layer\nSpring Security, JWT,\nmethod authorization,\nrate limiting]
-    Modules[Domain modules\nAuth, Users, Patients,\nDoctors, Appointments,\nPrescriptions, Pharmacy,\nBilling, Dashboard, Audit]
-    MySQL[(MySQL 8\ntransactional data)]
-    Redis[(Redis 7\ncache and Bucket4j buckets)]
-    Logs[(Application logs\nstartup verification and audit trail)]
+    subgraph Actors["Hospital Actors"]
+        Admin["Admin"]
+        Doctor["Doctor"]
+        Nurse["Nurse"]
+        Receptionist["Receptionist"]
+        Pharmacist["Pharmacist"]
+        LabStaff["Laboratory Staff"]
+        PatientUser["Patient"]
+    end
 
-    Users --> Browser
-    Browser -->|HTTP /api/v1| API
-    API --> Security
-    Security --> Modules
-    Modules -->|JPA / Hibernate| MySQL
-    Modules -->|cache reads and writes| Redis
-    Security -->|distributed quotas| Redis
-    Modules --> Logs
+    subgraph Client["Client Layer"]
+        Angular["Angular 17 SPA"]
+        Guards["Auth Guard<br/>Role Guard"]
+        Interceptors["JWT Interceptor<br/>Error Interceptor"]
+        FeaturePages["Feature Pages<br/>Dashboard, Patients, Appointments,<br/>Staff, Prescriptions, Pharmacy,<br/>Billing, Audit Logs"]
+    end
+
+    subgraph Backend["Backend Layer - Spring Boot 3 Modular Monolith"]
+        Controllers["REST Controllers<br/>/api/v1"]
+        Security["Security Filters<br/>JWT, CORS, security headers"]
+        Authorization["Method Authorization<br/>@PreAuthorize and ownership checks"]
+        Services["Domain Services"]
+        Mappers["MapStruct Mappers<br/>DTO conversion"]
+        Repositories["Spring Data JPA Repositories"]
+        Audit["Audit Logging"]
+    end
+
+    subgraph Domains["Domain Modules"]
+        Auth["Auth and Users"]
+        Patient["Patients"]
+        Appointment["Appointments"]
+        DoctorModule["Doctors and Staff"]
+        Prescription["Prescriptions"]
+        Pharmacy["Pharmacy and Inventory"]
+        Billing["Billing"]
+        Dashboard["Dashboard"]
+        LabNursing["Lab and Nursing APIs"]
+    end
+
+    subgraph Data["Data and Infrastructure"]
+        MySQL[("MySQL 8<br/>hospital records")]
+        Redis[("Redis 7<br/>cache and rate-limit buckets")]
+        Logs[("Logs<br/>startup verification and operations")]
+    end
+
+    Actors --> Angular
+    Angular --> Guards
+    Guards --> FeaturePages
+    FeaturePages --> Interceptors
+    Interceptors -->|"HTTP JSON /api/v1"| Controllers
+    Controllers --> Security
+    Security --> Authorization
+    Authorization --> Services
+    Services --> Mappers
+    Services --> Domains
+    Domains --> Repositories
+    Repositories --> MySQL
+    Services --> Redis
+    Security --> Redis
+    Services --> Audit
+    Audit --> Logs
 ```
 
 ## Sequence Diagram
