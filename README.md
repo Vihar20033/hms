@@ -49,6 +49,42 @@ flowchart LR
     Modules --> Logs
 ```
 
+## Sequence Diagram
+
+```mermaid
+sequenceDiagram
+    actor User as Hospital User
+    participant UI as Angular SPA
+    participant Guard as Route Guard / Interceptor
+    participant API as Spring Boot API
+    participant Security as Spring Security + JWT
+    participant RateLimit as Bucket4j + Redis
+    participant Service as Domain Service
+    participant Cache as Redis Cache
+    participant DB as MySQL
+    participant Audit as Audit Log
+
+    User->>UI: Open protected workspace
+    UI->>Guard: Check session and role access
+    Guard->>API: Send request with JWT
+    API->>Security: Validate token and method access
+    Security->>RateLimit: Check shared request quota
+    RateLimit-->>Security: Quota accepted
+    Security->>Service: Forward authorized request
+    Service->>Cache: Read cached domain data
+    alt Cache hit
+        Cache-->>Service: Return cached data
+    else Cache miss
+        Service->>DB: Query or persist hospital record
+        DB-->>Service: Return saved or loaded data
+        Service->>Cache: Store cacheable response
+    end
+    Service->>Audit: Record important clinical or admin action
+    Service-->>API: Return API response
+    API-->>UI: Return JSON result
+    UI-->>User: Render updated workspace
+```
+
 ## Implemented Features
 
 - Authentication and session management with login, registration, change password, JWT access tokens, refresh-token rotation, logout revocation, and BCrypt password hashing.
