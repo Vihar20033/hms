@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { getRoleBadgeClass } from '../utils/user-list.utils';
 import { HeaderComponent } from '../../../../layout/header/header.component';
 import { Role, User } from '../../../auth/models/auth.models';
@@ -16,7 +16,7 @@ import { Subject, debounceTime, distinctUntilChanged } from 'rxjs';
   templateUrl: './user-list.component.html',
   styleUrl: './user-list.component.scss',
 })
-export class UserListComponent implements OnInit {
+export class UserListComponent implements OnInit, OnDestroy {
   users: User[] = [];
   isLoading = true;
   Role = Role;
@@ -41,6 +41,10 @@ export class UserListComponent implements OnInit {
       this.loadUsers();
     });
     this.loadUsers();
+  }
+
+  ngOnDestroy(): void {
+    this.searchSubject.complete();
   }
 
   loadUsers(isLoadMore = false): void {
@@ -71,6 +75,15 @@ export class UserListComponent implements OnInit {
 
   onSearch(event: Event): void {
     this.searchSubject.next((event.target as HTMLInputElement).value);
+  }
+
+  clearSearch(): void {
+    if (!this.searchQuery) {
+      return;
+    }
+
+    this.searchQuery = '';
+    this.searchSubject.next('');
   }
 
   async onDelete(user: User): Promise<void> {

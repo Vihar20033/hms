@@ -8,6 +8,6 @@
     "format": "npm run format --prefix frontend",
     "frontend:start": "npm start --prefix frontend",
     "frontend:build": "npm run build --prefix frontend",
-    "backend:start": "cd backend && ./mvnw spring-boot:run"
+    "backend:start": "node scripts/start-backend.js"
   }
 }

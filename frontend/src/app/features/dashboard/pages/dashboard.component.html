@@ -208,6 +208,32 @@
               </div>
             </div>
             <div class="card-body">
+              <div class="activity-insights">
+                <div class="activity-insight primary">
+                  <span>Today's Visits</span>
+                  <strong>{{ data.todayAppointments | number }}</strong>
+                </div>
+                <div class="activity-insight">
+                  <span>Waiting</span>
+                  <strong>{{ data.patientsInQueue | number }}</strong>
+                </div>
+                <div class="activity-insight">
+                  <span>Completed</span>
+                  <strong>{{ data.completedConsultations | number }}</strong>
+                </div>
+                <div class="activity-insight">
+                  <span>Scheduled</span>
+                  <strong>{{ getScheduledVisits(data) | number }}</strong>
+                </div>
+                <div class="activity-insight">
+                  <span>Weekly Visits</span>
+                  <strong>{{ getWeeklyVisitTotal(data) | number }}</strong>
+                </div>
+                <div class="activity-insight wide">
+                  <span>Peak Day</span>
+                  <strong>{{ getPeakVisitDay(data) }}</strong>
+                </div>
+              </div>
               <div class="chart-stage">
                 <canvas #patientChart></canvas>
               </div>

@@ -96,7 +96,7 @@ Important backend settings live in `backend/src/main/resources/application.prope
 - `hms.rate-limit.refill-tokens`: tokens restored per interval.
 - `hms.rate-limit.refill-minutes`: refill interval in minutes.
 - `REDIS_HOST`, `REDIS_PORT`: Redis connection for shared rate limiting and cache.
-- `HMS_LOG_PATH` or `hms.logging.path`: canonical backend log directory. Defaults to `backend/logs` when the backend is launched from the backend directory.
+- `HMS_LOG_PATH` or `hms.logging.path`: canonical backend log directory. `npm run backend:start` writes backend logs and backend-run stdout/stderr files under `logs/backend`.
 
 Redis is required for consistent distributed rate limiting and optimized caching in this version.
 

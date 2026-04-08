@@ -221,6 +221,24 @@ export class DashboardComponent implements OnInit, AfterViewInit, OnDestroy {
     const total = this.getDepartmentTotal(data);
     return total > 0 ? Math.round((count / total) * 100) : 0;
   }
+
+  getScheduledVisits(data: DashboardSummary): number {
+    return Math.max((data.todayAppointments || 0) - (data.patientsInQueue || 0) - (data.completedConsultations || 0), 0);
+  }
+
+  getWeeklyVisitTotal(data: DashboardSummary): number {
+    return (data.weeklyStats || []).reduce((total, item) => total + (item.appointments || 0), 0);
+  }
+
+  getPeakVisitDay(data: DashboardSummary): string {
+    const stats = data.weeklyStats || [];
+    if (!stats.length) {
+      return 'No visits';
+    }
+
+    const peak = stats.reduce((highest, item) => ((item.appointments || 0) > (highest.appointments || 0) ? item : highest));
+    return peak.appointments > 0 ? `${peak.day} (${peak.appointments})` : 'No visits';
+  }
 }
 
 

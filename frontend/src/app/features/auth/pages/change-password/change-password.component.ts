@@ -7,6 +7,7 @@ import { HttpErrorResponse } from '@angular/common/http';
 import { Role } from '../../models/auth.models';
 import { Router } from '@angular/router';
 import { createChangePasswordForm } from '../../auth-form.utils';
+import { AbstractControl } from '@angular/forms';
 
 @Component({
   selector: 'app-change-password',
@@ -54,6 +55,19 @@ export class ChangePasswordComponent {
         this.errorMessage = err.error?.message || 'Unable to update password.';
       },
     });
+  }
+
+  getControl(name: string): AbstractControl | null {
+    return this.passwordForm.get(name);
+  }
+
+  shouldShowError(name: string): boolean {
+    const control = this.getControl(name);
+    return !!control && control.touched && control.invalid;
+  }
+
+  hasFormError(errorName: string): boolean {
+    return this.passwordForm.touched && this.passwordForm.hasError(errorName);
   }
 }
 

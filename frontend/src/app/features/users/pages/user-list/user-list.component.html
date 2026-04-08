@@ -18,8 +18,14 @@
               type="text"
               class="search-input"
               placeholder="Search username or email..."
+              [value]="searchQuery"
               (input)="onSearch($event)"
             />
+            @if (searchQuery) {
+              <button class="clear-search" type="button" aria-label="Clear user search" (click)="clearSearch()">
+                <i class="ri-close-line"></i>
+              </button>
+            }
           </div>
           <button class="btn btn-outline-primary" (click)="loadUsers()">
             <i class="ri-refresh-line me-1"></i> Refresh
@@ -99,7 +105,9 @@
               <td colspan="5" class="text-center py-5">
                 <div class="empty-state">
                   <i class="ri-user-search-line h1 text-muted"></i>
-                  <p class="text-muted">No system users available.</p>
+                  <p class="text-muted">
+                    {{ searchQuery ? 'No users match this username or email.' : 'No system users available.' }}
+                  </p>
                 </div>
               </td>
             </tr>

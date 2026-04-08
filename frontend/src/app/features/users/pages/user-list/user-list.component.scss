@@ -51,7 +51,7 @@
   height: 38px;
   border: 1px solid #cbd5e1;
   border-radius: 8px;
-  padding: 0 1rem 0 2.4rem;
+  padding: 0 2.4rem 0 2.4rem;
   font: inherit;
   color: #0f172a;
   background: #fff;
@@ -60,6 +60,32 @@
     outline: none;
     border-color: #3b82f6;
     box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.14);
+  }
+}
+
+.clear-search {
+  position: absolute;
+  right: 0.55rem;
+  top: 50%;
+  width: 1.75rem;
+  height: 1.75rem;
+  display: grid;
+  place-items: center;
+  border: 0;
+  border-radius: 8px;
+  background: transparent;
+  color: #64748b;
+  cursor: pointer;
+  transform: translateY(-50%);
+
+  &:hover {
+    background: #f1f5f9;
+    color: #0f172a;
+  }
+
+  i {
+    position: static;
+    transform: none;
   }
 }
 

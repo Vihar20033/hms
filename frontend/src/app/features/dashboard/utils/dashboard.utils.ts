@@ -49,41 +49,6 @@ export function getDashboardStatusClass(status: AppointmentStatus): string {
   return map[status] || 'status-scheduled';
 }
 
-const valueLabelPlugin = {
-  id: 'valueLabelPlugin',
-  afterDatasetsDraw(chart: Chart) {
-    const { ctx } = chart;
-    ctx.save();
-    ctx.textAlign = 'center';
-    ctx.textBaseline = 'bottom';
-    ctx.fillStyle = '#334155';
-    ctx.font = '700 11px system-ui';
-
-    chart.data.datasets.forEach((dataset, datasetIndex) => {
-      const meta = chart.getDatasetMeta(datasetIndex);
-      if (meta.hidden) {
-        return;
-      }
-
-      meta.data.forEach((element, index) => {
-        const rawValue = dataset.data[index];
-        if (typeof rawValue !== 'number') {
-          return;
-        }
-
-        const position = element.tooltipPosition(false);
-        if (position.x == null || position.y == null) {
-          return;
-        }
-
-        ctx.fillText(String(rawValue), position.x, position.y - 8);
-      });
-    });
-
-    ctx.restore();
-  },
-};
-
 export function createDashboardChart(ctx: CanvasRenderingContext2D, data: DashboardSummary): Chart {
   const stats: WeeklyStatistics[] = data.weeklyStats || [];
   const labels = stats.map((s) => s.day);
@@ -118,13 +83,23 @@ export function createDashboardChart(ctx: CanvasRenderingContext2D, data: Dashbo
     options: {
       responsive: true,
       maintainAspectRatio: false,
+      layout: {
+        padding: {
+          top: 4,
+          right: 8,
+          bottom: 0,
+          left: 0,
+        },
+      },
       plugins: {
         legend: { 
           position: 'top',
           labels: {
             usePointStyle: true,
-            padding: 20,
-            font: { weight: 'bold' }
+            boxWidth: 8,
+            boxHeight: 8,
+            padding: 14,
+            font: { weight: 'bold', size: 12 }
           }
         },
         tooltip: {
@@ -140,21 +115,22 @@ export function createDashboardChart(ctx: CanvasRenderingContext2D, data: Dashbo
           grace: 1,
           ticks: {
             precision: 0,
-            stepSize: 1,
-            padding: 10,
+            maxTicksLimit: 5,
+            padding: 8,
           },
-          grid: { color: '#f1f5f9' },
+          border: { display: false },
+          grid: { color: '#eef2f7' },
         },
         x: { 
+          border: { display: false },
           grid: { display: false },
           ticks: {
-            padding: 10,
-            font: { weight: 'bold' },
+            padding: 8,
+            font: { weight: 'bold', size: 11 },
           }
         },
       },
     },
-    plugins: [valueLabelPlugin],
   };
 
   return new Chart(ctx, config);
@@ -249,6 +225,9 @@ export function createDailyVisitFlowChart(ctx: CanvasRenderingContext2D, data: D
     options: {
       responsive: true,
       maintainAspectRatio: false,
+      layout: {
+        padding: 0,
+      },
       plugins: {
         legend: { display: false },
         tooltip: {
@@ -265,12 +244,14 @@ export function createDailyVisitFlowChart(ctx: CanvasRenderingContext2D, data: D
           grace: 1,
           ticks: {
             precision: 0,
-            stepSize: 1,
-            padding: 10,
+            maxTicksLimit: 4,
+            padding: 8,
           },
+          border: { display: false },
           grid: { color: '#f1f5f9' },
         },
         x: {
+          border: { display: false },
           grid: { display: false },
           ticks: {
             padding: 10,
@@ -279,7 +260,6 @@ export function createDailyVisitFlowChart(ctx: CanvasRenderingContext2D, data: D
         },
       },
     },
-    plugins: [valueLabelPlugin],
   };
 
   return new Chart(ctx, config);
