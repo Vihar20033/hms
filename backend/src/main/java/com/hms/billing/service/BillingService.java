@@ -19,7 +19,10 @@ public interface BillingService {
 
     Slice<BillingResponseDTO> getBillingSlice(int page, int size, String query);
 
-    List<BillingResponseDTO> getBillingsByPatientId(Long patientId);
+    Slice<BillingResponseDTO> getBillingsByPatientIdPaged(Long patientId, int page, int size);
+
+
+    Slice<BillingResponseDTO> getCurrentPatientBillingsPaged(int page, int size);
 
     List<BillingResponseDTO> getCurrentPatientBillings();
 

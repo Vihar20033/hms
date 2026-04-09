@@ -1,14 +1,16 @@
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { FULL_NAME_PATTERN, PHONE_PATTERN, trimRequired } from '../../../core/validators/app-validators';
 import { map } from 'rxjs/operators';
-import { BloodGroup, Patient, UrgencyLevel } from '../models/patient.models';
+import { BloodGroup, Gender, Patient, UrgencyLevel } from '../models/patient.models';
 import { Prescription } from '../../prescription/models/prescription.models';
 
 export function createPatientRegistrationForm(fb: FormBuilder): FormGroup {
   return fb.group({
     name: ['', [...trimRequired(2, 200), Validators.pattern(FULL_NAME_PATTERN)]],
     email: ['', [Validators.required, Validators.email, Validators.maxLength(100)]],
-    age: [null, [Validators.required, Validators.min(0), Validators.max(120)]],
+    age: [{ value: null, disabled: true }, [Validators.required, Validators.min(0), Validators.max(120)]],
+    dob: [null, [Validators.required]],
+    gender: [null, [Validators.required]],
     bloodGroup: [BloodGroup.O_POSITIVE, [Validators.required]],
     contactNumber: ['', [Validators.required, Validators.pattern(PHONE_PATTERN)]],
     urgencyLevel: [UrgencyLevel.LOW, [Validators.required]],
@@ -17,6 +19,7 @@ export function createPatientRegistrationForm(fb: FormBuilder): FormGroup {
     fees: [null, [Validators.required, Validators.min(0.01)]],
   });
 }
+
 
 export function buildBloodGroupOptions(bloodGroups: string[]): Array<{ label: string; value: string }> {
   return bloodGroups.map((group) => ({

@@ -18,7 +18,7 @@ import { InputTextareaModule } from 'primeng/inputtextarea';
 import { InputTextModule } from 'primeng/inputtext';
 import { KeyFilterModule } from 'primeng/keyfilter';
 import { Observable } from 'rxjs';
-import { BloodGroup, Patient, UrgencyLevel } from '../../models/patient.models';
+import { BloodGroup, Gender, Patient, UrgencyLevel } from '../../models/patient.models';
 import { PatientService } from '../../services/patient.service';
 import { Prescription } from '../../../prescription/models/prescription.models';
 import { SidebarComponent } from '../../../../layout/sidebar/sidebar.component';
@@ -51,6 +51,7 @@ export class PatientRegistrationComponent implements OnInit {
 
   bloodGroups = Object.values(BloodGroup);
   urgencyLevels = Object.values(UrgencyLevel);
+  genders = Object.values(Gender);
 
   constructor(
     private fb: FormBuilder,
@@ -59,6 +60,7 @@ export class PatientRegistrationComponent implements OnInit {
     private route: ActivatedRoute,
   ) {
     this.registrationForm = createPatientRegistrationForm(this.fb);
+    this.setupDobListener();
   }
 
   ngOnInit(): void {
@@ -71,6 +73,21 @@ export class PatientRegistrationComponent implements OnInit {
     });
   }
 
+  setupDobListener(): void {
+    this.registrationForm.get('dob')?.valueChanges.subscribe((value) => {
+      if (value) {
+        const dob = new Date(value);
+        const today = new Date();
+        let age = today.getFullYear() - dob.getFullYear();
+        const monthDiff = today.getMonth() - dob.getMonth();
+        if (monthDiff < 0 || (monthDiff === 0 && today.getDate() < dob.getDate())) {
+          age--;
+        }
+        this.registrationForm.get('age')?.setValue(age > 0 ? age : 0);
+      }
+    });
+  }
+
   loadPatient(id: number): void {
     this.isLoading = true;
     this.patientService.getById(id).subscribe({
@@ -79,6 +96,8 @@ export class PatientRegistrationComponent implements OnInit {
           name: res.data.name,
           email: res.data.email ?? '',
           age: res.data.age,
+          dob: res.data.dob,
+          gender: res.data.gender,
           bloodGroup: res.data.bloodGroup,
           contactNumber: res.data.contactNumber,
           urgencyLevel: res.data.urgencyLevel,
@@ -102,8 +121,8 @@ export class PatientRegistrationComponent implements OnInit {
 
       const request$: Observable<ApiResponse<Patient>> =
         this.isEditMode && this.patientId
-          ? this.patientService.update(this.patientId!, this.registrationForm.value)
-          : this.patientService.create(this.registrationForm.value);
+          ? this.patientService.update(this.patientId!, this.registrationForm.getRawValue())
+          : this.patientService.create(this.registrationForm.getRawValue());
 
       request$.subscribe({
         next: (res: ApiResponse<Patient>) => {
@@ -142,15 +161,3 @@ export class PatientRegistrationComponent implements OnInit {
     return getUrgencyClass(level);
   }
 }
-
-
-
-
-
-
-
-
-
-
-
-

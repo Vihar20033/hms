@@ -115,7 +115,7 @@ public class MedicineController {
     public ResponseEntity<ApiResponse<Void>> restock(
             @PathVariable("id") Long id,
             @Valid @RequestBody RestockMedicineRequestDTO request) {
-        service.restockMedicine(id, request.getQuantity());
+        service.restockMedicine(id, request.getQuantity()); // Fix #5 – Long qty passed through
         return ResponseEntity.ok(ApiResponse.success(null));
     }
 }

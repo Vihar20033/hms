@@ -26,6 +26,18 @@ public abstract class BaseEntity {
     @Builder.Default
     private Long version = 0L;
 
+    /**
+     * Fix #7 - Concurrent Patient Soft-Delete
+     * While Hibernate @SoftDelete filters records, we maintain an explicit field
+     * to allow check if (patient.isDeleted()) at the start of transactions.
+     */
+    @Column(name = "deleted", insertable = false, updatable = false)
+    private boolean deleted;
+
+    public boolean isDeleted() {
+        return deleted;
+    }
+
     @PrePersist
     protected void initializeVersion() {
         if (version == null) {

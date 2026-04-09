@@ -35,6 +35,7 @@ import org.springframework.data.jpa.domain.Specification;
 
 @Service
 @RequiredArgsConstructor
+@Slf4j
 public class MedicineServiceImpl implements MedicineService {
 
     private final MedicineRepository medicineRepository;
@@ -157,6 +158,18 @@ public class MedicineServiceImpl implements MedicineService {
             Medicine medicine = medicineRepository.findById(item.getMedicineId())
                     .orElseThrow(() -> new MedicineNotFoundException("Medicine not found with ID: " + item.getMedicineId()));
 
+            // Fix #5 – Max Transaction Limit: prevent accidental bulk data-entry mistakes
+            if (item.getQuantity() > Medicine.MAX_TRANSACTION_LIMIT) {
+                throw new com.hms.common.exception.BadRequestException(
+                    "Dispense quantity " + item.getQuantity() + " exceeds the maximum allowed transaction limit of " + Medicine.MAX_TRANSACTION_LIMIT);
+            }
+
+            // Fix #8 – Dosage Range Validation: warn if quantity exceeds maxSafeDose
+            if (medicine.getMaxSafeDose() != null && item.getQuantity() > medicine.getMaxSafeDose()) {
+                log.warn("DOSAGE_BOUNDS_EXCEEDED: Medicine '{}' (id={}) prescribed qty={} exceeds maxSafeDose={}. Review required.",
+                        medicine.getName(), medicine.getId(), item.getQuantity(), medicine.getMaxSafeDose());
+            }
+
             int updatedRows = medicineRepository.deductStockAtomic(medicine.getId(), item.getQuantity());
             if (updatedRows == 0) {
                 throw new InsufficientStockException(medicine.getName(), "Insufficient stock for medicine: " + medicine.getName());
@@ -178,9 +191,15 @@ public class MedicineServiceImpl implements MedicineService {
     @Override
     @Transactional(rollbackFor = Exception.class)
     @CacheEvict(value = "medicines", allEntries = true)
-    public void restockMedicine(Long id, Integer quantity) {
+    public void restockMedicine(Long id, Long quantity) {
         Medicine medicine = medicineRepository.findById(id)
                 .orElseThrow(() -> new MedicineNotFoundException("Medicine not found with ID: " + id));
+
+        // Fix #5 – Max Transaction Limit: guard against accidental bulk data-entry mistakes
+        if (quantity > Medicine.MAX_TRANSACTION_LIMIT) {
+            throw new com.hms.common.exception.BadRequestException(
+                "Restock quantity " + quantity + " exceeds the maximum allowed transaction limit of " + Medicine.MAX_TRANSACTION_LIMIT);
+        }
 
         medicineRepository.addStockAtomic(medicine.getId(), quantity);
 
@@ -199,8 +218,15 @@ public class MedicineServiceImpl implements MedicineService {
     @Override
     @Transactional(readOnly = true)
     public List<InventoryTransactionResponseDTO> getAllTransactions() {
-        return inventoryTransactionRepository.findAll().stream()
-                .sorted((t1, t2) -> t2.getCreatedAt().compareTo(t1.getCreatedAt())) // Recent first
+        // Fix #10 - Empty Search Performance: Enforce limit
+        return getTransactionSlice(0, 50).getContent();
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public Slice<InventoryTransactionResponseDTO> getTransactionSlice(int page, int size) {
+        PageRequest request = PageRequest.of(page, size, Sort.by(Sort.Direction.DESC, "createdAt"));
+        return inventoryTransactionRepository.findAll(request)
                 .map(t -> InventoryTransactionResponseDTO.builder()
                         .id(t.getId())
                         .medicineId(t.getMedicine().getId())
@@ -212,8 +238,7 @@ public class MedicineServiceImpl implements MedicineService {
                         .notes(t.getNotes())
                         .createdAt(t.getCreatedAt())
                         .createdBy(t.getCreatedBy())
-                        .build())
-                .toList();
+                        .build());
     }
 
     @Override

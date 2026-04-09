@@ -20,5 +20,7 @@ public interface PrescriptionService {
 
     List<PrescriptionResponseDTO> getPrescriptionsByPatientId(Long patientId);
 
+    Slice<PrescriptionResponseDTO> getPrescriptionSliceByPatient(Long patientId, int page, int size);
+
     void deletePrescription(Long id);
 }

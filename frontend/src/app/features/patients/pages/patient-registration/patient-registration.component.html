@@ -79,13 +79,54 @@
                 </div>
 
                 <div class="form-group">
+                  <label class="form-label" for="dob">Date of Birth</label>
+                  <div class="input-wrapper">
+                    <i class="ri-calendar-line icon"></i>
+                    <input
+                      pInputText
+                      type="date"
+                      id="dob"
+                      formControlName="dob"
+                      class="form-control"
+                    />
+                  </div>
+                  <div
+                    class="error-msg"
+                    *ngIf="registrationForm.get('dob')?.touched && registrationForm.get('dob')?.invalid"
+                  >
+                    <small>Date of birth is required</small>
+                  </div>
+                </div>
+
+                <div class="form-group">
+                  <label class="form-label" for="gender">Gender</label>
+                  <p-dropdown
+                    inputId="gender"
+                    formControlName="gender"
+                    [options]="genders"
+                    styleClass="w-full"
+                    placeholder="Select Gender"
+                  >
+                  </p-dropdown>
+                  <div
+                    class="error-msg"
+                    *ngIf="registrationForm.get('gender')?.touched && registrationForm.get('gender')?.invalid"
+                  >
+                    <small>Gender is required</small>
+                  </div>
+                </div>
+
+
+                <div class="form-group">
                   <label class="form-label" for="age">Age</label>
                   <p-inputNumber
                     inputId="age"
                     formControlName="age"
                     [useGrouping]="false"
-                    placeholder="Entry age"
+                    placeholder="Auto-calculated"
+                    [readonly]="true"
                   ></p-inputNumber>
+
                   <div
                     class="error-msg"
                     *ngIf="registrationForm.get('age')?.touched && registrationForm.get('age')?.invalid"

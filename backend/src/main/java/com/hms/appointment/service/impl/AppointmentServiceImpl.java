@@ -96,6 +96,10 @@ public class AppointmentServiceImpl implements AppointmentService {
         appointment.setPatient(patientRepository.findById(dto.getPatientId())
                 .orElseThrow(() -> new AppointmentNotFoundException("Patient not found with ID: " + dto.getPatientId())));
 
+        if (appointment.getPatient().isDeleted()) {
+            throw new BadRequestException("Cannot book an appointment for a deleted patient profile.");
+        }
+
         Doctor doctor;
         if (dto.getDoctorId() != null) {
             doctor = doctorRepository.findById(dto.getDoctorId())
@@ -187,7 +191,11 @@ public class AppointmentServiceImpl implements AppointmentService {
                 // Consistent locking order (Patient ID then Doctor ID)
                 lockAndCheckAvailability(doctor.getId(), patient.getId(), requestedTime, id, dto.isEmergency());
 
-                appointment.setPatient(patient);
+                if (patient.isDeleted()) {
+            throw new BadRequestException("Cannot update an appointment for a deleted patient profile.");
+        }
+
+        appointment.setPatient(patient);
                 appointment.setDoctor(doctor);
                 appointment.setDepartment(dto.getDepartment());
                 appointment.setAppointmentTime(requestedTime);

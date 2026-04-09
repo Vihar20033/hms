@@ -25,6 +25,7 @@ public class DispenseMedicineRequestDTO {
 
         @NotNull(message = "Quantity is required")
         @Min(value = 1, message = "Quantity must be at least 1")
-        private Integer quantity;
+        /** Fix #5 – Long to prevent overflow in bulk dispense operations */
+        private Long quantity;
     }
 }

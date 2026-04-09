@@ -33,12 +33,8 @@ public class PrescriptionController {
                         prescriptionService.createPrescription(dto), "Request successful", HttpStatus.CREATED));
     }
 
-    @PreAuthorize("hasAnyRole('ADMIN','PHARMACIST','DOCTOR')")
-    @GetMapping
-    public ResponseEntity<ApiResponse<List<PrescriptionResponseDTO>>> getAllPrescriptions() {
-        return ResponseEntity.ok(
-                ApiResponse.success(prescriptionService.getAllPrescriptions()));
-    }
+    // Fix #10 - Empty Search Performance: Removed generic / endpoint. 
+    // Clients must use /slice with pagination to prevent server memory issues.
 
     @PreAuthorize("hasAnyRole('ADMIN','DOCTOR','PHARMACIST')")
     @GetMapping("/slice")
@@ -64,10 +60,24 @@ public class PrescriptionController {
 
     @PreAuthorize("hasAnyRole('ADMIN','DOCTOR','PHARMACIST')")
     @GetMapping("/patient/{patientId}")
-    public ResponseEntity<ApiResponse<List<PrescriptionResponseDTO>>> getByPatientId(
-            @PathVariable("patientId") Long patientId) {
-        return ResponseEntity.ok(ApiResponse.success(
-                prescriptionService.getPrescriptionsByPatientId(patientId)));
+    public ResponseEntity<ApiResponse<SliceResponse<PrescriptionResponseDTO>>> getByPatientId(
+            @PathVariable("patientId") Long patientId,
+            @RequestParam(name = "page", defaultValue = "0") int page,
+            @RequestParam(name = "size", defaultValue = "15") int size) {
+        
+        // Fix #10 - Enforce mandatory pagination 
+        org.springframework.data.domain.Slice<PrescriptionResponseDTO> slice = prescriptionService.getPrescriptionSliceByPatient(
+                patientId, Math.max(page, 0), Math.min(Math.max(size, 1), 100));
+
+        return ResponseEntity.ok(ApiResponse.success(SliceResponse.<PrescriptionResponseDTO>builder()
+                .content(slice.getContent())
+                .page(slice.getNumber())
+                .size(slice.getSize())
+                .first(slice.isFirst())
+                .last(slice.isLast())
+                .hasNext(slice.hasNext())
+                .numberOfElements(slice.getNumberOfElements())
+                .build()));
     }
 
     @PreAuthorize("hasAnyRole('ADMIN','DOCTOR','PHARMACIST')")

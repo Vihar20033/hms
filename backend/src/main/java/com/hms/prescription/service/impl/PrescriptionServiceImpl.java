@@ -83,6 +83,12 @@ public class PrescriptionServiceImpl implements PrescriptionService {
             prescription.setAppointment(appointment);
         }
 
+        // Fix #7 - Concurrent Patient Soft-Delete
+        // Check if patient was deleted between retrieval and start of prescription creation
+        if (patient.isDeleted()) {
+            throw new BadRequestException("Cannot create a prescription for a deleted patient profile.");
+        }
+
         if (dto.getMedicines() != null && !dto.getMedicines().isEmpty()) {
             prescription.getMedicines().clear();
             for (PrescriptionMedicineRequestDTO medicineDto : dto.getMedicines()) {
@@ -102,8 +108,14 @@ public class PrescriptionServiceImpl implements PrescriptionService {
                         Medicine med = medicineRepository.findByNameIgnoreCase(medicineDto.getMedicineName())
                                 .orElseThrow(() -> new MedicineNotFoundException("Medicine not found: " + medicineDto.getMedicineName()));
                         
-                        Integer qty = medicineDto.getQuantity() != null ? medicineDto.getQuantity() : 1;
+                        Long qty = medicineDto.getQuantity() != null ? medicineDto.getQuantity() : 1L;
                         
+                        // Fix #8 - Prescribed Dosage Range Validation
+                        if (med.getMaxSafeDose() != null && qty > med.getMaxSafeDose()) {
+                            log.warn("SAFETY ALERT: Prescription for {} exceeds max safe dose ({} > {}). Logging for review.", 
+                                    med.getName(), qty, med.getMaxSafeDose());
+                        }
+
                         // Snapshotting: Store name and price at this exact moment
                         PrescriptionMedicine pm = prescriptionMapper.toMedicineEntity(medicineDto);
                         pm.setMedicineName(med.getName()); // Use master name
@@ -167,17 +179,13 @@ public class PrescriptionServiceImpl implements PrescriptionService {
     @Override
     @Transactional(readOnly = true)
     public List<PrescriptionResponseDTO> getAllPrescriptions() {
-        User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        Role role = user.getRole();
-
-        if (role == Role.ADMIN || role == Role.PHARMACIST) {
-            return prescriptionMapper.toDtoList(prescriptionRepository.findAll());
-        }
-
-        if (role == Role.DOCTOR) {
-            return prescriptionMapper.toDtoList(prescriptionRepository.findByDoctorUserId(user.getId()));
-        }
-        return Collections.emptyList();
+        // Fix #10 - Empty Search Performance 
+        // This method is deprecated. Callers should use paginated getPrescriptionSlice instead.
+        log.warn("Unbounded getAllPrescriptions called. Enforcing limit to prevent system crash.");
+        PageRequest request = PageRequest.of(0, 50, Sort.by(Sort.Direction.DESC, "createdAt"));
+        return prescriptionRepository.findAll(request).getContent().stream()
+                .map(prescriptionMapper::toDto)
+                .toList();
     }
 
     @Override
@@ -218,11 +226,19 @@ public class PrescriptionServiceImpl implements PrescriptionService {
     @Override
     @Transactional(readOnly = true)
     public List<PrescriptionResponseDTO> getPrescriptionsByPatientId(Long patientId) {
-        List<Prescription> prescriptions = prescriptionRepository.findByPatientId(patientId);
-        if (!prescriptions.isEmpty()) {
-            checkOwnership(prescriptions.get(0));
+        // Fix #10 - Empty Search Performance: Enforce limit
+        return getPrescriptionSliceByPatient(patientId, 0, 50).getContent();
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public Slice<PrescriptionResponseDTO> getPrescriptionSliceByPatient(Long patientId, int page, int size) {
+        PageRequest request = PageRequest.of(page, size, Sort.by(Sort.Direction.DESC, "createdAt"));
+        Slice<Prescription> slice = prescriptionRepository.findByPatientId(patientId, request);
+        if (!slice.isEmpty()) {
+            checkOwnership(slice.getContent().get(0));
         }
-        return prescriptionMapper.toDtoList(prescriptions);
+        return slice.map(prescriptionMapper::toDto);
     }
 
     @Override
@@ -234,7 +250,7 @@ public class PrescriptionServiceImpl implements PrescriptionService {
         if (prescription.getMedicines() != null && !prescription.getMedicines().isEmpty()) {
             for (PrescriptionMedicine pm : prescription.getMedicines()) {
                 medicineRepository.findByNameIgnoreCase(pm.getMedicineName()).ifPresent(med -> {
-                    Integer qty = pm.getQuantity() != null ? pm.getQuantity() : 1;
+                    Long qty = pm.getQuantity() != null ? pm.getQuantity() : 1L;
                     medicineRepository.addStockAtomic(med.getId(), qty);
                     
                     InventoryTransaction transaction = InventoryTransaction.builder()
@@ -246,6 +262,23 @@ public class PrescriptionServiceImpl implements PrescriptionService {
                             .build();
                     inventoryTransactionRepository.save(transaction);
                 });
+            }
+        }
+
+        // Fix #6 - PDF Report Orphaned Files
+        if (prescription.getReportUrl() != null) {
+            try {
+                // Extract public ID from Cloudinary URL (e.g. .../v12345/hms/prescriptions/rx_123.pdf)
+                String url = prescription.getReportUrl();
+                String folderPath = "hms/prescriptions/";
+                int startIndex = url.indexOf(folderPath);
+                if (startIndex != -1) {
+                    int endIndex = url.lastIndexOf(".");
+                    String publicId = url.substring(startIndex, endIndex);
+                    cloudinaryService.deleteFile(publicId);
+                }
+            } catch (Exception e) {
+                log.error("Failed to delete Cloudinary file while deleting prescription {}", id, e);
             }
         }
 

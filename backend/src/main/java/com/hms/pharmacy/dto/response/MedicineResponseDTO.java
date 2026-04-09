@@ -23,9 +23,12 @@ public class MedicineResponseDTO {
     private MedicineCategory category;
     private String manufacturer;
     private LocalDate expiryDate;
-    private Integer quantityInStock;
+    /** Fix #5 – Long to match entity type after overflow fix */
+    private Long quantityInStock;
     private BigDecimal unitPrice;
     private Integer reorderLevel;
+    /** Fix #8 – Dosage bounds field exposed to clients for UI warnings */
+    private Integer maxSafeDose;
     private String dosage;
     private Boolean isActive;
     private Instant createdAt;

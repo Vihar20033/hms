@@ -92,10 +92,10 @@ public class BillingServiceImpl implements BillingService {
     @Override
     @Transactional(readOnly = true)
     public List<BillingResponseDTO> getAllBillings() {
-        return billingRepository.findAll().stream()
-                .map(billingMapper::toDto)
-                .collect(Collectors.toList());
+        // Enforce pagination by calling getBillingSlice with default values
+        return getBillingSlice(0, 20).getContent();
     }
+
 
     @Override
     @Transactional(readOnly = true)
@@ -115,27 +115,37 @@ public class BillingServiceImpl implements BillingService {
 
     @Override
     @Transactional(readOnly = true)
-    public List<BillingResponseDTO> getBillingsByPatientId(Long patientId) {
-        List<Billing> billings = billingRepository.findByPatientId(patientId);
-        if (!billings.isEmpty()) {
-            checkOwnership(billings.get(0));
+    public Slice<BillingResponseDTO> getBillingsByPatientIdPaged(Long patientId, int page, int size) {
+        PageRequest request = PageRequest.of(Math.max(page, 0), Math.min(Math.max(size, 1), 100), Sort.by(Sort.Direction.DESC, "createdAt"));
+        Slice<Billing> slice = billingRepository.findByPatientId(patientId, request);
+        if (!slice.isEmpty()) {
+            checkOwnership(slice.getContent().get(0));
         }
-        return billings.stream()
-                .map(billingMapper::toDto)
-                .collect(Collectors.toList());
+        return slice.map(billingMapper::toDto);
     }
+
 
     @Override
     @Transactional(readOnly = true)
-    public List<BillingResponseDTO> getCurrentPatientBillings() {
+    public Slice<BillingResponseDTO> getCurrentPatientBillingsPaged(int page, int size) {
         User user = SecurityUtils.getCurrentUser();
         if (user == null) {
             throw new AccessDeniedException("No authenticated user found.");
         }
         Patient patient = patientRepository.findByEmail(user.getEmail())
                 .orElseThrow(() -> new AccessDeniedException("Your patient profile is not linked yet."));
-        return getBillingsByPatientId(patient.getId());
+        
+        PageRequest request = PageRequest.of(page, size, Sort.by(Sort.Direction.DESC, "createdAt"));
+        return billingRepository.findByPatientId(patient.getId(), request).map(billingMapper::toDto);
     }
+
+    @Override
+    @Transactional(readOnly = true)
+    public List<BillingResponseDTO> getCurrentPatientBillings() {
+        // Enforce limit via paginated method
+        return getCurrentPatientBillingsPaged(0, 50).getContent();
+    }
+
 
     @Override
     @Transactional

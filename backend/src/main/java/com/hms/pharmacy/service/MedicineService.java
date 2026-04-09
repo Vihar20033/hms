@@ -33,7 +33,10 @@ public interface MedicineService {
 
     void dispenseMedicines(DispenseMedicineRequestDTO request);
 
-    void restockMedicine(Long id, Integer quantity);
+    /** Fix #5 – Long quantity to prevent overflow on large restock transactions */
+    void restockMedicine(Long id, Long quantity);
 
     List<InventoryTransactionResponseDTO> getAllTransactions();
+
+    Slice<InventoryTransactionResponseDTO> getTransactionSlice(int page, int size);
 }

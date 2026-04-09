@@ -18,7 +18,8 @@ public class InventoryTransactionResponseDTO {
     private String medicineName;
     private String medicineCode;
     private String transactionType; // IN or OUT
-    private Integer quantity;
+    /** Fix #5 – Long quantity to match entity after overflow fix */
+    private Long quantity;
     private Long referenceId;
     private String notes;
     private Instant createdAt;

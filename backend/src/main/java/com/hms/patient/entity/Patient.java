@@ -9,6 +9,9 @@ import lombok.*;
 import lombok.experimental.SuperBuilder;
 import org.hibernate.envers.Audited;
 import java.math.BigDecimal;
+import java.time.LocalDate;
+import com.hms.common.enums.Gender;
+
 
 
 @Entity
@@ -38,6 +41,14 @@ public class Patient extends Auditable {
     @Min(0)
     @Max(150)
     private Integer age;
+
+    @Column(name = "dob")
+    private LocalDate dob;
+
+    @Enumerated(EnumType.STRING)
+    @Column(name = "gender", length = 10)
+    private Gender gender;
+
 
     @Enumerated(EnumType.STRING)
     @Column(name = "blood_group", length = 20)

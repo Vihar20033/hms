@@ -18,11 +18,21 @@ export enum UrgencyLevel {
   EMERGENCY = 'EMERGENCY',
 }
 
+export enum Gender {
+  MALE = 'MALE',
+  FEMALE = 'FEMALE',
+  OTHER = 'OTHER',
+}
+
+
 export interface Patient {
   id: number;
   name: string;
   email?: string;
   age: number;
+  dob: string;
+  gender: Gender;
+
   bloodGroup: BloodGroup;
   prescription: string;
   dose: string;
@@ -36,6 +46,9 @@ export interface PatientRequest {
   name: string;
   email?: string;
   age: number;
+  dob: string;
+  gender: Gender;
+
   bloodGroup: BloodGroup;
   prescription: string;
   dose: string;

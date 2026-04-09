@@ -9,6 +9,7 @@ import lombok.experimental.SuperBuilder;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 
+
 @Entity
 @Table(
         name = "medicines",
@@ -43,14 +44,35 @@ public class Medicine extends Auditable {
     @Column(name = "expiry_date")
     private LocalDate expiryDate;
 
+    /**
+     * Fix #5 – Pharmacy Stock Integer Overflow:
+     * Switched from Integer (max ~2.1B) to Long to safely handle bulk orders
+     * and cumulative transaction volumes in high-throughput pharmacy systems.
+     */
     @Column(name = "quantity_in_stock", nullable = false)
-    private Integer quantityInStock;
+    private Long quantityInStock;
+
+    /**
+     * Fix #5 – Max Transaction Limit guard:
+     * No single restock/dispense transaction may exceed this threshold,
+     * preventing accidental bulk data-entry mistakes.
+     */
+    public static final long MAX_TRANSACTION_LIMIT = 100_000L;
 
     @Column(name = "unit_price", nullable = false, precision = 10, scale = 2)
     private BigDecimal unitPrice;
 
     @Column(name = "reorder_level")
     private Integer reorderLevel;
+
+    /**
+     * Fix #8 – Prescribed Dosage Range Validation:
+     * Stores the maximum safe dispensable quantity per prescription
+     * for this medicine. The service layer checks quantity <= maxSafeDose
+     * and triggers a warning when exceeded.
+     */
+    @Column(name = "max_safe_dose")
+    private Integer maxSafeDose;
 
     @Column(name = "dosage")
     private String dosage;

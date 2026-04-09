@@ -23,15 +23,17 @@ public interface MedicineRepository extends JpaRepository<Medicine, Long>, JpaSp
 
     Optional<Medicine> findByNameIgnoreCase(String name);
 
+    /** Fix #5 – Long qty prevents Integer overflow on large bulk operations */
     @Modifying
     @Query("UPDATE Medicine m SET m.quantityInStock = m.quantityInStock - :qty " +
            "WHERE m.id = :id AND m.quantityInStock >= :qty")
-    int deductStockAtomic(@Param("id") Long id, @Param("qty") Integer qty);
+    int deductStockAtomic(@Param("id") Long id, @Param("qty") Long qty);
 
+    /** Fix #5 – Long qty prevents Integer overflow on large bulk restocks */
     @Modifying
     @Query("UPDATE Medicine m SET m.quantityInStock = m.quantityInStock + :qty " +
            "WHERE m.id = :id")
-    void addStockAtomic(@Param("id") Long id, @Param("qty") Integer qty);
+    void addStockAtomic(@Param("id") Long id, @Param("qty") Long qty);
 
     @Query("SELECT COUNT(m) FROM Medicine m WHERE m.quantityInStock <= m.reorderLevel OR (m.reorderLevel IS NULL AND m.quantityInStock <= 10)")
     long countLowStock();

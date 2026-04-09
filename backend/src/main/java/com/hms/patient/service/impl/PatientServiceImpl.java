@@ -30,6 +30,9 @@ import com.hms.common.exception.BadRequestException;
 import com.hms.appointment.repository.AppointmentRepository;
 
 import java.util.List;
+import java.time.LocalDate;
+import java.time.Period;
+
 
 import com.hms.common.specification.SearchSpecification;
 import org.springframework.data.jpa.domain.Specification;
@@ -57,7 +60,10 @@ public class PatientServiceImpl implements PatientService {
             throw new DuplicatePatientException("Patient already exists");
         }
 
-        Patient saved = repository.save(mapper.toEntity(dto));
+        Patient entity = mapper.toEntity(dto);
+        entity.setAge(calculateAge(dto.getDob()));
+        Patient saved = repository.save(entity);
+
         log.info("Patient created successfully with ID: {}", saved.getId());
         auditLogService.log(SecurityUtils.getCurrentUsername(), "PATIENT_CREATE", "Patient", saved.getId().toString(),
                 "name=" + saved.getName());
@@ -85,6 +91,8 @@ public class PatientServiceImpl implements PatientService {
         }
 
         mapper.updateEntity(dto, patient);
+        patient.setAge(calculateAge(dto.getDob()));
+
         Patient updated = repository.save(patient);
         log.info("Patient updated successfully with ID: {}", id);
         auditLogService.log(SecurityUtils.getCurrentUsername(), "PATIENT_UPDATE", "Patient", id.toString(),
@@ -141,4 +149,9 @@ public class PatientServiceImpl implements PatientService {
     }
 
 
+    private int calculateAge(LocalDate dob) {
+        if (dob == null) return 0;
+        return Period.between(dob, LocalDate.now()).getYears();
+    }
 }
+

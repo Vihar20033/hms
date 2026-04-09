@@ -29,12 +29,13 @@ public class InventoryTransaction extends Auditable {
     @Column(nullable = false)
     private String transactionType; // IN or OUT
 
+    /** Fix #5 – Long quantity to handle large bulk transactions (Integer max ~2.1B is insufficient) */
     @Column(nullable = false)
-    private Integer quantity;
+    private Long quantity;
 
     @Column(name = "reference_id")
     private Long referenceId; // e.g. Prescription ID
-    
+
     @Column(columnDefinition = "TEXT")
     private String notes;
 }

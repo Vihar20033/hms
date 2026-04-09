@@ -1,8 +1,11 @@
 package com.hms.patient.dto.request;
 
 import com.hms.common.enums.BloodGroup;
+import com.hms.common.enums.Gender;
 import com.hms.common.enums.UrgencyLevel;
 import com.hms.common.validation.ValidationPatterns;
+import java.time.LocalDate;
+
 import jakarta.validation.constraints.*;
 import lombok.Getter;
 import lombok.Setter;
@@ -25,6 +28,14 @@ public class PatientRequestDTO {
     @Min(0)
     @Max(120)
     private Integer age;
+
+    @NotNull(message = "Date of birth is required")
+    @Past(message = "Date of birth must be in the past")
+    private LocalDate dob;
+
+    @NotNull(message = "Gender is required")
+    private Gender gender;
+
 
     @NotNull
     private BloodGroup bloodGroup;

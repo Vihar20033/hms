@@ -35,10 +35,24 @@ public class BillingController {
 
     @PreAuthorize("hasAnyRole('ADMIN','RECEPTIONIST')")
     @GetMapping
-    public ResponseEntity<ApiResponse<List<BillingResponseDTO>>> getAllBillings() {
-        return ResponseEntity.ok(ApiResponse.success(
-                billingService.getAllBillings()));
+    public ResponseEntity<ApiResponse<SliceResponse<BillingResponseDTO>>> getAllBillings(
+            @RequestParam(name = "page", defaultValue = "0") int page,
+            @RequestParam(name = "size", defaultValue = "20") int size) {
+        Slice<BillingResponseDTO> slice = billingService.getBillingSlice(
+                Math.max(page, 0),
+                Math.min(Math.max(size, 1), 100));
+
+        return ResponseEntity.ok(ApiResponse.success(SliceResponse.<BillingResponseDTO>builder()
+                .content(slice.getContent())
+                .page(slice.getNumber())
+                .size(slice.getSize())
+                .first(slice.isFirst())
+                .last(slice.isLast())
+                .hasNext(slice.hasNext())
+                .numberOfElements(slice.getNumberOfElements())
+                .build()));
     }
+
 
     @PreAuthorize("hasAnyRole('ADMIN','RECEPTIONIST')")
     @GetMapping("/paged")
@@ -73,17 +87,43 @@ public class BillingController {
 
     @PreAuthorize("hasAnyRole('ADMIN','RECEPTIONIST')")
     @GetMapping("/patient/{patientId}")
-    public ResponseEntity<ApiResponse<List<BillingResponseDTO>>> getBillingsByPatientId(
-            @PathVariable("patientId") Long patientId) {
-        return ResponseEntity.ok(ApiResponse.success(
-                billingService.getBillingsByPatientId(patientId)));
+    public ResponseEntity<ApiResponse<SliceResponse<BillingResponseDTO>>> getBillingsByPatientId(
+            @PathVariable("patientId") Long patientId,
+            @RequestParam(name = "page", defaultValue = "0") int page,
+            @RequestParam(name = "size", defaultValue = "20") int size) {
+        Slice<BillingResponseDTO> slice = billingService.getBillingsByPatientIdPaged(patientId, page, size);
+        return ResponseEntity.ok(ApiResponse.success(SliceResponse.<BillingResponseDTO>builder()
+                .content(slice.getContent())
+                .page(slice.getNumber())
+                .size(slice.getSize())
+                .first(slice.isFirst())
+                .last(slice.isLast())
+                .hasNext(slice.hasNext())
+                .numberOfElements(slice.getNumberOfElements())
+                .build()));
     }
+
 
     @PreAuthorize("hasRole('PATIENT')")
     @GetMapping("/me")
-    public ResponseEntity<ApiResponse<List<BillingResponseDTO>>> getCurrentPatientBillings() {
-        return ResponseEntity.ok(ApiResponse.success(
-                billingService.getCurrentPatientBillings()));
+    public ResponseEntity<ApiResponse<SliceResponse<BillingResponseDTO>>> getCurrentPatientBillings(
+            @RequestParam(name = "page", defaultValue = "0") int page,
+            @RequestParam(name = "size", defaultValue = "20") int size) {
+        
+        // Fix #10 - Enforce mandatory pagination 
+        org.springframework.data.domain.Slice<BillingResponseDTO> slice = billingService.getCurrentPatientBillingsPaged(
+                Math.max(page, 0),
+                Math.min(Math.max(size, 1), 50));
+
+        return ResponseEntity.ok(ApiResponse.success(SliceResponse.<BillingResponseDTO>builder()
+                .content(slice.getContent())
+                .page(slice.getNumber())
+                .size(slice.getSize())
+                .first(slice.isFirst())
+                .last(slice.isLast())
+                .hasNext(slice.hasNext())
+                .numberOfElements(slice.getNumberOfElements())
+                .build()));
     }
 
     @PreAuthorize("hasAnyRole('ADMIN','RECEPTIONIST')")

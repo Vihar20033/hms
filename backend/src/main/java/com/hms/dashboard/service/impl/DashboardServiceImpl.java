@@ -112,12 +112,7 @@ public class DashboardServiceImpl implements DashboardService {
                 return value != null ? value : BigDecimal.ZERO;
         }
 
-        private record SummaryCounts(
-                        long totalPatients,
-                        long todayAppointments,
-                        long lowStockMedicines,
-                        BigDecimal totalRevenue,
-                        long patientsInQueue) {
-        }
+
 }
+
 

@@ -26,7 +26,8 @@ public class PrescriptionMedicine {
 
     private String dosage;
     private String duration;
-    private Integer quantity;
+    /** Fix #5 - Long quantity to handle potentially large dispensing volumes safely */
+    private Long quantity;
     @Column(nullable = false, precision = 12, scale = 2)
     private java.math.BigDecimal unitPriceAtPrescription;
 

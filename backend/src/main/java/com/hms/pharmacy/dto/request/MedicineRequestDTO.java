@@ -40,9 +40,14 @@ public class MedicineRequestDTO {
     @Future(message = "Expiry date must be in the future")
     private LocalDate expiryDate;
 
+    /** Fix #5 – Long quantity to prevent Integer overflow in high-volume pharmacy systems */
     @NotNull(message = "Quantity is required")
     @Min(value = 0, message = "Quantity must be non-negative")
-    private Integer quantityInStock;
+    private Long quantityInStock;
+
+    /** Fix #8 – Max safe dispensable dose for dosage bounds check */
+    @Min(value = 1, message = "Max safe dose must be at least 1")
+    private Integer maxSafeDose;
 
     @NotNull(message = "Unit price is required")
     @DecimalMin(value = "0.0", inclusive = false, message = "Unit price must be positive")

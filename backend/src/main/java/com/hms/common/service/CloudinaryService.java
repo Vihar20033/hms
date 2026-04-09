@@ -62,4 +62,19 @@ public class CloudinaryService {
             return null;
         }
     }
+
+    /**
+     * Fix #6 - PDF Report Orphaned Files
+     * Deletes a file from Cloudinary given its publicId.
+     */
+    public void deleteFile(String publicId) {
+        try {
+            if (publicId != null && !publicId.isBlank()) {
+                cloudinary.uploader().destroy(publicId, ObjectUtils.emptyMap());
+                log.info("Deleted file from Cloudinary: {}", publicId);
+            }
+        } catch (IOException e) {
+            log.error("Failed to delete file from Cloudinary: {}", publicId, e);
+        }
+    }
 }

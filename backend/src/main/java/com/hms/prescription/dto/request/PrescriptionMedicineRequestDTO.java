@@ -27,7 +27,8 @@ public class PrescriptionMedicineRequestDTO {
     private String duration;
     
     @NotNull(message = "Quantity is required")
-    private Integer quantity;
+    /** Fix #5 - Long quantity following inventory overflow fix */
+    private Long quantity;
     
     @Size(max = 500, message = "Instructions must not exceed 500 characters")
     private String instructions;
