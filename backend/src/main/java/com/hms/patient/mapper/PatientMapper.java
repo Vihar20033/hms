@@ -8,7 +8,8 @@ import org.mapstruct.Mapper;
 import org.mapstruct.MappingTarget;
 
 @Mapper(componentModel = "spring",
-        builder = @Builder(disableBuilder = true))
+        builder = @Builder(disableBuilder = true),
+        unmappedTargetPolicy = org.mapstruct.ReportingPolicy.IGNORE)
 public interface PatientMapper {
 
     Patient toEntity(PatientRequestDTO dto);

@@ -8,7 +8,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.math.BigDecimal;
-import java.time.LocalDateTime;
+import java.time.Instant;
 import java.util.List;
 
 
@@ -28,12 +28,11 @@ public class BillingResponseDTO {
     private BigDecimal netAmount;
     private PaymentStatus paymentStatus;
     private PaymentMethod paymentMethod;
-    private LocalDateTime billingDate;
-    private LocalDateTime dueDate;
+    private Instant billingDate;
+    private Instant dueDate;
     private String notes;
     private String reportUrl;
     private List<BillingItemResponseDTO> items;
-    private LocalDateTime createdAt;
+    private Instant createdAt;
 
 }
-

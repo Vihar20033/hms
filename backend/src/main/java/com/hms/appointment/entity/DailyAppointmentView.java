@@ -6,7 +6,7 @@ import jakarta.persistence.Table;
 import lombok.Getter;
 import org.hibernate.annotations.Immutable;
 
-import java.time.LocalDateTime;
+import java.time.Instant;
 
 @Entity
 @Immutable
@@ -17,7 +17,7 @@ public class DailyAppointmentView {
     @Id
     private Long appointmentId;
     
-    private LocalDateTime appointmentTime;
+    private Instant appointmentTime;
     
     private String status;
     

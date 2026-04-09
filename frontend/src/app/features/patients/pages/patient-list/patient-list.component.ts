@@ -9,6 +9,8 @@ import { PatientService } from '../../services/patient.service';
 import { Router, RouterLink } from '@angular/router';
 import { SidebarComponent } from '../../../../layout/sidebar/sidebar.component';
 import { StatusModalService } from '../../../../shared/services/status-modal.service';
+import { DialogService, DynamicDialogModule } from 'primeng/dynamicdialog';
+import { HistoryDialogComponent } from '../../../../shared/components/history-dialog/history-dialog.component';
 import { TableModule } from 'primeng/table';
 import { Subject, debounceTime, distinctUntilChanged } from 'rxjs';
 import { InputTextModule } from 'primeng/inputtext';
@@ -23,7 +25,9 @@ import { InputTextModule } from 'primeng/inputtext';
     RouterLink,
     TableModule,
     InputTextModule,
+    DynamicDialogModule
   ],
+  providers: [DialogService],
   templateUrl: './patient-list.component.html',
   styleUrl: './patient-list.component.scss',
 })
@@ -46,6 +50,7 @@ export class PatientListComponent implements OnInit {
     private authService: AuthService,
     private router: Router,
     private statusModalService: StatusModalService,
+    private dialogService: DialogService
   ) {
     this.searchSubject.pipe(
       debounceTime(400),
@@ -129,6 +134,21 @@ export class PatientListComponent implements OnInit {
         this.loadPatients();
       },
       error: (err) => this.statusModalService.showError('Delete Failed', err.error?.message || 'Could not delete this patient.'),
+    });
+  }
+
+  viewHistory(patient: Patient): void {
+    this.openMenuId = null;
+    this.dialogService.open(HistoryDialogComponent, {
+      data: {
+        entityType: 'patient',
+        id: patient.id,
+        title: patient.name
+      },
+      header: 'Audit History',
+      width: '70%',
+      contentStyle: { 'max-height': '600px', 'overflow': 'auto' },
+      baseZIndex: 10000
     });
   }
 

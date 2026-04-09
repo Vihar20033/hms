@@ -7,11 +7,11 @@ import com.hms.appointment.entity.Appointment;
 import jakarta.persistence.*;
 import lombok.*;
 import lombok.experimental.SuperBuilder;
-
 import java.util.ArrayList;
 import java.util.List;
-
+import org.hibernate.envers.Audited;
 @Entity
+@Audited
 @Table(
         name = "prescriptions",
         indexes = {

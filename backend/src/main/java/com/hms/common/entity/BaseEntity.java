@@ -6,9 +6,12 @@ import lombok.experimental.SuperBuilder;
 import org.hibernate.annotations.SoftDelete;
 import org.hibernate.annotations.SoftDeleteType;
 
+import org.hibernate.envers.Audited;
+
 @MappedSuperclass
 @Getter
 @Setter
+@Audited
 @SuperBuilder
 @NoArgsConstructor
 @AllArgsConstructor

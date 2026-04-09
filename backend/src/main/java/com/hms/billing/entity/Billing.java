@@ -8,15 +8,21 @@ import com.hms.common.enums.PaymentStatus;
 import jakarta.persistence.*;
 import lombok.*;
 import lombok.experimental.SuperBuilder;
+import org.hibernate.envers.Audited;
 
 import java.math.BigDecimal;
-import java.time.LocalDateTime;
+import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
 
 @Entity
+@Audited
 @Table(
         name = "billings",
+        uniqueConstraints = {
+                @UniqueConstraint(name = "uk_billing_invoice", columnNames = {"invoiceNumber"}),
+                @UniqueConstraint(name = "uk_billing_appointment", columnNames = {"appointment_id"})
+        },
         indexes = {
                 @Index(name = "idx_billing_invoice", columnList = "invoiceNumber"),
                 @Index(name = "idx_billing_patient", columnList = "patient_id"),
@@ -38,8 +44,8 @@ public class Billing extends Auditable {
     @JoinColumn(name = "patient_id", nullable = false)
     private Patient patient;
 
-    @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "appointment_id")
+    @OneToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "appointment_id", unique = true)
     private Appointment appointment;
 
     @Column(nullable = false, precision = 12, scale = 2)
@@ -63,9 +69,9 @@ public class Billing extends Auditable {
     private PaymentMethod paymentMethod;
 
     @Column(nullable = false)
-    private LocalDateTime billingDate;
+    private Instant billingDate;
 
-    private LocalDateTime dueDate;
+    private Instant dueDate;
 
     private String notes;
 

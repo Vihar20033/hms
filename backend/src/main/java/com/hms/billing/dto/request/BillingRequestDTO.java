@@ -1,7 +1,5 @@
 package com.hms.billing.dto.request;
 
-import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
-import com.hms.common.config.LocalDateTimeDeserializer;
 import com.hms.common.enums.PaymentMethod;
 import com.hms.common.enums.PaymentStatus;
 import jakarta.validation.Valid;
@@ -12,7 +10,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.math.BigDecimal;
-import java.time.LocalDateTime;
+import java.time.Instant;
 import java.util.List;
 
 
@@ -50,11 +48,9 @@ public class BillingRequestDTO {
     private PaymentMethod paymentMethod;
 
     @NotNull(message = "Billing date is required")
-    @JsonDeserialize(using = LocalDateTimeDeserializer.class)
-    private LocalDateTime billingDate;
+    private Instant billingDate;
 
-    @JsonDeserialize(using = LocalDateTimeDeserializer.class)
-    private LocalDateTime dueDate;
+    private Instant dueDate;
     @Size(max = 1000, message = "Notes must not exceed 1000 characters")
     private String notes;
 

@@ -15,13 +15,15 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
+import java.time.Instant;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.time.LocalTime;
+import java.time.ZoneId;
 import java.time.format.TextStyle;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
+
+
 
 @Service
 @Transactional(readOnly = true)
@@ -46,8 +48,8 @@ public class DashboardServiceImpl implements DashboardService {
 
         @Override
         public DashboardSummaryDTO getSummary() {
-                LocalDateTime startOfDay = LocalDateTime.of(LocalDate.now(), LocalTime.MIN);
-                LocalDateTime endOfDay = LocalDateTime.of(LocalDate.now(), LocalTime.MAX);
+                Instant startOfDay = LocalDate.now().atStartOfDay(ZoneId.systemDefault()).toInstant();
+                Instant endOfDay = LocalDate.now().plusDays(1).atStartOfDay(ZoneId.systemDefault()).toInstant().minusNanos(1);
 
                 SummaryCounts counts = loadSummaryCounts(startOfDay, endOfDay);
 
@@ -62,8 +64,8 @@ public class DashboardServiceImpl implements DashboardService {
                 // Generate a 7-day window centered on today (-3 to +3 days)
                 for (int i = -3; i <= 3; i++) {
                         LocalDate date = LocalDate.now().plusDays(i);
-                        LocalDateTime start = LocalDateTime.of(date, LocalTime.MIN);
-                        LocalDateTime end = LocalDateTime.of(date, LocalTime.MAX);
+                        Instant start = date.atStartOfDay(ZoneId.systemDefault()).toInstant();
+                        Instant end = date.plusDays(1).atStartOfDay(ZoneId.systemDefault()).toInstant().minusNanos(1);
 
                         weeklyStats.add(WeeklyStatisticsDTO.builder()
                                         .day(date.getDayOfWeek().getDisplayName(TextStyle.SHORT, Locale.ENGLISH))
@@ -97,7 +99,7 @@ public class DashboardServiceImpl implements DashboardService {
                                 .build();
         }
 
-        private SummaryCounts loadSummaryCounts(LocalDateTime startOfDay, LocalDateTime endOfDay) {
+        private SummaryCounts loadSummaryCounts(Instant startOfDay, Instant endOfDay) {
                 return new SummaryCounts(
                                 patientRepository.count(),
                                 appointmentRepository.countByAppointmentTimeBetween(startOfDay, endOfDay),
@@ -118,3 +120,4 @@ public class DashboardServiceImpl implements DashboardService {
                         long patientsInQueue) {
         }
 }
+

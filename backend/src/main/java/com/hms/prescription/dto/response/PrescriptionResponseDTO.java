@@ -5,7 +5,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.time.LocalDateTime;
+import java.time.Instant;
 import java.util.List;
 
 
@@ -29,5 +29,5 @@ public class PrescriptionResponseDTO {
     private String advice;
     private String notes;
     private String reportUrl;
-    private LocalDateTime createdAt;
+    private Instant createdAt;
 }

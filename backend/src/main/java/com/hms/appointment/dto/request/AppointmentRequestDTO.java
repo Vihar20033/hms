@@ -4,11 +4,6 @@ import com.hms.common.enums.Department;
 import jakarta.validation.constraints.*;
 import lombok.*;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
-
-import java.time.LocalDate;
-import java.time.LocalTime;
-
 @Getter
 @Setter
 @NoArgsConstructor
@@ -25,14 +20,9 @@ public class AppointmentRequestDTO {
     @NotNull(message = "Department is required")
     private Department department;
 
-    @NotNull(message = "Appointment date is required")
-    @FutureOrPresent(message = "Appointment date must be today or in the future")
-    @JsonFormat(pattern = "yyyy-MM-dd")
-    private LocalDate appointmentDate;
-
     @NotNull(message = "Appointment time is required")
-    @JsonFormat(pattern = "HH:mm")
-    private LocalTime appointmentTime;
+    @FutureOrPresent(message = "Appointment time must be in the future")
+    private java.time.Instant appointmentTime;
 
     @NotBlank(message = "Reason is required")
     @Size(min = 3, max = 500, message = "Reason must be between 3 and 500 characters")

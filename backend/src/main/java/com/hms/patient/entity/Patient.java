@@ -4,15 +4,15 @@ import com.hms.common.entity.Auditable;
 import com.hms.common.enums.BloodGroup;
 import com.hms.common.enums.UrgencyLevel;
 import jakarta.persistence.*;
-
 import jakarta.validation.constraints.*;
 import lombok.*;
 import lombok.experimental.SuperBuilder;
-
+import org.hibernate.envers.Audited;
 import java.math.BigDecimal;
 
 
 @Entity
+@Audited
 @Table(
         name = "patients",
         uniqueConstraints = {

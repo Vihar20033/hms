@@ -7,7 +7,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.time.LocalDateTime;
+import java.time.Instant;
 
 
 @Data
@@ -21,7 +21,7 @@ public class AppointmentResponseDTO {
     private Long doctorId;
     private String doctorName;
     private Department department;
-    private LocalDateTime appointmentTime;
+    private Instant appointmentTime;
     private AppointmentStatus status;
     private String reason;
     private String tokenNumber;

@@ -2,10 +2,9 @@ package com.hms.prescription.entity;
 
 import jakarta.persistence.*;
 import lombok.*;
-
-
-
+import org.hibernate.envers.Audited;
 @Entity
+@Audited
 @Table(name = "prescription_medicines")
 @Getter
 @Setter
@@ -28,5 +27,8 @@ public class PrescriptionMedicine {
     private String dosage;
     private String duration;
     private Integer quantity;
+    @Column(nullable = false, precision = 12, scale = 2)
+    private java.math.BigDecimal unitPriceAtPrescription;
+
     private String instructions;
 }

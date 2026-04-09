@@ -3,6 +3,7 @@ package com.hms.doctor.entity;
 import com.hms.common.entity.Auditable;
 import com.hms.common.enums.Department;
 import jakarta.persistence.*;
+import org.hibernate.envers.Audited;
 import lombok.*;
 import lombok.experimental.SuperBuilder;
 
@@ -10,6 +11,7 @@ import java.math.BigDecimal;
 
 
 @Entity
+@Audited
 @Table(
         name = "doctors",
         indexes = {

@@ -2,11 +2,11 @@ package com.hms.billing.entity;
 
 import jakarta.persistence.*;
 import lombok.*;
-
 import java.math.BigDecimal;
-
+import org.hibernate.envers.Audited;
 
 @Entity
+@Audited
 @Table(name = "billing_items")
 @Getter
 @Setter

@@ -179,6 +179,17 @@
 			<groupId>com.github.ben-manes.caffeine</groupId>
 			<artifactId>caffeine</artifactId>
 		</dependency>
+		<!-- Redisson for Distributed Locking -->
+		<dependency>
+			<groupId>org.redisson</groupId>
+			<artifactId>redisson-spring-boot-starter</artifactId>
+			<version>3.37.0</version>
+		</dependency>
+		<!-- Hibernate Envers for Auditing -->
+		<dependency>
+			<groupId>org.hibernate.orm</groupId>
+			<artifactId>hibernate-envers</artifactId>
+		</dependency>
 		<!-- Cloudinary for File Uploads -->
 		<dependency>
 			<groupId>com.cloudinary</groupId>

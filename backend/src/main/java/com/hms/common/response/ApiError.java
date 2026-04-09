@@ -1,6 +1,5 @@
 package com.hms.common.response;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -9,7 +8,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.springframework.http.HttpStatus;
 
-import java.time.LocalDateTime;
+import java.time.Instant;
 import java.util.List;
 
 @Getter
@@ -24,8 +23,7 @@ public class ApiError {
     private String message;
     private String errorCode;
     private int status;
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss")
-    private LocalDateTime timestamp;
+    private Instant timestamp;
     private String path;
     private List<ValidationError> validationErrors;
 
@@ -35,7 +33,7 @@ public class ApiError {
                 .message(message)
                 .errorCode(errorCode)
                 .status(status.value())
-                .timestamp(LocalDateTime.now())
+                .timestamp(Instant.now())
                 .build();
     }
 }

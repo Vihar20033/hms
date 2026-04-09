@@ -5,7 +5,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.time.LocalDateTime;
+import java.time.Instant;
 
 
 @Data
@@ -21,6 +21,6 @@ public class InventoryTransactionResponseDTO {
     private Integer quantity;
     private Long referenceId;
     private String notes;
-    private LocalDateTime createdAt;
+    private Instant createdAt;
     private String createdBy;
 }

@@ -6,6 +6,7 @@ import com.hms.appointment.dto.response.AppointmentResponseDTO;
 import com.hms.appointment.mapper.AppointmentMapper;
 import com.hms.common.enums.AppointmentStatus;
 import com.hms.appointment.service.AppointmentService;
+import com.hms.appointment.service.AppointmentQueueService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -24,6 +25,7 @@ public class AppointmentController {
 
     private final AppointmentService appointmentService;
     private final AppointmentMapper appointmentMapper;
+    private final AppointmentQueueService appointmentQueueService;
 
     @PreAuthorize("hasAnyRole('ADMIN','RECEPTIONIST','DOCTOR')")
     @GetMapping("/summary")
@@ -113,6 +115,7 @@ public class AppointmentController {
         return ResponseEntity.ok(ApiResponse.success(
                 appointmentMapper.toDto(appointmentService.updateStatus(id, AppointmentStatus.COMPLETED))));
     }
+
     @PreAuthorize("hasAnyRole('ADMIN','RECEPTIONIST')")
     @PatchMapping("/reassign")
     public ResponseEntity<ApiResponse<Void>> reassignAppointments(
@@ -120,5 +123,21 @@ public class AppointmentController {
             @RequestParam("toDoctorId") Long toDoctorId) {
         appointmentService.reassignAppointments(fromDoctorId, toDoctorId);
         return ResponseEntity.ok(ApiResponse.success(null, "Appointments reassigned successfully", org.springframework.http.HttpStatus.OK));
+    }
+
+    @PreAuthorize("hasAnyRole('ADMIN','DOCTOR')")
+    @GetMapping("/queue")
+    public ResponseEntity<ApiResponse<List<AppointmentResponseDTO>>> getPriorityQueue(
+            @RequestParam("doctorId") Long doctorId) {
+        return ResponseEntity.ok(ApiResponse.success(
+                appointmentMapper.toDtoList(appointmentQueueService.getPriorityQueue(doctorId))));
+    }
+
+    @PreAuthorize("hasAnyRole('ADMIN','DOCTOR')")
+    @GetMapping("/queue/next")
+    public ResponseEntity<ApiResponse<AppointmentResponseDTO>> getNextPatient(
+            @RequestParam("doctorId") Long doctorId) {
+        return ResponseEntity.ok(ApiResponse.success(
+                appointmentMapper.toDto(appointmentQueueService.getNextPatient(doctorId))));
     }
 }

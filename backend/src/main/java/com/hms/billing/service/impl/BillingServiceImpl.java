@@ -22,15 +22,18 @@ import com.hms.patient.repository.PatientRepository;
 import com.hms.user.entity.User;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import com.hms.common.concurrency.LockService;
+import java.util.concurrent.TimeUnit;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Slice;
 import org.springframework.data.domain.Sort;
+import com.hms.common.exception.BadRequestException;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
-import java.time.LocalDateTime;
+import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -47,6 +50,7 @@ public class BillingServiceImpl implements BillingService {
     private final AuditLogService auditLogService;
     private final PdfGenerationService pdfGenerationService;
     private final CloudinaryService cloudinaryService;
+    private final LockService lockService;
 
     @Override
     @Transactional
@@ -170,24 +174,34 @@ public class BillingServiceImpl implements BillingService {
     @Override
     @Transactional
     public BillingResponseDTO generateBillingFromAppointment(Long appointmentId) {
-        if (billingRepository.existsByAppointmentId(appointmentId)) {
-            log.warn("Billing already exists for appointment: {}", appointmentId);
+        String lockKey = "lock:billing:appointment:" + appointmentId;
+        
+        if (lockService.tryLock(lockKey, 5, 10, TimeUnit.SECONDS)) {
+            try {
+                if (billingRepository.existsByAppointmentId(appointmentId)) {
+                    throw new BadRequestException("Billing already exists for appointment: " + appointmentId);
+                }
+
+                Billing billing = prepareBillingFromAppointment(appointmentId);
+                Billing saved = billingRepository.save(billing);
+                
+                // Generate and Upload PDF
+                try {
+                    byte[] pdfBytes = pdfGenerationService.generateBillingPdf(saved);
+                    String reportUrl = cloudinaryService.uploadBytes(pdfBytes, "bill_" + saved.getInvoiceNumber(), "billings");
+                    saved.setReportUrl(reportUrl);
+                    saved = billingRepository.save(saved);
+                } catch (Exception e) {
+                    log.error("Failed to generate/upload billing PDF from appointment", e);
+                }
+                
+                return billingMapper.toDto(saved);
+            } finally {
+                lockService.unlock(lockKey);
+            }
+        } else {
+            throw new BadRequestException("This billing is currently being processed by another user.");
         }
-        Billing billing = prepareBillingFromAppointment(appointmentId);
-        
-        Billing saved = billingRepository.save(billing);
-        
-        // Generate and Upload PDF
-        try {
-            byte[] pdfBytes = pdfGenerationService.generateBillingPdf(saved);
-            String reportUrl = cloudinaryService.uploadBytes(pdfBytes, "bill_" + saved.getInvoiceNumber(), "billings");
-            saved.setReportUrl(reportUrl);
-            saved = billingRepository.save(saved);
-        } catch (Exception e) {
-            log.error("Failed to generate/upload billing PDF from appointment", e);
-        }
-        
-        return billingMapper.toDto(saved);
     }
 
     @Override
@@ -211,8 +225,8 @@ public class BillingServiceImpl implements BillingService {
                 .appointment(appointment)
                 .invoiceNumber("INV-" + System.currentTimeMillis() + "-" + appointmentId)
                 .paymentStatus(PaymentStatus.UNPAID)
-                .billingDate(LocalDateTime.now())
-                .dueDate(LocalDateTime.now().plusDays(7))
+                .billingDate(Instant.now())
+                .dueDate(Instant.now().plus(java.time.Duration.ofDays(7)))
                 .items(new ArrayList<>())
                 .build();
 

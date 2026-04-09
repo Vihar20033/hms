@@ -8,10 +8,10 @@ import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.ReportingPolicy;
 
-import java.time.LocalDateTime;
+import java.time.Instant;
 import java.util.List;
 
-@Mapper(componentModel = "spring", builder = @Builder(disableBuilder = true), unmappedTargetPolicy = ReportingPolicy.IGNORE, imports = {LocalDateTime.class})
+@Mapper(componentModel = "spring", builder = @Builder(disableBuilder = true), unmappedTargetPolicy = ReportingPolicy.IGNORE, imports = {Instant.class})
 public abstract class AppointmentMapper {
 
     @org.springframework.beans.factory.annotation.Autowired
@@ -24,7 +24,7 @@ public abstract class AppointmentMapper {
     @Mapping(target = "hasPrescription", expression = "java(prescriptionRepository.findByAppointmentId(entity.getId()).isPresent())")
     public abstract AppointmentResponseDTO toDto(Appointment entity);
 
-    @Mapping(target = "appointmentTime", expression = "java(LocalDateTime.of(dto.getAppointmentDate(), dto.getAppointmentTime()))")
+    @Mapping(target = "appointmentTime", source = "appointmentTime")
     @Mapping(target = "patient", ignore = true)
     @Mapping(target = "doctor", ignore = true)
     public abstract Appointment toEntity(AppointmentRequestDTO dto);

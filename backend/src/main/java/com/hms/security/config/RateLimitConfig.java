@@ -17,7 +17,7 @@ import org.springframework.context.annotation.Configuration;
 import java.time.Duration;
 
 @Configuration
-@ConditionalOnProperty(prefix = "hms.rate-limit", name = "enabled", havingValue = "true", matchIfMissing = true)
+@ConditionalOnProperty(name = "hms.redis.enabled", havingValue = "true")
 public class RateLimitConfig {
 
     @Value("${spring.data.redis.host:localhost}")

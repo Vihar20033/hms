@@ -34,13 +34,14 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Slice;
 import org.springframework.data.domain.SliceImpl;
-import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Sort;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import com.hms.common.exception.BadRequestException;
+import com.hms.common.concurrency.LockService;
+import java.util.concurrent.TimeUnit;
 
 import java.util.Collections;
 import java.util.List;
@@ -61,6 +62,7 @@ public class PrescriptionServiceImpl implements PrescriptionService {
     private final AuditLogService auditLogService;
     private final PdfGenerationService pdfGenerationService;
     private final CloudinaryService cloudinaryService;
+    private final LockService lockService;
 
     @Override
     @Transactional(rollbackFor = Exception.class)
@@ -92,32 +94,51 @@ public class PrescriptionServiceImpl implements PrescriptionService {
         Prescription savedPrescription = prescriptionRepository.save(prescription);
 
         if (dto.getMedicines() != null && !dto.getMedicines().isEmpty()) {
-
             for (PrescriptionMedicineRequestDTO medicineDto : dto.getMedicines()) {
-                Medicine med = medicineRepository.findByNameIgnoreCase(medicineDto.getMedicineName())
-                        .orElseThrow(() -> new MedicineNotFoundException("Medicine not found: " + medicineDto.getMedicineName()));
+                String lockKey = "lock:medicine:" + medicineDto.getMedicineName().toLowerCase().replace(" ", "_");
                 
-                Integer qty = medicineDto.getQuantity() != null ? medicineDto.getQuantity() : 1;
-                
-                int updatedRows = medicineRepository.deductStockAtomic(med.getId(), qty);
-                if (updatedRows == 0) {
-                    throw new InsufficientStockException(med.getName(), "Insufficient stock for medicine: " + med.getName());
-                }
+                if (lockService.tryLock(lockKey, 10, 30, TimeUnit.SECONDS)) {
+                    try {
+                        Medicine med = medicineRepository.findByNameIgnoreCase(medicineDto.getMedicineName())
+                                .orElseThrow(() -> new MedicineNotFoundException("Medicine not found: " + medicineDto.getMedicineName()));
+                        
+                        Integer qty = medicineDto.getQuantity() != null ? medicineDto.getQuantity() : 1;
+                        
+                        // Snapshotting: Store name and price at this exact moment
+                        PrescriptionMedicine pm = prescriptionMapper.toMedicineEntity(medicineDto);
+                        pm.setMedicineName(med.getName()); // Use master name
+                        pm.setUnitPriceAtPrescription(med.getUnitPrice());
+                        pm.setPrescription(savedPrescription);
+                        savedPrescription.getMedicines().add(pm);
 
-                if (med.getQuantityInStock() - qty <= med.getReorderLevel()) {
-                    auditLogService.log(null, "LOW_STOCK_AUTO_ALERT", "Medicine", med.getId().toString(), 
-                        "Medicine " + med.getName() + " running low.");
+                        int updatedRows = medicineRepository.deductStockAtomic(med.getId(), qty);
+                        if (updatedRows == 0) {
+                            throw new InsufficientStockException(med.getName(), "Insufficient stock for: " + med.getName());
+                        }
+
+                        // ... rest of logging and transaction ...
+                        if (med.getQuantityInStock() - qty <= med.getReorderLevel()) {
+                            auditLogService.log(null, "LOW_STOCK_AUTO_ALERT", "Medicine", med.getId().toString(), 
+                                "Medicine " + med.getName() + " running low.");
+                        }
+                        
+                        InventoryTransaction transaction = InventoryTransaction.builder()
+                                .medicine(med)
+                                .transactionType("DISPENSE")
+                                .quantity(qty)
+                                .referenceId(savedPrescription.getId())
+                                .notes("Dispensed")
+                                .build();
+                        inventoryTransactionRepository.save(transaction);
+                    } finally {
+                        lockService.unlock(lockKey);
+                    }
+                } else {
+                    throw new BadRequestException("Could not acquire lock for medicine: " + medicineDto.getMedicineName());
                 }
-                
-                InventoryTransaction transaction = InventoryTransaction.builder()
-                        .medicine(med)
-                        .transactionType("DISPENSE")
-                        .quantity(qty)
-                        .referenceId(savedPrescription.getId())
-                        .notes("Dispensed")
-                        .build();
-                inventoryTransactionRepository.save(transaction);
             }
+            // Save again to persist the snapshotting additions
+            savedPrescription = prescriptionRepository.save(savedPrescription);
         }
 
         // Generate and Upload PDF

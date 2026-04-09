@@ -13,7 +13,7 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import jakarta.persistence.LockModeType;
-import java.time.LocalDateTime;
+import java.time.Instant;
 import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
@@ -42,13 +42,13 @@ public interface AppointmentRepository extends JpaRepository<Appointment, Long> 
     @NonNull
     Optional<Appointment> findById(@NonNull Long id);
 
-    long countByAppointmentTimeBetween(LocalDateTime start, LocalDateTime end);
+    long countByAppointmentTimeBetween(Instant start, Instant end);
 
-    long countByStatusAndUpdatedAtBetween(AppointmentStatus status, LocalDateTime start, LocalDateTime end);
+    long countByStatusAndUpdatedAtBetween(AppointmentStatus status, Instant start, Instant end);
 
-    long countByStatusInAndAppointmentTimeBetween(Collection<AppointmentStatus> statuses, LocalDateTime start, LocalDateTime end);
+    long countByStatusInAndAppointmentTimeBetween(Collection<AppointmentStatus> statuses, Instant start, Instant end);
 
-    long countByDoctorIdAndAppointmentTimeBetween(Long doctorId, LocalDateTime start, LocalDateTime end);
+    long countByDoctorIdAndAppointmentTimeBetween(Long doctorId, Instant start, Instant end);
 
     long countByStatus(AppointmentStatus status);
 
@@ -69,7 +69,7 @@ public interface AppointmentRepository extends JpaRepository<Appointment, Long> 
     @Query("SELECT a FROM Appointment a WHERE a.doctor.id = :doctorId AND a.appointmentTime = :appointmentTime AND a.status IN :statuses")
     List<Appointment> findAndLockConflictingAppointments(
             @Param("doctorId") Long doctorId,
-            @Param("appointmentTime") LocalDateTime appointmentTime,
+            @Param("appointmentTime") Instant appointmentTime,
             @Param("statuses") Collection<AppointmentStatus> statuses
     );
 
@@ -77,7 +77,7 @@ public interface AppointmentRepository extends JpaRepository<Appointment, Long> 
     @Query("SELECT a FROM Appointment a WHERE a.patient.id = :patientId AND a.appointmentTime = :appointmentTime AND a.status IN :statuses")
     List<Appointment> findAndLockPatientConflictingAppointments(
             @Param("patientId") Long patientId,
-            @Param("appointmentTime") LocalDateTime appointmentTime,
+            @Param("appointmentTime") Instant appointmentTime,
             @Param("statuses") Collection<AppointmentStatus> statuses
     );
 
@@ -93,8 +93,8 @@ public interface AppointmentRepository extends JpaRepository<Appointment, Long> 
             @Param("doctorUserId") Long doctorUserId,
             @Param("patientId") Long patientId,
             @Param("status") AppointmentStatus status,
-            @Param("startTime") LocalDateTime startTime,
-            @Param("endTime") LocalDateTime endTime
+            @Param("startTime") Instant startTime,
+            @Param("endTime") Instant endTime
     );
 
     @Modifying

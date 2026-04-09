@@ -8,7 +8,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.math.BigDecimal;
-import java.time.LocalDateTime;
+import java.time.Instant;
 
 
 @Data
@@ -26,5 +26,5 @@ public class PatientResponseDTO {
     private BigDecimal fees;
     private String contactNumber;
     private UrgencyLevel urgencyLevel;
-    private LocalDateTime createdAt;
+    private Instant createdAt;
 }

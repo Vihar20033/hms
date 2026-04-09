@@ -8,6 +8,7 @@ import com.hms.appointment.exception.SlotAlreadyBookedException;
 import com.hms.appointment.mapper.AppointmentMapper;
 import com.hms.appointment.repository.AppointmentRepository;
 import com.hms.appointment.service.AppointmentService;
+import com.hms.appointment.service.SeverityScoreService;
 import com.hms.common.audit.AuditLogService;
 import com.hms.common.enums.AppointmentStatus;
 import com.hms.common.enums.Role;
@@ -19,20 +20,22 @@ import com.hms.patient.repository.PatientRepository;
 import com.hms.user.entity.User;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.data.redis.core.StringRedisTemplate;
+import com.hms.common.concurrency.CounterService;
+import com.hms.common.concurrency.LockService;
+import com.hms.common.util.SecurityUtils;
 import org.springframework.security.access.AccessDeniedException;
-import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import com.hms.common.util.SecurityUtils;
+import java.util.concurrent.TimeUnit;
 
-import java.time.LocalDateTime;
+import java.time.Instant;
+import java.time.LocalDate;
 import java.time.LocalTime;
+import java.time.ZoneId;
 import java.time.Duration;
 import java.time.format.DateTimeFormatter;
 import java.util.Arrays;
 import java.util.List;
-import java.util.function.Supplier;
 
 @Service
 @RequiredArgsConstructor
@@ -49,7 +52,9 @@ public class AppointmentServiceImpl implements AppointmentService {
     private final DoctorRepository doctorRepository;
     private final AppointmentMapper appointmentMapper;
     private final AuditLogService auditLogService;
-    private final StringRedisTemplate redisTemplate;
+    private final LockService lockService;
+    private final CounterService counterService;
+    private final SeverityScoreService severityScoreService;
 
     @Override
     @Transactional(readOnly = true)
@@ -111,24 +116,38 @@ public class AppointmentServiceImpl implements AppointmentService {
         appointment.setDoctor(doctor);
         appointment.setEmergency(dto.isEmergency());
 
-        // Concurrency Control: Consistent locking order to prevent deadlocks (Always lock Patient then Doctor)
-        lockAndCheckAvailability(appointment.getDoctor().getId(), appointment.getPatient().getId(),
-                appointment.getAppointmentTime(), appointment.getId(), appointment.isEmergency());
-
-        // Concurrency Control: Atomic token counter using Redis to prevent race conditions
-        String dateKey = appointment.getAppointmentTime().toLocalDate().format(DateTimeFormatter.ISO_DATE);
-        String tokenRedisKey = "tokens:" + appointment.getDoctor().getId() + ":" + dateKey;
-        Long nextToken = redisTemplate.opsForValue().increment(tokenRedisKey);
-        redisTemplate.expire(tokenRedisKey, Duration.ofDays(2));
+        // Distributed/Local lock for the doctor's specific time slot
+        String lockKey = String.format("lock:appointment:doctor:%d:slot:%s", 
+                doctor.getId(), appointment.getAppointmentTime().toString());
         
-        String prefix = appointment.isEmergency() ? "EM" : "P";
-        appointment.setTokenNumber(String.format("%s-%03d", prefix, nextToken));
-        appointment.setStatus(AppointmentStatus.SCHEDULED);
+        if (lockService.tryLock(lockKey, 5, 10, TimeUnit.SECONDS)) {
+            try {
+                // Concurrency Control: Consistent locking order to prevent deadlocks (Always lock Patient then Doctor)
+                lockAndCheckAvailability(appointment.getDoctor().getId(), appointment.getPatient().getId(),
+                        appointment.getAppointmentTime(), appointment.getId(), appointment.isEmergency());
 
-        Appointment saved = appointmentRepository.save(appointment);
-        auditLogService.log(SecurityUtils.getCurrentUsername(), "APPOINTMENT_CREATE", "Appointment", saved.getId().toString(),
-                "patient=" + saved.getPatient().getName());
-        return saved;
+                // Concurrency Control: Atomic token counter
+                String dateKey = appointment.getAppointmentTime().toString().substring(0, 10);
+                String tokenRedisKey = "tokens:" + appointment.getDoctor().getId() + ":" + dateKey;
+                long nextToken = counterService.increment(tokenRedisKey);
+                
+                String prefix = appointment.isEmergency() ? "EM" : "P";
+                appointment.setTokenNumber(String.format("%s-%03d", prefix, nextToken));
+                appointment.setStatus(AppointmentStatus.SCHEDULED);
+                
+                // DSA: Calculate Severity Score based on symptoms
+                appointment.setSeverityScore(severityScoreService.calculateScore(appointment.getReason(), appointment.isEmergency()));
+
+                Appointment saved = appointmentRepository.save(appointment);
+                auditLogService.log(SecurityUtils.getCurrentUsername(), "APPOINTMENT_CREATE", "Appointment", saved.getId().toString(),
+                        "patient=" + saved.getPatient().getName());
+                return saved;
+            } finally {
+                lockService.unlock(lockKey);
+            }
+        } else {
+            throw new BadRequestException("This slot is currently being processed by another user. Please try again in a few seconds.");
+        }
     }
 
     @Override
@@ -157,25 +176,39 @@ public class AppointmentServiceImpl implements AppointmentService {
             throw new BadRequestException("Doctor " + doctor.getFirstName() + " does not belong to the " + dto.getDepartment() + " department.");
         }
 
-        LocalDateTime requestedTime = LocalDateTime.of(dto.getAppointmentDate(), dto.getAppointmentTime());
-        // Consistent locking order (Patient ID then Doctor ID)
-        lockAndCheckAvailability(doctor.getId(), patient.getId(), requestedTime, id, dto.isEmergency());
+        java.time.Instant requestedTime = dto.getAppointmentTime();
+        
+        // Distributed/Local lock for the doctor's specific time slot
+        String lockKey = String.format("lock:appointment:doctor:%d:slot:%s", 
+                doctor.getId(), requestedTime.toString());
 
-        appointment.setPatient(patient);
-        appointment.setDoctor(doctor);
-        appointment.setDepartment(dto.getDepartment());
-        appointment.setAppointmentTime(requestedTime);
-        appointment.setReason(dto.getReason());
-        appointment.setNotes(dto.getNotes());
-        appointment.setEmergency(dto.isEmergency());
+        if (lockService.tryLock(lockKey, 5, 10, TimeUnit.SECONDS)) {
+            try {
+                // Consistent locking order (Patient ID then Doctor ID)
+                lockAndCheckAvailability(doctor.getId(), patient.getId(), requestedTime, id, dto.isEmergency());
 
-        Appointment saved = appointmentRepository.save(appointment);
-        auditLogService.log(SecurityUtils.getCurrentUsername(), "APPOINTMENT_UPDATE", "Appointment", id.toString(),
-                "patient=" + saved.getPatient().getName());
-        return saved;
+                appointment.setPatient(patient);
+                appointment.setDoctor(doctor);
+                appointment.setDepartment(dto.getDepartment());
+                appointment.setAppointmentTime(requestedTime);
+                appointment.setReason(dto.getReason());
+                appointment.setNotes(dto.getNotes());
+                appointment.setEmergency(dto.isEmergency());
+                appointment.setSeverityScore(severityScoreService.calculateScore(dto.getReason(), dto.isEmergency()));
+
+                Appointment saved = appointmentRepository.save(appointment);
+                auditLogService.log(SecurityUtils.getCurrentUsername(), "APPOINTMENT_UPDATE", "Appointment", id.toString(),
+                        "patient=" + saved.getPatient().getName());
+                return saved;
+            } finally {
+                lockService.unlock(lockKey);
+            }
+        } else {
+            throw new BadRequestException("This slot is currently being processed by another user. Please try again in a few seconds.");
+        }
     }
 
-    private void lockAndCheckAvailability(Long doctorId, Long patientId, LocalDateTime time, Long currentAppointmentId,
+    private void lockAndCheckAvailability(Long doctorId, Long patientId, java.time.Instant time, Long currentAppointmentId,
             boolean isEmergency) {
 
         if (isEmergency)
@@ -279,8 +312,8 @@ public class AppointmentServiceImpl implements AppointmentService {
              throw new AccessDeniedException("No authenticated user found.");
         }
         Long doctorUserId = (user.getRole() == Role.DOCTOR) ? user.getId() : null;
-        LocalDateTime startOfDay = LocalDateTime.now().with(LocalTime.MIN);
-        LocalDateTime endOfDay = LocalDateTime.now().with(LocalTime.MAX);
+        java.time.Instant startOfDay = LocalDate.now().atStartOfDay(ZoneId.systemDefault()).toInstant();
+        java.time.Instant endOfDay = LocalDate.now().plusDays(1).atStartOfDay(ZoneId.systemDefault()).toInstant().minusNanos(1);
 
         return appointmentRepository.findAppointments(doctorUserId, null, null, startOfDay, endOfDay);
     }

@@ -9,10 +9,12 @@ import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import lombok.*;
 import lombok.experimental.SuperBuilder;
+import org.hibernate.envers.Audited;
 
-import java.time.LocalDateTime;
+import java.time.Instant;
 
 @Entity
+@Audited
 @Table(
     name = "appointments",
     uniqueConstraints = {
@@ -48,7 +50,7 @@ public class Appointment extends Auditable {
 
     @Column(nullable = false)
     @NotNull(message = "Appointment time is required")
-    private LocalDateTime appointmentTime;
+    private Instant appointmentTime;
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
@@ -64,4 +66,7 @@ public class Appointment extends Auditable {
 
     @Builder.Default
     private boolean isEmergency = false;
+
+    @Builder.Default
+    private Integer severityScore = 0; // 1 (Low) to 10 (Critical)
 }

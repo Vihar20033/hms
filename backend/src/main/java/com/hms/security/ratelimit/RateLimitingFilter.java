@@ -28,7 +28,7 @@ import java.util.function.Supplier;
 
 @Component
 @RequiredArgsConstructor
-@ConditionalOnProperty(prefix = "hms.rate-limit", name = "enabled", havingValue = "true", matchIfMissing = true)
+@ConditionalOnProperty(name = {"hms.rate-limit.enabled", "hms.redis.enabled"}, havingValue = "true")
 public class RateLimitingFilter extends OncePerRequestFilter {
 
     private final RateLimitProperties properties;

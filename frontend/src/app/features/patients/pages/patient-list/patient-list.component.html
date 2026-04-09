@@ -98,7 +98,11 @@
                       <i class="ri-more-2-fill"></i>
                     </button>
                     @if (openMenuId === patient.id) {
-                      <div class="menu-panel">
+                        <div class="menu-panel">
+                        <button class="menu-item" type="button" (click)="viewHistory(patient)">
+                          <i class="ri-history-line"></i>
+                          View history
+                        </button>
                         <button class="menu-item danger" type="button" (click)="deletePatient(patient.id)">
                           <i class="ri-delete-bin-line"></i>
                           Delete patient

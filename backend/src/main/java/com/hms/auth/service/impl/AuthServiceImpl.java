@@ -25,8 +25,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.time.LocalDateTime;
-import java.time.ZoneId;
+import java.time.Instant;
 
 @Service
 @RequiredArgsConstructor
@@ -198,9 +197,7 @@ public class AuthServiceImpl implements AuthService {
         revokedRefreshTokenRepository.save(RevokedRefreshToken.builder()
                 .tokenHash(tokenHash)
                 .username(username)
-                .expiresAt(LocalDateTime.ofInstant(
-                        jwtUtil.extractExpiration(refreshToken)
-                                .toInstant(), ZoneId.systemDefault()))
+                .expiresAt(jwtUtil.extractExpiration(refreshToken).toInstant())
                 .build());
     }
 }

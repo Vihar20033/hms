@@ -20,6 +20,7 @@ import org.springframework.stereotype.Service;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.time.format.DateTimeFormatter;
+import java.time.ZoneId;
 
 @Service
 public class PdfGenerationService {
@@ -46,7 +47,7 @@ public class PdfGenerationService {
         // Patient & Invoice Info
         Table infoTable = new Table(UnitValue.createPercentArray(new float[]{50, 50})).useAllAvailableWidth();
         infoTable.addCell(createNoBorderCell("Invoice Number: " + billing.getInvoiceNumber(), true));
-        infoTable.addCell(createNoBorderCell("Date: " + billing.getBillingDate().format(DATE_FORMATTER), true));
+        infoTable.addCell(createNoBorderCell("Date: " + billing.getBillingDate().atZone(ZoneId.systemDefault()).format(DATE_FORMATTER), true));
         infoTable.addCell(createNoBorderCell("Patient Name: " + billing.getPatient().getName(), false));
         infoTable.addCell(createNoBorderCell("Payment Status: " + billing.getPaymentStatus(), false));
         infoTable.addCell(createNoBorderCell("Payment Method: " + (billing.getPaymentMethod() != null ? billing.getPaymentMethod() : "N/A"), false));
@@ -113,7 +114,7 @@ public class PdfGenerationService {
         // Details
         Table infoTable = new Table(UnitValue.createPercentArray(new float[]{50, 50})).useAllAvailableWidth();
         infoTable.addCell(createNoBorderCell("Patient: " + prescription.getPatient().getName(), true));
-        infoTable.addCell(createNoBorderCell("Date: " + prescription.getCreatedAt().format(DATE_FORMATTER), true));
+        infoTable.addCell(createNoBorderCell("Date: " + prescription.getCreatedAt().atZone(ZoneId.systemDefault()).format(DATE_FORMATTER), true));
         infoTable.addCell(createNoBorderCell("Doctor: Dr. " + prescription.getDoctor().getFirstName() + " " + prescription.getDoctor().getLastName(), false));
         infoTable.addCell(createNoBorderCell("Department: " + prescription.getDoctor().getDepartment(), false));
         infoTable.setMarginBottom(20);
