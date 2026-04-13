@@ -1,0 +1,132 @@
+version: "3.8"
+
+services:
+  # Elasticsearch - Search engine
+  elasticsearch:
+    image: docker.elastic.co/elasticsearch/elasticsearch:8.11.0
+    container_name: hms-elasticsearch
+    environment:
+      # Single node cluster for development
+      - discovery.type=single-node
+      # Disable security for development (enable in production)
+      - xpack.security.enabled=false
+      # Memory settings - adjust based on your system
+      - "ES_JAVA_OPTS=-Xms512m -Xmx512m"
+      # Disable ML (optional, reduces memory usage)
+      - xpack.ml.enabled=false
+    ports:
+      - "9200:9200"
+      - "9300:9300"
+    volumes:
+      - elasticsearch_data:/usr/share/elasticsearch/data
+    networks:
+      - hms-network
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:9200/_cluster/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 5
+      start_period: 40s
+    restart: unless-stopped
+
+  # Kibana - Elasticsearch visualization and monitoring (optional)
+  # Uncomment to use Kibana for monitoring search indices
+  # kibana:
+  #   image: docker.elastic.co/kibana/kibana:8.11.0
+  #   container_name: hms-kibana
+  #   environment:
+  #     - ELASTICSEARCH_HOSTS=http://elasticsearch:9200
+  #   ports:
+  #     - "5601:5601"
+  #   networks:
+  #     - hms-network
+  #   depends_on:
+  #     - elasticsearch
+  #   healthcheck:
+  #     test: ["CMD", "curl", "-f", "http://localhost:5601/api/status"]
+  #     interval: 30s
+  #     timeout: 10s
+  #     retries: 3
+  #   restart: unless-stopped
+
+  # Redis - Caching and session management
+  redis:
+    image: redis:7-alpine
+    container_name: hms-redis
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis_data:/data
+    networks:
+      - hms-network
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+    restart: unless-stopped
+
+  # MySQL - Main database
+  mysql:
+    image: mysql:8.0
+    container_name: hms-mysql
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: hms
+      MYSQL_USER: hms_user
+      MYSQL_PASSWORD: hms_password@123
+      # Set timezone
+      TZ: "UTC"
+    ports:
+      - "3306:3306"
+    volumes:
+      - mysql_data:/var/lib/mysql
+    networks:
+      - hms-network
+    command: --default-authentication-plugin=mysql_native_password --character-set-server=utf8mb4 --collation-server=utf8mb4_unicode_ci
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+    restart: unless-stopped
+
+  # HMS Backend (uncomment when ready to run backend in container)
+  # backend:
+  #   build:
+  #     context: ./backend
+  #     dockerfile: Dockerfile
+  #   container_name: hms-backend
+  #   environment:
+  #     SPRING_DATASOURCE_URL: jdbc:mysql://mysql:3306/hms?useSSL=false&serverTimezone=UTC
+  #     SPRING_DATASOURCE_USERNAME: hms_user
+  #     SPRING_DATASOURCE_PASSWORD: hms_password@123
+  #     ELASTICSEARCH_HOST: elasticsearch
+  #     ELASTICSEARCH_PORT: 9200
+  #     REDIS_HOST: redis
+  #     REDIS_PORT: 6379
+  #     SERVER_PORT: 8080
+  #   ports:
+  #     - "8080:8080"
+  #   networks:
+  #     - hms-network
+  #   depends_on:
+  #     elasticsearch:
+  #       condition: service_healthy
+  #     redis:
+  #       condition: service_healthy
+  #     mysql:
+  #       condition: service_healthy
+  #   restart: unless-stopped
+
+networks:
+  hms-network:
+    driver: bridge
+
+volumes:
+  elasticsearch_data:
+    driver: local
+  redis_data:
+    driver: local
+  mysql_data:
+    driver: local

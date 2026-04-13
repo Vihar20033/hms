@@ -13,6 +13,7 @@ Production-oriented Hospital Management System built as a modular monolith with 
 - [Role Workspaces](#role-workspaces)
 - [Role Module APIs](#role-module-apis)
 - [Local Setup](#local-setup)
+- [Elasticsearch Setup](#elasticsearch-setup)
 - [Configuration](#configuration)
 - [Production Safety](#production-safety)
 - [Security Notes](#security-notes)
@@ -21,9 +22,10 @@ Production-oriented Hospital Management System built as a modular monolith with 
 
 ## Architecture
 
-- Backend: Spring Boot 3.3, Spring Security 6, Spring Data JPA, Hibernate, MapStruct, Lombok, Bucket4j, Redis.
+- Backend: Spring Boot 3.3, Spring Security 6, Spring Data JPA, Spring Data Elasticsearch, Hibernate, MapStruct, Lombok, Bucket4j, Redis.
 - Frontend: Angular 17 standalone components, PrimeNG, RxJS, route guards, HTTP interceptors.
 - Database: MySQL 8 and Redis 7 (caching & rate limiting) for normal runtime.
+- Search: Elasticsearch 8.11 with fuzzy search, phonetic matching, and batch reindexing.
 - Security: JWT access tokens, refresh-token rotation/revocation, BCrypt password hashing, method-level authorization, security headers, and distributed Redis-backed rate limiting.
 - Caching: Multi-level caching for Doctor, Patient, and Medicine entities to reduce DB load and improve response times.
 
@@ -220,6 +222,9 @@ sequenceDiagram
 - Pharmacy workflows with medicine catalog management, restock and dispense operations, inventory transaction logging, stock validation, and medicine slice endpoints.
 - Billing workflows with bill creation, bill items, payment status and method handling, patient billing access, and patient payment action support.
 - Audit logging for administrative visibility through `GET /api/v1/audit-logs/slice?page=0&size=25` and the Angular `/audit-logs` page.
+- **Elasticsearch full-text search** with fuzzy search (typo tolerance), phonetic matching (similar-sounding names), and multi-field search across patients, doctors, appointments, and prescriptions.
+- **Admin search management** dashboard for reindexing entities, health checks, and index management with batch processing (500 records/batch).
+- **Search API endpoints** for global fuzzy search with pagination and role-based access control.
 - Production-oriented platform behavior including soft delete, centralized exception responses, validation errors, CORS configuration, startup database verification, logging configuration, caching, and distributed rate limiting.
 
 ## Application Flow
@@ -303,6 +308,128 @@ npm start
 
 The frontend runs on `http://localhost:4200` by default.
 
+## Elasticsearch Setup
+
+Elasticsearch provides fast full-text search with fuzzy matching and phonetic analysis. Choose one setup method below.
+
+### Option 1: Local Elasticsearch (Without Docker) - Windows
+
+#### Step 1: Download Elasticsearch
+
+1. Visit [Elasticsearch Downloads](https://www.elastic.co/downloads/elasticsearch)
+2. Download Elasticsearch 8.11.0 for Windows (ZIP)
+3. Extract to a location like `C:\elasticsearch-8.11.0`
+
+#### Step 2: Disable Security (Development Only)
+
+Edit `C:\elasticsearch-8.11.0\config\elasticsearch.yml`:
+
+```yaml
+xpack.security.enabled: false
+discovery.type: single-node
+```
+
+#### Step 3: Start Elasticsearch
+
+Open PowerShell and run:
+
+```powershell
+cd C:\elasticsearch-8.11.0\bin
+.\elasticsearch.bat
+```
+
+Wait for the message: `started`
+
+Verify it's running:
+
+```powershell
+curl http://localhost:9200
+```
+
+#### Step 4: Configure HMS Backend
+
+Set environment variable or update `application.properties`:
+
+```properties
+elasticsearch.enabled=true
+elasticsearch.host=localhost
+elasticsearch.port=9200
+```
+
+### Option 2: Elasticsearch with Docker
+
+```bash
+docker run -d \
+  --name elasticsearch \
+  -e discovery.type=single-node \
+  -e xpack.security.enabled=false \
+  -e "ES_JAVA_OPTS=-Xms512m -Xmx512m" \
+  -p 9200:9200 \
+  docker.elastic.co/elasticsearch/elasticsearch:8.11.0
+```
+
+### Option 3: Docker Compose (Complete Stack)
+
+Use the included `docker-compose.yml` to run all services:
+
+```bash
+docker-compose up -d
+```
+
+This starts: Elasticsearch, MySQL, Redis (and optional Kibana for monitoring)
+
+### Using the Search Features
+
+1. **Access Admin Dashboard**:
+   - Navigate to `http://localhost:4200/admin/elasticsearch`
+   - Click "Refresh" to check Elasticsearch health status
+
+2. **Reindex Data**:
+   - Select "All Entities" from dropdown
+   - Click "Start Reindex"
+   - Wait for completion
+
+3. **Search Data**:
+   Use the search endpoints:
+   ```
+   GET /api/v1/search/patients?query=john&page=0&size=10
+   GET /api/v1/search/doctors?query=cardiology&page=0&size=10
+   GET /api/v1/search/appointments?query=knee&page=0&size=10
+   GET /api/v1/search/prescriptions?query=diabetes&page=0&size=10
+   ```
+
+### Search Features
+
+- **Fuzzy Search**: Typo-tolerant searching ("jon" matches "john", "smyth" matches "smith")
+- **Phonetic Matching**: Similar-sounding names are matched using Metaphone analysis
+- **Multi-field Search**: Searches across relevant fields (name, email, phone, specialization, etc.)
+- **Pagination**: Full support for paginated results
+- **Role-based Access**: User search is protected by role-based access control
+
+### Admin Reindex Endpoints
+
+All endpoints require ADMIN role:
+
+```
+POST   /api/v1/admin/search/reindex/patients
+POST   /api/v1/admin/search/reindex/doctors
+POST   /api/v1/admin/search/reindex/appointments
+POST   /api/v1/admin/search/reindex/prescriptions
+POST   /api/v1/admin/search/reindex/all         (Reindex everything)
+DELETE /api/v1/admin/search/indices/clear-all   (Clear all indices)
+GET    /api/v1/admin/search/health              (Check Elasticsearch health)
+```
+
+### Disabling Elasticsearch
+
+If you want to run without Elasticsearch, set:
+
+```properties
+elasticsearch.enabled=false
+```
+
+The application will start successfully but search features will be unavailable.
+
 ## Configuration
 
 Important backend settings live in `backend/src/main/resources/application.properties` and can be overridden with environment variables.
@@ -318,6 +445,11 @@ Important backend settings live in `backend/src/main/resources/application.prope
 - `hms.rate-limit.refill-minutes`: refill interval in minutes.
 - `REDIS_HOST`, `REDIS_PORT`: Redis connection for shared rate limiting and cache.
 - `HMS_LOG_PATH` or `hms.logging.path`: canonical backend log directory. `npm run backend:start` writes backend logs and backend-run stdout/stderr files under `logs/backend`.
+- `elasticsearch.enabled`: enable/disable Elasticsearch search. Defaults to `true`.
+- `elasticsearch.host`: Elasticsearch server hostname. Defaults to `localhost`.
+- `elasticsearch.port`: Elasticsearch port. Defaults to `9200`.
+- `elasticsearch.username`: Elasticsearch username (for secured clusters).
+- `elasticsearch.password`: Elasticsearch password (for secured clusters).
 
 Redis is required for consistent distributed rate limiting and optimized caching in this version.
 
@@ -345,6 +477,36 @@ Production profile names `prod` and `production` are guarded at startup:
 - If MySQL tables are empty but old users still appear, clear browser site data for `localhost` and stop any backend from `C:\Users\Piyush\Desktop\Project\backend`.
 - If the frontend cannot connect, confirm `frontend/src/environments/environment*.ts` points to `http://localhost:8080/api/v1`.
 - Use `docs/manual-route-validation.md` to confirm role route access after auth changes.
+
+### Elasticsearch Troubleshooting
+
+- **"Elasticsearch is not available"**: Check if Elasticsearch is running. On Windows, verify the `elasticsearch.bat` process is active.
+
+  ```powershell
+  # Check Elasticsearch status
+  curl http://localhost:9200
+
+  # If not running, start it
+  cd C:\elasticsearch-8.11.0\bin
+  .\elasticsearch.bat
+  ```
+
+- **Reindex fails or takes too long**:
+  - Verify Elasticsearch has enough memory: Check `elasticsearch.yml` for `ES_JAVA_OPTS`
+  - For local setup, you can increase heap size by editing the bat file or environment
+
+- **Search returns no results**:
+  - Ensure reindex was completed successfully from admin dashboard
+  - Check Elasticsearch logs for errors
+  - Verify indices exist: `curl http://localhost:9200/_cat/indices`
+
+- **Memory issues with Elasticsearch**:
+  - Edit `elasticsearch.yml` and reduce heap: `ES_JAVA_OPTS: "-Xms256m -Xmx512m"`
+  - Or reduce batch size in `ElasticsearchReindexServiceImpl.java` (change `BATCH_SIZE` from 500)
+
+- **Port 9200 already in use**:
+  - Change Elasticsearch port in `elasticsearch.yml`: `http.port: 9201`
+  - Update `application.properties`: `elasticsearch.port=9201`
 
 ## Verification
 

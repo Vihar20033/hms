@@ -8,7 +8,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.time.Instant;
-import java.time.LocalTime;
 import java.time.ZoneId;
 import java.time.LocalDate;
 import java.util.Comparator;

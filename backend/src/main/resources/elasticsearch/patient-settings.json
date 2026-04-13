@@ -1,0 +1,32 @@
+{
+  "settings": {
+    "number_of_shards": 1,
+    "number_of_replicas": 1,
+    "analysis": {
+      "filter": {
+        "phonetic_filter": {
+          "type": "phonetic",
+          "encoder": "metaphone",
+          "replace": true
+        },
+        "stop_filter": {
+          "type": "stop"
+        },
+        "synonym_filter": {
+          "type": "synonym",
+          "synonyms": ["dr => doctor", "co => company"]
+        }
+      },
+      "analyzer": {
+        "phonetic_analyzer": {
+          "tokenizer": "standard",
+          "filter": ["lowercase", "stop_filter", "phonetic_filter"]
+        },
+        "standard": {
+          "tokenizer": "standard",
+          "filter": ["lowercase", "stop", "snowball"]
+        }
+      }
+    }
+  }
+}

@@ -196,12 +196,28 @@
 			<artifactId>cloudinary-http44</artifactId>
 			<version>1.36.0</version>
 		</dependency>
-	</dependencies>
-
-	<build>
-		<plugins>
-            <plugin>
-                <groupId>org.springframework.boot</groupId>
+	<!-- Elasticsearch -->
+	<dependency>
+		<groupId>org.springframework.boot</groupId>
+		<artifactId>spring-boot-starter-data-elasticsearch</artifactId>
+	</dependency>
+	<!-- Elasticsearch client -->
+	<dependency>
+		<groupId>co.elastic.clients</groupId>
+		<artifactId>elasticsearch-java</artifactId>
+		<version>8.11.0</version>
+	</dependency>
+	<!-- Jakarta JSON API -->
+	<dependency>
+		<groupId>jakarta.json</groupId>
+		<artifactId>jakarta.json-api</artifactId>
+	</dependency>
+	<!-- Elasticsearch Phonetic Analysis Plugin dependencies -->
+	<dependency>
+		<groupId>org.apache.lucene</groupId>
+		<artifactId>lucene-phonetic</artifactId>
+		<version>9.9.1</version>
+	</dependency>
                 <artifactId>spring-boot-maven-plugin</artifactId>
                 <configuration>
                     <mainClass>com.hms.HospitalManagementSystemApplication</mainClass>
