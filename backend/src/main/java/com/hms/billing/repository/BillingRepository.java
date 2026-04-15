@@ -18,6 +18,8 @@ public interface BillingRepository extends JpaRepository<Billing, Long> {
 
     List<Billing> findByPatientId(Long patientId);
 
+    Slice<Billing> findByPatientId(Long patientId, Pageable pageable);
+
     @Query("""
             SELECT b FROM Billing b
             JOIN b.patient p
@@ -27,6 +29,12 @@ public interface BillingRepository extends JpaRepository<Billing, Long> {
                OR LOWER(COALESCE(p.email, '')) LIKE LOWER(CONCAT('%', :query, '%'))
                OR LOWER(COALESCE(b.insuranceProvider, '')) LIKE LOWER(CONCAT('%', :query, '%'))
                OR LOWER(COALESCE(b.insuranceClaimNumber, '')) LIKE LOWER(CONCAT('%', :query, '%'))
+               OR FUNCTION('soundex', LOWER(b.invoiceNumber)) = FUNCTION('soundex', LOWER(:query))
+               OR FUNCTION('soundex', LOWER(p.name)) = FUNCTION('soundex', LOWER(:query))
+               OR FUNCTION('soundex', LOWER(p.contactNumber)) = FUNCTION('soundex', LOWER(:query))
+               OR FUNCTION('soundex', LOWER(COALESCE(p.email, ''))) = FUNCTION('soundex', LOWER(:query))
+               OR FUNCTION('soundex', LOWER(COALESCE(b.insuranceProvider, ''))) = FUNCTION('soundex', LOWER(:query))
+               OR FUNCTION('soundex', LOWER(COALESCE(b.insuranceClaimNumber, ''))) = FUNCTION('soundex', LOWER(:query))
             """)
     Slice<Billing> searchBillings(@Param("query") String query, Pageable pageable);
 

@@ -1,0 +1,16 @@
+singleServerConfig:
+  address: "redis://redis-16517.c244.us-east-1-2.ec2.cloud.redislabs.com:16517"
+  username: "default"
+  password: "aJqtsD3vOrNH3NmfjPocRWVJqp6mOiRv"
+  connectionMinimumIdleSize: 1
+  connectionPoolSize: 1
+  subscriptionConnectionMinimumIdleSize: 1
+  subscriptionConnectionPoolSize: 1
+  connectTimeout: 10000
+  timeout: 5000
+  retryAttempts: 5
+  retryInterval: 2000
+threads: 1
+nettyThreads: 2
+lazyInitialization: true
+codec: !<org.redisson.codec.JsonJacksonCodec> {}

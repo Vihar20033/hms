@@ -1,18 +1,16 @@
-import { ApiResponse } from '../../../../core/models/common.models';
-import { Appointment, Department } from '../../../appointments/models/appointment.models';
-import { AppointmentService } from '../../../appointments/services/appointment.service';
 import { CommonModule } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
-import { DialogModule } from 'primeng/dialog';
-import { Doctor } from '../../models/doctor.models';
-import { DoctorService } from '../../services/doctor.service';
-import { DropdownModule } from 'primeng/dropdown';
-import { filter, map } from 'rxjs/operators';
 import { FormsModule } from '@angular/forms';
-import { HeaderComponent } from '../../../../layout/header/header.component';
 import { Router, RouterLink } from '@angular/router';
+import { DialogModule } from 'primeng/dialog';
+import { DropdownModule } from 'primeng/dropdown';
+import { ApiResponse } from '../../../../core/models/common.models';
+import { HeaderComponent } from '../../../../layout/header/header.component';
 import { SidebarComponent } from '../../../../layout/sidebar/sidebar.component';
 import { StatusModalService } from '../../../../shared/services/status-modal.service';
+import { AppointmentService } from '../../../appointments/services/appointment.service';
+import { Doctor } from '../../models/doctor.models';
+import { DoctorService } from '../../services/doctor.service';
 
 @Component({
   selector: 'app-doctor-list',
@@ -48,7 +46,7 @@ export class DoctorListComponent implements OnInit {
     private appointmentService: AppointmentService,
     private router: Router,
     private statusModalService: StatusModalService,
-  ) { }
+  ) {}
 
   ngOnInit(): void {
     this.loadDoctors();
@@ -81,8 +79,7 @@ export class DoctorListComponent implements OnInit {
   }
 
   onEdit(doctor: Doctor): void {
-    this.router.navigate(['/staff/register'], 
-      { queryParams: { doctorId: doctor.id, mode: 'edit' } });
+    this.router.navigate(['/staff/register'], { queryParams: { doctorId: doctor.id, mode: 'edit' } });
   }
 
   onDelete(doctor: Doctor): void {
@@ -90,21 +87,25 @@ export class DoctorListComponent implements OnInit {
     this.deleteModalVisible = true;
   }
 
+  private openReassignModal(doctor: Doctor, count: number, errorMessage = ''): void {
+    this.deleteModalVisible = false;
+    this.selectedDoctorForReassignment = doctor;
+    this.reassignModalVisible = true;
+    this.reassignErrorMessage = errorMessage;
+    this.targetDoctorId = null;
+    this.currentReassignCount = count;
+  }
+
   confirmDelete(): void {
     if (!this.selectedDoctorForDelete) return;
-    
+
     // First check appointment count to give admin a heads-up
     this.doctorService.getAppointmentCount(this.selectedDoctorForDelete.id).subscribe({
       next: (res: ApiResponse<number>) => {
         const count = res.data;
         if (count > 0) {
           // Show reassignment modal immediately with count context
-          this.deleteModalVisible = false;
-          this.selectedDoctorForReassignment = this.selectedDoctorForDelete;
-          this.reassignModalVisible = true;
-          this.reassignErrorMessage = '';
-          this.targetDoctorId = null;
-          this.currentReassignCount = count;
+          this.openReassignModal(this.selectedDoctorForDelete!, count);
         } else {
           // No appointments, proceed with normal delete
           this.performDelete(this.selectedDoctorForDelete!);
@@ -113,7 +114,7 @@ export class DoctorListComponent implements OnInit {
       error: () => {
         // Fallback to normal delete attempt if count check fails
         this.performDelete(this.selectedDoctorForDelete!);
-      }
+      },
     });
   }
 
@@ -127,14 +128,50 @@ export class DoctorListComponent implements OnInit {
       error: (err) => {
         // Handle constraint violation (active appointments)
         if (err.status === 400 || err.status === 409 || err.error?.message?.toLowerCase().includes('appointment')) {
-          this.deleteModalVisible = false;
-          this.selectedDoctorForReassignment = doctor;
-          this.reassignModalVisible = true;
-          this.reassignErrorMessage = '';
-          this.targetDoctorId = null;
+          this.doctorService.getAppointmentCount(doctor.id).subscribe({
+            next: (res: ApiResponse<number>) => {
+              this.openReassignModal(
+                doctor,
+                res.data,
+                'This doctor has active appointments. Reassign them before deleting.',
+              );
+            },
+            error: () => {
+              this.openReassignModal(
+                doctor,
+                0,
+                'This doctor may still have active appointments. Reassign them before deleting.',
+              );
+            },
+          });
         } else {
           this.statusModalService.showError('Delete Failed', err.error?.message || 'Could not delete this doctor.');
         }
+      },
+    });
+  }
+
+  promptReassignment(): void {
+    if (!this.selectedDoctorForDelete) return;
+
+    this.doctorService.getAppointmentCount(this.selectedDoctorForDelete.id).subscribe({
+      next: (res: ApiResponse<number>) => {
+        if (res.data > 0) {
+          this.openReassignModal(this.selectedDoctorForDelete!, res.data);
+          return;
+        }
+
+        this.statusModalService.showInfo?.(
+          'No active appointments',
+          'This doctor does not currently have active appointments to reassign.',
+        );
+      },
+      error: () => {
+        this.openReassignModal(
+          this.selectedDoctorForDelete!,
+          0,
+          'We could not verify appointment count. You can still reassign manually before deleting.',
+        );
       },
     });
   }
@@ -158,31 +195,19 @@ export class DoctorListComponent implements OnInit {
           error: (err) => {
             this.reassignErrorMessage = err.error?.message || 'Deletion failed after reassignment.';
             this.isReassigning = false;
-          }
+          },
         });
       },
       error: (err) => {
         this.reassignErrorMessage = err.error?.message || 'Reassignment failed.';
         this.isReassigning = false;
-      }
+      },
     });
   }
 
   get availableDoctorsForReassignment(): any[] {
     return this.doctors
-      .filter(d => d.id !== this.selectedDoctorForReassignment?.id)
-      .map(d => ({ label: `Dr. ${d.firstName} ${d.lastName} (${d.department})`, value: d.id }));
+      .filter((d) => d.id !== this.selectedDoctorForReassignment?.id)
+      .map((d) => ({ label: `Dr. ${d.firstName} ${d.lastName} (${d.department})`, value: d.id }));
   }
 }
-
-
-
-
-
-
-
-
-
-
-
-

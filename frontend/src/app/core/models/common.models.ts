@@ -41,6 +41,8 @@ export interface DashboardSummary {
   totalCompletedConsultations: number;
   weeklyStats: WeeklyStatistics[];
   departmentStats: DepartmentStatistics[];
+  stockInToday: number;
+  stockOutToday: number;
 }
 
 

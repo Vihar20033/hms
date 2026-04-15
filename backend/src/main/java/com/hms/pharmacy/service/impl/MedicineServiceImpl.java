@@ -32,6 +32,7 @@ import org.springframework.dao.DataIntegrityViolationException;
 
 import com.hms.common.specification.SearchSpecification;
 import org.springframework.data.jpa.domain.Specification;
+import lombok.extern.slf4j.Slf4j;
 
 @Service
 @RequiredArgsConstructor

@@ -113,7 +113,7 @@ public class MedicineController {
     @PreAuthorize("hasAnyRole('ADMIN','PHARMACIST')")
     @PatchMapping("/{id}/restock")
     public ResponseEntity<ApiResponse<Void>> restock(
-            @PathVariable("id") Long id,
+            @PathVariable Long id,
             @Valid @RequestBody RestockMedicineRequestDTO request) {
         service.restockMedicine(id, request.getQuantity()); // Fix #5 – Long qty passed through
         return ResponseEntity.ok(ApiResponse.success(null));

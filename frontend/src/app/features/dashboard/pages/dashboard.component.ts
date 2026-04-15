@@ -1,30 +1,38 @@
-import { AfterViewInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, ElementRef, OnDestroy, OnInit, ViewChild } from '@angular/core';
-import { ApiResponse, DashboardSummary } from '../../../core/models/common.models';
-import { Appointment, AppointmentStatus, Department } from '../../appointments/models/appointment.models';
-import { AppointmentService } from '../../appointments/services/appointment.service';
-import { AuthService } from '../../auth/services/auth.service';
 import { CommonModule, CurrencyPipe, DecimalPipe } from '@angular/common';
-import { DashboardService } from '../services/dashboard.service';
 import {
-  buildDashboardQuickActions,
-  createDashboardChart,
-  createDailyVisitFlowChart,
-  createDepartmentChart,
-  getDashboardStatusClass,
-  QuickAction,
-} from '../utils/dashboard.utils';
-import { delay } from 'rxjs/operators';
-import { Doctor } from '../../staff/models/doctor.models';
-import { HeaderComponent } from '../../../layout/header/header.component';
-import { Patient } from '../../patients/models/patient.models';
-import { Role, User } from '../../auth/models/auth.models';
+  AfterViewInit,
+  ChangeDetectionStrategy,
+  ChangeDetectorRef,
+  Component,
+  ElementRef,
+  OnDestroy,
+  OnInit,
+  ViewChild,
+} from '@angular/core';
 import { RouterLink } from '@angular/router';
+import { Chart, registerables } from 'chart.js';
+import ChartDataLabels from 'chartjs-plugin-datalabels';
+import { TableModule } from 'primeng/table';
+import { ApiResponse, DashboardSummary } from '../../../core/models/common.models';
+import { HeaderComponent } from '../../../layout/header/header.component';
 import { SidebarComponent } from '../../../layout/sidebar/sidebar.component';
 import { StatusModalService } from '../../../shared/services/status-modal.service';
-import { Chart, registerables } from 'chart.js';
-import { TableModule } from 'primeng/table';
+import { Appointment, AppointmentStatus } from '../../appointments/models/appointment.models';
+import { AppointmentService } from '../../appointments/services/appointment.service';
+import { User } from '../../auth/models/auth.models';
+import { AuthService } from '../../auth/services/auth.service';
+import { DashboardService } from '../services/dashboard.service';
+import {
+  QuickAction,
+  buildDashboardQuickActions,
+  createDailyVisitFlowChart,
+  createDashboardChart,
+  createDepartmentChart,
+  createStockChart,
+  getDashboardStatusClass,
+} from '../utils/dashboard.utils';
 
-Chart.register(...registerables);
+Chart.register(...registerables, ChartDataLabels);
 
 @Component({
   selector: 'app-dashboard',
@@ -38,6 +46,7 @@ export class DashboardComponent implements OnInit, AfterViewInit, OnDestroy {
   @ViewChild('patientChart') patientChartCanvas!: ElementRef<HTMLCanvasElement>;
   @ViewChild('deptChart') deptChartCanvas!: ElementRef<HTMLCanvasElement>;
   @ViewChild('visitFlowChart') visitFlowChartCanvas!: ElementRef<HTMLCanvasElement>;
+  @ViewChild('stockChart') stockChartCanvas!: ElementRef<HTMLCanvasElement>;
 
   summary: DashboardSummary | null = null;
   isLoading = true;
@@ -48,6 +57,7 @@ export class DashboardComponent implements OnInit, AfterViewInit, OnDestroy {
   chart: Chart | null = null;
   deptChart: Chart | null = null;
   visitFlowChart: Chart | null = null;
+  stockChart: Chart | null = null;
   quickActions: QuickAction[] = [];
 
   todayAppointments: Appointment[] = [];
@@ -114,6 +124,9 @@ export class DashboardComponent implements OnInit, AfterViewInit, OnDestroy {
     if (this.visitFlowChart) {
       this.visitFlowChart.destroy();
     }
+    if (this.stockChart) {
+      this.stockChart.destroy();
+    }
   }
 
   private initCharts(data: DashboardSummary): void {
@@ -144,6 +157,16 @@ export class DashboardComponent implements OnInit, AfterViewInit, OnDestroy {
       if (ctx) {
         if (this.visitFlowChart) this.visitFlowChart.destroy();
         this.visitFlowChart = createDailyVisitFlowChart(ctx, data);
+      }
+    }
+
+    // 4. Stock Movement Chart
+    const stockCanvas = this.stockChartCanvas?.nativeElement;
+    if (stockCanvas) {
+      const ctx = stockCanvas.getContext('2d');
+      if (ctx) {
+        if (this.stockChart) this.stockChart.destroy();
+        this.stockChart = createStockChart(ctx, data);
       }
     }
   }
@@ -223,7 +246,10 @@ export class DashboardComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   getScheduledVisits(data: DashboardSummary): number {
-    return Math.max((data.todayAppointments || 0) - (data.patientsInQueue || 0) - (data.completedConsultations || 0), 0);
+    return Math.max(
+      (data.todayAppointments || 0) - (data.patientsInQueue || 0) - (data.completedConsultations || 0),
+      0,
+    );
   }
 
   getWeeklyVisitTotal(data: DashboardSummary): number {
@@ -236,19 +262,9 @@ export class DashboardComponent implements OnInit, AfterViewInit, OnDestroy {
       return 'No visits';
     }
 
-    const peak = stats.reduce((highest, item) => ((item.appointments || 0) > (highest.appointments || 0) ? item : highest));
+    const peak = stats.reduce((highest, item) =>
+      (item.appointments || 0) > (highest.appointments || 0) ? item : highest,
+    );
     return peak.appointments > 0 ? `${peak.day} (${peak.appointments})` : 'No visits';
   }
 }
-
-
-
-
-
-
-
-
-
-
-
-

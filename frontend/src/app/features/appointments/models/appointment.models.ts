@@ -42,8 +42,7 @@ export interface AppointmentRequest {
   patientId: number;
   doctorId?: number;
   department: Department;
-  appointmentDate: string; 
-  appointmentTime: string; 
+  appointmentTime: string;
   reason: string;
   notes?: string;
   isEmergency: boolean;
@@ -58,5 +57,3 @@ export interface AppointmentSummary {
   completed: number;
   cancelled: number;
 }
-
-

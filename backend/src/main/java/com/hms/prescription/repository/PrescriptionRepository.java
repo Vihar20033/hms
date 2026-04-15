@@ -36,6 +36,14 @@ public interface PrescriptionRepository extends JpaRepository<Prescription, Long
                OR LOWER(doctor.specialization) LIKE LOWER(CONCAT('%', :query, '%'))
                OR LOWER(COALESCE(p.diagnosis, '')) LIKE LOWER(CONCAT('%', :query, '%'))
                OR LOWER(COALESCE(p.symptoms, '')) LIKE LOWER(CONCAT('%', :query, '%'))
+               OR FUNCTION('soundex', LOWER(patient.name)) = FUNCTION('soundex', LOWER(:query))
+               OR FUNCTION('soundex', LOWER(patient.contactNumber)) = FUNCTION('soundex', LOWER(:query))
+               OR FUNCTION('soundex', LOWER(COALESCE(patient.email, ''))) = FUNCTION('soundex', LOWER(:query))
+               OR FUNCTION('soundex', LOWER(doctor.firstName)) = FUNCTION('soundex', LOWER(:query))
+               OR FUNCTION('soundex', LOWER(doctor.lastName)) = FUNCTION('soundex', LOWER(:query))
+               OR FUNCTION('soundex', LOWER(doctor.specialization)) = FUNCTION('soundex', LOWER(:query))
+               OR FUNCTION('soundex', LOWER(COALESCE(p.diagnosis, ''))) = FUNCTION('soundex', LOWER(:query))
+               OR FUNCTION('soundex', LOWER(COALESCE(p.symptoms, ''))) = FUNCTION('soundex', LOWER(:query))
             """)
     Slice<Prescription> searchPrescriptions(@Param("query") String query, Pageable pageable);
 
@@ -50,6 +58,11 @@ public interface PrescriptionRepository extends JpaRepository<Prescription, Long
                 OR LOWER(COALESCE(patient.email, '')) LIKE LOWER(CONCAT('%', :query, '%'))
                 OR LOWER(COALESCE(p.diagnosis, '')) LIKE LOWER(CONCAT('%', :query, '%'))
                 OR LOWER(COALESCE(p.symptoms, '')) LIKE LOWER(CONCAT('%', :query, '%'))
+                OR FUNCTION('soundex', LOWER(patient.name)) = FUNCTION('soundex', LOWER(:query))
+                OR FUNCTION('soundex', LOWER(patient.contactNumber)) = FUNCTION('soundex', LOWER(:query))
+                OR FUNCTION('soundex', LOWER(COALESCE(patient.email, ''))) = FUNCTION('soundex', LOWER(:query))
+                OR FUNCTION('soundex', LOWER(COALESCE(p.diagnosis, ''))) = FUNCTION('soundex', LOWER(:query))
+                OR FUNCTION('soundex', LOWER(COALESCE(p.symptoms, ''))) = FUNCTION('soundex', LOWER(:query))
               )
             """)
     Slice<Prescription> searchPrescriptionsForDoctor(

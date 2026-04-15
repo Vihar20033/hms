@@ -1,10 +1,6 @@
-import { Appointment, AppointmentStatus, Department } from '../../appointments/models/appointment.models';
 import { Chart, ChartConfiguration, TooltipItem } from 'chart.js';
 import { DashboardSummary, WeeklyStatistics } from '../../../core/models/common.models';
-import { Doctor } from '../../staff/models/doctor.models';
-import { map } from 'rxjs/operators';
-import { Patient } from '../../patients/models/patient.models';
-import { Role, User } from '../../auth/models/auth.models';
+import { AppointmentStatus } from '../../appointments/models/appointment.models';
 
 export interface QuickAction {
   label: string;
@@ -92,21 +88,33 @@ export function createDashboardChart(ctx: CanvasRenderingContext2D, data: Dashbo
         },
       },
       plugins: {
-        legend: { 
+        legend: {
           position: 'top',
           labels: {
             usePointStyle: true,
             boxWidth: 8,
             boxHeight: 8,
             padding: 14,
-            font: { weight: 'bold', size: 12 }
-          }
+            font: { weight: 'bold', size: 12 },
+          },
         },
         tooltip: {
           mode: 'index',
           intersect: false,
           padding: 12,
           backgroundColor: 'rgba(15, 23, 42, 0.9)',
+        },
+        datalabels: {
+          display: true,
+          color: '#1e293b',
+          font: {
+            weight: 'bold',
+            size: 12,
+          },
+          formatter: (value: number) => (value === 0 ? '' : value.toString()),
+          anchor: 'end',
+          align: 'top',
+          offset: 4,
         },
       },
       scales: {
@@ -121,13 +129,13 @@ export function createDashboardChart(ctx: CanvasRenderingContext2D, data: Dashbo
           border: { display: false },
           grid: { color: '#eef2f7' },
         },
-        x: { 
+        x: {
           border: { display: false },
           grid: { display: false },
           ticks: {
             padding: 8,
             font: { weight: 'bold', size: 11 },
-          }
+          },
         },
       },
     },
@@ -181,8 +189,8 @@ export function createDepartmentChart(ctx: CanvasRenderingContext2D, data: Dashb
           labels: {
             usePointStyle: true,
             padding: 15,
-            font: { weight: 'bold', size: 11 }
-          }
+            font: { weight: 'bold', size: 11 },
+          },
         },
         tooltip: {
           padding: 12,
@@ -192,6 +200,18 @@ export function createDepartmentChart(ctx: CanvasRenderingContext2D, data: Dashb
           callbacks: {
             label: (item: TooltipItem<'doughnut'>) => ` ${item.label}: ${item.raw} visits`,
           },
+        },
+        datalabels: {
+          display: true,
+          color: '#1e293b',
+          font: {
+            weight: 'bold',
+            size: 12,
+          },
+          formatter: (value: number) => (value === 0 ? '' : value.toString()),
+          anchor: 'end',
+          align: 'end',
+          offset: 8,
         },
       },
     },
@@ -206,19 +226,24 @@ export function createDailyVisitFlowChart(ctx: CanvasRenderingContext2D, data: D
   const today = data.todayAppointments || 0;
   const scheduled = Math.max(today - completed - waiting, 0);
 
-  const config: ChartConfiguration<'bar'> = {
-    type: 'bar',
+  const config: ChartConfiguration<'line'> = {
+    type: 'line',
     data: {
       labels: ['Scheduled', 'Waiting', 'Completed'],
       datasets: [
         {
-          label: 'Visits',
+          label: 'Daily Visits',
           data: [scheduled, waiting, completed],
-          backgroundColor: ['rgba(37, 99, 235, 0.78)', 'rgba(245, 158, 11, 0.78)', 'rgba(16, 185, 129, 0.78)'],
-          borderColor: ['#2563eb', '#d97706', '#059669'],
-          borderWidth: 1,
-          borderRadius: 8,
-          maxBarThickness: 56,
+          borderColor: '#2563eb',
+          backgroundColor: 'rgba(37, 99, 235, 0.12)',
+          pointBackgroundColor: '#2563eb',
+          pointBorderColor: '#ffffff',
+          pointBorderWidth: 2,
+          pointRadius: 5,
+          pointHoverRadius: 7,
+          borderWidth: 3,
+          tension: 0.35,
+          fill: true,
         },
       ],
     },
@@ -229,13 +254,27 @@ export function createDailyVisitFlowChart(ctx: CanvasRenderingContext2D, data: D
         padding: 0,
       },
       plugins: {
-        legend: { display: false },
+        legend: {
+          display: false,
+        },
         tooltip: {
           padding: 12,
           backgroundColor: 'rgba(15, 23, 42, 0.9)',
           callbacks: {
-            label: (item: TooltipItem<'bar'>) => ` ${item.raw} visits`,
+            label: (item: TooltipItem<'line'>) => ` ${item.raw} visits`,
           },
+        },
+        datalabels: {
+          display: true,
+          color: '#ffffff',
+          font: {
+            weight: 'bold',
+            size: 12,
+          },
+          formatter: (value: number) => (value === 0 ? '' : value.toString()),
+          anchor: 'end',
+          align: 'top',
+          offset: 4,
         },
       },
       scales: {
@@ -265,12 +304,77 @@ export function createDailyVisitFlowChart(ctx: CanvasRenderingContext2D, data: D
   return new Chart(ctx, config);
 }
 
+export function createStockChart(ctx: CanvasRenderingContext2D, data: DashboardSummary): Chart {
+  const stockIn = data.stockInToday || 0;
+  const stockOut = data.stockOutToday || 0;
 
+  const config: ChartConfiguration<'bar'> = {
+    type: 'bar',
+    data: {
+      labels: ['Stock In', 'Dispensed'],
+      datasets: [
+        {
+          label: 'Quantity',
+          data: [stockIn, stockOut],
+          backgroundColor: ['rgba(16, 185, 129, 0.78)', 'rgba(239, 68, 68, 0.78)'],
+          borderColor: ['#059669', '#dc2626'],
+          borderWidth: 1,
+          borderRadius: 8,
+          maxBarThickness: 56,
+        },
+      ],
+    },
+    options: {
+      responsive: true,
+      maintainAspectRatio: false,
+      layout: {
+        padding: 0,
+      },
+      plugins: {
+        legend: { display: false },
+        tooltip: {
+          padding: 12,
+          backgroundColor: 'rgba(15, 23, 42, 0.9)',
+          callbacks: {
+            label: (item: TooltipItem<'bar'>) => ` ${item.raw} units`,
+          },
+        },
+        datalabels: {
+          display: true,
+          color: '#1e293b',
+          font: {
+            weight: 'bold',
+            size: 12,
+          },
+          formatter: (value: number) => (value === 0 ? '' : value.toString()),
+          anchor: 'end',
+          align: 'end',
+          offset: 8,
+        },
+      },
+      scales: {
+        y: {
+          beginAtZero: true,
+          grace: 1,
+          ticks: {
+            precision: 0,
+            maxTicksLimit: 4,
+            padding: 8,
+          },
+          border: { display: false },
+          grid: { color: '#f1f5f9' },
+        },
+        x: {
+          border: { display: false },
+          grid: { display: false },
+          ticks: {
+            padding: 10,
+            font: { weight: 'bold' },
+          },
+        },
+      },
+    },
+  };
 
-
-
-
-
-
-
-
+  return new Chart(ctx, config);
+}

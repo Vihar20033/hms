@@ -9,6 +9,8 @@ import com.hms.dashboard.dto.DepartmentStatisticsDTO;
 import com.hms.dashboard.dto.WeeklyStatisticsDTO;
 import com.hms.dashboard.service.DashboardService;
 import com.hms.patient.repository.PatientRepository;
+import com.hms.pharmacy.entity.InventoryTransaction;
+import com.hms.pharmacy.repository.InventoryTransactionRepository;
 import com.hms.pharmacy.repository.MedicineRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -33,17 +35,20 @@ public class DashboardServiceImpl implements DashboardService {
         private final AppointmentRepository appointmentRepository;
         private final MedicineRepository medicineRepository;
         private final BillingRepository billingRepository;
+        private final InventoryTransactionRepository inventoryTransactionRepository;
 
         @Autowired
         public DashboardServiceImpl(
                         PatientRepository patientRepository,
                         AppointmentRepository appointmentRepository,
                         MedicineRepository medicineRepository,
-                        BillingRepository billingRepository) {
+                        BillingRepository billingRepository,
+                        InventoryTransactionRepository inventoryTransactionRepository) {
                 this.patientRepository = patientRepository;
                 this.appointmentRepository = appointmentRepository;
                 this.medicineRepository = medicineRepository;
                 this.billingRepository = billingRepository;
+                this.inventoryTransactionRepository = inventoryTransactionRepository;
         }
 
         @Override
@@ -86,6 +91,21 @@ public class DashboardServiceImpl implements DashboardService {
                         }
                 }
 
+                // Calculate stock in/out for today
+                long stockInToday = inventoryTransactionRepository.findAll().stream()
+                        .filter(t -> t.getTransactionType().equals("IN") &&
+                                     t.getCreatedAt().isAfter(startOfDay) &&
+                                     t.getCreatedAt().isBefore(endOfDay))
+                        .mapToLong(InventoryTransaction::getQuantity)
+                        .sum();
+
+                long stockOutToday = inventoryTransactionRepository.findAll().stream()
+                        .filter(t -> t.getTransactionType().equals("OUT") &&
+                                     t.getCreatedAt().isAfter(startOfDay) &&
+                                     t.getCreatedAt().isBefore(endOfDay))
+                        .mapToLong(InventoryTransaction::getQuantity)
+                        .sum();
+
                 return DashboardSummaryDTO.builder()
                                 .totalPatients(counts.totalPatients())
                                 .todayAppointments(counts.todayAppointments())
@@ -96,6 +116,8 @@ public class DashboardServiceImpl implements DashboardService {
                                 .totalCompletedConsultations(totalConsultations)
                                 .weeklyStats(weeklyStats)
                                 .departmentStats(deptStats)
+                                .stockInToday(stockInToday)
+                                .stockOutToday(stockOutToday)
                                 .build();
         }
 

@@ -21,6 +21,9 @@ public interface UserRepository extends JpaRepository<User, Long> {
             SELECT u FROM User u
             WHERE LOWER(u.username) LIKE LOWER(CONCAT('%', :query, '%'))
                OR LOWER(u.email) LIKE LOWER(CONCAT('%', :query, '%'))
+
+               OR FUNCTION('soundex', LOWER(u.username)) = FUNCTION('soundex', LOWER(:query))
+               OR FUNCTION('soundex', LOWER(u.email)) = FUNCTION('soundex', LOWER(:query))
             """)
     Slice<User> searchUsers(@Param("query") String query, Pageable pageable);
 

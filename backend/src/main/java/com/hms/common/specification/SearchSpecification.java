@@ -1,6 +1,7 @@
 package com.hms.common.specification;
 
 import org.springframework.data.jpa.domain.Specification;
+import jakarta.persistence.criteria.Expression;
 import jakarta.persistence.criteria.Predicate;
 import java.util.ArrayList;
 import java.util.List;
@@ -13,11 +14,16 @@ public class SearchSpecification<T> {
                 return cb.conjunction();
             }
 
-            String pattern = "%" + query.toLowerCase() + "%";
+            String normalizedQuery = query.trim().toLowerCase();
+            String pattern = "%" + normalizedQuery + "%";
             List<Predicate> predicates = new ArrayList<>();
+            Expression<String> querySoundex = cb.function("soundex", String.class, cb.literal(normalizedQuery));
 
             for (String field : searchFields) {
-                predicates.add(cb.like(cb.lower(root.get(field)), pattern));
+                Expression<String> fieldValue = cb.lower(root.get(field));
+                Predicate likePredicate = cb.like(fieldValue, pattern);
+                Predicate soundexPredicate = cb.equal(cb.function("soundex", String.class, fieldValue), querySoundex);
+                predicates.add(cb.or(likePredicate, soundexPredicate));
             }
 
             return cb.or(predicates.toArray(new Predicate[0]));

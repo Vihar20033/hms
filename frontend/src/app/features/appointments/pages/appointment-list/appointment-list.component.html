@@ -5,7 +5,6 @@
     <app-header></app-header>
 
     <div class="page-body">
-
       <div class="content-header">
         <div class="title-section">
           <h1>Appointments Schedule</h1>
@@ -68,7 +67,10 @@
           <div class="workflow-banner">
             <div class="workflow-copy">
               <strong>Doctor workflow</strong>
-              <span>`SCHEDULED` -> reception checks in patient -> `CHECKED_IN` -> you start consultation -> prescribe -> complete visit.</span>
+              <span
+                >`SCHEDULED` -> reception checks in patient -> `CHECKED_IN` -> you start consultation -> prescribe ->
+                complete visit.</span
+              >
             </div>
           </div>
         }
@@ -77,7 +79,10 @@
           <div class="workflow-banner receptionist">
             <div class="workflow-copy">
               <strong>Front desk workflow</strong>
-              <span>Use `Check In` when the patient arrives. That moves the visit into the doctor queue and unlocks consultation for the assigned doctor.</span>
+              <span
+                >Use `Check In` when the patient arrives. That moves the visit into the doctor queue and unlocks
+                consultation for the assigned doctor.</span
+              >
             </div>
           </div>
         }
@@ -91,12 +96,13 @@
                   <th>Department / Doctor</th>
                   <th>Time</th>
                   <th>Status</th>
+                  <th>Details</th>
                   <th>Token</th>
                   <th *ngIf="userRole === 'DOCTOR' || userRole === 'ADMIN'">Actions</th>
                 </tr>
               </ng-template>
               <ng-template pTemplate="body" let-apt>
-                <tr (click)="onRowSelect(apt)" class="clickable-row">
+                <tr>
                   <td>
                     <div class="user-info">
                       <div class="avatar-small">{{ apt.patientName[0] }}</div>
@@ -124,6 +130,12 @@
                       {{ apt.status }}
                     </span>
                     <div class="workflow-note">{{ getWorkflowLabel(apt) }}</div>
+                  </td>
+                  <td>
+                    <button type="button" class="btn-text-action view-appointment" (click)="onRowSelect(apt)">
+                      <i class="ri-eye-line"></i>
+                      View
+                    </button>
                   </td>
                   <td>
                     @if (apt.tokenNumber) {
@@ -157,23 +169,32 @@
         }
 
         <!-- Appointment Detail Modal -->
-        <p-dialog [(visible)]="detailModalVisible" 
-                  [header]="'Appointment Details - ' + selectedAppointment?.patientName" 
-                  [modal]="true" 
-                  [style]="{width: '600px', 'max-height': '90vh'}" 
-                  [closable]="true"
-                  appendTo="body">
-          
+        <p-dialog
+          [(visible)]="detailModalVisible"
+          [header]="'Appointment Details - ' + selectedAppointment?.patientName"
+          [modal]="true"
+          [style]="{ width: '860px', 'max-height': '88vh' }"
+          [breakpoints]="{ '960px': '92vw', '640px': '100vw' }"
+          [closable]="true"
+          appendTo="body"
+          styleClass="appointment-detail-dialog"
+        >
           @if (selectedAppointment) {
             <div class="appointment-detail-content">
-              <div class="detail-header">
+              <div class="detail-hero">
                 <div class="patient-profile">
                   <div class="avatar-large">{{ selectedAppointment.patientName[0] }}</div>
                   <div class="profile-info">
+                    <span class="profile-kicker">Patient snapshot</span>
                     <h3>{{ selectedAppointment.patientName }}</h3>
                     <div class="token-wrap">
-                      Token: <span class="token-val" [class.emergency]="selectedAppointment.isEmergency">{{ selectedAppointment.tokenNumber || '--' }}</span>
-                      @if (selectedAppointment.isEmergency) { <span class="emergency-label">EMERGENCY</span> }
+                      <span class="token-label">Token</span>
+                      <span class="token-val" [class.emergency]="selectedAppointment.isEmergency">
+                        {{ selectedAppointment.tokenNumber || '--' }}
+                      </span>
+                      @if (selectedAppointment.isEmergency) {
+                        <span class="emergency-label">Emergency</span>
+                      }
                     </div>
                   </div>
                 </div>
@@ -181,28 +202,36 @@
                   <span class="status-badge" [ngClass]="getStatusClass(selectedAppointment.status)">
                     {{ selectedAppointment.status }}
                   </span>
+                  <p>{{ getWorkflowLabel(selectedAppointment) }}</p>
+                </div>
+              </div>
+
+              <div class="summary-grid">
+                <div class="summary-chip">
+                  <span>Department</span>
+                  <strong>{{ selectedAppointment.department.replace('_', ' ') | titlecase }}</strong>
+                </div>
+                <div class="summary-chip">
+                  <span>Doctor</span>
+                  <strong>Dr. {{ selectedAppointment.doctorName || 'Unassigned' }}</strong>
+                </div>
+                <div class="summary-chip">
+                  <span>Appointment Time</span>
+                  <strong>{{ selectedAppointment.appointmentTime | date: 'medium' }}</strong>
+                </div>
+                <div class="summary-chip" [class.emergency-chip]="selectedAppointment.isEmergency">
+                  <span>Priority</span>
+                  <strong>{{ selectedAppointment.isEmergency ? 'Emergency' : 'Standard' }}</strong>
                 </div>
               </div>
 
               <div class="detail-grid">
-                <div class="detail-item">
-                  <label>Department</label>
-                  <span>{{ selectedAppointment.department.replace('_', ' ') | titlecase }}</span>
-                </div>
-                <div class="detail-item">
-                  <label>Doctor</label>
-                  <span>Dr. {{ selectedAppointment.doctorName || 'Unassigned' }}</span>
-                </div>
-                <div class="detail-item">
-                  <label>Appointment Time</label>
-                  <span>{{ selectedAppointment.appointmentTime | date: 'medium' }}</span>
-                </div>
-                <div class="detail-item full">
+                <div class="detail-item reason-panel">
                   <label>Reason for Visit</label>
                   <p class="reason-text">{{ selectedAppointment.reason || 'No reason provided.' }}</p>
                 </div>
                 @if (selectedAppointment.notes) {
-                  <div class="detail-item full">
+                  <div class="detail-item notes-panel">
                     <label>Internal Notes</label>
                     <p class="notes-text">{{ selectedAppointment.notes }}</p>
                   </div>
@@ -211,60 +240,100 @@
 
               <div class="modal-workflow-hint">
                 <i class="ri-information-line"></i>
-                {{ getWorkflowLabel(selectedAppointment) }}
+                <span>{{ getWorkflowLabel(selectedAppointment) }}</span>
               </div>
 
               <div class="detail-actions">
                 <!-- Receptionist Actions -->
-                @if (selectedAppointment.status === statusEnum.SCHEDULED && (userRole === 'RECEPTIONIST' || userRole === 'ADMIN')) {
-                  <button class="btn-action btn-checkin" (click)="onCheckIn(selectedAppointment.id); detailModalVisible = false">
+                @if (
+                  selectedAppointment.status === statusEnum.SCHEDULED &&
+                  (userRole === 'RECEPTIONIST' || userRole === 'ADMIN')
+                ) {
+                  <button
+                    class="btn-action btn-checkin"
+                    (click)="onCheckIn(selectedAppointment.id); detailModalVisible = false"
+                  >
                     <i class="ri-user-received-line"></i> Check In Patient
                   </button>
-                  <button class="btn-action btn-cancel" (click)="onCancel(selectedAppointment.id); detailModalVisible = false">
+                  <button
+                    class="btn-action btn-cancel"
+                    (click)="onCancel(selectedAppointment.id); detailModalVisible = false"
+                  >
                     <i class="ri-close-circle-line"></i> Cancel Visit
                   </button>
                 }
 
                 <!-- Doctor Actions -->
-                @if (selectedAppointment.status === statusEnum.CHECKED_IN && (userRole === 'RECEPTIONIST' || userRole === 'DOCTOR' || userRole === 'ADMIN')) {
-                  <button class="btn-action btn-play" (click)="onStart(selectedAppointment.id); detailModalVisible = false">
+                @if (
+                  selectedAppointment.status === statusEnum.CHECKED_IN &&
+                  (userRole === 'RECEPTIONIST' || userRole === 'DOCTOR' || userRole === 'ADMIN')
+                ) {
+                  <button
+                    class="btn-action btn-play"
+                    (click)="onStart(selectedAppointment.id); detailModalVisible = false"
+                  >
                     <i class="ri-play-line"></i> Start Consultation
                   </button>
                 }
 
-                  @if (selectedAppointment.status === statusEnum.IN_CONSULTATION && (userRole === 'DOCTOR' || userRole === 'ADMIN')) {
-                    <button class="btn-action btn-start" [routerLink]="['/prescriptions/create', selectedAppointment.id]">
-                      <i class="ri-capsule-line"></i> {{ selectedAppointment.hasPrescription ? 'Update Prescription' : 'Prescribe Medicine' }}
-                    </button>
+                @if (
+                  selectedAppointment.status === statusEnum.IN_CONSULTATION &&
+                  (userRole === 'DOCTOR' || userRole === 'ADMIN')
+                ) {
+                  <button class="btn-action btn-start" [routerLink]="['/prescriptions/create', selectedAppointment.id]">
+                    <i class="ri-capsule-line"></i>
+                    {{ selectedAppointment.hasPrescription ? 'Update Prescription' : 'Prescribe Medicine' }}
+                  </button>
 
-                    @if (selectedAppointment.hasPrescription) {
-                      <button class="btn-action btn-complete" (click)="onComplete(selectedAppointment.id); detailModalVisible = false">
-                        <i class="ri-checkbox-circle-line"></i> Complete Consultation
-                      </button>
-                    } @else {
-                      <div class="workflow-info-msg" style="padding: 0.75rem 1rem; background: #fffcf0; border: 1.5px solid #fdf2bb; border-radius: 12px; color: #856404; font-size: 0.85rem; display: flex; align-items: center; gap: 0.6rem; margin-top: 0.5rem;">
-                        <i class="ri-error-warning-line"></i>
-                        <span>Issuing a prescription is required to complete this visit.</span>
-                      </div>
-                    }
+                  @if (selectedAppointment.hasPrescription) {
+                    <button
+                      class="btn-action btn-complete"
+                      (click)="onComplete(selectedAppointment.id); detailModalVisible = false"
+                    >
+                      <i class="ri-checkbox-circle-line"></i> Complete Consultation
+                    </button>
+                  } @else {
+                    <div class="workflow-info-msg">
+                      <i class="ri-error-warning-line"></i>
+                      <span>Issuing a prescription is required to complete this visit.</span>
+                    </div>
                   }
+                }
 
                 <!-- Billing Action -->
-                @if (selectedAppointment.status === statusEnum.COMPLETED && (userRole === 'RECEPTIONIST' || userRole === 'ADMIN')) {
-                  <button class="btn-action btn-view" (click)="onGenerateBill(selectedAppointment.id); detailModalVisible = false">
+                @if (
+                  selectedAppointment.status === statusEnum.COMPLETED &&
+                  (userRole === 'RECEPTIONIST' || userRole === 'ADMIN')
+                ) {
+                  <button
+                    class="btn-action btn-view"
+                    (click)="onGenerateBill(selectedAppointment.id); detailModalVisible = false"
+                  >
                     <i class="ri-bill-line"></i> Generate Billing
                   </button>
                 }
 
                 <!-- Generic Management -->
                 <div class="management-buttons">
-                  @if (canManageAppointment() && selectedAppointment.status !== statusEnum.COMPLETED && selectedAppointment.status !== statusEnum.CANCELLED) {
-                    <button class="btn-icon-alt" title="Edit" (click)="onEdit(selectedAppointment.id); detailModalVisible = false">
+                  @if (
+                    canManageAppointment() &&
+                    selectedAppointment.status !== statusEnum.COMPLETED &&
+                    selectedAppointment.status !== statusEnum.CANCELLED
+                  ) {
+                    <button
+                      class="btn-icon-alt"
+                      title="Edit"
+                      (click)="onEdit(selectedAppointment.id); detailModalVisible = false"
+                    >
                       <i class="ri-edit-line"></i>
                     </button>
                   }
                   @if (canManageAppointment()) {
-                    <button class="btn-icon-alt delete" title="Delete" (click)="onDelete(selectedAppointment.id); detailModalVisible = false">
+                    <button
+                      class="btn-icon-alt delete"
+                      title="Delete"
+                      (click)="onDelete(selectedAppointment.id); detailModalVisible = false"
+                    >
                       <i class="ri-delete-bin-line"></i>
                     </button>
                   }

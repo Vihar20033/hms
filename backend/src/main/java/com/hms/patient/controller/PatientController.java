@@ -33,24 +33,9 @@ public class PatientController {
 
     @PreAuthorize("hasAnyRole('ADMIN','DOCTOR','RECEPTIONIST','PHARMACIST')")
     @GetMapping
-    public ResponseEntity<ApiResponse<SliceResponse<PatientResponseDTO>>> getAll(
-            @RequestParam(name = "page", defaultValue = "0") int page,
-            @RequestParam(name = "size", defaultValue = "20") int size) {
-        org.springframework.data.domain.Slice<PatientResponseDTO> slice = service.getSlice(
-                Math.max(page, 0),
-                Math.min(Math.max(size, 1), 100));
-
-        return ResponseEntity.ok(ApiResponse.success(SliceResponse.<PatientResponseDTO>builder()
-                .content(slice.getContent())
-                .page(slice.getNumber())
-                .size(slice.getSize())
-                .first(slice.isFirst())
-                .last(slice.isLast())
-                .hasNext(slice.hasNext())
-                .numberOfElements(slice.getNumberOfElements())
-                .build()));
+    public ResponseEntity<ApiResponse<List<PatientResponseDTO>>> getAll() {
+        return ResponseEntity.ok(ApiResponse.success(service.getAll()));
     }
-
 
     @PreAuthorize("hasAnyRole('ADMIN','DOCTOR','RECEPTIONIST','PHARMACIST')")
     @GetMapping("/slice")

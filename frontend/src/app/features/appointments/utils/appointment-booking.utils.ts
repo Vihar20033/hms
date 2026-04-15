@@ -1,8 +1,6 @@
-import { Department } from '../models/appointment.models';
-import { Doctor } from '../../staff/models/doctor.models';
-import { filter, map } from 'rxjs/operators';
 import { formatDepartmentLabel } from '../../../core/constants/department.constants';
 import { Patient } from '../../patients/models/patient.models';
+import { Doctor } from '../../staff/models/doctor.models';
 
 export interface SelectOption<T> {
   label: string;
@@ -61,6 +59,16 @@ export function formatTimeOnly(value: Date | null): string | null {
   return `${hours}:${minutes}`;
 }
 
+export function buildAppointmentInstant(appointmentDate: Date | null, appointmentTime: Date | null): string | null {
+  if (!appointmentDate || !appointmentTime) {
+    return null;
+  }
+
+  const scheduledAt = new Date(appointmentDate);
+  scheduledAt.setHours(appointmentTime.getHours(), appointmentTime.getMinutes(), 0, 0);
+  return scheduledAt.toISOString();
+}
+
 export function toDateOnly(value: string | null | undefined): Date | null {
   if (!value) {
     return null;
@@ -84,10 +92,3 @@ export function toTimeOnly(value: string | null | undefined): Date | null {
   time.setHours(parsed.getHours(), parsed.getMinutes(), 0, 0);
   return time;
 }
-
-
-
-
-
-
-

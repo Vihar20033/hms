@@ -22,4 +22,6 @@ public class DashboardSummaryDTO {
     private long totalCompletedConsultations;
     private List<WeeklyStatisticsDTO> weeklyStats;
     private List<DepartmentStatisticsDTO> departmentStats;
+    private long stockInToday;
+    private long stockOutToday;
 }

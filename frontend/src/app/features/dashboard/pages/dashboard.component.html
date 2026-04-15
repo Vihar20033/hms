@@ -10,8 +10,8 @@
           <h1>Hospital Operations Overview</h1>
           <p>
             Welcome back,
-            <span class="username">{{ currentUser?.username || 'User' }}</span>. 
-            Monitor patient flow, care activity, and daily service delivery from one place.
+            <span class="username">{{ currentUser?.username || 'User' }}</span
+            >. Monitor patient flow, care activity, and daily service delivery from one place.
           </p>
         </div>
         <div class="header-btns">
@@ -116,7 +116,9 @@
                 <span class="subtitle">Live waiting list and active consultations</span>
               </div>
               <div class="header-actions">
-                 <button class="btn-small" (click)="loadTodayAppointments()"><i class="ri-refresh-line"></i> Refresh</button>
+                <button class="btn-small" (click)="loadTodayAppointments()">
+                  <i class="ri-refresh-line"></i> Refresh
+                </button>
               </div>
             </div>
             <div class="card-body">
@@ -126,7 +128,11 @@
                 </div>
               } @else if (todayAppointments.length > 0) {
                 <div class="table-responsive">
-                  <p-table [value]="todayAppointments" responsiveLayout="scroll" styleClass="data-table dashboard-table">
+                  <p-table
+                    [value]="todayAppointments"
+                    responsiveLayout="scroll"
+                    styleClass="data-table dashboard-table"
+                  >
                     <ng-template pTemplate="header">
                       <tr>
                         <th>Token</th>
@@ -157,7 +163,7 @@
                           </div>
                         </td>
                         <td>
-                           <span class="time-text">{{ apt.appointmentTime | date: 'shortTime' }}</span>
+                          <span class="time-text">{{ apt.appointmentTime | date: 'shortTime' }}</span>
                         </td>
                         <td>
                           <span class="status-badge" [ngClass]="getStatusClass(apt.status)">
@@ -167,22 +173,22 @@
                         <td>
                           <div class="action-buttons">
                             @if (apt.status === statusEnum.SCHEDULED && (role === 'RECEPTIONIST' || role === 'ADMIN')) {
-                               <button class="btn-icon btn-checkin" title="Check In" (click)="onCheckIn(apt.id)">
-                                 <i class="ri-user-received-line"></i>
-                               </button>
+                              <button class="btn-icon btn-checkin" title="Check In" (click)="onCheckIn(apt.id)">
+                                <i class="ri-user-received-line"></i>
+                              </button>
                             }
                             @if (apt.status === statusEnum.CHECKED_IN && role === 'DOCTOR') {
-                               <button class="btn-icon btn-start" title="Start Consultation" (click)="onStart(apt.id)">
-                                 <i class="ri-play-line"></i>
-                               </button>
+                              <button class="btn-icon btn-start" title="Start Consultation" (click)="onStart(apt.id)">
+                                <i class="ri-play-line"></i>
+                              </button>
                             }
                             @if (apt.status === statusEnum.IN_CONSULTATION && role === 'DOCTOR') {
-                               <button class="btn-icon btn-complete" title="Complete Visit" (click)="onComplete(apt.id)">
-                                 <i class="ri-checkbox-circle-line"></i>
-                               </button>
+                              <button class="btn-icon btn-complete" title="Complete Visit" (click)="onComplete(apt.id)">
+                                <i class="ri-checkbox-circle-line"></i>
+                              </button>
                             }
                             @if (apt.status === statusEnum.COMPLETED || apt.status === statusEnum.CANCELLED) {
-                               <span class="text-muted small">Consultation ended</span>
+                              <span class="text-muted small">Consultation ended</span>
                             }
                           </div>
                         </td>
@@ -272,9 +278,7 @@
                       }
                     </div>
                   } @else {
-                    <div class="empty-insight">
-                      No department visits yet.
-                    </div>
+                    <div class="empty-insight">No department visits yet.</div>
                   }
                 </div>
               </div>
@@ -292,6 +296,50 @@
             <div class="card-body">
               <div class="chart-stage">
                 <canvas #visitFlowChart></canvas>
+              </div>
+            </div>
+          </div>
+
+          <!-- Stock In/Out Chart -->
+          <div class="grid-card half-width">
+            <div class="card-header">
+              <div>
+                <h3>Stock Movement Today</h3>
+                <span class="subtitle">Medicines received and dispensed</span>
+              </div>
+            </div>
+            <div class="card-body">
+              <div class="stock-insight-layout">
+                <div class="chart-stage">
+                  <canvas #stockChart></canvas>
+                </div>
+                <div class="department-insights">
+                  <div class="insight-summary stock-summary">
+                    <span>Total Stock Movement</span>
+                    <strong>{{ (data.stockInToday || 0) + (data.stockOutToday || 0) | number }}</strong>
+                  </div>
+
+                  @if ((data.stockInToday || 0) + (data.stockOutToday || 0) > 0) {
+                    <div class="insight-list">
+                      <div class="insight-row stock-in">
+                        <div>
+                          <strong>Stock In</strong>
+                          <span>Items received today</span>
+                        </div>
+                        <b>{{ data.stockInToday | number }}</b>
+                      </div>
+                      <div class="insight-row stock-out">
+                        <div>
+                          <strong>Dispensed</strong>
+                          <span>Items issued to patients</span>
+                        </div>
+                        <b>{{ data.stockOutToday | number }}</b>
+                      </div>
+                    </div>
+                  } @else {
+                    <div class="empty-insight">No stock movement yet.</div>
+                  }
+                </div>
               </div>
             </div>
           </div>

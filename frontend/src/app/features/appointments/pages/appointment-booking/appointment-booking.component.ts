@@ -1,28 +1,34 @@
-import { ActivatedRoute, Router, RouterLink } from '@angular/router';
-import { ApiResponse } from '../../../../core/models/common.models';
-import { Appointment, Department } from '../../models/appointment.models';
-import { AppointmentService } from '../../services/appointment.service';
-import { AuthService } from '../../../auth/services/auth.service';
-import { BOOKABLE_DEPARTMENTS, formatDepartmentLabel } from '../../../../core/constants/department.constants';
-import { buildDepartmentOptions, buildDoctorOptions, buildPatientOptions, filterAvailableDoctors, formatDateOnly, formatTimeOnly, toDateOnly, toTimeOnly } from '../../utils/appointment-booking.utils';
-import { CalendarModule } from 'primeng/calendar';
 import { CommonModule } from '@angular/common';
-import { Component, OnInit } from '@angular/core';
-import { createAppointmentBookingForm, updateAppointmentTimeValidators } from '../../utils/appointment-booking-form';
-import { Doctor } from '../../../staff/models/doctor.models';
-import { DoctorService } from '../../../staff/services/doctor.service';
-import { DropdownModule } from 'primeng/dropdown';
-import { FormBuilder, FormGroup, ReactiveFormsModule } from '@angular/forms';
-import { from } from 'rxjs';
-import { HeaderComponent } from '../../../../layout/header/header.component';
 import { HttpErrorResponse } from '@angular/common/http';
+import { Component, OnInit } from '@angular/core';
+import { FormBuilder, FormGroup, ReactiveFormsModule } from '@angular/forms';
+import { ActivatedRoute, Router, RouterLink } from '@angular/router';
+import { CalendarModule } from 'primeng/calendar';
+import { DropdownModule } from 'primeng/dropdown';
 import { InputSwitchModule } from 'primeng/inputswitch';
-import { InputTextareaModule } from 'primeng/inputtextarea';
 import { InputTextModule } from 'primeng/inputtext';
+import { InputTextareaModule } from 'primeng/inputtextarea';
+import { BOOKABLE_DEPARTMENTS, formatDepartmentLabel } from '../../../../core/constants/department.constants';
+import { ApiResponse } from '../../../../core/models/common.models';
+import { HeaderComponent } from '../../../../layout/header/header.component';
+import { SidebarComponent } from '../../../../layout/sidebar/sidebar.component';
+import { AuthService } from '../../../auth/services/auth.service';
 import { Patient } from '../../../patients/models/patient.models';
 import { PatientService } from '../../../patients/services/patient.service';
-import { SidebarComponent } from '../../../../layout/sidebar/sidebar.component';
-import { User } from '../../../auth/models/auth.models';
+import { Doctor } from '../../../staff/models/doctor.models';
+import { DoctorService } from '../../../staff/services/doctor.service';
+import { Appointment, AppointmentRequest } from '../../models/appointment.models';
+import { AppointmentService } from '../../services/appointment.service';
+import { createAppointmentBookingForm, updateAppointmentTimeValidators } from '../../utils/appointment-booking-form';
+import {
+  buildAppointmentInstant,
+  buildDepartmentOptions,
+  buildDoctorOptions,
+  buildPatientOptions,
+  filterAvailableDoctors,
+  toDateOnly,
+  toTimeOnly,
+} from '../../utils/appointment-booking.utils';
 
 @Component({
   selector: 'app-appointment-booking',
@@ -99,8 +105,8 @@ export class AppointmentBookingComponent implements OnInit {
   private processQueryParams(): void {
     this.route.queryParams.subscribe((params) => {
       if (params['patientId']) {
-        this.bookingForm.patchValue({ patientId: Number(params['patientId']) });  // Updates only specific field 
-      } 
+        this.bookingForm.patchValue({ patientId: Number(params['patientId']) }); // Updates only specific field
+      }
       if (params['appointmentId']) {
         this.isEditMode = true;
         this.appointmentId = Number(params['appointmentId']);
@@ -160,11 +166,26 @@ export class AppointmentBookingComponent implements OnInit {
     }
 
     this.isLoading = true;
-    const payload = {
-      ...this.bookingForm.value,
-      appointmentDate: formatDateOnly(this.bookingForm.get('appointmentDate')?.value),
-      appointmentTime: formatTimeOnly(this.bookingForm.get('appointmentTime')?.value),
-      version: this.currentVersion,
+    const appointmentTime = buildAppointmentInstant(
+      this.bookingForm.get('appointmentDate')?.value,
+      this.bookingForm.get('appointmentTime')?.value,
+    );
+
+    if (!appointmentTime) {
+      this.errorMessage = 'Please choose both a valid date and time.';
+      this.isLoading = false;
+      return;
+    }
+
+    const payload: AppointmentRequest = {
+      patientId: this.bookingForm.get('patientId')?.value,
+      doctorId: this.bookingForm.get('doctorId')?.value,
+      department: this.bookingForm.get('department')?.value,
+      appointmentTime,
+      reason: this.bookingForm.get('reason')?.value,
+      notes: this.bookingForm.get('notes')?.value,
+      isEmergency: this.bookingForm.get('isEmergency')?.value,
+      version: this.currentVersion ?? undefined,
     };
 
     const request$ =
@@ -182,26 +203,17 @@ export class AppointmentBookingComponent implements OnInit {
   }
 
   // Helpers for template
-  get patientOptions() 
-  { return buildPatientOptions(this.patients); }
+  get patientOptions() {
+    return buildPatientOptions(this.patients);
+  }
 
-  get departmentOptions() 
-  { return buildDepartmentOptions(this.departments); }
+  get departmentOptions() {
+    return buildDepartmentOptions(this.departments);
+  }
 
-  get doctorOptions() 
-  { return buildDoctorOptions(this.filteredDoctors); }
+  get doctorOptions() {
+    return buildDoctorOptions(this.filteredDoctors);
+  }
 
   getDepartmentLabel = (dept: string) => formatDepartmentLabel(dept);
 }
-
-
-
-
-
-
-
-
-
-
-
-
