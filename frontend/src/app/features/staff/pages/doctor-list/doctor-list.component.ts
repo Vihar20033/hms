@@ -1,9 +1,10 @@
 import { CommonModule } from '@angular/common';
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { Router, RouterLink } from '@angular/router';
 import { DialogModule } from 'primeng/dialog';
 import { DropdownModule } from 'primeng/dropdown';
+import { Subject, debounceTime, distinctUntilChanged } from 'rxjs';
 import { ApiResponse } from '../../../../core/models/common.models';
 import { HeaderComponent } from '../../../../layout/header/header.component';
 import { SidebarComponent } from '../../../../layout/sidebar/sidebar.component';
@@ -19,15 +20,17 @@ import { DoctorService } from '../../services/doctor.service';
   templateUrl: './doctor-list.component.html',
   styleUrl: './doctor-list.component.scss',
 })
-export class DoctorListComponent implements OnInit {
+export class DoctorListComponent implements OnInit, OnDestroy {
   doctors: Doctor[] = [];
   isLoading = true;
 
   // Pagination
   currentPage = 0;
-  pageSize = 12;
+  pageSize = 20;
   isLastPage = false;
   isMoreLoading = false;
+  searchQuery = '';
+  private searchSubject = new Subject<string>();
 
   // Delete Modal State
   deleteModalVisible = false;
@@ -49,7 +52,20 @@ export class DoctorListComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
+    this.searchSubject.pipe(debounceTime(350), distinctUntilChanged()).subscribe((query) => {
+      this.searchQuery = query;
+      this.loadDoctors();
+    });
+
     this.loadDoctors();
+  }
+
+  ngOnDestroy(): void {
+    this.searchSubject.complete();
+  }
+
+  onSearch(event: Event): void {
+    this.searchSubject.next((event.target as HTMLInputElement).value);
   }
 
   loadDoctors(isLoadMore = false): void {
@@ -62,7 +78,7 @@ export class DoctorListComponent implements OnInit {
       this.doctors = [];
     }
 
-    this.doctorService.getSlice(this.currentPage, this.pageSize).subscribe({
+    this.doctorService.getSlice(this.currentPage, this.pageSize, this.searchQuery).subscribe({
       next: (res) => {
         if (res.data) {
           this.doctors = [...this.doctors, ...res.data.content];
@@ -85,6 +101,29 @@ export class DoctorListComponent implements OnInit {
   onDelete(doctor: Doctor): void {
     this.selectedDoctorForDelete = doctor;
     this.deleteModalVisible = true;
+  }
+
+  onReassign(doctor: Doctor): void {
+    this.doctorService.getAppointmentCount(doctor.id).subscribe({
+      next: (res: ApiResponse<number>) => {
+        if (res.data > 0) {
+          this.openReassignModal(doctor, res.data);
+          return;
+        }
+
+        this.statusModalService.showInfo(
+          'No active appointments',
+          'This doctor does not currently have active appointments to reassign.',
+        );
+      },
+      error: () => {
+        this.openReassignModal(
+          doctor,
+          0,
+          'We could not verify appointment count. You can still reassign manually before deleting.',
+        );
+      },
+    });
   }
 
   private openReassignModal(doctor: Doctor, count: number, errorMessage = ''): void {
@@ -147,31 +186,6 @@ export class DoctorListComponent implements OnInit {
         } else {
           this.statusModalService.showError('Delete Failed', err.error?.message || 'Could not delete this doctor.');
         }
-      },
-    });
-  }
-
-  promptReassignment(): void {
-    if (!this.selectedDoctorForDelete) return;
-
-    this.doctorService.getAppointmentCount(this.selectedDoctorForDelete.id).subscribe({
-      next: (res: ApiResponse<number>) => {
-        if (res.data > 0) {
-          this.openReassignModal(this.selectedDoctorForDelete!, res.data);
-          return;
-        }
-
-        this.statusModalService.showInfo?.(
-          'No active appointments',
-          'This doctor does not currently have active appointments to reassign.',
-        );
-      },
-      error: () => {
-        this.openReassignModal(
-          this.selectedDoctorForDelete!,
-          0,
-          'We could not verify appointment count. You can still reassign manually before deleting.',
-        );
       },
     });
   }

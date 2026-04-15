@@ -1,13 +1,13 @@
 import { CommonModule } from '@angular/common';
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import { getRoleBadgeClass } from '../utils/user-list.utils';
+import { TableModule } from 'primeng/table';
+import { Subject, debounceTime, distinctUntilChanged } from 'rxjs';
 import { HeaderComponent } from '../../../../layout/header/header.component';
-import { Role, User } from '../../../auth/models/auth.models';
 import { SidebarComponent } from '../../../../layout/sidebar/sidebar.component';
 import { StatusModalService } from '../../../../shared/services/status-modal.service';
-import { TableModule } from 'primeng/table';
+import { Role, User } from '../../../auth/models/auth.models';
 import { UserService } from '../../services/user.service';
-import { Subject, debounceTime, distinctUntilChanged } from 'rxjs';
+import { getRoleBadgeClass } from '../utils/user-list.utils';
 
 @Component({
   selector: 'app-user-list',
@@ -23,7 +23,7 @@ export class UserListComponent implements OnInit, OnDestroy {
   searchQuery = '';
   searchSubject = new Subject<string>();
   currentPage = 0;
-  pageSize = 25;
+  pageSize = 20;
   isLastPage = false;
   isMoreLoading = false;
 
@@ -33,10 +33,7 @@ export class UserListComponent implements OnInit, OnDestroy {
   ) {}
 
   ngOnInit(): void {
-    this.searchSubject.pipe(
-      debounceTime(350),
-      distinctUntilChanged()
-    ).subscribe((query) => {
+    this.searchSubject.pipe(debounceTime(350), distinctUntilChanged()).subscribe((query) => {
       this.searchQuery = query;
       this.loadUsers();
     });
@@ -111,16 +108,3 @@ export class UserListComponent implements OnInit, OnDestroy {
     return getRoleBadgeClass(role);
   }
 }
-
-
-
-
-
-
-
-
-
-
-
-
-

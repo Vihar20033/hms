@@ -24,12 +24,18 @@ public class AuditLogController {
     @GetMapping("/slice")
     public ResponseEntity<ApiResponse<SliceResponse<AuditLogResponse>>> getSlice(
             @RequestParam(name = "page", defaultValue = "0") int page,
-            @RequestParam(name = "size", defaultValue = "25") int size) {
+            @RequestParam(name = "size", defaultValue = "20") int size,
+            @RequestParam(name = "query", required = false) String query) {
         PageRequest request = PageRequest.of(
                 Math.max(page, 0),
                 Math.min(Math.max(size, 1), 100),
                 Sort.by(Sort.Direction.DESC, "createdAt"));
-        Slice<AuditLogResponse> slice = auditLogRepository.findAllByOrderByCreatedAtDesc(request)
+        String normalizedQuery = query == null ? "" : query.trim();
+        Slice<AuditLog> source = normalizedQuery.isEmpty()
+                ? auditLogRepository.findAllByOrderByCreatedAtDesc(request)
+                : auditLogRepository.searchAuditLogs(normalizedQuery, request);
+
+        Slice<AuditLogResponse> slice = source
                 .map(this::toResponse);
 
         return ResponseEntity.ok(ApiResponse.success(SliceResponse.<AuditLogResponse>builder()

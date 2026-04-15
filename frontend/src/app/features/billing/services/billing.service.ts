@@ -1,11 +1,9 @@
-import { ApiResponse, SliceResponse } from '../../../core/models/common.models';
-import { Appointment } from '../../appointments/models/appointment.models';
-import { Billing, BillingRequest, PaymentStatus } from '../models/billing.models';
-import { environment } from '../../../../environments/environment';
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
-import { Patient } from '../../patients/models/patient.models';
+import { environment } from '../../../../environments/environment';
+import { ApiResponse, SliceResponse } from '../../../core/models/common.models';
+import { Billing, BillingRequest, PaymentStatus } from '../models/billing.models';
 
 @Injectable({ providedIn: 'root' })
 export class BillingService {
@@ -17,7 +15,7 @@ export class BillingService {
     return this.http.get<ApiResponse<Billing[]>>(this.apiUrl);
   }
 
-  getSlice(page = 0, size = 15, query = ''): Observable<ApiResponse<SliceResponse<Billing>>> {
+  getSlice(page = 0, size = 20, query = ''): Observable<ApiResponse<SliceResponse<Billing>>> {
     const params: Record<string, string | number> = { page, size };
     if (query.trim()) params['query'] = query.trim();
 
@@ -64,9 +62,3 @@ export class BillingService {
     return this.http.get<ApiResponse<Billing>>(`${this.apiUrl}/preview-appointment/${appointmentId}`);
   }
 }
-
-
-
-
-
-

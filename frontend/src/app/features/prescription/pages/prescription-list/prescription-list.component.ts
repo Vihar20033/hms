@@ -1,15 +1,15 @@
-import { AuthService } from '../../../auth/services/auth.service';
 import { CommonModule } from '@angular/common';
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import { HeaderComponent } from '../../../../layout/header/header.component';
-import { Prescription } from '../../models/prescription.models';
-import { PrescriptionService } from '../../services/prescription.service';
 import { RouterLink } from '@angular/router';
+import { TableModule } from 'primeng/table';
+import { Subject, debounceTime, distinctUntilChanged, takeUntil } from 'rxjs';
+import { HeaderComponent } from '../../../../layout/header/header.component';
 import { SidebarComponent } from '../../../../layout/sidebar/sidebar.component';
 import { StatusModalService } from '../../../../shared/services/status-modal.service';
-import { TableModule } from 'primeng/table';
+import { AuthService } from '../../../auth/services/auth.service';
+import { Prescription } from '../../models/prescription.models';
+import { PrescriptionService } from '../../services/prescription.service';
 import { canManagePrescriptions } from '../../utils/prescription-list.utils';
-import { Subject, debounceTime, distinctUntilChanged, takeUntil } from 'rxjs';
 
 @Component({
   selector: 'app-prescription-list',
@@ -25,7 +25,7 @@ export class PrescriptionListComponent implements OnInit, OnDestroy {
 
   // Pagination
   currentPage = 0;
-  pageSize = 15;
+  pageSize = 20;
   isLastPage = false;
   isMoreLoading = false;
   searchQuery = '';
@@ -36,14 +36,10 @@ export class PrescriptionListComponent implements OnInit, OnDestroy {
     private prescriptionService: PrescriptionService,
     private authService: AuthService,
     private statusModalService: StatusModalService,
-  ) { }
+  ) {}
 
   ngOnInit(): void {
-    this.searchSubject.pipe(
-      debounceTime(350),
-      distinctUntilChanged(),
-      takeUntil(this.destroy$),
-    ).subscribe((query) => {
+    this.searchSubject.pipe(debounceTime(350), distinctUntilChanged(), takeUntil(this.destroy$)).subscribe((query) => {
       this.searchQuery = query;
       this.loadPrescriptions();
     });
@@ -124,15 +120,3 @@ export class PrescriptionListComponent implements OnInit, OnDestroy {
     return canManagePrescriptions(this.authService.getUserRole());
   }
 }
-
-
-
-
-
-
-
-
-
-
-
-

@@ -193,7 +193,7 @@
 
   .summary-grid {
     display: grid;
-    grid-template-columns: repeat(4, minmax(0, 1fr));
+    grid-template-columns: repeat(3, minmax(0, 1fr));
     gap: 0.7rem;
     margin-bottom: 0.85rem;
 
@@ -223,15 +223,6 @@
         line-height: 1.35;
         overflow: hidden;
         text-overflow: ellipsis;
-      }
-
-      &.emergency-chip {
-        border-color: #fecaca;
-        background: #fff5f5;
-
-        strong {
-          color: #b91c1c;
-        }
       }
     }
   }

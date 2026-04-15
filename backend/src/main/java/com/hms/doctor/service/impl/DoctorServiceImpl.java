@@ -23,7 +23,6 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Slice;
 import org.springframework.data.domain.Sort;
 import com.hms.common.enums.AppointmentStatus;
-import com.hms.common.exception.BadRequestException;
 import com.hms.common.exception.ConflictException;
 import com.hms.appointment.repository.AppointmentRepository;
 import org.springframework.cache.annotation.CacheEvict;
@@ -124,8 +123,19 @@ public class DoctorServiceImpl implements DoctorService {
     @Transactional(readOnly = true)
     @Cacheable(value = "doctors", key = "'slice_' + #page + '_' + #size")
     public Slice<Doctor> getDoctorSlice(int page, int size) {
+        return getDoctorSlice(page, size, null);
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    @Cacheable(value = "doctors", key = "'slice_' + #page + '_' + #size + '_' + (#query == null ? '' : #query)")
+    public Slice<Doctor> getDoctorSlice(int page, int size, String query) {
         PageRequest request = PageRequest.of(page, size, Sort.by(Sort.Direction.ASC, "lastName", "firstName"));
-        return doctorRepository.findAll(request);
+        String normalizedQuery = query == null ? "" : query.trim();
+        if (normalizedQuery.isEmpty()) {
+            return doctorRepository.findAll(request);
+        }
+        return doctorRepository.searchDoctors(normalizedQuery, request);
     }
 
     @Override

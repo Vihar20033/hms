@@ -13,10 +13,16 @@ export class AuditLogService {
 
   constructor(private http: HttpClient) {}
 
-  getSlice(page = 0, size = 25): Observable<ApiResponse<SliceResponse<AuditLog>>> {
-    const params = new HttpParams()
+  getSlice(page = 0, size = 20, query = ''): Observable<ApiResponse<SliceResponse<AuditLog>>> {
+    let params = new HttpParams()
       .set('page', page.toString())
       .set('size', size.toString());
+
+    const normalizedQuery = query.trim();
+    if (normalizedQuery) {
+      params = params.set('query', normalizedQuery);
+    }
+
     return this.http.get<ApiResponse<SliceResponse<AuditLog>>>(`${this.apiUrl}/slice`, { params });
   }
 }

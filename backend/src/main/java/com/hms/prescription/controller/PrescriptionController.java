@@ -40,7 +40,7 @@ public class PrescriptionController {
     @GetMapping("/slice")
     public ResponseEntity<ApiResponse<SliceResponse<PrescriptionResponseDTO>>> getPrescriptionSlice(
             @RequestParam(name = "page", defaultValue = "0") int page,
-            @RequestParam(name = "size", defaultValue = "15") int size,
+            @RequestParam(name = "size", defaultValue = "20") int size,
             @RequestParam(name = "query", required = false) String query) {
         Slice<PrescriptionResponseDTO> slice = prescriptionService.getPrescriptionSlice(
                 Math.max(page, 0),

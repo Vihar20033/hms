@@ -1,5 +1,21 @@
 /* Using global .page-content */
 
+.header-actions {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  flex-wrap: wrap;
+}
+
+.search-input {
+  min-width: 280px;
+  height: 40px;
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-md);
+  padding: 0 0.75rem;
+  background: white;
+}
+
 .doctors-grid {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
@@ -142,6 +158,19 @@
   }
 }
 
+.btn-reassign-sm {
+  background: white;
+  border: 1px solid #dbeafe;
+  border-radius: var(--radius-md);
+  color: #1d4ed8;
+  font-weight: 600;
+
+  &:hover {
+    background: #eff6ff;
+    border-color: #93c5fd;
+  }
+}
+
 .btn-delete-sm {
   background: white;
   border: 1px solid #fee2e2;
@@ -168,6 +197,39 @@
 .reassign-container {
   padding: 1rem 0;
 
+  .warning-box {
+    background: #fff7ed;
+    border: 1px solid #fdba74;
+    padding: 1rem;
+    border-radius: 12px;
+    margin-bottom: 1.5rem;
+    display: flex;
+    gap: 0.75rem;
+  }
+
+  .warning-icon {
+    color: #9a3412;
+    font-size: 1.25rem;
+  }
+
+  .warning-title {
+    color: #9a3412;
+    display: block;
+    margin-bottom: 0.25rem;
+  }
+
+  .warning-text {
+    color: #7c2d12;
+    font-size: 0.9rem;
+    line-height: 1.4;
+  }
+
+  .reassign-note {
+    font-weight: 600;
+    color: #1e293b;
+    margin-bottom: 1rem;
+  }
+
   p {
     margin-bottom: 0.5rem;
     color: var(--text-main);
@@ -182,7 +244,7 @@
   .form-group {
     margin-top: 1.5rem;
     margin-bottom: 1.5rem;
-    
+
     label {
       display: block;
       margin-bottom: 0.5rem;
@@ -211,6 +273,20 @@
     padding-top: 1.5rem;
     border-top: 1px solid var(--border-color);
   }
+}
+
+.delete-note {
+  color: #64748b;
+  font-size: 0.9rem;
+  margin-top: 0.5rem;
+}
+
+.modal-footer-delete,
+.modal-footer-reassign {
+  padding-top: 2rem;
+  display: flex;
+  justify-content: flex-end;
+  gap: 1rem;
 }
 
 .spin {
@@ -265,7 +341,7 @@
     i {
       font-size: 1.2rem;
     }
-    
+
     .spin {
       animation: fa-spin 1s infinite linear;
     }

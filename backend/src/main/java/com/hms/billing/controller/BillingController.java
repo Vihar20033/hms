@@ -67,7 +67,7 @@ public class BillingController {
     @GetMapping("/slice")
     public ResponseEntity<ApiResponse<SliceResponse<BillingResponseDTO>>> getBillingSlice(
             @RequestParam(name = "page", defaultValue = "0") int page,
-            @RequestParam(name = "size", defaultValue = "15") int size,
+            @RequestParam(name = "size", defaultValue = "20") int size,
             @RequestParam(name = "query", required = false) String query) {
         Slice<BillingResponseDTO> slice = billingService.getBillingSlice(
                 Math.max(page, 0),

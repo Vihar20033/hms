@@ -219,10 +219,6 @@
                   <span>Appointment Time</span>
                   <strong>{{ selectedAppointment.appointmentTime | date: 'medium' }}</strong>
                 </div>
-                <div class="summary-chip" [class.emergency-chip]="selectedAppointment.isEmergency">
-                  <span>Priority</span>
-                  <strong>{{ selectedAppointment.isEmergency ? 'Emergency' : 'Standard' }}</strong>
-                </div>
               </div>
 
               <div class="detail-grid">

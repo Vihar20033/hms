@@ -20,6 +20,8 @@ public interface DoctorService {
 
     Slice<Doctor> getDoctorSlice(int page, int size);
 
+    Slice<Doctor> getDoctorSlice(int page, int size, String query);
+
     List<Doctor> getDoctorsByDepartment(com.hms.common.enums.Department department);
 
     void deleteDoctor(Long id);

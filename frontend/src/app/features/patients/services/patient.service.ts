@@ -1,8 +1,8 @@
-import { ApiResponse, SliceResponse } from '../../../core/models/common.models';
-import { environment } from '../../../../environments/environment';
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
+import { environment } from '../../../../environments/environment';
+import { ApiResponse, SliceResponse } from '../../../core/models/common.models';
 import { Patient, PatientRequest } from '../models/patient.models';
 
 @Injectable({
@@ -17,9 +17,9 @@ export class PatientService {
     return this.http.get<ApiResponse<Patient[]>>(this.apiUrl);
   }
 
-  getSlice(page = 0, size = 25, query = ''): Observable<ApiResponse<SliceResponse<Patient>>> {
+  getSlice(page = 0, size = 20, query = ''): Observable<ApiResponse<SliceResponse<Patient>>> {
     const params: any = { page, size };
-    if (query) params.query = query;
+    if (query.trim()) params.query = query.trim();
     return this.http.get<ApiResponse<SliceResponse<Patient>>>(`${this.apiUrl}/slice`, { params });
   }
 
@@ -39,9 +39,3 @@ export class PatientService {
     return this.http.delete<ApiResponse<void>>(`${this.apiUrl}/${id}`);
   }
 }
-
-
-
-
-
-

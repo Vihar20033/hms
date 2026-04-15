@@ -1,11 +1,10 @@
-import { AuditLog } from './models/audit.models';
-import { AuditLogService } from './services/audit-log.service';
 import { CommonModule } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
+import { TableModule } from 'primeng/table';
 import { HeaderComponent } from '../../layout/header/header.component';
 import { SidebarComponent } from '../../layout/sidebar/sidebar.component';
-import { TableModule } from 'primeng/table';
-import { User } from '../auth/models/auth.models';
+import { AuditLog } from './models/audit.models';
+import { AuditLogService } from './services/audit-log.service';
 
 @Component({
   selector: 'app-audit-log-page',
@@ -22,7 +21,18 @@ import { User } from '../auth/models/auth.models';
               <h1>Audit Trail</h1>
               <p>Review security and operational activity across the hospital system.</p>
             </div>
-            <button class="btn-primary" type="button" (click)="load()">Refresh</button>
+            <div class="header-actions">
+              <input
+                #searchBox
+                class="search-input"
+                type="text"
+                [value]="searchQuery"
+                placeholder="Search user, action, entity or details"
+                (keyup.enter)="applySearch(searchBox.value)"
+              />
+              <button class="btn-outline" type="button" (click)="applySearch(searchBox.value)">Search</button>
+              <button class="btn-primary" type="button" (click)="load()">Refresh</button>
+            </div>
           </section>
 
           @if (errorMessage) {
@@ -69,41 +79,77 @@ import { User } from '../auth/models/auth.models';
       </div>
     </div>
   `,
-  styles: [`
-    .page-header, .content-card {
-      border: 1px solid var(--border-color);
-      background: var(--bg-card);
-      border-radius: 8px;
-      box-shadow: var(--shadow-md);
-      padding: 1.25rem;
-      margin-bottom: 1rem;
-    }
-    .page-header {
-      display: flex;
-      justify-content: space-between;
-      gap: 1rem;
-      align-items: flex-start;
-    }
-    .empty-state {
-      color: var(--text-muted);
-      text-align: center;
-      padding: 1.5rem;
-    }
-    .btn-outline {
-      margin-top: 1rem;
-      min-height: 40px;
-      border: 1px solid var(--border-color);
-      border-radius: 8px;
-      padding: 0 1rem;
-      background: white;
-      font-weight: 700;
-    }
-  `],
+  styles: [
+    `
+      .page-header,
+      .content-card {
+        border: 1px solid var(--border-color);
+        background: var(--bg-card);
+        border-radius: 8px;
+        box-shadow: var(--shadow-md);
+        padding: 1.25rem;
+        margin-bottom: 1rem;
+      }
+      .page-header {
+        display: flex;
+        justify-content: space-between;
+        gap: 1rem;
+        align-items: flex-start;
+      }
+      .header-actions {
+        display: flex;
+        gap: 0.5rem;
+        align-items: center;
+        flex-wrap: nowrap;
+        justify-content: flex-end;
+      }
+      .search-input {
+        height: 40px;
+        min-width: 260px;
+        border: 1px solid var(--border-color);
+        border-radius: 8px;
+        padding: 0 0.75rem;
+        background: white;
+      }
+      .header-actions .btn-outline,
+      .header-actions .btn-primary {
+        margin-top: 0;
+        height: 40px;
+        min-height: 40px;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        white-space: nowrap;
+      }
+      .empty-state {
+        color: var(--text-muted);
+        text-align: center;
+        padding: 1.5rem;
+      }
+      .btn-outline {
+        margin-top: 1rem;
+        min-height: 40px;
+        border: 1px solid var(--border-color);
+        border-radius: 8px;
+        padding: 0 1rem;
+        background: white;
+        font-weight: 700;
+      }
+      @media (max-width: 980px) {
+        .header-actions {
+          flex-wrap: wrap;
+          justify-content: flex-start;
+        }
+      }
+    `,
+  ],
 })
 export class AuditLogPageComponent implements OnInit {
   logs: AuditLog[] = [];
   isLoading = true;
   errorMessage = '';
+  readonly pageSize = 20;
+  searchQuery = '';
   page = 0;
   hasNext = false;
 
@@ -119,6 +165,11 @@ export class AuditLogPageComponent implements OnInit {
     this.fetchPage();
   }
 
+  applySearch(query: string): void {
+    this.searchQuery = query.trim();
+    this.load();
+  }
+
   loadNext(): void {
     this.page += 1;
     this.fetchPage(true);
@@ -127,7 +178,7 @@ export class AuditLogPageComponent implements OnInit {
   private fetchPage(append = false): void {
     this.isLoading = true;
     this.errorMessage = '';
-    this.auditLogService.getSlice(this.page, 25).subscribe({
+    this.auditLogService.getSlice(this.page, this.pageSize, this.searchQuery).subscribe({
       next: (res) => {
         this.logs = append ? [...this.logs, ...res.data.content] : res.data.content;
         this.hasNext = res.data.hasNext;
@@ -140,12 +191,3 @@ export class AuditLogPageComponent implements OnInit {
     });
   }
 }
-
-
-
-
-
-
-
-
-

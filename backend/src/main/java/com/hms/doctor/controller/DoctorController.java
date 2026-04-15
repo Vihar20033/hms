@@ -42,8 +42,10 @@ public class DoctorController {
     @GetMapping("/slice")
     public ResponseEntity<ApiResponse<SliceResponse<DoctorResponseDTO>>> getDoctorSlice(
             @RequestParam(name = "page", defaultValue = "0") int page,
-            @RequestParam(name = "size", defaultValue = "25") int size) {
-        org.springframework.data.domain.Slice<DoctorResponseDTO> slice = doctorService.getDoctorSlice(Math.max(page, 0), Math.min(Math.max(size, 1), 100))
+            @RequestParam(name = "size", defaultValue = "20") int size,
+            @RequestParam(name = "query", required = false) String query) {
+        org.springframework.data.domain.Slice<DoctorResponseDTO> slice = doctorService
+                .getDoctorSlice(Math.max(page, 0), Math.min(Math.max(size, 1), 100), query)
                 .map(doctorMapper::toDto);
         return ResponseEntity.ok(ApiResponse.success(SliceResponse.<DoctorResponseDTO>builder()
                 .content(slice.getContent())

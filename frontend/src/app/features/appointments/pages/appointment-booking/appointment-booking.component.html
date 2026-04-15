@@ -100,7 +100,10 @@
                     {{ filteredDoctors.length }} doctor{{ filteredDoctors.length > 1 ? 's are' : ' is' }} available in
                     this department
                   </small>
-                  <small class="helper-text warning" *ngIf="bookingForm.get('department')?.value && filteredDoctors.length === 0">
+                  <small
+                    class="helper-text warning"
+                    *ngIf="bookingForm.get('department')?.value && filteredDoctors.length === 0"
+                  >
                     No doctors found for {{ getDepartmentLabel(bookingForm.get('department')?.value) }}.
                   </small>
                   <div
@@ -161,20 +164,6 @@
                     "
                   >
                     <small>Preferred time is required</small>
-                  </div>
-                </div>
-
-                <!-- Emergency Toggle -->
-                <div class="form-group full-width">
-                  <div class="emergency-toggle-card" [class.active]="bookingForm.get('isEmergency')?.value">
-                    <div class="toggle-content">
-                      <div class="toggle-icon"><i class="ri-alarm-warning-line"></i></div>
-                      <div class="toggle-copy">
-                        <label class="form-label" for="isEmergency">Emergency Override</label>
-                        <p>Bypasses time restrictions and prioritizes the patient in the queue.</p>
-                      </div>
-                    </div>
-                    <p-inputSwitch inputId="isEmergency" formControlName="isEmergency"></p-inputSwitch>
                   </div>
                 </div>
 

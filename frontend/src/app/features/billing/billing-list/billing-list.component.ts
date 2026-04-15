@@ -1,26 +1,25 @@
+import { CommonModule } from '@angular/common';
+import { HttpErrorResponse } from '@angular/common/http';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnDestroy, OnInit } from '@angular/core';
+import { FormArray, FormBuilder, FormGroup, FormsModule } from '@angular/forms';
+import { DialogModule } from 'primeng/dialog';
+import { DropdownModule } from 'primeng/dropdown';
+import { Subject, debounceTime, distinctUntilChanged, takeUntil } from 'rxjs';
 import { ApiResponse } from '../../../core/models/common.models';
+import { HeaderComponent } from '../../../layout/header/header.component';
+import { SidebarComponent } from '../../../layout/sidebar/sidebar.component';
+import { PdfExportService } from '../../../shared/services/pdf-export.service';
+import { StatusModalService } from '../../../shared/services/status-modal.service';
 import { Appointment } from '../../appointments/models/appointment.models';
 import { AppointmentService } from '../../appointments/services/appointment.service';
 import { AuthService } from '../../auth/services/auth.service';
-import { Billing, PaymentStatus } from '../models/billing.models';
-import { BillingService } from '../services/billing.service';
+import { Patient } from '../../patients/models/patient.models';
+import { PatientService } from '../../patients/services/patient.service';
 import { BillingFormComponent } from '../components/billing-form/billing-form.component';
 import { BillingTableComponent } from '../components/billing-table/billing-table.component';
 import { BillingViewModalComponent } from '../components/billing-view-modal/billing-view-modal.component';
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnDestroy, OnInit } from '@angular/core';
-import { CommonModule } from '@angular/common';
-import { DialogModule } from 'primeng/dialog';
-import { DropdownModule } from 'primeng/dropdown';
-import { FormArray, FormBuilder, FormGroup, FormsModule } from '@angular/forms';
-import { Subject, debounceTime, distinctUntilChanged, takeUntil } from 'rxjs';
-import { HeaderComponent } from '../../../layout/header/header.component';
-import { HttpErrorResponse } from '@angular/common/http';
-import { Patient } from '../../patients/models/patient.models';
-import { PatientService } from '../../patients/services/patient.service';
-import { PdfExportService } from '../../../shared/services/pdf-export.service';
-import { SidebarComponent } from '../../../layout/sidebar/sidebar.component';
-import { StatusModalService } from '../../../shared/services/status-modal.service';
-import { createBillingForm, createBillingItemGroup, getBillingItems } from '../utils/billing-form.utils';
+import { Billing, PaymentStatus } from '../models/billing.models';
+import { BillingService } from '../services/billing.service';
 import {
   buildBillingPayload,
   buildPreviewItemGroups,
@@ -28,6 +27,7 @@ import {
   getBillingSubtotal,
   mapAppointmentOptions,
 } from '../utils/billing-data.utils';
+import { createBillingForm, createBillingItemGroup, getBillingItems } from '../utils/billing-form.utils';
 
 @Component({
   selector: 'app-billing-list',
@@ -41,7 +41,7 @@ import {
     BillingViewModalComponent,
     DialogModule,
     DropdownModule,
-    FormsModule
+    FormsModule,
   ],
   templateUrl: './billing-list.component.html',
   styleUrl: './billing-list.component.scss',
@@ -59,7 +59,7 @@ export class BillingListComponent implements OnInit, OnDestroy {
 
   // Pagination
   currentPage = 0;
-  pageSize = 15;
+  pageSize = 20;
   isLastPage = false;
   isMoreLoading = false;
   searchQuery = '';
@@ -91,16 +91,12 @@ export class BillingListComponent implements OnInit, OnDestroy {
     private statusModalService: StatusModalService,
     private pdfExportService: PdfExportService,
     private cdr: ChangeDetectorRef,
-  ) { }
+  ) {}
 
   ngOnInit(): void {
     this.userRole = this.authService.getUserRole();
     this.initForm();
-    this.searchSubject.pipe(
-      debounceTime(350),
-      distinctUntilChanged(),
-      takeUntil(this.destroy$),
-    ).subscribe((query) => {
+    this.searchSubject.pipe(debounceTime(350), distinctUntilChanged(), takeUntil(this.destroy$)).subscribe((query) => {
       this.searchQuery = query;
       this.loadBillings();
     });
@@ -118,9 +114,7 @@ export class BillingListComponent implements OnInit, OnDestroy {
 
   initForm(): void {
     this.billingForm = createBillingForm(this.fb);
-    this.billingForm.get('patientId')?.valueChanges.
-      subscribe((id: number) => 
-        this.onPatientSelectedForManual(id));
+    this.billingForm.get('patientId')?.valueChanges.subscribe((id: number) => this.onPatientSelectedForManual(id));
 
     this.billingForm.get('items')?.valueChanges.subscribe(() => {
       const subtotal = this.getSubtotal();
@@ -240,8 +234,7 @@ export class BillingListComponent implements OnInit, OnDestroy {
           while (this.items.length) {
             this.items.removeAt(0);
           }
-          buildPreviewItemGroups(suggested, (item) =>
-            createBillingItemGroup(this.fb, item)).forEach((group) => {
+          buildPreviewItemGroups(suggested, (item) => createBillingItemGroup(this.fb, item)).forEach((group) => {
             this.items.push(group);
           });
         }
@@ -349,10 +342,7 @@ export class BillingListComponent implements OnInit, OnDestroy {
     });
   }
 
-  private loadPatientAppointments(
-    patientId: number,
-    assignAppointments: (appointments: Appointment[]) => void,
-  ): void {
+  private loadPatientAppointments(patientId: number, assignAppointments: (appointments: Appointment[]) => void): void {
     if (!patientId) {
       this.cdr.markForCheck();
       return;
@@ -366,15 +356,3 @@ export class BillingListComponent implements OnInit, OnDestroy {
     });
   }
 }
-
-
-
-
-
-
-
-
-
-
-
-
