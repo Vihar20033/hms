@@ -34,6 +34,7 @@ public enum HmsErrorCode {
     // Request Errors
     BAD_REQUEST("REQ_001", "The request is invalid"),
     RATE_LIMIT_EXCEEDED("REQ_002", "Too many requests"),
+    REQUEST_CONFLICT("REQ_003", "The request conflicts with current resource state"),
     
     // User Errors
     USER_NOT_FOUND("AUTH_006", "User record not found"),

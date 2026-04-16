@@ -2,10 +2,12 @@ package com.hms.billing.controller;
 
 import com.hms.common.response.ApiResponse;
 import com.hms.common.response.SliceResponse;
+import com.hms.common.idempotency.IdempotencyService;
 import com.hms.billing.dto.request.BillingRequestDTO;
 import com.hms.billing.dto.response.BillingResponseDTO;
 import com.hms.common.enums.PaymentStatus;
 import com.hms.billing.service.BillingService;
+import com.hms.common.util.SecurityUtils;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Slice;
@@ -14,8 +16,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
-
 @RestController
 @RequestMapping("/api/v1/billings")
 @RequiredArgsConstructor
@@ -23,6 +23,7 @@ import java.util.List;
 public class BillingController {
 
     private final BillingService billingService;
+        private final IdempotencyService idempotencyService;
 
     @PreAuthorize("hasAnyRole('ADMIN','RECEPTIONIST')")
     @PostMapping
@@ -160,10 +161,23 @@ public class BillingController {
     @PreAuthorize("hasAnyRole('ADMIN','RECEPTIONIST')")
     @PostMapping("/generate/appointment/{appointmentId}")
     public ResponseEntity<ApiResponse<BillingResponseDTO>> generateBilling(
-            @PathVariable("appointmentId") Long appointmentId) {
+            @PathVariable("appointmentId") Long appointmentId,
+            @RequestHeader("X-Idempotency-Key") String idempotencyKey) {
+        String currentUser = SecurityUtils.getCurrentUsername();
+        String fingerprint = idempotencyService.computeFingerprint("appointmentId", appointmentId);
+
+        BillingResponseDTO response = idempotencyService.execute(
+                idempotencyKey,
+                "billing-generate-appointment",
+                currentUser,
+                fingerprint,
+                () -> billingService.generateBillingFromAppointment(appointmentId),
+                BillingResponseDTO::getId,
+                billingService::getBillingById);
+
         return ResponseEntity.status(HttpStatus.CREATED)
                 .body(ApiResponse.success(
-                        billingService.generateBillingFromAppointment(appointmentId)));
+                        response));
     }
 
     @PreAuthorize("hasRole('ADMIN')")

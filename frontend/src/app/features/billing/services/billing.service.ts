@@ -1,4 +1,4 @@
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { environment } from '../../../../environments/environment';
@@ -55,10 +55,21 @@ export class BillingService {
   }
 
   generateFromAppointment(appointmentId: number): Observable<ApiResponse<Billing>> {
-    return this.http.post<ApiResponse<Billing>>(`${this.apiUrl}/generate/appointment/${appointmentId}`, {});
+    return this.http.post<ApiResponse<Billing>>(`${this.apiUrl}/generate/appointment/${appointmentId}`, {}, {
+      headers: new HttpHeaders({
+        'X-Idempotency-Key': this.createIdempotencyKey('billing-generate'),
+      }),
+    });
   }
 
   getPreviewFromAppointment(appointmentId: number): Observable<ApiResponse<Billing>> {
     return this.http.get<ApiResponse<Billing>>(`${this.apiUrl}/preview-appointment/${appointmentId}`);
+  }
+
+  private createIdempotencyKey(prefix: string): string {
+    const randomPart = typeof crypto !== 'undefined' && typeof crypto.randomUUID === 'function'
+      ? crypto.randomUUID()
+      : `${Date.now()}-${Math.random().toString(36).slice(2)}`;
+    return `${prefix}-${randomPart}`;
   }
 }

@@ -1,4 +1,4 @@
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { environment } from '../../../../environments/environment';
@@ -27,7 +27,11 @@ export class PrescriptionService {
   }
 
   create(prescription: PrescriptionRequest): Observable<ApiResponse<Prescription>> {
-    return this.http.post<ApiResponse<Prescription>>(this.apiUrl, prescription);
+    return this.http.post<ApiResponse<Prescription>>(this.apiUrl, prescription, {
+      headers: new HttpHeaders({
+        'X-Idempotency-Key': this.createIdempotencyKey('prescription-create'),
+      }),
+    });
   }
 
   getById(id: number): Observable<ApiResponse<Prescription>> {
@@ -40,5 +44,12 @@ export class PrescriptionService {
 
   delete(id: number): Observable<ApiResponse<void>> {
     return this.http.delete<ApiResponse<void>>(`${this.apiUrl}/${id}`);
+  }
+
+  private createIdempotencyKey(prefix: string): string {
+    const randomPart = typeof crypto !== 'undefined' && typeof crypto.randomUUID === 'function'
+      ? crypto.randomUUID()
+      : `${Date.now()}-${Math.random().toString(36).slice(2)}`;
+    return `${prefix}-${randomPart}`;
   }
 }

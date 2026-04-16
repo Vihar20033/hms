@@ -2,6 +2,8 @@ package com.hms.prescription.controller;
 
 import com.hms.common.response.ApiResponse;
 import com.hms.common.response.SliceResponse;
+import com.hms.common.idempotency.IdempotencyService;
+import com.hms.common.util.SecurityUtils;
 import com.hms.prescription.dto.request.PrescriptionRequestDTO;
 import com.hms.prescription.dto.response.PrescriptionResponseDTO;
 import com.hms.prescription.service.PrescriptionService;
@@ -13,8 +15,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
-
 
 @RestController
 @RequestMapping("/api/v1/prescriptions")
@@ -23,14 +23,28 @@ import java.util.List;
 public class PrescriptionController {
 
     private final PrescriptionService prescriptionService;
+        private final IdempotencyService idempotencyService;
 
     @PreAuthorize("hasAnyRole('ADMIN','DOCTOR')")
     @PostMapping
     public ResponseEntity<ApiResponse<PrescriptionResponseDTO>> createPrescription(
-            @Valid @RequestBody PrescriptionRequestDTO dto) {
+            @Valid @RequestBody PrescriptionRequestDTO dto,
+            @RequestHeader("X-Idempotency-Key") String idempotencyKey) {
+        String currentUser = SecurityUtils.getCurrentUsername();
+        String fingerprint = idempotencyService.computeFingerprint(dto);
+
+        PrescriptionResponseDTO response = idempotencyService.execute(
+                idempotencyKey,
+                "prescription-create",
+                currentUser,
+                fingerprint,
+                () -> prescriptionService.createPrescription(dto),
+                PrescriptionResponseDTO::getId,
+                prescriptionService::getPrescriptionById);
+
         return ResponseEntity.status(HttpStatus.CREATED)
                 .body(ApiResponse.success(
-                        prescriptionService.createPrescription(dto), "Request successful", HttpStatus.CREATED));
+                        response, "Request successful", HttpStatus.CREATED));
     }
 
     // Fix #10 - Empty Search Performance: Removed generic / endpoint. 

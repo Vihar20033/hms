@@ -1,7 +1,7 @@
 import { ApiResponse } from '../../../core/models/common.models';
 import { Appointment, AppointmentRequest, AppointmentStatus, AppointmentSummary } from '../models/appointment.models';
 import { environment } from '../../../../environments/environment';
-import { HttpClient, HttpParams } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 
@@ -57,15 +57,21 @@ export class AppointmentService {
   }
 
   checkIn(id: number): Observable<ApiResponse<Appointment>> {
-    return this.http.patch<ApiResponse<Appointment>>(`${this.apiUrl}/${id}/check-in`, null);
+    return this.http.patch<ApiResponse<Appointment>>(`${this.apiUrl}/${id}/check-in`, null, {
+      headers: this.createIdempotencyHeaders('appointment-check-in'),
+    });
   }
 
   startConsultation(id: number): Observable<ApiResponse<Appointment>> {
-    return this.http.patch<ApiResponse<Appointment>>(`${this.apiUrl}/${id}/start`, null);
+    return this.http.patch<ApiResponse<Appointment>>(`${this.apiUrl}/${id}/start`, null, {
+      headers: this.createIdempotencyHeaders('appointment-start'),
+    });
   }
 
   completeConsultation(id: number): Observable<ApiResponse<Appointment>> {
-    return this.http.patch<ApiResponse<Appointment>>(`${this.apiUrl}/${id}/complete`, null);
+    return this.http.patch<ApiResponse<Appointment>>(`${this.apiUrl}/${id}/complete`, null, {
+      headers: this.createIdempotencyHeaders('appointment-complete'),
+    });
   }
 
   delete(id: number): Observable<ApiResponse<void>> {
@@ -80,6 +86,19 @@ export class AppointmentService {
     return this.http.patch<ApiResponse<void>>(`${this.apiUrl}/reassign`, null, {
       params: { fromDoctorId, toDoctorId }
     });
+  }
+
+  private createIdempotencyHeaders(prefix: string): HttpHeaders {
+    return new HttpHeaders({
+      'X-Idempotency-Key': this.createIdempotencyKey(prefix),
+    });
+  }
+
+  private createIdempotencyKey(prefix: string): string {
+    const randomPart = typeof crypto !== 'undefined' && typeof crypto.randomUUID === 'function'
+      ? crypto.randomUUID()
+      : `${Date.now()}-${Math.random().toString(36).slice(2)}`;
+    return `${prefix}-${randomPart}`;
   }
 }
 

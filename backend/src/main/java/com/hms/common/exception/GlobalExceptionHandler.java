@@ -161,6 +161,12 @@ public class GlobalExceptionHandler {
                 return buildResponse(HmsErrorCode.BAD_REQUEST, HttpStatus.BAD_REQUEST, ex.getMessage(), request);
         }
 
+        @ExceptionHandler(ConflictException.class)
+        public ResponseEntity<ApiError> handleConflict(ConflictException ex, HttpServletRequest request) {
+                log.warn("Conflict: {}", ex.getMessage());
+                return buildResponse(HmsErrorCode.REQUEST_CONFLICT, HttpStatus.CONFLICT, ex.getMessage(), request);
+        }
+
         @ExceptionHandler(MethodArgumentNotValidException.class)
         public ResponseEntity<ApiError> handleValidation(MethodArgumentNotValidException ex, HttpServletRequest request) {
                 List<ValidationError> errors = ex.getBindingResult().getFieldErrors().stream()

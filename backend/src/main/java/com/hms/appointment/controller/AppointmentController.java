@@ -2,11 +2,13 @@ package com.hms.appointment.controller;
 
 import com.hms.appointment.dto.response.AppointmentSummaryDTO;
 import com.hms.common.response.ApiResponse;
+import com.hms.common.idempotency.IdempotencyService;
 import com.hms.appointment.dto.response.AppointmentResponseDTO;
 import com.hms.appointment.mapper.AppointmentMapper;
 import com.hms.common.enums.AppointmentStatus;
 import com.hms.appointment.service.AppointmentService;
 import com.hms.appointment.service.AppointmentQueueService;
+import com.hms.common.util.SecurityUtils;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -26,6 +28,7 @@ public class AppointmentController {
     private final AppointmentService appointmentService;
     private final AppointmentMapper appointmentMapper;
     private final AppointmentQueueService appointmentQueueService;
+        private final IdempotencyService idempotencyService;
 
     @PreAuthorize("hasAnyRole('ADMIN','RECEPTIONIST','DOCTOR')")
     @GetMapping("/summary")
@@ -95,25 +98,64 @@ public class AppointmentController {
     @PreAuthorize("hasAnyRole('ADMIN','RECEPTIONIST')")
     @PatchMapping("/{id}/check-in")
     public ResponseEntity<ApiResponse<AppointmentResponseDTO>> checkInAppointment(
-            @PathVariable("id") Long id) {
+            @PathVariable("id") Long id,
+            @RequestHeader("X-Idempotency-Key") String idempotencyKey) {
+        String currentUser = SecurityUtils.getCurrentUsername();
+        String fingerprint = idempotencyService.computeFingerprint("appointmentId", id, "status", AppointmentStatus.CHECKED_IN);
+
+        AppointmentResponseDTO response = idempotencyService.execute(
+                idempotencyKey,
+                "appointment-status-check-in",
+                currentUser,
+                fingerprint,
+                () -> appointmentMapper.toDto(appointmentService.updateStatus(id, AppointmentStatus.CHECKED_IN)),
+                AppointmentResponseDTO::getId,
+                replayId -> appointmentMapper.toDto(appointmentService.getAppointmentById(replayId)));
+
         return ResponseEntity.ok(ApiResponse.success(
-                appointmentMapper.toDto(appointmentService.updateStatus(id, AppointmentStatus.CHECKED_IN))));
+                response));
     }
 
     @PreAuthorize("hasAnyRole('ADMIN','DOCTOR')")
     @PatchMapping("/{id}/start")
     public ResponseEntity<ApiResponse<AppointmentResponseDTO>> startConsultation(
-            @PathVariable("id") Long id) {
+            @PathVariable("id") Long id,
+            @RequestHeader("X-Idempotency-Key") String idempotencyKey) {
+        String currentUser = SecurityUtils.getCurrentUsername();
+        String fingerprint = idempotencyService.computeFingerprint("appointmentId", id, "status", AppointmentStatus.IN_CONSULTATION);
+
+        AppointmentResponseDTO response = idempotencyService.execute(
+                idempotencyKey,
+                "appointment-status-start",
+                currentUser,
+                fingerprint,
+                () -> appointmentMapper.toDto(appointmentService.updateStatus(id, AppointmentStatus.IN_CONSULTATION)),
+                AppointmentResponseDTO::getId,
+                replayId -> appointmentMapper.toDto(appointmentService.getAppointmentById(replayId)));
+
         return ResponseEntity.ok(ApiResponse.success(
-                appointmentMapper.toDto(appointmentService.updateStatus(id, AppointmentStatus.IN_CONSULTATION))));
+                response));
     }
 
     @PreAuthorize("hasAnyRole('ADMIN','DOCTOR')")
     @PatchMapping("/{id}/complete")
     public ResponseEntity<ApiResponse<AppointmentResponseDTO>> completeConsultation(
-            @PathVariable("id") Long id) {
+            @PathVariable("id") Long id,
+            @RequestHeader("X-Idempotency-Key") String idempotencyKey) {
+        String currentUser = SecurityUtils.getCurrentUsername();
+        String fingerprint = idempotencyService.computeFingerprint("appointmentId", id, "status", AppointmentStatus.COMPLETED);
+
+        AppointmentResponseDTO response = idempotencyService.execute(
+                idempotencyKey,
+                "appointment-status-complete",
+                currentUser,
+                fingerprint,
+                () -> appointmentMapper.toDto(appointmentService.updateStatus(id, AppointmentStatus.COMPLETED)),
+                AppointmentResponseDTO::getId,
+                replayId -> appointmentMapper.toDto(appointmentService.getAppointmentById(replayId)));
+
         return ResponseEntity.ok(ApiResponse.success(
-                appointmentMapper.toDto(appointmentService.updateStatus(id, AppointmentStatus.COMPLETED))));
+                response));
     }
 
     @PreAuthorize("hasAnyRole('ADMIN','RECEPTIONIST')")
