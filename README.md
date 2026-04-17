@@ -150,6 +150,8 @@ For deep technical details, see:
 - [docs/README.md](docs/README.md)
 - [docs/advanced-features.md](docs/advanced-features.md)
 - [docs/system-design.md](docs/system-design.md)
+- [docs/module-working-guide.md](docs/module-working-guide.md)
+- [docs/api-endpoints-reference.md](docs/api-endpoints-reference.md)
 - [backend/README.md](backend/README.md)
 - [frontend/README.md](frontend/README.md)
 
