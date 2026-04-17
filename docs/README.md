@@ -5,7 +5,7 @@ This folder contains implementation-level documentation for advanced HMS capabil
 ## Documents
 
 - [docs/advanced-features.md](advanced-features.md): feature-by-feature technical analysis
-- [docs/system-design.md](system-design.md): architecture, module, flow, and sequence diagrams
+- [docs/system-design.md](system-design.md): architecture, module, feature, activity, ER, Redis, and idempotency diagrams
 
 ## How to Use
 
