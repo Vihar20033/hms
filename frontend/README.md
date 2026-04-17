@@ -1,27 +1,76 @@
-# HospitalFrontend
+# Frontend (Angular 17)
 
-This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 17.3.17.
+Frontend SPA for Artem Health HMS.
 
-## Development server
+## Purpose
 
-Run `ng serve` for a dev server. Navigate to `http://localhost:4200/`. The application will automatically reload if you change any of the source files.
+Delivers role-based hospital workspaces with secure navigation, clear operational flows, and responsive data handling.
 
-## Code scaffolding
+## Stack
 
-Run `ng generate component component-name` to generate a new component. You can also use `ng generate directive|pipe|service|class|guard|interface|enum|module`.
+- Angular 17 standalone components
+- PrimeNG + PrimeIcons
+- RxJS
+- Angular Router guards
+- HTTP interceptors
+
+## Major UX Workspaces
+
+- Dashboard
+- Users
+- Patients
+- Appointments
+- Staff/Doctors
+- Prescriptions
+- Pharmacy
+- Billing
+- Audit Trail
+- System Admin
+- Workflow Admin
+
+## Cross-Cutting Frontend Patterns
+
+- Route-level role protection
+- Centralized auth/session service
+- JWT request interceptor
+- Error interception and modal feedback
+- Shared layout shell (`header`, `sidebar`)
+- Feature-scoped services and models
+
+## Run
+
+```bash
+cd frontend
+npm install
+npm start
+```
+
+App URL: `http://localhost:4200`
 
 ## Build
 
-Run `ng build` to build the project. The build artifacts will be stored in the `dist/` directory.
+```bash
+npm run build
+```
 
-## Running unit tests
+## Lint and Format
 
-Run `ng test` to execute the unit tests via [Karma](https://karma-runner.github.io).
+```bash
+npm run lint
+npm run lint:fix
+npm run format
+```
 
-## Running end-to-end tests
+## Dependency Notes
 
-Run `ng e2e` to execute the end-to-end tests via a platform of your choice. To use this command, you need to first add a package that implements end-to-end testing capabilities.
+- `primeng`, `primeicons`: data-heavy enterprise UI
+- `chart.js`: dashboard visualizations
+- `jspdf`, `pdfmake`, `xlsx`: export/reporting tooling
 
-## Further help
+## Architecture Notes
 
-To get more help on the Angular CLI use `ng help` or go check out the [Angular CLI Overview and Command Reference](https://angular.io/cli) page.
+- Routes and role maps are the first security UX boundary; backend remains source of truth.
+- New features should follow the existing pattern:
+  - `models` -> `services` -> `pages/components`
+  - explicit API contracts through typed interfaces
+  - centralized feedback (success/error/warning)
