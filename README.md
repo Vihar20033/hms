@@ -27,6 +27,19 @@ This HMS unifies those concerns into a single platform with:
 - `docker-compose.yml`: local infra stack (MySQL, Redis, Elasticsearch)
 - `docs/`: advanced feature documentation and architecture decisions
 
+## System Design (Quick View)
+
+```mermaid
+flowchart LR
+	U[Hospital Users] --> FE[Angular Frontend]
+	FE --> BE[Spring Boot Backend]
+	BE --> DB[(MySQL)]
+	BE --> R[(Redis)]
+	BE --> ES[(Elasticsearch Optional)]
+```
+
+Detailed diagrams and sequence flows are available in [docs/system-design.md](docs/system-design.md).
+
 ## Core Modules
 
 - Authentication and JWT session management
@@ -136,6 +149,7 @@ For deep technical details, see:
 
 - [docs/README.md](docs/README.md)
 - [docs/advanced-features.md](docs/advanced-features.md)
+- [docs/system-design.md](docs/system-design.md)
 - [backend/README.md](backend/README.md)
 - [frontend/README.md](frontend/README.md)
 
