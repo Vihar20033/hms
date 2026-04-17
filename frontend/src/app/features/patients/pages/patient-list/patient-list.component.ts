@@ -42,8 +42,8 @@ export class PatientListComponent implements OnInit {
   searchSubject = new Subject<string>();
   currentPage = 0;
   pageSize = 20;
-  isLastPage = false;
-  isMoreLoading = false;
+  isFirstPage = true;
+  hasNextPage = false;
 
   constructor(
     private patientService: PatientService,
@@ -54,12 +54,12 @@ export class PatientListComponent implements OnInit {
   ) {
     this.searchSubject.pipe(debounceTime(400), distinctUntilChanged()).subscribe((query) => {
       this.searchQuery = query;
-      this.loadPatients();
+      this.loadPatients(0);
     });
   }
 
   ngOnInit(): void {
-    this.loadPatients();
+    this.loadPatients(0);
   }
 
   onSearch(event: Event): void {
@@ -67,32 +67,34 @@ export class PatientListComponent implements OnInit {
     this.searchSubject.next(query);
   }
 
-  loadPatients(isLoadMore = false): void {
-    if (isLoadMore) {
-      this.isMoreLoading = true;
-      this.currentPage++;
-    } else {
-      this.isLoading = true;
-      this.currentPage = 0;
-      this.patients = [];
-    }
+  loadPatients(page = 0): void {
+    this.isLoading = true;
+    this.currentPage = Math.max(page, 0);
 
     this.patientService.getSlice(this.currentPage, this.pageSize, this.searchQuery).subscribe({
       next: (res) => {
         if (res.data) {
-          const newPatients = res.data.content;
-          this.patients = isLoadMore ? [...this.patients, ...newPatients] : newPatients;
-          this.isLastPage = res.data.last;
+          this.patients = res.data.content;
+          this.isFirstPage = res.data.first;
+          this.hasNextPage = res.data.hasNext;
         }
         this.isLoading = false;
-        this.isMoreLoading = false;
       },
       error: () => {
         this.errorMessage = 'Failed to load patients.';
         this.isLoading = false;
-        this.isMoreLoading = false;
       },
     });
+  }
+
+  previousPage(): void {
+    if (this.isLoading || this.isFirstPage) return;
+    this.loadPatients(this.currentPage - 1);
+  }
+
+  nextPage(): void {
+    if (this.isLoading || !this.hasNextPage) return;
+    this.loadPatients(this.currentPage + 1);
   }
 
   canRegister(): boolean {

@@ -34,10 +34,6 @@ public abstract class BaseEntity {
     @Column(name = "deleted", insertable = false, updatable = false)
     private boolean deleted;
 
-    public boolean isDeleted() {
-        return deleted;
-    }
-
     @PrePersist
     protected void initializeVersion() {
         if (version == null) {

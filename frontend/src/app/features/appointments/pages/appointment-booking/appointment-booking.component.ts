@@ -11,6 +11,8 @@ import { BOOKABLE_DEPARTMENTS, formatDepartmentLabel } from '../../../../core/co
 import { ApiResponse } from '../../../../core/models/common.models';
 import { HeaderComponent } from '../../../../layout/header/header.component';
 import { SidebarComponent } from '../../../../layout/sidebar/sidebar.component';
+import { StartWorkflowInstanceRequest } from '../../../admin/models/workflow-admin.models';
+import { WorkflowAdminService } from '../../../admin/services/workflow-admin.service';
 import { AuthService } from '../../../auth/services/auth.service';
 import { Patient } from '../../../patients/models/patient.models';
 import { PatientService } from '../../../patients/services/patient.service';
@@ -65,6 +67,7 @@ export class AppointmentBookingComponent implements OnInit {
     private appointmentService: AppointmentService,
     private patientService: PatientService,
     private doctorService: DoctorService,
+    private workflowAdminService: WorkflowAdminService,
     private router: Router,
     private route: ActivatedRoute,
     public authService: AuthService,
@@ -192,12 +195,51 @@ export class AppointmentBookingComponent implements OnInit {
         : this.appointmentService.create(payload);
 
     request$.subscribe({
-      next: () => this.router.navigate(['/appointments']),
+      next: (res) => {
+        const createdAppointment = res.data;
+
+        if (!this.isEditMode && createdAppointment?.id) {
+          this.startWorkflowForAppointment(createdAppointment.id, payload);
+          return;
+        }
+
+        this.router.navigate(['/appointments']);
+      },
       error: (err: HttpErrorResponse) => {
         this.errorMessage = err.error?.message || 'Booking failed. Please try again.';
         this.isLoading = false;
       },
     });
+  }
+
+  private startWorkflowForAppointment(appointmentId: number, payload: AppointmentRequest): void {
+    const workflowRequest: StartWorkflowInstanceRequest = {
+      definitionKey: this.resolveWorkflowDefinitionKey(payload),
+      referenceType: 'APPOINTMENT',
+      referenceId: String(appointmentId),
+      contextJson: JSON.stringify({
+        department: payload.department,
+        isEmergency: payload.isEmergency,
+      }),
+    };
+
+    this.workflowAdminService.startInstance(workflowRequest).subscribe({
+      next: () => this.router.navigate(['/appointments']),
+      error: () => {
+        // Do not block appointment creation if workflow start fails.
+        this.router.navigate(['/appointments'], {
+          queryParams: { workflowStart: 'failed', appointmentId },
+        });
+      },
+    });
+  }
+
+  private resolveWorkflowDefinitionKey(payload: AppointmentRequest): string {
+    if (payload.isEmergency) {
+      return 'EMERGENCY_FLOW';
+    }
+
+    return 'OPD_FLOW';
   }
 
   // Helpers for template

@@ -1,20 +1,23 @@
-import { ApiResponse } from '../../../../core/models/common.models';
-import { Appointment, AppointmentStatus, AppointmentSummary } from '../../models/appointment.models';
-import { AppointmentService } from '../../services/appointment.service';
-import { AuthService } from '../../../auth/services/auth.service';
-import { Billing } from '../../../billing/models/billing.models';
-import { BillingService } from '../../../billing/services/billing.service';
-import { canDoctorStartAppointment, canManageAppointmentForRole, getAppointmentPageLead, getAppointmentStatusClass, getAppointmentWorkflowLabel } from '../../utils/appointment-list.utils';
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { DialogModule } from 'primeng/dialog';
-import { filter } from 'rxjs/operators';
-import { HeaderComponent } from '../../../../layout/header/header.component';
-import { Prescription } from '../../../prescription/models/prescription.models';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnInit } from '@angular/core';
 import { Router, RouterLink } from '@angular/router';
+import { DialogModule } from 'primeng/dialog';
+import { TableModule } from 'primeng/table';
+import { ApiResponse } from '../../../../core/models/common.models';
+import { HeaderComponent } from '../../../../layout/header/header.component';
 import { SidebarComponent } from '../../../../layout/sidebar/sidebar.component';
 import { StatusModalService } from '../../../../shared/services/status-modal.service';
-import { TableModule } from 'primeng/table';
+import { AuthService } from '../../../auth/services/auth.service';
+import { BillingService } from '../../../billing/services/billing.service';
+import { Appointment, AppointmentStatus, AppointmentSummary } from '../../models/appointment.models';
+import { AppointmentService } from '../../services/appointment.service';
+import {
+  canDoctorStartAppointment,
+  canManageAppointmentForRole,
+  getAppointmentPageLead,
+  getAppointmentStatusClass,
+  getAppointmentWorkflowLabel,
+} from '../../utils/appointment-list.utils';
 
 @Component({
   selector: 'app-appointment-list',
@@ -28,7 +31,9 @@ export class AppointmentListComponent implements OnInit {
   appointments: Appointment[] = [];
   summary: AppointmentSummary | null = null;
   isLoading = true;
-  
+  currentPage = 0;
+  pageSize = 10;
+
   // Detail Modal State
   detailModalVisible = false;
   selectedAppointment: Appointment | null = null;
@@ -49,7 +54,6 @@ export class AppointmentListComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    
     this.userRole = this.authService.getUserRole();
 
     if (this.userRole === 'RECEPTIONIST') {
@@ -80,6 +84,7 @@ export class AppointmentListComponent implements OnInit {
     this.appointmentService.getAll(params).subscribe({
       next: (res: ApiResponse<Appointment[]>) => {
         this.appointments = res.data;
+        this.currentPage = 0;
         this.isLoading = false;
         this.cdr.markForCheck();
       },
@@ -92,7 +97,7 @@ export class AppointmentListComponent implements OnInit {
 
   onRowSelect(appointment: Appointment): void {
     // Optimization: Pre-fill with current data while fetching fresh state
-    this.selectedAppointment = {...appointment};
+    this.selectedAppointment = { ...appointment };
     this.detailModalVisible = true;
     this.cdr.markForCheck();
 
@@ -101,12 +106,12 @@ export class AppointmentListComponent implements OnInit {
       next: (res: ApiResponse<Appointment>) => {
         this.selectedAppointment = res.data;
         // Also update in the list to maintain consistency
-        const idx = this.appointments.findIndex(a => a.id === appointment.id);
+        const idx = this.appointments.findIndex((a) => a.id === appointment.id);
         if (idx !== -1) {
           this.appointments[idx] = res.data;
         }
         this.cdr.markForCheck();
-      }
+      },
     });
   }
 
@@ -136,7 +141,11 @@ export class AppointmentListComponent implements OnInit {
   }
 
   async onCancel(id: number): Promise<void> {
-    const confirmed = await this.statusModalService.confirm('Cancel Appointment', 'Cancel this appointment?', 'Cancel Appointment');
+    const confirmed = await this.statusModalService.confirm(
+      'Cancel Appointment',
+      'Cancel this appointment?',
+      'Cancel Appointment',
+    );
     if (!confirmed) return;
 
     this.appointmentService.updateStatus(id, AppointmentStatus.CANCELLED).subscribe(() => {
@@ -181,6 +190,31 @@ export class AppointmentListComponent implements OnInit {
     this.loadAppointments();
   }
 
+  get pagedAppointments(): Appointment[] {
+    const start = this.currentPage * this.pageSize;
+    return this.appointments.slice(start, start + this.pageSize);
+  }
+
+  get isFirstPage(): boolean {
+    return this.currentPage === 0;
+  }
+
+  get hasNextPage(): boolean {
+    return (this.currentPage + 1) * this.pageSize < this.appointments.length;
+  }
+
+  previousPage(): void {
+    if (this.isLoading || this.isFirstPage) return;
+    this.currentPage -= 1;
+    this.cdr.markForCheck();
+  }
+
+  nextPage(): void {
+    if (this.isLoading || !this.hasNextPage) return;
+    this.currentPage += 1;
+    this.cdr.markForCheck();
+  }
+
   getStatusClass(status: string): string {
     return getAppointmentStatusClass(status);
   }
@@ -193,15 +227,3 @@ export class AppointmentListComponent implements OnInit {
     return canDoctorStartAppointment(appointment, this.userRole);
   }
 }
-
-
-
-
-
-
-
-
-
-
-
-

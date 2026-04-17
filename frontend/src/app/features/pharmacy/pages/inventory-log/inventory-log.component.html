@@ -10,20 +10,12 @@
           <h1>Stock Movement Log</h1>
           <p>Track all incoming and outgoing medicine stock entries</p>
         </div>
-        <div class="header-actions">
-        </div>
+        <div class="header-actions"></div>
       </div>
 
       <div class="appointments-card">
         <div class="table-responsive" *ngIf="!isLoading">
-          <p-table
-            [value]="filteredTransactions"
-            [rows]="10"
-            [paginator]="true"
-            [rowsPerPageOptions]="[10, 25, 50]"
-            responsiveLayout="scroll"
-            styleClass="data-table"
-          >
+          <p-table [value]="filteredTransactions" responsiveLayout="scroll" styleClass="data-table">
             <ng-template pTemplate="header">
               <tr>
                 <th pSortableColumn="createdAt">Timestamp <i class="ri-sort-asc"></i></th>
@@ -70,12 +62,34 @@
                   <span class="text-muted small">{{ tx.notes || 'N/A' }}</span>
                 </td>
                 <td>
-                  <span class="code-badge" *ngIf="tx.referenceId">{{ tx.referenceId  }}...</span>
+                  <span class="code-badge" *ngIf="tx.referenceId">{{ tx.referenceId }}...</span>
                   <span class="text-muted" *ngIf="!tx.referenceId">-</span>
                 </td>
               </tr>
             </ng-template>
           </p-table>
+
+          <div class="table-footer mt-3" *ngIf="transactions.length > 0">
+            <div class="table-footer__meta">Page {{ currentPage + 1 }} • Next {{ hasNextPage ? 1 : 0 }}</div>
+            <div class="table-footer__actions">
+              <button
+                class="table-footer__btn"
+                type="button"
+                (click)="previousPage()"
+                [disabled]="isLoading || isFirstPage"
+              >
+                <i class="ri-arrow-left-s-line"></i> Previous
+              </button>
+              <button
+                class="table-footer__btn table-footer__btn--next"
+                type="button"
+                (click)="nextPage()"
+                [disabled]="isLoading || !hasNextPage"
+              >
+                Next <i class="ri-arrow-right-s-line"></i>
+              </button>
+            </div>
+          </div>
         </div>
 
         <div class="loading-state" *ngIf="isLoading">

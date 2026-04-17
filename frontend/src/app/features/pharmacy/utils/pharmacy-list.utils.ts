@@ -1,4 +1,3 @@
-import { filter, map } from 'rxjs/operators';
 import { Medicine } from '../models/pharmacy.models';
 
 export function filterMedicinesByLowStock(medicines: Medicine[], showLowStockOnly: boolean): Medicine[] {
@@ -10,7 +9,8 @@ export function filterMedicinesByLowStock(medicines: Medicine[], showLowStockOnl
 }
 
 export function isMedicineLowStock(medicine: Medicine): boolean {
-  return medicine.quantityInStock <= medicine.reorderLevel;
+  const threshold = medicine.reorderLevel ?? 10;
+  return medicine.quantityInStock <= threshold;
 }
 
 export function buildCategoryOptions(categories: string[]): Array<{ label: string; value: string }> {
@@ -31,9 +31,3 @@ export function formatMedicineDate(value: Date | string | null): string | null {
   const day = String(value.getDate()).padStart(2, '0');
   return `${year}-${month}-${day}`;
 }
-
-
-
-
-
-

@@ -129,7 +129,7 @@
               } @else if (todayAppointments.length > 0) {
                 <div class="table-responsive">
                   <p-table
-                    [value]="todayAppointments"
+                    [value]="pagedTodayAppointments"
                     responsiveLayout="scroll"
                     styleClass="data-table dashboard-table"
                   >
@@ -195,6 +195,32 @@
                       </tr>
                     </ng-template>
                   </p-table>
+
+                  @if (todayAppointments.length > 0) {
+                    <div class="table-footer mt-3">
+                      <div class="table-footer__meta">
+                        Page {{ queuePage + 1 }} • Next {{ hasQueueNextPage ? 1 : 0 }}
+                      </div>
+                      <div class="table-footer__actions">
+                        <button
+                          class="table-footer__btn"
+                          type="button"
+                          (click)="previousQueuePage()"
+                          [disabled]="isAppointmentsLoading || isQueueFirstPage"
+                        >
+                          <i class="ri-arrow-left-s-line"></i> Previous
+                        </button>
+                        <button
+                          class="table-footer__btn table-footer__btn--next"
+                          type="button"
+                          (click)="nextQueuePage()"
+                          [disabled]="isAppointmentsLoading || !hasQueueNextPage"
+                        >
+                          Next <i class="ri-arrow-right-s-line"></i>
+                        </button>
+                      </div>
+                    </div>
+                  }
                 </div>
               } @else {
                 <div class="empty-list">
@@ -285,21 +311,6 @@
             </div>
           </div>
 
-          <!-- Daily Visit Flow Chart -->
-          <div class="grid-card half-width">
-            <div class="card-header">
-              <div>
-                <h3>Daily Visit Flow</h3>
-                <span class="subtitle">Scheduled, waiting, and completed visits</span>
-              </div>
-            </div>
-            <div class="card-body">
-              <div class="chart-stage">
-                <canvas #visitFlowChart></canvas>
-              </div>
-            </div>
-          </div>
-
           <!-- Stock In/Out Chart -->
           <div class="grid-card half-width">
             <div class="card-header">
@@ -340,6 +351,21 @@
                     <div class="empty-insight">No stock movement yet.</div>
                   }
                 </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Daily Visit Flow Chart -->
+          <div class="grid-card full-width">
+            <div class="card-header">
+              <div>
+                <h3>Daily Visit Flow</h3>
+                <span class="subtitle">Scheduled, waiting, and completed visits</span>
+              </div>
+            </div>
+            <div class="card-body">
+              <div class="chart-stage">
+                <canvas #visitFlowChart></canvas>
               </div>
             </div>
           </div>

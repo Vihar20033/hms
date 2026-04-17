@@ -1,4 +1,4 @@
-package com.hms.common.util;
+package com.hms.security.util;
 
 import com.hms.user.entity.User;
 import org.springframework.security.core.Authentication;

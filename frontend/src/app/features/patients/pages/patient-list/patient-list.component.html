@@ -14,10 +14,10 @@
         <div class="header-actions">
           <div class="search-container">
             <i class="ri-search-line"></i>
-            <input 
-              type="text" 
-              pInputText 
-              placeholder="Fuzzy search patients..." 
+            <input
+              type="text"
+              pInputText
+              placeholder="Fuzzy search patients..."
               (input)="onSearch($event)"
               class="search-input"
             />
@@ -52,14 +52,26 @@
             <!-- Row level searching (Common search) -->
             <tr class="search-row">
               <th>
-                <input pInputText type="text" (input)="onSearch($event)" placeholder="Search Name..." class="p-inputtext-sm w-full" />
+                <input
+                  pInputText
+                  type="text"
+                  (input)="onSearch($event)"
+                  placeholder="Search Name..."
+                  class="p-inputtext-sm w-full"
+                />
               </th>
               <th></th>
               <th></th>
               <th></th>
               <th></th>
               <th>
-                <input pInputText type="text" (input)="onSearch($event)" placeholder="Search Contact..." class="p-inputtext-sm w-full" />
+                <input
+                  pInputText
+                  type="text"
+                  (input)="onSearch($event)"
+                  placeholder="Search Contact..."
+                  class="p-inputtext-sm w-full"
+                />
               </th>
               <th></th>
               <th></th>
@@ -90,18 +102,22 @@
               <td class="contact-cell">{{ patient.contactNumber }}</td>
               <td class="date-cell">{{ patient.createdAt | date: 'shortDate' }}</td>
               <td class="action-cell">
-                <div class="action-menu" (click)="$event.stopPropagation()" (keydown.enter)="$event.stopPropagation()" role="group" aria-label="Patient actions">
+                <div
+                  class="action-menu"
+                  (click)="$event.stopPropagation()"
+                  (keydown.enter)="$event.stopPropagation()"
+                  role="group"
+                  aria-label="Patient actions"
+                >
                   @if (canEdit()) {
-                    <button class="btn-view" type="button" (click)="editPatient(patient.id)">
-                      Edit
-                    </button>
+                    <button class="btn-view" type="button" (click)="editPatient(patient.id)">Edit</button>
                   }
                   @if (canDelete()) {
                     <button class="btn-more" type="button" (click)="toggleMenu(patient.id)" title="More actions">
                       <i class="ri-more-2-fill"></i>
                     </button>
                     @if (openMenuId === patient.id) {
-                        <div class="menu-panel">
+                      <div class="menu-panel">
                         <button class="menu-item" type="button" (click)="viewHistory(patient)">
                           <i class="ri-history-line"></i>
                           View history
@@ -125,20 +141,27 @@
           </ng-template>
         </p-table>
 
-        @if (!isLastPage && patients.length > 0) {
-          <div class="load-more-container">
-            <button 
-              class="btn-secondary load-more-btn" 
-              (click)="loadPatients(true)" 
-              [disabled]="isMoreLoading"
-            >
-              @if (isMoreLoading) {
-                <span class="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span>
-                Loading...
-              } @else {
-                <i class="ri-arrow-down-s-line"></i> Load More Patients
-              }
-            </button>
+        @if (patients.length > 0) {
+          <div class="table-footer">
+            <div class="table-footer__meta">Page {{ currentPage + 1 }} • Next {{ hasNextPage ? 1 : 0 }}</div>
+            <div class="table-footer__actions">
+              <button
+                class="table-footer__btn"
+                type="button"
+                (click)="previousPage()"
+                [disabled]="isLoading || isFirstPage"
+              >
+                <i class="ri-arrow-left-s-line"></i> Previous
+              </button>
+              <button
+                class="table-footer__btn table-footer__btn--next"
+                type="button"
+                (click)="nextPage()"
+                [disabled]="isLoading || !hasNextPage"
+              >
+                Next <i class="ri-arrow-right-s-line"></i>
+              </button>
+            </div>
           </div>
         }
       </div>

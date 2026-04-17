@@ -60,8 +60,8 @@ export class BillingListComponent implements OnInit, OnDestroy {
   // Pagination
   currentPage = 0;
   pageSize = 20;
-  isLastPage = false;
-  isMoreLoading = false;
+  isFirstPage = true;
+  hasNextPage = false;
   searchQuery = '';
   private searchSubject = new Subject<string>();
   private destroy$ = new Subject<void>();
@@ -98,9 +98,9 @@ export class BillingListComponent implements OnInit, OnDestroy {
     this.initForm();
     this.searchSubject.pipe(debounceTime(350), distinctUntilChanged(), takeUntil(this.destroy$)).subscribe((query) => {
       this.searchQuery = query;
-      this.loadBillings();
+      this.loadBillings(0);
     });
-    this.loadBillings();
+    this.loadBillings(0);
     this.patientService.getAll().subscribe((res: ApiResponse<Patient[]>) => {
       this.patients = res.data;
       this.cdr.markForCheck();
@@ -143,32 +143,35 @@ export class BillingListComponent implements OnInit, OnDestroy {
     return getBillingSubtotal(this.items);
   }
 
-  loadBillings(isLoadMore = false): void {
-    if (isLoadMore) {
-      this.isMoreLoading = true;
-      this.currentPage++;
-    } else {
-      this.isLoading = true;
-      this.currentPage = 0;
-      this.billings = [];
-    }
+  loadBillings(page = 0): void {
+    this.isLoading = true;
+    this.currentPage = Math.max(page, 0);
 
     this.billingService.getSlice(this.currentPage, this.pageSize, this.searchQuery).subscribe({
       next: (res) => {
         if (res.data) {
-          this.billings = [...this.billings, ...res.data.content];
-          this.isLastPage = res.data.last;
+          this.billings = res.data.content;
+          this.isFirstPage = res.data.first;
+          this.hasNextPage = res.data.hasNext;
         }
         this.isLoading = false;
-        this.isMoreLoading = false;
         this.cdr.markForCheck();
       },
       error: () => {
         this.isLoading = false;
-        this.isMoreLoading = false;
         this.cdr.markForCheck();
       },
     });
+  }
+
+  previousPage(): void {
+    if (this.isLoading || this.isFirstPage) return;
+    this.loadBillings(this.currentPage - 1);
+  }
+
+  nextPage(): void {
+    if (this.isLoading || !this.hasNextPage) return;
+    this.loadBillings(this.currentPage + 1);
   }
 
   onSearch(event: Event): void {

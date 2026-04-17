@@ -91,12 +91,27 @@
           <h3>No Clinical Records Found</h3>
           <p>Once prescriptions are finalized, they will be archived here for follow-up.</p>
         </div>
-        
-        <div class="load-more-container mt-4 mb-4" *ngIf="!isLastPage && prescriptions.length > 0" style="display: flex; justify-content: center;">
-          <button class="btn-primary" (click)="loadPrescriptions(true)" [disabled]="isMoreLoading">
-            <i class="ri-loader-4-line spin" *ngIf="isMoreLoading"></i>
-            {{ isMoreLoading ? 'Fetching...' : 'Load More Records' }}
-          </button>
+
+        <div class="table-footer mt-4 mb-4" *ngIf="prescriptions.length > 0">
+          <div class="table-footer__meta">Page {{ currentPage + 1 }} • Next {{ hasNextPage ? 1 : 0 }}</div>
+          <div class="table-footer__actions">
+            <button
+              class="table-footer__btn"
+              type="button"
+              (click)="previousPage()"
+              [disabled]="isLoading || isFirstPage"
+            >
+              <i class="ri-arrow-left-s-line"></i> Previous
+            </button>
+            <button
+              class="table-footer__btn table-footer__btn--next"
+              type="button"
+              (click)="nextPage()"
+              [disabled]="isLoading || !hasNextPage"
+            >
+              Next <i class="ri-arrow-right-s-line"></i>
+            </button>
+          </div>
         </div>
       </div>
     </main>

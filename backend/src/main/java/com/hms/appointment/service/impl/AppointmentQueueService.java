@@ -1,4 +1,4 @@
-package com.hms.appointment.service;
+package com.hms.appointment.service.impl;
 
 import com.hms.appointment.entity.Appointment;
 import com.hms.appointment.repository.AppointmentRepository;

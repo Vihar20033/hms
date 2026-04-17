@@ -2,8 +2,8 @@ package com.hms.prescription.controller;
 
 import com.hms.common.response.ApiResponse;
 import com.hms.common.response.SliceResponse;
-import com.hms.common.idempotency.IdempotencyService;
-import com.hms.common.util.SecurityUtils;
+import com.hms.security.idempotency.IdempotencyService;
+import com.hms.security.util.SecurityUtils;
 import com.hms.prescription.dto.request.PrescriptionRequestDTO;
 import com.hms.prescription.dto.response.PrescriptionResponseDTO;
 import com.hms.prescription.service.PrescriptionService;

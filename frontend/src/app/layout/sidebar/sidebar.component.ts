@@ -1,13 +1,10 @@
-import { AuthService } from '../../features/auth/services/auth.service';
-import { Billing } from '../../features/billing/models/billing.models';
-import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { Doctor } from '../../features/staff/models/doctor.models';
-import { LayoutService } from '../services/layout.service';
-import { Patient } from '../../features/patients/models/patient.models';
-import { Role, User } from '../../features/auth/models/auth.models';
-import { ROUTE_ROLES } from '../../core/constants/role-route-map';
+import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
 import { Router, RouterLink, RouterLinkActive } from '@angular/router';
+import { ROUTE_ROLES } from '../../core/constants/role-route-map';
+import { User } from '../../features/auth/models/auth.models';
+import { AuthService } from '../../features/auth/services/auth.service';
+import { LayoutService } from '../services/layout.service';
 
 interface SidebarMenuItem {
   title: string;
@@ -30,8 +27,12 @@ export class SidebarComponent {
   private authService = inject(AuthService);
   private router = inject(Router);
 
-  get isOpen() { return this.layoutService.isSidebarOpen(); }
-  get currentUser() { return this.authService.currentUser; }
+  get isOpen() {
+    return this.layoutService.isSidebarOpen();
+  }
+  get currentUser() {
+    return this.authService.currentUser;
+  }
 
   menuItems: SidebarMenuItem[] = [
     {
@@ -47,6 +48,20 @@ export class SidebarComponent {
       link: '/users',
       roles: ROUTE_ROLES.users,
       summary: 'Staff identity control',
+    },
+    {
+      title: 'System Admin',
+      icon: 'ri-settings-3-line',
+      link: '/admin/system',
+      roles: ROUTE_ROLES.systemAdmin,
+      summary: 'Restore deleted records',
+    },
+    {
+      title: 'Workflow Admin',
+      icon: 'ri-flow-chart',
+      link: '/admin/workflows',
+      roles: ROUTE_ROLES.workflowAdmin,
+      summary: 'Design and run workflows',
     },
     {
       title: 'Audit Trail',
@@ -126,9 +141,3 @@ export class SidebarComponent {
     });
   }
 }
-
-
-
-
-
-

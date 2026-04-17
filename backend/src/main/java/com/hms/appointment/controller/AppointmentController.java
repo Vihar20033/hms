@@ -2,13 +2,13 @@ package com.hms.appointment.controller;
 
 import com.hms.appointment.dto.response.AppointmentSummaryDTO;
 import com.hms.common.response.ApiResponse;
-import com.hms.common.idempotency.IdempotencyService;
+import com.hms.security.idempotency.IdempotencyService;
 import com.hms.appointment.dto.response.AppointmentResponseDTO;
 import com.hms.appointment.mapper.AppointmentMapper;
 import com.hms.common.enums.AppointmentStatus;
 import com.hms.appointment.service.AppointmentService;
-import com.hms.appointment.service.AppointmentQueueService;
-import com.hms.common.util.SecurityUtils;
+import com.hms.appointment.service.impl.AppointmentQueueService;
+import com.hms.security.util.SecurityUtils;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;

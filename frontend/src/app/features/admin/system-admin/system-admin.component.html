@@ -1,0 +1,125 @@
+<div class="dashboard-layout">
+  <app-sidebar></app-sidebar>
+
+  <main class="main-content">
+    <app-header></app-header>
+
+    <div class="page-body animate-fade-in">
+      <div class="admin-shell">
+        <div class="content-header">
+          <div class="title-section">
+            <h1>System Admin</h1>
+            <p>Restore soft-deleted records with consistent operational controls.</p>
+          </div>
+          <div class="header-note">
+            <i class="ri-shield-check-line"></i>
+            <span>Audited restore actions</span>
+          </div>
+        </div>
+
+        <div class="section-title-row">
+          <div>
+            <h3>Restore Modules</h3>
+            <p class="section-subtitle">Use entity-wise restore actions to reactivate soft-deleted records safely.</p>
+          </div>
+        </div>
+
+        <div class="admin-grid">
+          <div class="restore-card">
+            <div class="restore-card__header">
+              <div class="card-title-block">
+                <h3>Patient Restore</h3>
+                <p class="section-subtitle">Bring back a deleted patient by ID.</p>
+              </div>
+              <i class="ri-user-heart-line"></i>
+            </div>
+
+            <label class="form-label" for="patientId">Patient ID</label>
+            <input
+              id="patientId"
+              type="number"
+              class="restore-input"
+              [(ngModel)]="patientId"
+              placeholder="Enter patient ID"
+            />
+
+            <button class="restore-btn" type="button" (click)="restorePatient()" [disabled]="isLoading('patient')">
+              <i class="ri-loader-4-line spin" *ngIf="isLoading('patient')"></i>
+              <i class="ri-refresh-line" *ngIf="!isLoading('patient')"></i>
+              Restore Patient
+            </button>
+          </div>
+
+          <div class="restore-card">
+            <div class="restore-card__header">
+              <div class="card-title-block">
+                <h3>Doctor Restore</h3>
+                <p class="section-subtitle">Reactivate a deleted doctor profile.</p>
+              </div>
+              <i class="ri-stethoscope-line"></i>
+            </div>
+
+            <label class="form-label" for="doctorId">Doctor ID</label>
+            <input
+              id="doctorId"
+              type="number"
+              class="restore-input"
+              [(ngModel)]="doctorId"
+              placeholder="Enter doctor ID"
+            />
+
+            <button class="restore-btn" type="button" (click)="restoreDoctor()" [disabled]="isLoading('doctor')">
+              <i class="ri-loader-4-line spin" *ngIf="isLoading('doctor')"></i>
+              <i class="ri-refresh-line" *ngIf="!isLoading('doctor')"></i>
+              Restore Doctor
+            </button>
+          </div>
+
+          <div class="restore-card">
+            <div class="restore-card__header">
+              <div class="card-title-block">
+                <h3>User Restore</h3>
+                <p class="section-subtitle">Re-enable a deleted user account.</p>
+              </div>
+              <i class="ri-shield-user-line"></i>
+            </div>
+
+            <label class="form-label" for="userId">User ID</label>
+            <input id="userId" type="number" class="restore-input" [(ngModel)]="userId" placeholder="Enter user ID" />
+
+            <button class="restore-btn" type="button" (click)="restoreUser()" [disabled]="isLoading('user')">
+              <i class="ri-loader-4-line spin" *ngIf="isLoading('user')"></i>
+              <i class="ri-refresh-line" *ngIf="!isLoading('user')"></i>
+              Restore User
+            </button>
+          </div>
+
+          <div class="restore-card">
+            <div class="restore-card__header">
+              <div class="card-title-block">
+                <h3>Billing Restore</h3>
+                <p class="section-subtitle">Recover a deleted billing record.</p>
+              </div>
+              <i class="ri-receipt-line"></i>
+            </div>
+
+            <label class="form-label" for="billingId">Billing ID</label>
+            <input
+              id="billingId"
+              type="number"
+              class="restore-input"
+              [(ngModel)]="billingId"
+              placeholder="Enter billing ID"
+            />
+
+            <button class="restore-btn" type="button" (click)="restoreBilling()" [disabled]="isLoading('billing')">
+              <i class="ri-loader-4-line spin" *ngIf="isLoading('billing')"></i>
+              <i class="ri-refresh-line" *ngIf="!isLoading('billing')"></i>
+              Restore Billing
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </main>
+</div>

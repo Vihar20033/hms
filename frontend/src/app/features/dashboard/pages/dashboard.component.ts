@@ -62,6 +62,8 @@ export class DashboardComponent implements OnInit, AfterViewInit, OnDestroy {
 
   todayAppointments: Appointment[] = [];
   isAppointmentsLoading = false;
+  queuePage = 0;
+  queuePageSize = 8;
   statusEnum = AppointmentStatus;
 
   constructor(
@@ -177,6 +179,7 @@ export class DashboardComponent implements OnInit, AfterViewInit, OnDestroy {
     this.appointmentService.getTodayAppointments().subscribe({
       next: (res: ApiResponse<Appointment[]>) => {
         this.todayAppointments = res.data;
+        this.queuePage = 0;
         this.isAppointmentsLoading = false;
         this.cdr.markForCheck();
       },
@@ -219,6 +222,31 @@ export class DashboardComponent implements OnInit, AfterViewInit, OnDestroy {
       },
       error: (err) => this.statusModalService.showError('Error', err.error?.message || 'Could not complete visit.'),
     });
+  }
+
+  get pagedTodayAppointments(): Appointment[] {
+    const start = this.queuePage * this.queuePageSize;
+    return this.todayAppointments.slice(start, start + this.queuePageSize);
+  }
+
+  get isQueueFirstPage(): boolean {
+    return this.queuePage === 0;
+  }
+
+  get hasQueueNextPage(): boolean {
+    return (this.queuePage + 1) * this.queuePageSize < this.todayAppointments.length;
+  }
+
+  previousQueuePage(): void {
+    if (this.isAppointmentsLoading || this.isQueueFirstPage) return;
+    this.queuePage -= 1;
+    this.cdr.markForCheck();
+  }
+
+  nextQueuePage(): void {
+    if (this.isAppointmentsLoading || !this.hasQueueNextPage) return;
+    this.queuePage += 1;
+    this.cdr.markForCheck();
   }
 
   getStatusClass(status: AppointmentStatus): string {

@@ -1,7 +1,7 @@
 package com.hms.patient.service.impl;
 
 import com.hms.common.audit.AuditLogService;
-import com.hms.common.util.SecurityUtils;
+import com.hms.security.util.SecurityUtils;
 import com.hms.patient.dto.request.PatientRequestDTO;
 import com.hms.patient.dto.response.PatientResponseDTO;
 import com.hms.patient.entity.Patient;

@@ -13,10 +13,10 @@
         <div class="header-actions">
           <div class="search-container">
             <i class="ri-search-line"></i>
-            <input 
-              type="text" 
-              pInputText 
-              placeholder="Search inventory..." 
+            <input
+              type="text"
+              pInputText
+              placeholder="Search inventory..."
               (input)="onSearch($event)"
               class="search-input"
             />
@@ -122,11 +122,15 @@
                     dateFormat="yy-mm-dd"
                     styleClass="w-full"
                     [minDate]="minExpiryDate"
-                    [class.ng-invalid]="medicineForm.get('expiryDate')?.invalid && medicineForm.get('expiryDate')?.touched"
+                    [class.ng-invalid]="
+                      medicineForm.get('expiryDate')?.invalid && medicineForm.get('expiryDate')?.touched
+                    "
                   ></p-calendar>
                   <small
                     class="text-red-500 block mt-1"
-                    *ngIf="medicineForm.get('expiryDate')?.errors?.['notFuture'] && medicineForm.get('expiryDate')?.touched"
+                    *ngIf="
+                      medicineForm.get('expiryDate')?.errors?.['notFuture'] && medicineForm.get('expiryDate')?.touched
+                    "
                   >
                     Expiry date must be in the future
                   </small>
@@ -163,7 +167,12 @@
             <div class="form-section">
               <div class="form-group">
                 <label class="form-label">Quantity to Add *</label>
-                <p-inputNumber formControlName="quantity" [useGrouping]="false" [min]="1" class="w-full"></p-inputNumber>
+                <p-inputNumber
+                  formControlName="quantity"
+                  [useGrouping]="false"
+                  [min]="1"
+                  class="w-full"
+                ></p-inputNumber>
                 <small class="text-gray-500 mt-1 block">Current Stock: {{ restockingMedicine.quantityInStock }}</small>
               </div>
             </div>
@@ -192,8 +201,24 @@
                 <th *ngIf="userRole === 'ADMIN' || userRole === 'PHARMACIST'">Actions</th>
               </tr>
               <tr class="search-row">
-                <th><input pInputText type="text" (input)="onSearch($event)" placeholder="Filter name" class="p-inputtext-sm w-full" /></th>
-                <th><input pInputText type="text" (input)="onSearch($event)" placeholder="Code" class="p-inputtext-sm w-full" /></th>
+                <th>
+                  <input
+                    pInputText
+                    type="text"
+                    (input)="onSearch($event)"
+                    placeholder="Filter name"
+                    class="p-inputtext-sm w-full"
+                  />
+                </th>
+                <th>
+                  <input
+                    pInputText
+                    type="text"
+                    (input)="onSearch($event)"
+                    placeholder="Code"
+                    class="p-inputtext-sm w-full"
+                  />
+                </th>
                 <th></th>
                 <th></th>
                 <th></th>
@@ -229,9 +254,7 @@
                 </td>
                 <td *ngIf="userRole === 'ADMIN' || userRole === 'PHARMACIST'">
                   <div class="action-menu">
-                    <button class="btn-view" type="button" (click)="openRestockForm(med)">
-                      Restock
-                    </button>
+                    <button class="btn-view" type="button" (click)="openRestockForm(med)">Restock</button>
                     <button class="btn-more" type="button" title="More actions" (click)="toggleMenu(med.id)">
                       <i class="ri-more-2-fill"></i>
                     </button>
@@ -265,16 +288,26 @@
           <p>{{ showLowStockOnly ? 'No low stock items.' : 'Add medicines to build your inventory.' }}</p>
         </div>
 
-        <!-- Load More Button -->
-        <div class="load-more-container" *ngIf="!isLastPage && medicines.length > 0 && !showLowStockOnly">
-          <button class="btn-load-more" (click)="loadMedicines(true)" [disabled]="isMoreLoading">
-            <ng-container *ngIf="!isMoreLoading">
-              <i class="ri-arrow-down-s-line"></i> Load More Medicines
-            </ng-container>
-            <ng-container *ngIf="isMoreLoading">
-              <i class="ri-loader-4-line spin"></i> Loading Catalog...
-            </ng-container>
-          </button>
+        <div class="table-footer" *ngIf="medicines.length > 0 && !showLowStockOnly">
+          <div class="table-footer__meta">Page {{ currentPage + 1 }} • Next {{ hasNextPage ? 1 : 0 }}</div>
+          <div class="table-footer__actions">
+            <button
+              class="table-footer__btn"
+              type="button"
+              (click)="previousPage()"
+              [disabled]="isLoading || isFirstPage"
+            >
+              <i class="ri-arrow-left-s-line"></i> Previous
+            </button>
+            <button
+              class="table-footer__btn table-footer__btn--next"
+              type="button"
+              (click)="nextPage()"
+              [disabled]="isLoading || !hasNextPage"
+            >
+              Next <i class="ri-arrow-right-s-line"></i>
+            </button>
+          </div>
         </div>
       </div>
     </div>

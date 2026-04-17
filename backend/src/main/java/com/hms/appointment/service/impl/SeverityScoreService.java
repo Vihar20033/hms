@@ -1,4 +1,4 @@
-package com.hms.appointment.service;
+package com.hms.appointment.service.impl;
 
 import org.springframework.stereotype.Service;
 import java.util.Map;

@@ -3,7 +3,7 @@ package com.hms.doctor.service.impl;
 import com.hms.common.audit.AuditLogService;
 import com.hms.common.enums.Department;
 import com.hms.common.enums.Role;
-import com.hms.common.util.SecurityUtils;
+import com.hms.security.util.SecurityUtils;
 import com.hms.doctor.dto.request.CreateDoctorRequest;
 import com.hms.doctor.dto.request.UpdateDoctorRequest;
 import com.hms.doctor.dto.response.DoctorOnboardingResponse;

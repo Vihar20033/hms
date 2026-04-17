@@ -16,7 +16,7 @@ import com.hms.common.service.PdfGenerationService;
 import com.hms.common.enums.PaymentMethod;
 import com.hms.common.enums.PaymentStatus;
 import com.hms.common.enums.Role;
-import com.hms.common.util.SecurityUtils;
+import com.hms.security.util.SecurityUtils;
 import com.hms.patient.entity.Patient;
 import com.hms.patient.repository.PatientRepository;
 import com.hms.user.entity.User;

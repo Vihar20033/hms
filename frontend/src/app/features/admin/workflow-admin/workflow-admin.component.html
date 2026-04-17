@@ -1,0 +1,259 @@
+<div class="dashboard-layout">
+  <app-sidebar></app-sidebar>
+
+  <main class="main-content">
+    <app-header></app-header>
+
+    <div class="page-body animate-fade-in">
+      <div class="admin-shell">
+        <div class="content-header">
+          <div class="title-section">
+            <h1>Workflow Admin</h1>
+            <p>Design workflow definitions and run live clinical workflow progression.</p>
+          </div>
+          <div class="header-note">
+            <i class="ri-flow-chart"></i>
+            <span>Live orchestration controls</span>
+          </div>
+        </div>
+
+        <div class="workflow-grid">
+          <section class="workflow-card">
+            <div class="card-title-row">
+              <div class="card-title-block">
+                <h3>Create Definition</h3>
+                <p class="section-subtitle">Configure reusable workflow templates with clear step sequencing.</p>
+              </div>
+              <button class="btn-primary" type="button" (click)="createDefinition()">Save Draft</button>
+            </div>
+
+            <div class="form-grid">
+              <label>
+                <span>Definition Key</span>
+                <input type="text" [(ngModel)]="definitionForm.definitionKey" placeholder="OPD_FLOW" />
+              </label>
+              <label>
+                <span>Name</span>
+                <input type="text" [(ngModel)]="definitionForm.name" placeholder="OPD Standard Flow" />
+              </label>
+              <label>
+                <span>Domain</span>
+                <select [(ngModel)]="definitionForm.domain">
+                  <option *ngFor="let domain of domainOptions" [ngValue]="domain">{{ domain }}</option>
+                </select>
+              </label>
+              <label>
+                <span>Initial Step Code</span>
+                <input type="text" [(ngModel)]="definitionForm.initialStepCode" placeholder="REGISTRATION" />
+              </label>
+            </div>
+
+            <label class="description-field">
+              <span>Description</span>
+              <textarea
+                rows="2"
+                [(ngModel)]="definitionForm.description"
+                placeholder="Describe the flow intent"
+              ></textarea>
+            </label>
+
+            <div class="section-title-row">
+              <div>
+                <h4>Steps</h4>
+                <p class="section-subtitle">Define assignee role, order, and terminal behavior.</p>
+              </div>
+              <button class="btn-secondary" type="button" (click)="addStep()">+ Step</button>
+            </div>
+            <div class="step-list">
+              <div class="step-row" *ngFor="let step of definitionForm.steps; let i = index">
+                <input type="text" [(ngModel)]="step.stepCode" placeholder="Step code" />
+                <input type="text" [(ngModel)]="step.name" placeholder="Step name" />
+                <input type="number" [(ngModel)]="step.stepOrder" placeholder="Order" />
+                <input type="text" [(ngModel)]="step.assigneeRole" placeholder="Role" />
+                <input type="number" [(ngModel)]="step.slaMinutes" placeholder="SLA(min)" />
+                <label class="checkbox-inline">
+                  <input type="checkbox" [(ngModel)]="step.terminalStep" />
+                  Terminal
+                </label>
+                <button class="btn-danger" type="button" (click)="removeStep(i)">Remove</button>
+              </div>
+            </div>
+
+            <div class="section-title-row">
+              <div>
+                <h4>Transitions</h4>
+                <p class="section-subtitle">Map movement between steps with action labels and approvals.</p>
+              </div>
+              <button class="btn-secondary" type="button" (click)="addTransition()">+ Transition</button>
+            </div>
+            <div class="transition-list">
+              <div class="transition-row" *ngFor="let transition of definitionForm.transitions; let i = index">
+                <input type="text" [(ngModel)]="transition.fromStepCode" placeholder="From" />
+                <input type="text" [(ngModel)]="transition.toStepCode" placeholder="To" />
+                <input type="text" [(ngModel)]="transition.actionLabel" placeholder="Action label" />
+                <label class="checkbox-inline">
+                  <input type="checkbox" [(ngModel)]="transition.requiresApproval" />
+                  Approval
+                </label>
+                <input type="text" [(ngModel)]="transition.approvalRole" placeholder="Approval role" />
+                <button class="btn-danger" type="button" (click)="removeTransition(i)">Remove</button>
+              </div>
+            </div>
+          </section>
+
+          <section class="workflow-card">
+            <div class="card-title-row">
+              <div class="card-title-block">
+                <h3>Definitions</h3>
+                <p class="section-subtitle">Review versions and activate the current workflow definition.</p>
+              </div>
+              <div class="actions-inline">
+                <input type="text" [(ngModel)]="definitionFilter" placeholder="Filter by key" />
+                <button class="btn-secondary" type="button" (click)="loadDefinitions()" [disabled]="loadingDefinitions">
+                  Refresh
+                </button>
+              </div>
+            </div>
+
+            <div class="definition-list" *ngIf="definitions.length; else noDefinitions">
+              <article class="definition-item" *ngFor="let definition of definitions">
+                <div>
+                  <h4>{{ definition.name }}</h4>
+                  <p class="meta">
+                    {{ definition.definitionKey }} v{{ definition.versionNumber }} · {{ definition.domain }} ·
+                    {{ definition.status }}
+                  </p>
+                </div>
+                <button
+                  class="btn-primary"
+                  type="button"
+                  (click)="activateDefinition(definition)"
+                  [disabled]="definition.status === 'ACTIVE'"
+                >
+                  {{ definition.status === 'ACTIVE' ? 'Active' : 'Activate' }}
+                </button>
+              </article>
+            </div>
+            <ng-template #noDefinitions>
+              <p class="text-muted mb-0">No definitions found.</p>
+            </ng-template>
+          </section>
+
+          <section class="workflow-card">
+            <div class="card-title-row">
+              <div class="card-title-block">
+                <h3>Run Instance</h3>
+                <p class="section-subtitle">Start, load, and transition live instances with traceable updates.</p>
+              </div>
+            </div>
+
+            <div class="form-grid">
+              <label>
+                <span>Definition Key</span>
+                <input type="text" [(ngModel)]="startForm.definitionKey" placeholder="OPD_FLOW" />
+              </label>
+              <label>
+                <span>Reference Type</span>
+                <input type="text" [(ngModel)]="startForm.referenceType" placeholder="APPOINTMENT" />
+              </label>
+              <label>
+                <span>Reference ID</span>
+                <input type="text" [(ngModel)]="startForm.referenceId" placeholder="123" />
+              </label>
+              <label>
+                <span>Context JSON</span>
+                <input type="text" [(ngModel)]="startForm.contextJson" placeholder='{"priority":"NORMAL"}' />
+              </label>
+            </div>
+
+            <button class="btn-primary" type="button" (click)="startInstance()" [disabled]="loadingInstance">
+              Start Instance
+            </button>
+
+            <hr />
+
+            <div class="instance-controls">
+              <input type="number" [(ngModel)]="selectedInstanceId" placeholder="Instance ID" />
+              <button class="btn-secondary" type="button" (click)="loadInstance()" [disabled]="loadingInstance">
+                Load
+              </button>
+              <button class="btn-secondary" type="button" (click)="refreshTasks()">Tasks</button>
+            </div>
+
+            <div class="form-grid mt-3">
+              <label>
+                <span>Action Label</span>
+                <input type="text" [(ngModel)]="transitionForm.actionLabel" placeholder="START_TRIAGE" />
+              </label>
+              <label>
+                <span>Assign User ID</span>
+                <input type="number" [(ngModel)]="transitionForm.assigneeUserId" placeholder="Optional" />
+              </label>
+            </div>
+
+            <label class="checkbox-inline mt-2">
+              <input type="checkbox" [(ngModel)]="transitionForm.approvalGranted" />
+              Approval Granted
+            </label>
+
+            <label class="description-field mt-2">
+              <span>Notes</span>
+              <textarea rows="2" [(ngModel)]="transitionForm.notes" placeholder="Transition notes"></textarea>
+            </label>
+
+            <button class="btn-primary" type="button" (click)="transitionInstance()" [disabled]="transitionLoading">
+              Apply Transition
+            </button>
+
+            <div class="instance-summary" *ngIf="currentInstance as instance">
+              <h4>Current Instance</h4>
+              <p>Instance #{{ instance.id }} · {{ instance.status }}</p>
+              <p>
+                Step: <strong>{{ instance.currentStepCode }}</strong>
+              </p>
+              <p>Reference: {{ instance.referenceType }} / {{ instance.referenceId }}</p>
+            </div>
+          </section>
+
+          <section class="workflow-card">
+            <div class="card-title-row">
+              <div class="card-title-block">
+                <h3>Live Tasks</h3>
+                <p class="section-subtitle">Track active task execution and due timelines in real time.</p>
+              </div>
+            </div>
+
+            <div class="task-table-wrap" *ngIf="currentTasks.length; else noTasks">
+              <table class="task-table">
+                <thead>
+                  <tr>
+                    <th>ID</th>
+                    <th>Step</th>
+                    <th>Title</th>
+                    <th>Status</th>
+                    <th>Assignee</th>
+                    <th>Due</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr *ngFor="let task of currentTasks">
+                    <td>{{ task.id }}</td>
+                    <td>{{ task.stepCode }}</td>
+                    <td>{{ task.title }}</td>
+                    <td>{{ task.status }}</td>
+                    <td>{{ task.assigneeUserId || '-' }}</td>
+                    <td>{{ task.dueAt ? (task.dueAt | date: 'short') : '-' }}</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+
+            <ng-template #noTasks>
+              <p class="text-muted mb-0">No tasks loaded. Start or load an instance first.</p>
+            </ng-template>
+          </section>
+        </div>
+      </div>
+    </div>
+  </main>
+</div>

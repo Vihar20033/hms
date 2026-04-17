@@ -12,8 +12,9 @@ export class PharmacyService {
 
   constructor(private http: HttpClient) {}
 
-  getInventoryLog(): Observable<ApiResponse<InventoryTransaction[]>> {
-    return this.http.get<ApiResponse<InventoryTransaction[]>>(this.inventoryUrl);
+  getInventoryLog(page = 0, size = 20): Observable<ApiResponse<SliceResponse<InventoryTransaction>>> {
+    const params: any = { page, size };
+    return this.http.get<ApiResponse<SliceResponse<InventoryTransaction>>>(this.inventoryUrl, { params });
   }
 
   getAll(): Observable<ApiResponse<Medicine[]>> {

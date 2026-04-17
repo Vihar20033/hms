@@ -1,6 +1,3 @@
-import { Billing } from '../../features/billing/models/billing.models';
-import { Doctor } from '../../features/staff/models/doctor.models';
-import { Patient } from '../../features/patients/models/patient.models';
 import { Role } from '../../features/auth/models/auth.models';
 
 export const ROLE_HOME_ROUTE: Record<Role, string> = {
@@ -13,6 +10,8 @@ export const ROLE_HOME_ROUTE: Record<Role, string> = {
 export const ROUTE_ROLES = {
   dashboard: [Role.ADMIN, Role.DOCTOR, Role.RECEPTIONIST, Role.PHARMACIST],
   users: [Role.ADMIN],
+  systemAdmin: [Role.ADMIN],
+  workflowAdmin: [Role.ADMIN, Role.DOCTOR, Role.RECEPTIONIST],
   audit: [Role.ADMIN],
   patients: [Role.ADMIN, Role.DOCTOR, Role.RECEPTIONIST, Role.PHARMACIST],
   patientRegister: [Role.ADMIN, Role.RECEPTIONIST],
@@ -42,9 +41,3 @@ export function canRoleAccessPath(role: Role | string | null | undefined, path: 
 
   return true;
 }
-
-
-
-
-
-

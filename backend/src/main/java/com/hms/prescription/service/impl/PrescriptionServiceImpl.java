@@ -283,7 +283,7 @@ public class PrescriptionServiceImpl implements PrescriptionService {
         }
 
         prescriptionRepository.delete(prescription);
-        auditLogService.log(com.hms.common.util.SecurityUtils.getCurrentUsername(), "PRESCRIPTION_DELETE", "Prescription", id.toString(), "deleted=true");
+        auditLogService.log(com.hms.security.util.SecurityUtils.getCurrentUsername(), "PRESCRIPTION_DELETE", "Prescription", id.toString(), "deleted=true");
     }
 
     private void checkOwnership(Prescription prescription) {

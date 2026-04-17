@@ -43,7 +43,12 @@ import { AuditLogService } from './services/audit-log.service';
             </section>
           } @else {
             <section class="content-card">
-              <p-table [value]="logs" [loading]="isLoading" responsiveLayout="scroll" styleClass="p-datatable-sm">
+              <p-table
+                [value]="logs"
+                [loading]="isLoading"
+                responsiveLayout="scroll"
+                styleClass="p-datatable-sm audit-table"
+              >
                 <ng-template pTemplate="header">
                   <tr>
                     <th>Time</th>
@@ -70,8 +75,30 @@ import { AuditLogService } from './services/audit-log.service';
                   </tr>
                 </ng-template>
               </p-table>
-              @if (hasNext) {
-                <button class="btn-outline" type="button" (click)="loadNext()">Load More</button>
+              @if (logs.length > 0) {
+                <div class="table-footer">
+                  <div class="table-footer__meta">Page {{ page + 1 }} • Next {{ hasNext ? 1 : 0 }}</div>
+                  <div class="table-footer__actions">
+                    <button
+                      class="table-footer__btn"
+                      type="button"
+                      (click)="loadPrevious()"
+                      [disabled]="isLoading || isFirstPage"
+                    >
+                      <i class="ri-arrow-left-s-line"></i>
+                      Previous
+                    </button>
+                    <button
+                      class="table-footer__btn table-footer__btn--next"
+                      type="button"
+                      (click)="loadNext()"
+                      [disabled]="isLoading || !hasNext"
+                    >
+                      Next
+                      <i class="ri-arrow-right-s-line"></i>
+                    </button>
+                  </div>
+                </div>
               }
             </section>
           }
@@ -126,14 +153,21 @@ import { AuditLogService } from './services/audit-log.service';
         text-align: center;
         padding: 1.5rem;
       }
-      .btn-outline {
-        margin-top: 1rem;
-        min-height: 40px;
-        border: 1px solid var(--border-color);
-        border-radius: 8px;
-        padding: 0 1rem;
-        background: white;
-        font-weight: 700;
+      :host ::ng-deep .audit-table .p-datatable-thead > tr > th {
+        color: #22384a;
+        font-size: 0.8rem;
+        font-weight: 800;
+        letter-spacing: 0.055em;
+        border-bottom: 1px solid rgba(23, 48, 66, 0.22);
+        background: #f5f8fb;
+      }
+      :host ::ng-deep .audit-table .p-datatable-tbody > tr > td {
+        border-bottom: 1px solid rgba(23, 48, 66, 0.12);
+        color: #1a3143;
+        font-weight: 400;
+      }
+      :host ::ng-deep .audit-table .p-datatable-tbody > tr:hover {
+        background: rgba(15, 108, 189, 0.075);
       }
       @media (max-width: 980px) {
         .header-actions {
@@ -152,6 +186,10 @@ export class AuditLogPageComponent implements OnInit {
   searchQuery = '';
   page = 0;
   hasNext = false;
+
+  get isFirstPage(): boolean {
+    return this.page === 0;
+  }
 
   constructor(private auditLogService: AuditLogService) {}
 
@@ -172,15 +210,21 @@ export class AuditLogPageComponent implements OnInit {
 
   loadNext(): void {
     this.page += 1;
-    this.fetchPage(true);
+    this.fetchPage();
   }
 
-  private fetchPage(append = false): void {
+  loadPrevious(): void {
+    if (this.page === 0) return;
+    this.page -= 1;
+    this.fetchPage();
+  }
+
+  private fetchPage(): void {
     this.isLoading = true;
     this.errorMessage = '';
     this.auditLogService.getSlice(this.page, this.pageSize, this.searchQuery).subscribe({
       next: (res) => {
-        this.logs = append ? [...this.logs, ...res.data.content] : res.data.content;
+        this.logs = res.data.content;
         this.hasNext = res.data.hasNext;
         this.isLoading = false;
       },

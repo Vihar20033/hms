@@ -1,13 +1,12 @@
-import { ApiResponse } from '../../../../core/models/common.models';
 import { CommonModule } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
-import { filter } from 'rxjs/operators';
-import { HeaderComponent } from '../../../../layout/header/header.component';
 import { InputTextModule } from 'primeng/inputtext';
+import { TableModule } from 'primeng/table';
+import { ApiResponse, SliceResponse } from '../../../../core/models/common.models';
+import { HeaderComponent } from '../../../../layout/header/header.component';
+import { SidebarComponent } from '../../../../layout/sidebar/sidebar.component';
 import { InventoryTransaction } from '../../models/pharmacy.models';
 import { PharmacyService } from '../../services/pharmacy.service';
-import { SidebarComponent } from '../../../../layout/sidebar/sidebar.component';
-import { TableModule } from 'primeng/table';
 
 @Component({
   selector: 'app-inventory-log',
@@ -17,22 +16,29 @@ import { TableModule } from 'primeng/table';
   styleUrl: './inventory-log.component.scss',
 })
 export class InventoryLogComponent implements OnInit {
-  
   transactions: InventoryTransaction[] = [];
   filteredTransactions: InventoryTransaction[] = [];
   isLoading = true;
+  currentPage = 0;
+  pageSize = 20;
+  isFirstPage = true;
+  hasNextPage = false;
 
   constructor(private pharmacyService: PharmacyService) {}
 
   ngOnInit(): void {
-    this.loadTransactions();
+    this.loadTransactions(0);
   }
 
-  loadTransactions(): void {
+  loadTransactions(page = 0): void {
     this.isLoading = true;
-    this.pharmacyService.getInventoryLog().subscribe({
-      next: (res: ApiResponse<InventoryTransaction[]>) => {
-        this.transactions = res.data;
+    this.currentPage = Math.max(page, 0);
+
+    this.pharmacyService.getInventoryLog(this.currentPage, this.pageSize).subscribe({
+      next: (res: ApiResponse<SliceResponse<InventoryTransaction>>) => {
+        this.transactions = Array.isArray(res.data?.content) ? res.data.content : [];
+        this.isFirstPage = !!res.data?.first;
+        this.hasNextPage = !!res.data?.hasNext;
         this.applyFilter();
         this.isLoading = false;
       },
@@ -42,20 +48,17 @@ export class InventoryLogComponent implements OnInit {
     });
   }
 
- // Placeholder for filter logic - currently just copies all transactions to filteredTransactions
   applyFilter(): void {
-    this.filteredTransactions = this.transactions;
+    this.filteredTransactions = Array.isArray(this.transactions) ? this.transactions : [];
+  }
+
+  previousPage(): void {
+    if (this.isLoading || this.isFirstPage) return;
+    this.loadTransactions(this.currentPage - 1);
+  }
+
+  nextPage(): void {
+    if (this.isLoading || !this.hasNextPage) return;
+    this.loadTransactions(this.currentPage + 1);
   }
 }
-
-
-
-
-
-
-
-
-
-
-
-

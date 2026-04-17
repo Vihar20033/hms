@@ -8,7 +8,6 @@ import com.hms.appointment.exception.SlotAlreadyBookedException;
 import com.hms.appointment.mapper.AppointmentMapper;
 import com.hms.appointment.repository.AppointmentRepository;
 import com.hms.appointment.service.AppointmentService;
-import com.hms.appointment.service.SeverityScoreService;
 import com.hms.common.audit.AuditLogService;
 import com.hms.common.enums.AppointmentStatus;
 import com.hms.common.enums.Role;
@@ -22,18 +21,14 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import com.hms.common.concurrency.CounterService;
 import com.hms.common.concurrency.LockService;
-import com.hms.common.util.SecurityUtils;
+import com.hms.security.util.SecurityUtils;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import java.util.concurrent.TimeUnit;
 
-import java.time.Instant;
 import java.time.LocalDate;
-import java.time.LocalTime;
 import java.time.ZoneId;
-import java.time.Duration;
-import java.time.format.DateTimeFormatter;
 import java.util.Arrays;
 import java.util.List;
 

@@ -27,9 +27,6 @@
               </button>
             }
           </div>
-          <button class="btn btn-outline-primary" (click)="loadUsers()">
-            <i class="ri-refresh-line me-1"></i> Refresh
-          </button>
         </div>
       </div>
 
@@ -50,11 +47,11 @@
 
       <!-- PrimeNG Table -->
       <div class="card shadow-sm border-0 overflow-hidden">
-        <p-table 
-          [value]="users" 
-          [loading]="isLoading" 
-          [rows]="pageSize" 
-          [paginator]="false" 
+        <p-table
+          [value]="users"
+          [loading]="isLoading"
+          [rows]="pageSize"
+          [paginator]="false"
           responsiveLayout="stack"
           styleClass="p-datatable-sm"
           class="custom-p-table"
@@ -68,12 +65,14 @@
               <th class="text-end">Actions</th>
             </tr>
           </ng-template>
-          
+
           <ng-template pTemplate="body" let-user>
             <tr class="user-row">
               <td class="fw-medium text-dark">
                 <div class="d-flex align-items-center">
-                  <div class="avatar-sm bg-light text-primary me-2 rounded-circle d-flex align-items-center justify-content-center">
+                  <div
+                    class="avatar-sm bg-light text-primary me-2 rounded-circle d-flex align-items-center justify-content-center"
+                  >
                     {{ user.username.charAt(0).toUpperCase() }}
                   </div>
                   {{ user.username }}
@@ -86,9 +85,11 @@
                   {{ user.role.replace('_', ' ') }}
                 </span>
               </td>
-              <td class="text-center">
-                <span class="status-indicator" [ngClass]="user.enabled ? 'active' : 'inactive'"></span>
-                <span class="ms-2 small">{{ user.enabled ? 'Active' : 'Disabled' }}</span>
+              <td class="text-center status-cell">
+                <div class="status-wrap">
+                  <span class="status-indicator" [ngClass]="user.enabled ? 'active' : 'inactive'"></span>
+                  <span class="status-text">{{ user.enabled ? 'Active' : 'Disabled' }}</span>
+                </div>
               </td>
               <td class="text-end">
                 <div class="action-buttons justify-content-end">
@@ -114,15 +115,27 @@
           </ng-template>
         </p-table>
 
-        @if (!isLastPage && users.length > 0) {
-          <div class="load-more-container">
-            <button class="btn btn-outline-primary" type="button" (click)="loadUsers(true)" [disabled]="isMoreLoading">
-              @if (isMoreLoading) {
-                <i class="ri-loader-4-line me-1"></i> Loading...
-              } @else {
-                <i class="ri-arrow-down-s-line me-1"></i> Load More Users
-              }
-            </button>
+        @if (users.length > 0) {
+          <div class="table-footer">
+            <div class="table-footer__meta">Page {{ currentPage + 1 }} • Next {{ hasNextPage ? 1 : 0 }}</div>
+            <div class="table-footer__actions">
+              <button
+                class="table-footer__btn"
+                type="button"
+                (click)="previousPage()"
+                [disabled]="isLoading || isFirstPage"
+              >
+                <i class="ri-arrow-left-s-line me-1"></i> Previous
+              </button>
+              <button
+                class="table-footer__btn table-footer__btn--next"
+                type="button"
+                (click)="nextPage()"
+                [disabled]="isLoading || !hasNextPage"
+              >
+                Next <i class="ri-arrow-right-s-line ms-1"></i>
+              </button>
+            </div>
           </div>
         }
       </div>

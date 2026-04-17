@@ -171,7 +171,7 @@ textarea {
     border-bottom: 1px solid #edf2f7 !important;
     padding: 1.5rem 2rem !important;
     color: var(--text-main) !important;
-    
+
     .p-dialog-title {
       font-weight: 800 !important;
       font-size: 1.35rem !important;
@@ -183,7 +183,7 @@ textarea {
       height: 40px;
       border-radius: 12px;
       transition: all var(--transition-fast);
-      
+
       &:hover {
         background: #fee2e2;
         color: #ef4444;
@@ -203,7 +203,7 @@ textarea {
     display: flex;
     justify-content: flex-end;
     gap: 1rem;
-    
+
     button {
       margin: 0 !important;
     }
@@ -213,22 +213,22 @@ textarea {
   @media (max-width: 640px) {
     width: 95vw !important;
     margin: 0 1rem;
-    
+
     .p-dialog-header {
       padding: 1.25rem 1.5rem !important;
     }
-    
+
     .p-dialog-content {
       padding: 1.5rem !important;
     }
-    
+
     .p-dialog-footer {
-       padding: 1rem 1.5rem !important;
-       flex-direction: column;
-       
-       button {
-         width: 100%;
-       }
+      padding: 1rem 1.5rem !important;
+      flex-direction: column;
+
+      button {
+        width: 100%;
+      }
     }
   }
 }
@@ -481,7 +481,7 @@ button {
 
 .p-inputtext:enabled:focus,
 .p-dropdown:not(.p-disabled).p-focus,
-.p-calendar:not(.p-calendar-disabled).p-focus>.p-inputtext,
+.p-calendar:not(.p-calendar-disabled).p-focus > .p-inputtext,
 .p-inputnumber-input:enabled:focus {
   outline: none;
   border-color: var(--brand-primary);
@@ -494,7 +494,7 @@ button {
 }
 
 .p-dropdown-panel .p-dropdown-items .p-dropdown-item.p-highlight,
-.p-datepicker table td>span.p-highlight {
+.p-datepicker table td > span.p-highlight {
   background: rgba(15, 108, 189, 0.12);
   color: var(--brand-primary);
 }
@@ -516,7 +516,6 @@ button {
   }
 
   .urgency-icon {
-
     &.urgency-high,
     &.urgency-high-risk {
       color: #ef4444;
@@ -624,7 +623,7 @@ button {
   overflow: hidden;
 }
 
-.p-datatable .p-datatable-thead>tr>th {
+.p-datatable .p-datatable-thead > tr > th {
   text-align: left;
   color: var(--text-muted);
   font-size: 0.78rem;
@@ -635,14 +634,95 @@ button {
   background: rgba(255, 255, 255, 0.78);
 }
 
-.p-datatable .p-datatable-tbody>tr>td {
+.p-datatable .p-datatable-tbody > tr > td {
   padding: 1rem 1.2rem;
   border-bottom: 1px solid rgba(23, 48, 66, 0.06);
   vertical-align: middle;
 }
 
-.p-datatable .p-datatable-tbody>tr:hover {
+.p-datatable .p-datatable-tbody > tr:hover {
   background: rgba(15, 108, 189, 0.03);
+}
+
+.table-footer {
+  margin-top: 1rem;
+  padding: 0.95rem 1rem 0.35rem;
+  border-top: 1px solid rgba(23, 48, 66, 0.08);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+
+.table-footer__meta {
+  color: var(--text-muted);
+  font-size: 0.87rem;
+  font-weight: 600;
+  letter-spacing: 0.01em;
+  line-height: 1.35;
+}
+
+.table-footer__actions {
+  display: flex;
+  align-items: center;
+  gap: 0.65rem;
+}
+
+.table-footer__btn {
+  min-height: 42px;
+  padding: 0.62rem 1.1rem;
+  border-radius: var(--radius-xl);
+  border: 1px solid var(--border-color);
+  background: #fff;
+  color: var(--text-main);
+  font-family: var(--font-sans);
+  font-size: 0.93rem;
+  font-weight: 700;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.42rem;
+  cursor: pointer;
+  transition: all var(--transition-fast);
+}
+
+.table-footer__btn:hover:not(:disabled) {
+  border-color: rgba(15, 108, 189, 0.35);
+  transform: translateY(-1px);
+}
+
+.table-footer__btn--next {
+  background: var(--brand-primary);
+  border-color: var(--brand-primary);
+  color: #fff;
+}
+
+.table-footer__btn--next:hover:not(:disabled) {
+  background: var(--brand-primary-hover);
+  border-color: var(--brand-primary-hover);
+}
+
+.table-footer__btn:disabled {
+  opacity: 0.48;
+  cursor: not-allowed;
+  transform: none;
+}
+
+@media (max-width: 768px) {
+  .table-footer {
+    padding: 0.85rem 0.75rem 0.2rem;
+    justify-content: center;
+  }
+
+  .table-footer__meta {
+    width: 100%;
+    text-align: center;
+  }
+
+  .table-footer__actions {
+    width: 100%;
+    justify-content: center;
+  }
 }
 
 /* Responsive Utilities */
@@ -653,8 +733,8 @@ button {
   border-radius: var(--radius-xl);
 
   /* Ensure inner content doesn't force parent's width */
-  &>p-table,
-  &>table {
+  & > p-table,
+  & > table {
     width: 100%;
     min-width: 800px;
     /* Optional: forces scroll if table gets too thin to read */
@@ -735,7 +815,7 @@ button {
   display: flex;
   flex-direction: column;
   background: transparent;
-  width: 0; 
+  width: 0;
   min-width: 0;
   height: 100%;
   overflow-y: auto;
@@ -783,8 +863,9 @@ button {
       display: flex;
       flex-wrap: wrap;
       gap: 0.75rem;
-      
-      button, a {
+
+      button,
+      a {
         flex: 1;
         min-width: 140px;
         justify-content: center;
@@ -915,7 +996,7 @@ button {
   justify-content: flex-start;
 }
 
-.section-title>div:last-child,
+.section-title > div:last-child,
 .section-copy {
   display: grid;
   gap: 0.25rem;
@@ -1324,7 +1405,6 @@ button {
 }
 
 @media (max-width: 720px) {
-
   .booking-form-card,
   .registration-form-card,
   .form-card.form-card-elevated,
