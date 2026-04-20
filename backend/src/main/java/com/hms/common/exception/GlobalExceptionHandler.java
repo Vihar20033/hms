@@ -3,10 +3,15 @@ package com.hms.common.exception;
 import com.hms.appointment.exception.AppointmentNotFoundException;
 import com.hms.appointment.exception.DoctorUnavailableException;
 import com.hms.appointment.exception.SlotAlreadyBookedException;
+import com.hms.audit.exception.AuditEntityTypeNotSupportedException;
 import com.hms.billing.exception.BillingNotFoundException;
 import com.hms.doctor.exception.DoctorNotFoundException;
 import com.hms.prescription.exception.PrescriptionNotFoundException;
 import com.hms.user.exception.UserNotFoundException;
+import com.hms.workflow.exception.WorkflowDefinitionNotFoundException;
+import com.hms.workflow.exception.WorkflowInstanceNotFoundException;
+import com.hms.workflow.exception.WorkflowStateException;
+import com.hms.workflow.exception.WorkflowValidationException;
 
 import com.hms.common.response.ApiError;
 import com.hms.common.response.ValidationError;
@@ -165,6 +170,36 @@ public class GlobalExceptionHandler {
         public ResponseEntity<ApiError> handleUserNotFound(UserNotFoundException ex, HttpServletRequest request) {
                 log.warn("User not found: {}", ex.getMessage());
                 return buildResponse(HmsErrorCode.USER_NOT_FOUND, HttpStatus.NOT_FOUND, ex.getMessage(), request);
+        }
+
+        @ExceptionHandler(WorkflowDefinitionNotFoundException.class)
+        public ResponseEntity<ApiError> handleWorkflowDefinitionNotFound(WorkflowDefinitionNotFoundException ex, HttpServletRequest request) {
+                log.warn("Workflow definition not found: {}", ex.getMessage());
+                return buildResponse(HmsErrorCode.WORKFLOW_DEFINITION_NOT_FOUND, HttpStatus.NOT_FOUND, ex.getMessage(), request);
+        }
+
+        @ExceptionHandler(WorkflowInstanceNotFoundException.class)
+        public ResponseEntity<ApiError> handleWorkflowInstanceNotFound(WorkflowInstanceNotFoundException ex, HttpServletRequest request) {
+                log.warn("Workflow instance not found: {}", ex.getMessage());
+                return buildResponse(HmsErrorCode.WORKFLOW_INSTANCE_NOT_FOUND, HttpStatus.NOT_FOUND, ex.getMessage(), request);
+        }
+
+        @ExceptionHandler(WorkflowValidationException.class)
+        public ResponseEntity<ApiError> handleWorkflowValidation(WorkflowValidationException ex, HttpServletRequest request) {
+                log.warn("Workflow validation failed: {}", ex.getMessage());
+                return buildResponse(HmsErrorCode.WORKFLOW_VALIDATION_FAILED, HttpStatus.BAD_REQUEST, ex.getMessage(), request);
+        }
+
+        @ExceptionHandler(WorkflowStateException.class)
+        public ResponseEntity<ApiError> handleWorkflowState(WorkflowStateException ex, HttpServletRequest request) {
+                log.warn("Workflow state invalid: {}", ex.getMessage());
+                return buildResponse(HmsErrorCode.WORKFLOW_STATE_INVALID, HttpStatus.CONFLICT, ex.getMessage(), request);
+        }
+
+        @ExceptionHandler(AuditEntityTypeNotSupportedException.class)
+        public ResponseEntity<ApiError> handleAuditEntityTypeNotSupported(AuditEntityTypeNotSupportedException ex, HttpServletRequest request) {
+                log.warn("Audit entity type not supported: {}", ex.getMessage());
+                return buildResponse(HmsErrorCode.AUDIT_ENTITY_TYPE_NOT_SUPPORTED, HttpStatus.BAD_REQUEST, ex.getMessage(), request);
         }
 
         // ========== Validation & Security ==========

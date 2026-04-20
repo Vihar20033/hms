@@ -15,12 +15,15 @@ import com.hms.workflow.entity.WorkflowTransition;
 import com.hms.workflow.enums.WorkflowDefinitionStatus;
 import com.hms.workflow.enums.WorkflowInstanceStatus;
 import com.hms.workflow.enums.WorkflowTaskStatus;
+import com.hms.workflow.exception.WorkflowDefinitionNotFoundException;
+import com.hms.workflow.exception.WorkflowInstanceNotFoundException;
+import com.hms.workflow.exception.WorkflowStateException;
+import com.hms.workflow.exception.WorkflowValidationException;
 import com.hms.workflow.repository.WorkflowDefinitionRepository;
 import com.hms.workflow.repository.WorkflowInstanceRepository;
 import com.hms.workflow.repository.WorkflowStepRepository;
 import com.hms.workflow.repository.WorkflowTaskRepository;
 import com.hms.workflow.repository.WorkflowTransitionRepository;
-import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -101,11 +104,11 @@ public class WorkflowEngineServiceImpl implements WorkflowEngineService {
     public WorkflowDefinitionResponse activateDefinition(String definitionKey, Integer versionNumber) {
         WorkflowDefinition target = definitionRepository
                 .findByDefinitionKeyAndVersionNumber(definitionKey, versionNumber)
-                .orElseThrow(() -> new EntityNotFoundException("Workflow definition version not found"));
+                .orElseThrow(() -> new WorkflowDefinitionNotFoundException("Workflow definition version not found"));
 
         List<WorkflowStep> steps = stepRepository.findByDefinitionIdOrderByStepOrderAsc(target.getId());
         if (steps.isEmpty()) {
-            throw new IllegalStateException("Cannot activate workflow without steps");
+            throw new WorkflowStateException("Cannot activate workflow without steps");
         }
 
         definitionRepository.findByDefinitionKeyAndStatus(definitionKey, WorkflowDefinitionStatus.ACTIVE)
@@ -137,14 +140,14 @@ public class WorkflowEngineServiceImpl implements WorkflowEngineService {
     public WorkflowInstanceResponse startInstance(StartWorkflowInstanceRequest request) {
         WorkflowDefinition definition = definitionRepository
                 .findByDefinitionKeyAndStatus(request.getDefinitionKey(), WorkflowDefinitionStatus.ACTIVE)
-                .orElseThrow(() -> new EntityNotFoundException("Active workflow definition not found for key"));
+                .orElseThrow(() -> new WorkflowDefinitionNotFoundException("Active workflow definition not found for key"));
 
         Map<String, WorkflowStep> stepMap = stepRepository.findByDefinitionIdOrderByStepOrderAsc(definition.getId()).stream()
                 .collect(Collectors.toMap(WorkflowStep::getStepCode, Function.identity()));
 
         WorkflowStep initialStep = stepMap.get(definition.getInitialStepCode());
         if (initialStep == null) {
-            throw new IllegalStateException("Initial step missing in workflow definition");
+            throw new WorkflowStateException("Initial step missing in workflow definition");
         }
 
         WorkflowInstance instance = WorkflowInstance.builder()
@@ -167,15 +170,15 @@ public class WorkflowEngineServiceImpl implements WorkflowEngineService {
     @Override
     public WorkflowInstanceResponse transition(Long instanceId, TransitionWorkflowRequest request) {
         WorkflowInstance instance = instanceRepository.findById(instanceId)
-                .orElseThrow(() -> new EntityNotFoundException("Workflow instance not found"));
+                .orElseThrow(() -> new WorkflowInstanceNotFoundException("Workflow instance not found"));
 
         if (instance.getStatus() != WorkflowInstanceStatus.RUNNING) {
-            throw new IllegalStateException("Only RUNNING instances can transition");
+            throw new WorkflowStateException("Only RUNNING instances can transition");
         }
 
         WorkflowDefinition definition = definitionRepository
                 .findByDefinitionKeyAndVersionNumber(instance.getDefinitionKey(), instance.getDefinitionVersion())
-                .orElseThrow(() -> new EntityNotFoundException("Workflow definition for instance not found"));
+                .orElseThrow(() -> new WorkflowDefinitionNotFoundException("Workflow definition for instance not found"));
 
         List<WorkflowStep> steps = stepRepository.findByDefinitionIdOrderByStepOrderAsc(definition.getId());
         Map<String, WorkflowStep> stepMap = steps.stream()
@@ -183,7 +186,7 @@ public class WorkflowEngineServiceImpl implements WorkflowEngineService {
 
         WorkflowStep currentStep = stepMap.get(instance.getCurrentStepCode());
         if (currentStep == null) {
-            throw new IllegalStateException("Current step does not exist in workflow definition");
+            throw new WorkflowStateException("Current step does not exist in workflow definition");
         }
 
         List<WorkflowTransition> candidates = transitionRepository
@@ -192,13 +195,13 @@ public class WorkflowEngineServiceImpl implements WorkflowEngineService {
         WorkflowTransition selectedTransition = candidates.stream()
                 .filter(t -> t.getActionLabel().equalsIgnoreCase(request.getActionLabel()))
                 .findFirst()
-                .orElseThrow(() -> new IllegalArgumentException("No valid transition for requested action"));
+                .orElseThrow(() -> new WorkflowValidationException("No valid transition for requested action"));
 
         enforceApprovalIfRequired(selectedTransition, request);
 
         WorkflowStep targetStep = stepMap.get(selectedTransition.getToStepCode());
         if (targetStep == null) {
-            throw new IllegalStateException("Target step not present in workflow definition");
+            throw new WorkflowStateException("Target step not present in workflow definition");
         }
 
         List<WorkflowTask> openTasks = taskRepository.findByInstanceIdAndStatus(instance.getId(), WorkflowTaskStatus.PENDING);
@@ -234,7 +237,7 @@ public class WorkflowEngineServiceImpl implements WorkflowEngineService {
     @Transactional(readOnly = true)
     public WorkflowInstanceResponse getInstance(Long instanceId) {
         WorkflowInstance instance = instanceRepository.findById(instanceId)
-                .orElseThrow(() -> new EntityNotFoundException("Workflow instance not found"));
+                .orElseThrow(() -> new WorkflowInstanceNotFoundException("Workflow instance not found"));
         List<WorkflowTask> tasks = taskRepository.findByInstanceIdOrderByCreatedAtAsc(instanceId);
         return mapInstance(instance, tasks);
     }
@@ -253,12 +256,12 @@ public class WorkflowEngineServiceImpl implements WorkflowEngineService {
                 .collect(Collectors.toSet());
 
         if (!stepCodes.contains(request.getInitialStepCode())) {
-            throw new IllegalArgumentException("Initial step code must exist in steps list");
+            throw new WorkflowValidationException("Initial step code must exist in steps list");
         }
 
         request.getTransitions().forEach(transition -> {
             if (!stepCodes.contains(transition.getFromStepCode()) || !stepCodes.contains(transition.getToStepCode())) {
-                throw new IllegalArgumentException("Transition references undefined step code");
+                throw new WorkflowValidationException("Transition references undefined step code");
             }
         });
     }
@@ -269,7 +272,7 @@ public class WorkflowEngineServiceImpl implements WorkflowEngineService {
         }
 
         if (!Boolean.TRUE.equals(request.getApprovalGranted())) {
-            throw new IllegalStateException("Approval is required for this transition");
+            throw new WorkflowStateException("Approval is required for this transition");
         }
 
         Role requiredRole = transition.getApprovalRole();

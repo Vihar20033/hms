@@ -49,7 +49,16 @@ public enum HmsErrorCode {
     BILLING_NOT_FOUND("BIL_001", "Billing record not found"),
 
     // Prescription Errors
-    PRESCRIPTION_NOT_FOUND("PRE_001", "Prescription not found");
+    PRESCRIPTION_NOT_FOUND("PRE_001", "Prescription not found"),
+
+    // Workflow Errors
+    WORKFLOW_DEFINITION_NOT_FOUND("WFL_001", "Workflow definition not found"),
+    WORKFLOW_INSTANCE_NOT_FOUND("WFL_002", "Workflow instance not found"),
+    WORKFLOW_STATE_INVALID("WFL_003", "Workflow is not in a valid state for this operation"),
+    WORKFLOW_VALIDATION_FAILED("WFL_004", "Workflow request validation failed"),
+
+    // Audit Errors
+    AUDIT_ENTITY_TYPE_NOT_SUPPORTED("AUD_001", "Requested audit entity type is not supported");
 
     private final String code;
     private final String defaultMessage;

@@ -1,8 +1,8 @@
 package com.hms.audit.controller;
 
 import com.hms.audit.dto.EntityRevisionDTO;
+import com.hms.audit.exception.AuditEntityTypeNotSupportedException;
 import com.hms.audit.service.EntityHistoryService;
-import com.hms.common.exception.BadRequestException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
@@ -30,14 +30,14 @@ public class EntityHistoryController {
 
         String entityClassName = ENTITY_MAP.get(entityType.toLowerCase());
         if (entityClassName == null) {
-            throw new BadRequestException("Unknown entity type: " + entityType);
+            throw new AuditEntityTypeNotSupportedException("Unknown entity type: " + entityType);
         }
 
         try {
             Class<?> entityClass = Class.forName(entityClassName);
             return historyService.getHistory(entityClass, id);
         } catch (ClassNotFoundException ex) {
-            throw new BadRequestException("Unsupported entity type: " + entityType);
+            throw new AuditEntityTypeNotSupportedException("Unsupported entity type: " + entityType);
         }
     }
 }
