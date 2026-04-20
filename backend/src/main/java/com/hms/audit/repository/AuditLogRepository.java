@@ -1,4 +1,6 @@
-package com.hms.common.audit;
+package com.hms.audit.repository;
+
+import com.hms.audit.entity.AuditLog;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;

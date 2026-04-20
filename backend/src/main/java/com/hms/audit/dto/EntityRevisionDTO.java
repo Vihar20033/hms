@@ -1,4 +1,4 @@
-package com.hms.common.audit.dto;
+package com.hms.audit.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;

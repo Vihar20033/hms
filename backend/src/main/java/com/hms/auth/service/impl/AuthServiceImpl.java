@@ -9,7 +9,7 @@ import com.hms.auth.dto.response.AuthResponse;
 import com.hms.auth.entity.RevokedRefreshToken;
 import com.hms.auth.repository.RevokedRefreshTokenRepository;
 import com.hms.auth.service.AuthService;
-import com.hms.common.audit.AuditLogService;
+import com.hms.audit.service.AuditLogService;
 import com.hms.common.exception.BadRequestException;
 import com.hms.user.exception.EmailAlreadyExistsException;
 import com.hms.user.exception.InvalidCredentialsException;

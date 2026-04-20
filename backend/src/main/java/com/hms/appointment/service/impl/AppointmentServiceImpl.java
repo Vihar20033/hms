@@ -8,7 +8,7 @@ import com.hms.appointment.exception.SlotAlreadyBookedException;
 import com.hms.appointment.mapper.AppointmentMapper;
 import com.hms.appointment.repository.AppointmentRepository;
 import com.hms.appointment.service.AppointmentService;
-import com.hms.common.audit.AuditLogService;
+import com.hms.audit.service.AuditLogService;
 import com.hms.common.enums.AppointmentStatus;
 import com.hms.common.enums.Role;
 import com.hms.common.exception.BadRequestException;

@@ -1,6 +1,6 @@
 package com.hms.patient.service.impl;
 
-import com.hms.common.audit.AuditLogService;
+import com.hms.audit.service.AuditLogService;
 import com.hms.security.util.SecurityUtils;
 import com.hms.patient.dto.request.PatientRequestDTO;
 import com.hms.patient.dto.response.PatientResponseDTO;
@@ -154,4 +154,3 @@ public class PatientServiceImpl implements PatientService {
         return Period.between(dob, LocalDate.now()).getYears();
     }
 }
-

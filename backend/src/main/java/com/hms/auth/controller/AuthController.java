@@ -53,9 +53,7 @@ public class AuthController {
                 .refreshToken(refreshToken)
                 .build();
         AuthResponse refreshResponse = service.refreshToken(updatedRequest);
-        
         cookieUtil.setRefreshTokenCookie(response, refreshResponse.getRefreshToken());
-        
         return ApiResponse.success(refreshResponse);
     }
 

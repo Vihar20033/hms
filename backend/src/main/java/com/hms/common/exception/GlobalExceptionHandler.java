@@ -19,15 +19,22 @@ import com.hms.user.exception.EmailAlreadyExistsException;
 import com.hms.user.exception.InvalidCredentialsException;
 import com.hms.user.exception.UsernameAlreadyExistsException;
 import jakarta.servlet.http.HttpServletRequest;
+import jakarta.validation.ConstraintViolationException;
+import jakarta.persistence.EntityNotFoundException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.core.AuthenticationException;
+import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.converter.HttpMessageNotReadableException;
+import org.springframework.web.method.annotation.HandlerMethodValidationException;
+import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
+import org.springframework.web.bind.MissingServletRequestParameterException;
+import org.springframework.web.servlet.resource.NoResourceFoundException;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -46,6 +53,13 @@ public class GlobalExceptionHandler {
             );
             response.setPath(request.getRequestURI());
             return ResponseEntity.status(status).body(response);
+        }
+
+        private ResponseEntity<ApiError> buildValidationResponse(List<ValidationError> errors, HttpServletRequest request) {
+                ApiError response = ApiError.of("Validation failed", HmsErrorCode.VALIDATION_FAILED.getCode(), HttpStatus.BAD_REQUEST);
+                response.setValidationErrors(errors);
+                response.setPath(request.getRequestURI());
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
         }
 
         // ========== Patient Exceptions ==========
@@ -174,10 +188,26 @@ public class GlobalExceptionHandler {
                         .collect(Collectors.toList());
 
                 log.warn("Validation failed for {}: {}", request.getRequestURI(), errors);
-                ApiError response = ApiError.of("Validation failed", HmsErrorCode.VALIDATION_FAILED.getCode(), HttpStatus.BAD_REQUEST);
-                response.setValidationErrors(errors);
-                response.setPath(request.getRequestURI());
-                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
+                return buildValidationResponse(errors, request);
+        }
+
+        @ExceptionHandler(ConstraintViolationException.class)
+        public ResponseEntity<ApiError> handleConstraintViolation(ConstraintViolationException ex, HttpServletRequest request) {
+                List<ValidationError> errors = ex.getConstraintViolations().stream()
+                        .map(v -> new ValidationError(v.getPropertyPath().toString(), v.getMessage()))
+                        .collect(Collectors.toList());
+                log.warn("Constraint violation for {}: {}", request.getRequestURI(), errors);
+                return buildValidationResponse(errors, request);
+        }
+
+        @ExceptionHandler(HandlerMethodValidationException.class)
+        public ResponseEntity<ApiError> handleHandlerMethodValidation(HandlerMethodValidationException ex, HttpServletRequest request) {
+                List<ValidationError> errors = ex.getAllValidationResults().stream()
+                        .flatMap(result -> result.getResolvableErrors().stream()
+                                .map(error -> new ValidationError(result.getMethodParameter().getParameterName(), error.getDefaultMessage())))
+                        .collect(Collectors.toList());
+                log.warn("Handler method validation failed for {}: {}", request.getRequestURI(), errors);
+                return buildValidationResponse(errors, request);
         }
 
         @ExceptionHandler(AccessDeniedException.class)
@@ -192,6 +222,30 @@ public class GlobalExceptionHandler {
                 return buildResponse(HmsErrorCode.INVALID_CREDENTIALS, HttpStatus.UNAUTHORIZED, ex.getMessage(), request);
         }
 
+        @ExceptionHandler(EntityNotFoundException.class)
+        public ResponseEntity<ApiError> handleEntityNotFound(EntityNotFoundException ex, HttpServletRequest request) {
+                log.warn("Entity not found: {}", ex.getMessage());
+                return buildResponse(HmsErrorCode.BAD_REQUEST, HttpStatus.NOT_FOUND, ex.getMessage(), request);
+        }
+
+        @ExceptionHandler(IllegalArgumentException.class)
+        public ResponseEntity<ApiError> handleIllegalArgument(IllegalArgumentException ex, HttpServletRequest request) {
+                log.warn("Illegal argument for {}: {}", request.getRequestURI(), ex.getMessage());
+                return buildResponse(HmsErrorCode.BAD_REQUEST, HttpStatus.BAD_REQUEST, ex.getMessage(), request);
+        }
+
+        @ExceptionHandler(IllegalStateException.class)
+        public ResponseEntity<ApiError> handleIllegalState(IllegalStateException ex, HttpServletRequest request) {
+                log.warn("Illegal state for {}: {}", request.getRequestURI(), ex.getMessage());
+                return buildResponse(HmsErrorCode.REQUEST_CONFLICT, HttpStatus.CONFLICT, ex.getMessage(), request);
+        }
+
+        @ExceptionHandler(SecurityException.class)
+        public ResponseEntity<ApiError> handleSecurityException(SecurityException ex, HttpServletRequest request) {
+                log.warn("Security exception for {}: {}", request.getRequestURI(), ex.getMessage());
+                return buildResponse(HmsErrorCode.ACCESS_DENIED, HttpStatus.FORBIDDEN, ex.getMessage(), request);
+        }
+
         @ExceptionHandler(DataIntegrityViolationException.class)
         public ResponseEntity<ApiError> handleDataIntegrityViolation(DataIntegrityViolationException ex, HttpServletRequest request) {
                 log.warn("Data integrity violation: {}", ex.getMessage());
@@ -202,6 +256,32 @@ public class GlobalExceptionHandler {
         public ResponseEntity<ApiError> handleMessageNotReadable(HttpMessageNotReadableException ex, HttpServletRequest request) {
                 log.warn("HTTP message not readable: {}", ex.getMessage());
                 return buildResponse(HmsErrorCode.BAD_REQUEST, HttpStatus.BAD_REQUEST, "Malformed request or invalid data format.", request);
+        }
+
+        @ExceptionHandler(MethodArgumentTypeMismatchException.class)
+        public ResponseEntity<ApiError> handleArgumentTypeMismatch(MethodArgumentTypeMismatchException ex, HttpServletRequest request) {
+                String message = "Invalid value for parameter '" + ex.getName() + "'";
+                log.warn("Argument type mismatch for {}: {}", request.getRequestURI(), ex.getMessage());
+                return buildResponse(HmsErrorCode.BAD_REQUEST, HttpStatus.BAD_REQUEST, message, request);
+        }
+
+        @ExceptionHandler(MissingServletRequestParameterException.class)
+        public ResponseEntity<ApiError> handleMissingRequestParameter(MissingServletRequestParameterException ex, HttpServletRequest request) {
+                String message = "Missing required parameter: " + ex.getParameterName();
+                log.warn("Missing request parameter for {}: {}", request.getRequestURI(), ex.getMessage());
+                return buildResponse(HmsErrorCode.BAD_REQUEST, HttpStatus.BAD_REQUEST, message, request);
+        }
+
+        @ExceptionHandler(NoResourceFoundException.class)
+        public ResponseEntity<ApiError> handleNoResourceFound(NoResourceFoundException ex, HttpServletRequest request) {
+                log.warn("No route found for {}: {}", request.getRequestURI(), ex.getMessage());
+                return buildResponse(HmsErrorCode.BAD_REQUEST, HttpStatus.NOT_FOUND, "Requested endpoint was not found.", request);
+        }
+
+        @ExceptionHandler(NullPointerException.class)
+        public ResponseEntity<ApiError> handleNullPointer(NullPointerException ex, HttpServletRequest request) {
+                log.error("Null pointer prevented at {}", request.getRequestURI(), ex);
+                return buildResponse(HmsErrorCode.INTERNAL_SERVER_ERROR, HttpStatus.INTERNAL_SERVER_ERROR, "Required data was missing while processing the request.", request);
         }
 
         @ExceptionHandler(Exception.class)

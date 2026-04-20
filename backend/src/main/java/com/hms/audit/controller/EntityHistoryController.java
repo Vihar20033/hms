@@ -1,6 +1,7 @@
-package com.hms.common.audit;
+package com.hms.audit.controller;
 
-import com.hms.common.audit.dto.EntityRevisionDTO;
+import com.hms.audit.dto.EntityRevisionDTO;
+import com.hms.audit.service.EntityHistoryService;
 import com.hms.common.exception.BadRequestException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;

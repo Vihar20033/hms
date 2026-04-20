@@ -1,6 +1,6 @@
 package com.hms.doctor.service.impl;
 
-import com.hms.common.audit.AuditLogService;
+import com.hms.audit.service.AuditLogService;
 import com.hms.common.enums.Department;
 import com.hms.common.enums.Role;
 import com.hms.security.util.SecurityUtils;

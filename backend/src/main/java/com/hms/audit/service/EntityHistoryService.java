@@ -1,6 +1,6 @@
-package com.hms.common.audit;
+package com.hms.audit.service;
 
-import com.hms.common.audit.dto.EntityRevisionDTO;
+import com.hms.audit.dto.EntityRevisionDTO;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
 import lombok.RequiredArgsConstructor;

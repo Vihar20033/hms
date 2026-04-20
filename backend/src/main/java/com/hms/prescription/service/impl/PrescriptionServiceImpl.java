@@ -3,7 +3,7 @@ package com.hms.prescription.service.impl;
 import com.hms.appointment.entity.Appointment;
 import com.hms.appointment.exception.AppointmentNotFoundException;
 import com.hms.appointment.repository.AppointmentRepository;
-import com.hms.common.audit.AuditLogService;
+import com.hms.audit.service.AuditLogService;
 import com.hms.common.enums.Role;
 import com.hms.doctor.entity.Doctor;
 import com.hms.doctor.exception.DoctorNotFoundException;
@@ -67,6 +67,9 @@ public class PrescriptionServiceImpl implements PrescriptionService {
     @Override
     @Transactional(rollbackFor = Exception.class)
     public PrescriptionResponseDTO createPrescription(PrescriptionRequestDTO dto) {
+        if (dto == null) {
+            throw new BadRequestException("Prescription request is required.");
+        }
         Patient patient = patientRepository.findById(dto.getPatientId())
                 .orElseThrow(() -> new PatientNotFoundException("Patient not found: " + dto.getPatientId()));
 
@@ -198,7 +201,7 @@ public class PrescriptionServiceImpl implements PrescriptionService {
     @Transactional(readOnly = true)
     public Slice<PrescriptionResponseDTO> getPrescriptionSlice(int page, int size, String query) {
         PageRequest request = PageRequest.of(page, size, Sort.by(Sort.Direction.DESC, "createdAt"));
-        User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        User user = getAuthenticatedUser();
         Role role = user.getRole();
         String normalizedQuery = query == null ? "" : query.trim();
 
@@ -287,7 +290,10 @@ public class PrescriptionServiceImpl implements PrescriptionService {
     }
 
     private void checkOwnership(Prescription prescription) {
-        User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        if (prescription == null) {
+            throw new BadRequestException("Prescription details are required.");
+        }
+        User user = getAuthenticatedUser();
         Role role = user.getRole();
 
         // 1. Staff with Access
@@ -297,7 +303,8 @@ public class PrescriptionServiceImpl implements PrescriptionService {
 
         // 2. Doctor access (Assigned to the patient or wrote it)
         if (role == Role.DOCTOR) {
-            if (prescription.getDoctor().getUserId().equals(user.getId())) {
+            if (prescription.getDoctor() != null && prescription.getDoctor().getUserId() != null
+                    && prescription.getDoctor().getUserId().equals(user.getId())) {
                 return;
             }
         }
@@ -305,5 +312,16 @@ public class PrescriptionServiceImpl implements PrescriptionService {
         log.warn("Security Alert: User {} with role {} tried to access prescription {}.", 
                 user.getUsername(), role, prescription.getId());
         throw new AccessDeniedException("You do not have permission to access this prescription.");
+    }
+
+    private User getAuthenticatedUser() {
+        if (SecurityContextHolder.getContext().getAuthentication() == null) {
+            throw new AccessDeniedException("No authenticated user found.");
+        }
+        Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        if (!(principal instanceof User user)) {
+            throw new AccessDeniedException("Authenticated user context is invalid.");
+        }
+        return user;
     }
 }

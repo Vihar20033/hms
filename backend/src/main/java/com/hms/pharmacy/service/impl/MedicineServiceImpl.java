@@ -1,6 +1,6 @@
 package com.hms.pharmacy.service.impl;
 
-import com.hms.common.audit.AuditLogService;
+import com.hms.audit.service.AuditLogService;
 import com.hms.common.enums.MedicineCategory;
 import com.hms.security.util.SecurityUtils;
 import com.hms.pharmacy.dto.request.MedicineRequestDTO;

@@ -1,4 +1,7 @@
-package com.hms.common.audit;
+package com.hms.audit.service;
+
+import com.hms.audit.entity.AuditLog;
+import com.hms.audit.repository.AuditLogRepository;
 
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;

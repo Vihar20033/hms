@@ -10,7 +10,7 @@ import com.hms.billing.exception.BillingNotFoundException;
 import com.hms.billing.mapper.BillingMapper;
 import com.hms.billing.repository.BillingRepository;
 import com.hms.billing.service.BillingService;
-import com.hms.common.audit.AuditLogService;
+import com.hms.audit.service.AuditLogService;
 import com.hms.common.service.CloudinaryService;
 import com.hms.common.service.PdfGenerationService;
 import com.hms.common.enums.PaymentMethod;
@@ -55,9 +55,18 @@ public class BillingServiceImpl implements BillingService {
     @Override
     @Transactional
     public BillingResponseDTO createBilling(BillingRequestDTO dto) {
+        if (dto == null) {
+            throw new BadRequestException("Billing request is required.");
+        }
         Billing billing = billingMapper.toEntity(dto);
         
         // Ensure net amount is calculated if not provided
+        if (billing == null) {
+            throw new BadRequestException("Billing could not be created from the request.");
+        }
+        if (billing.getTotalAmount() == null || billing.getTaxAmount() == null || billing.getDiscountAmount() == null) {
+            throw new BadRequestException("Billing totals are incomplete.");
+        }
         if (billing.getNetAmount() == null) {
             billing.setNetAmount(
                     billing.getTotalAmount().add(billing.getTaxAmount()).subtract(billing.getDiscountAmount()));
@@ -222,8 +231,14 @@ public class BillingServiceImpl implements BillingService {
     }
 
     private Billing prepareBillingFromAppointment(Long appointmentId) {
+        if (appointmentId == null) {
+            throw new BadRequestException("Appointment id is required.");
+        }
         Appointment appointment = appointmentRepository.findById(appointmentId)
                 .orElseThrow(() -> new BillingNotFoundException("Appointment not found", appointmentId.toString()));
+        if (appointment.getPatient() == null) {
+            throw new BadRequestException("Appointment patient details are missing.");
+        }
 
         BigDecimal consultationFee = (appointment.getDoctor() != null && appointment.getDoctor().getConsultationFee() != null) 
                 ? appointment.getDoctor().getConsultationFee() : new BigDecimal("500.00");
@@ -271,11 +286,18 @@ public class BillingServiceImpl implements BillingService {
         if (user == null) {
             throw new AccessDeniedException("No authenticated user found.");
         }
+        if (billing == null) {
+            throw new BadRequestException("Billing details are required.");
+        }
         Role role = user.getRole();
         if (role == Role.ADMIN || role == Role.RECEPTIONIST) {
             return;
         }
-        if (role == Role.PATIENT && user.getEmail().equalsIgnoreCase(billing.getPatient().getEmail())) {
+        if (role == Role.PATIENT
+                && user.getEmail() != null
+                && billing.getPatient() != null
+                && billing.getPatient().getEmail() != null
+                && user.getEmail().equalsIgnoreCase(billing.getPatient().getEmail())) {
             return;
         }
         throw new AccessDeniedException("You do not have permission to access this billing record.");

@@ -2,6 +2,7 @@ package com.hms.common.service;
 
 import com.hms.billing.entity.Billing;
 import com.hms.billing.entity.BillingItem;
+import com.hms.common.exception.BadRequestException;
 import com.hms.prescription.entity.Prescription;
 import com.hms.prescription.entity.PrescriptionMedicine;
 import com.itextpdf.io.font.constants.StandardFonts;
@@ -19,6 +20,8 @@ import org.springframework.stereotype.Service;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.util.List;
+import java.util.Objects;
 import java.time.format.DateTimeFormatter;
 import java.time.ZoneId;
 
@@ -28,6 +31,7 @@ public class PdfGenerationService {
     private static final DateTimeFormatter DATE_FORMATTER = DateTimeFormatter.ofPattern("dd-MMM-yyyy HH:mm");
 
     public byte[] generateBillingPdf(Billing billing) throws IOException {
+        validateBilling(billing);
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
         PdfWriter writer = new PdfWriter(baos);
         PdfDocument pdf = new PdfDocument(writer);
@@ -95,6 +99,7 @@ public class PdfGenerationService {
     }
 
     public byte[] generatePrescriptionPdf(Prescription prescription) throws IOException {
+        validatePrescription(prescription);
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
         PdfWriter writer = new PdfWriter(baos);
         PdfDocument pdf = new PdfDocument(writer);
@@ -172,5 +177,54 @@ public class PdfGenerationService {
         return new Cell().add(new Paragraph(content).setBold())
                 .setBackgroundColor(ColorConstants.LIGHT_GRAY)
                 .setTextAlignment(TextAlignment.CENTER);
+    }
+
+    private void validateBilling(Billing billing) {
+        requireNonNull(billing, "Billing data is required for PDF generation.");
+        requireNonNull(billing.getInvoiceNumber(), "Billing invoice number is required for PDF generation.");
+        requireNonNull(billing.getBillingDate(), "Billing date is required for PDF generation.");
+        requireNonNull(billing.getPatient(), "Billing patient details are required for PDF generation.");
+        requireNonNull(billing.getPatient().getName(), "Billing patient name is required for PDF generation.");
+        requireNonNull(billing.getPaymentStatus(), "Billing payment status is required for PDF generation.");
+        requireNonNull(billing.getTotalAmount(), "Billing total amount is required for PDF generation.");
+        requireNonNull(billing.getTaxAmount(), "Billing tax amount is required for PDF generation.");
+        requireNonNull(billing.getDiscountAmount(), "Billing discount amount is required for PDF generation.");
+        requireNonNull(billing.getNetAmount(), "Billing net amount is required for PDF generation.");
+        List<BillingItem> items = billing.getItems();
+        if (items == null || items.isEmpty()) {
+            throw new BadRequestException("At least one billing item is required for PDF generation.");
+        }
+        for (BillingItem item : items) {
+            requireNonNull(item, "Billing item is required for PDF generation.");
+            requireNonNull(item.getItemName(), "Billing item name is required for PDF generation.");
+            requireNonNull(item.getQuantity(), "Billing item quantity is required for PDF generation.");
+            requireNonNull(item.getUnitPrice(), "Billing item unit price is required for PDF generation.");
+            requireNonNull(item.getTotalValue(), "Billing item total value is required for PDF generation.");
+        }
+    }
+
+    private void validatePrescription(Prescription prescription) {
+        requireNonNull(prescription, "Prescription data is required for PDF generation.");
+        requireNonNull(prescription.getPatient(), "Prescription patient details are required for PDF generation.");
+        requireNonNull(prescription.getPatient().getName(), "Prescription patient name is required for PDF generation.");
+        requireNonNull(prescription.getCreatedAt(), "Prescription date is required for PDF generation.");
+        requireNonNull(prescription.getDoctor(), "Prescription doctor details are required for PDF generation.");
+        requireNonNull(prescription.getDoctor().getFirstName(), "Doctor first name is required for PDF generation.");
+        requireNonNull(prescription.getDoctor().getLastName(), "Doctor last name is required for PDF generation.");
+        requireNonNull(prescription.getDoctor().getDepartment(), "Doctor department is required for PDF generation.");
+        List<PrescriptionMedicine> medicines = prescription.getMedicines();
+        if (medicines == null || medicines.isEmpty()) {
+            throw new BadRequestException("At least one prescribed medicine is required for PDF generation.");
+        }
+        for (PrescriptionMedicine medicine : medicines) {
+            requireNonNull(medicine, "Prescribed medicine is required for PDF generation.");
+            requireNonNull(medicine.getMedicineName(), "Medicine name is required for PDF generation.");
+        }
+    }
+
+    private void requireNonNull(Object value, String message) {
+        if (value == null) {
+            throw new BadRequestException(message);
+        }
     }
 }

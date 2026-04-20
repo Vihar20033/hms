@@ -1,5 +1,8 @@
-package com.hms.common.audit;
+package com.hms.audit.controller;
 
+import com.hms.audit.dto.AuditLogResponse;
+import com.hms.audit.entity.AuditLog;
+import com.hms.audit.repository.AuditLogRepository;
 import com.hms.common.response.ApiResponse;
 import com.hms.common.response.SliceResponse;
 import lombok.RequiredArgsConstructor;

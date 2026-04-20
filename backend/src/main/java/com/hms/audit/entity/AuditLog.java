@@ -1,4 +1,4 @@
-package com.hms.common.audit;
+package com.hms.audit.entity;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
